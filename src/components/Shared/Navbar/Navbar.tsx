@@ -1,6 +1,9 @@
+import TopBar from "./TopBar";
+
 const Navbar = () => {
   return (
-    <header className="container mx-auto">
+    <header>
+      <TopBar />
       <nav>
         <h2 className="text-sm font-bold">Navbar</h2>
       </nav>
