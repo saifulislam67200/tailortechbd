@@ -1,5 +1,6 @@
-// Sample category data for testing
-export const categories = [
+import { ICategory } from "@/types/category";
+
+export const categories: ICategory[] = [
   {
     _id: "electronicsId",
     label: "Electronics",

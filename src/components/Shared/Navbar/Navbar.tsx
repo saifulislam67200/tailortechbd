@@ -12,6 +12,7 @@ import MenuDrawer from "./MenuDrawer";
 import Link from "next/link";
 import TopBar from "./TopBar";
 import { MenuIcon } from "@/components/ui/icons/MenuIcon";
+import CategoryMenu from "./NavCategory/CategoryMenu";
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -107,6 +108,8 @@ export default function Navbar() {
           />
         )}
       </nav>
+
+      <CategoryMenu />
       {/* Cart Drawer */}
       <CartDrawer isOpen={isCartOpen} setIsOpen={setIsCartOpen} cartItems={cartItems} />
 
