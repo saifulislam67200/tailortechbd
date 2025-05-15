@@ -1,13 +1,7 @@
-
-
 const Navbar = () => {
- 
-
   return (
     <header className="container mx-auto">
-      <nav>
-        Navbar
-      </nav>
+      <nav>Navbar</nav>
     </header>
   );
 };
