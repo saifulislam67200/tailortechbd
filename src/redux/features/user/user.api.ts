@@ -6,7 +6,7 @@ const userApi = api.injectEndpoints({
     // Create blog post
     registerCustomer: builder.mutation<
       { data: { result: IUser; token: string } },
-      Omit<IUser, "_id" | "role" | "email">
+      Pick<IUser, "password" | "phoneNumber" | "fullName">
     >({
       query: (post) => ({
         url: "/user/signup",
@@ -15,8 +15,11 @@ const userApi = api.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
-    loginUser: builder.mutation({
-      query: (post: { email: string; password: string }) => ({
+    loginUser: builder.mutation<
+      { data: { result: IUser; token: string } },
+      { email?: string; phoneNumber?: string; mode?: "email" | "phoneNumber"; password: string }
+    >({
+      query: (post) => ({
         url: "/user/login",
         method: "POST",
         body: post,
@@ -31,23 +34,29 @@ const userApi = api.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
-    sendVerificationOtp: builder.mutation<{data:{ cooldownEnd: number; remainingSecond: number }}, undefined>(
-      {
-        query: () => ({
-          url: "/user/send-verification-otp",
-          method: "POST",
-        }),
-        invalidatesTags: ["user"],
-      }
-    ),
-    getAuthor: builder.query<{ data: IUser }, string>({
-      query: (token) => {
+    sendVerificationOtp: builder.mutation<
+      { data: { cooldownEnd: number; remainingSecond: number } },
+      undefined
+    >({
+      query: () => ({
+        url: "/user/send-verification-otp",
+        method: "POST",
+      }),
+      invalidatesTags: ["user"],
+    }),
+    verifyOtp: builder.mutation<{ data: null }, { otp: number }>({
+      query: (payload) => ({
+        url: "/user/verify-otp",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["user"],
+    }),
+    getAuthor: builder.query<{ data: IUser }, undefined>({
+      query: () => {
         return {
           url: `/user/author`,
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
         };
       },
       providesTags: ["user"],
@@ -60,4 +69,5 @@ export const {
   useGetAuthorQuery,
   useSendVerificationOtpMutation,
   useChangePasswordMutation,
+  useVerifyOtpMutation,
 } = userApi;

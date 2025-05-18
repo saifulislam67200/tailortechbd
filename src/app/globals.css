@@ -25,7 +25,9 @@
   --font-system: system-ui, "Segoe UI", Roboto, sans-serif;
   --pirmary-foreground: #000;
   --border-main: #ced4da;
-  --muted: #212529;
+  --border-muted: #00000020;
+  --strong: #212529;
+  --muted: #6f6f6f;
   --danger: #fb2c36;
 }
 
@@ -38,8 +40,10 @@
   --color-danger: var(--danger);
   --font-system: var(--font-system);
   --color-border-main: var(--border-main);
+  --color-strong: var(--strong);
   --color-muted: var(--muted);
   --color-danger: var(--danger);
+  --color-border-muted: var(--border-muted);
 }
 
 body {

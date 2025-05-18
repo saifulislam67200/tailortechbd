@@ -3,8 +3,10 @@
 import type React from "react";
 
 import { MenuIcon } from "@/components/icons/MenuIcon";
+import { useAppSelector } from "@/hooks/redux";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { FaCircleUser } from "react-icons/fa6";
 import CartDrawer from "./CartDrawer";
 import MenuDrawer from "./MenuDrawer";
 import MobileSearchBar from "./MobileSearchBar";
@@ -16,15 +18,14 @@ import UserDropdown from "./UserDropdown";
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { user } = useAppSelector((state) => state.user);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     // Implement search functionality here
-    console.log("Searching for:", searchQuery);
     setIsSearchOpen(false);
   };
 
@@ -94,7 +95,13 @@ export default function Navbar() {
               cartItemsCount={cartItems.reduce((total, item) => total + item.quantity, 0)}
             />
 
-            <UserDropdown isOpen={isUserDropdownOpen} setIsOpen={setIsUserDropdownOpen} />
+            {user ? (
+              <UserDropdown />
+            ) : (
+              <Link href={"/login"} className="text-white">
+                <FaCircleUser size={22} />
+              </Link>
+            )}
           </div>
         </div>
 

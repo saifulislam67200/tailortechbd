@@ -1,15 +1,25 @@
 import React from "react";
+import { CgSpinner } from "react-icons/cg";
 import { twMerge } from "tailwind-merge";
 
-const Button = ({ className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+const Button = ({
+  className,
+  children,
+  disabled,
+  isLoading,
+  ...props
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & { isLoading?: boolean }) => {
   return (
     <button
       {...props}
+      disabled={disabled || isLoading}
       className={twMerge(
-        "center cursor-pointer gap-[10px] rounded-[5px] bg-primary py-[6px] text-white active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-primary/50",
+        "flex cursor-pointer items-center justify-center gap-[10px] rounded-[5px] bg-primary px-[20px] py-[6px] text-white active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-primary/70",
         className
       )}
-    ></button>
+    >
+      {children} {isLoading && <CgSpinner className="animate-spin" />}
+    </button>
   );
 };
 

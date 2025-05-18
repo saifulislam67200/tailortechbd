@@ -33,7 +33,7 @@ export const getPageMetaData = (pageName: string) => {
   return {
     ...metadata,
     title: {
-      default: pageName,
+      default: pageName + " | BD SHOP",
       template: "%s | BD Shop - Your Marketplace for Bulk Products",
     },
   };

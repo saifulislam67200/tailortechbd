@@ -8,7 +8,6 @@ import { useState } from "react";
 import { CgSpinner } from "react-icons/cg";
 import { ImSpinner11 } from "react-icons/im";
 import { isPossiblePhoneNumber, isValidPhoneNumber } from "react-phone-number-input";
-import "react-phone-number-input/style.css";
 import * as Yup from "yup";
 import CountrySelector from "../ui/CountrySelector";
 import FormCard from "../ui/FormCard";
@@ -95,7 +94,7 @@ const RegisterForm = () => {
 
             <div className="flex flex-col gap-[5px]">
               <div className="flex items-center justify-start gap-0">
-                <span className="border-y-[1px] border-l-[1px] border-border-main bg-[#e9ecef] px-[12px] py-[6px] text-[12px] text-muted">
+                <span className="text-strong border-y-[1px] border-l-[1px] border-border-main bg-[#e9ecef] px-[12px] py-[6px] text-[12px]">
                   {country?.dial_code || "+880"}
                 </span>
                 <Field

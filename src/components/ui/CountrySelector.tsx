@@ -2,6 +2,7 @@
 
 import useCountries, { ICountry } from "@/hooks/useCountries";
 import { useEffect, useRef, useState } from "react";
+import { FaCaretDown } from "react-icons/fa6";
 
 const defaultCountry = {
   name: "Bangladesh",
@@ -40,10 +41,13 @@ const CountrySelector = ({ onCountrySelect }: { onCountrySelect: (country: ICoun
     <div className="relative w-full" ref={dropdownRef}>
       <button
         type="button"
-        className="w-full cursor-pointer rounded border border-border-main bg-white px-[12px] py-[6px] text-start text-base text-[12px] font-normal"
+        className="relative w-full cursor-pointer rounded border border-border-main bg-white px-[12px] py-[6px] text-start text-base text-[12px] font-normal"
         onClick={() => setIsOpen(!isOpen)}
       >
         {selected?.name || "Select a country"}
+        <FaCaretDown
+          className={`text-strong absolute top-1/2 right-2 -translate-y-1/2 duration-[0.4s] ${isOpen ? "rotate-180" : ""}`}
+        />
       </button>
 
       {isOpen && (
@@ -60,7 +64,7 @@ const CountrySelector = ({ onCountrySelect }: { onCountrySelect: (country: ICoun
             filtered.map((country) => (
               <div
                 key={country.name}
-                className="cursor-pointer px-3 py-2 hover:bg-blue-100"
+                className="border-strong/5 cursor-pointer border-b-[1px] px-3 py-2 hover:bg-blue-100"
                 onClick={() => {
                   onCountrySelect(country);
                   setSelected(country);

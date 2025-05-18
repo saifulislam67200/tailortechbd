@@ -1,15 +1,12 @@
 "use client";
 
-import { useRef, useEffect } from "react";
 import Link from "next/link";
-import { FiChevronDown } from "react-icons/fi";
+import { useEffect, useRef, useState } from "react";
 import { FaCircleUser } from "react-icons/fa6";
-interface UserDropdownProps {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
-}
+import { FiChevronDown } from "react-icons/fi";
 
-export default function UserDropdown({ isOpen, setIsOpen }: UserDropdownProps) {
+export default function UserDropdown() {
+  const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside

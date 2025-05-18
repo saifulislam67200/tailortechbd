@@ -20,7 +20,7 @@ const FormCard: React.FC<IProps> = ({ headerButtons, children, className }) => {
         className
       )}
     >
-      <div className="flex w-full items-center justify-start gap-[3px]">
+      <div className="flex w-full items-center justify-start gap-[0px]">
         {headerButtons.map((button, index) => (
           <button
             key={index + "form header"}
