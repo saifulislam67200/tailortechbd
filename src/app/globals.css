@@ -23,15 +23,23 @@
   --info: rgb(134, 133, 133);
   --danger: rgb(220, 53, 69);
   --font-system: system-ui, "Segoe UI", Roboto, sans-serif;
+  --pirmary-foreground: #000;
+  --border-main: #ced4da;
+  --muted: #212529;
+  --danger: #fb2c36;
 }
 
 @theme {
+  --color-pirmary-foreground: var(--pirmary-foreground);
   --color-background: var(--background);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-info: var(--info);
   --color-danger: var(--danger);
   --font-system: var(--font-system);
+  --color-border-main: var(--border-main);
+  --color-muted: var(--muted);
+  --color-danger: var(--danger);
 }
 
 body {
@@ -40,10 +48,11 @@ body {
   font-family: var(--font-system);
 }
 
-@layer components {
-  .center {
-    @apply flex items-center justify-center;
-  }
+.center {
+  @apply flex items-center justify-center;
+}
+.main_container {
+  @apply mx-auto max-w-[1780px] px-[16px] sm:px-[12px];
 }
 
 .position_center {

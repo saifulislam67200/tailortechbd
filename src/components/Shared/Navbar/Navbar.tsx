@@ -2,17 +2,17 @@
 
 import type React from "react";
 
-import { useState, useEffect } from "react";
-import SearchBar from "./SearchBar";
-import NavIcons from "./NavIcons";
-import UserDropdown from "./UserDropdown";
-import MobileSearchBar from "./MobileSearchBar";
+import { MenuIcon } from "@/components/icons/MenuIcon";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import CartDrawer from "./CartDrawer";
 import MenuDrawer from "./MenuDrawer";
-import Link from "next/link";
-import TopBar from "./TopBar";
-import { MenuIcon } from "@/components/ui/icons/MenuIcon";
+import MobileSearchBar from "./MobileSearchBar";
 import CategoryMenu from "./NavCategory/CategoryMenu";
+import NavIcons from "./NavIcons";
+import SearchBar from "./SearchBar";
+import TopBar from "./TopBar";
+import UserDropdown from "./UserDropdown";
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -62,7 +62,7 @@ export default function Navbar() {
     <header>
       <TopBar />
       <nav className="relative z-10 bg-black px-[16px] py-[16px]">
-        <div className="container mx-auto flex items-center justify-between">
+        <div className="main_container mx-auto flex items-center justify-between">
           {/* Hamburger Menu - Mobile only */}
           <div className="md:hidden">
             <button className="text-white" onClick={() => setIsMenuOpen(true)}>

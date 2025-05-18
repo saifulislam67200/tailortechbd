@@ -1,8 +1,6 @@
-import React from "react";
-
 const Footer = () => {
   return (
-    <footer className="container mx-auto">
+    <footer className="main_container mx-auto">
       <div>Footer</div>
     </footer>
   );
