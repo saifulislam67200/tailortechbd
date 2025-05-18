@@ -62,7 +62,7 @@ const Verification = () => {
       <FormCard headerButtons={[{ title: "Verification" }]}>
         <form>
           <div className="flex flex-col gap-[8px]">
-            <label className="text-[16px] font-[500] text-pirmary-foreground">
+            <label className="text-[16px] font-[500] text-primary-foreground">
               Verification code
             </label>
             <div className="flex items-center justify-start gap-0">

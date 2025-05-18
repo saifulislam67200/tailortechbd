@@ -19,14 +19,14 @@ export default function NavIcons({
   return (
     <>
       <button
-        className="text-white md:hidden"
+        className="text-white lg:hidden"
         onClick={() => setIsSearchOpen((prev) => !prev)}
         aria-label="Search"
       >
         <FiSearch size={22} />
       </button>
 
-      <button onClick={() => setIsCartOpen(true)} className="relative text-white" aria-label="Cart">
+      <button onClick={() => setIsCartOpen(true)} className="cursor-pointer relative hidden lg:flex text-white" aria-label="Cart">
         <FaCartArrowDown size={22} />
         {cartItemsCount > 0 && (
           <span className="absolute -top-[12px] -right-[12px] flex h-[20px] w-[20px] items-center justify-center rounded-full bg-danger text-[12px] text-white">
@@ -35,14 +35,14 @@ export default function NavIcons({
         )}
       </button>
 
-      <Link href="/wishlist" className="relative hidden text-white md:block" aria-label="wishlist">
+      <Link href="/wishlist" className="relative  text-white" aria-label="wishlist">
         <FaHeart size={22} />
         <span className="absolute -top-[12px] -right-[12px] flex h-[20px] w-[20px] items-center justify-center rounded-full bg-danger text-[12px] text-white">
           0
         </span>
       </Link>
 
-      <Link href="/compare" className="relative hidden text-white md:block" aria-label="compare">
+      <Link href="/compare" className="relative hidden text-white lg:block" aria-label="compare">
         <FiRefreshCw size={22} />
         <span className="absolute -top-[12px] -right-[12px] flex h-[20px] w-[20px] items-center justify-center rounded-full bg-danger text-[12px] text-white">
           0

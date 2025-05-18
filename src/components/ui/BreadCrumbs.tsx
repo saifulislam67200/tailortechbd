@@ -13,12 +13,12 @@ const Breadcrumb = () => {
   return (
     <nav className="flex w-full flex-wrap items-center justify-start gap-[7px] bg-white px-[16px] py-[6.4px] text-[10px] leading-[150%] font-medium">
       {pathSegments.length === 0 ? (
-        <span className="text-[14px] text-pirmary-foreground">Home</span>
+        <span className="text-[14px] text-primary-foreground">Home</span>
       ) : (
         <>
           <Link
             href="/"
-            className="flex w-fit items-center justify-start gap-[6px] text-[14px] text-pirmary-foreground hover:text-primary"
+            className="flex w-fit items-center justify-start gap-[6px] text-[14px] text-primary-foreground hover:text-primary"
           >
             <IoIosHome /> Home
           </Link>

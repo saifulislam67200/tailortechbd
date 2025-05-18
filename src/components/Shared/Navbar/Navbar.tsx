@@ -61,10 +61,10 @@ export default function Navbar() {
   return (
     <header>
       <TopBar />
-      <nav className="relative z-10 bg-black px-[16px] py-[16px]">
+      <nav className="relative z-10 bg-black px-[16px] py-[10px]">
         <div className="main_container mx-auto flex items-center justify-between">
           {/* Hamburger Menu - Mobile only */}
-          <div className="md:hidden">
+          <div className="lg:hidden mr-[0px] sm:mr-[10px] lg:mr-[0px]">
             <button className="text-white" onClick={() => setIsMenuOpen(true)}>
               <MenuIcon />
             </button>
@@ -78,7 +78,7 @@ export default function Navbar() {
           </div>
 
           {/* Search Bar - Desktop only */}
-          <div className="mx-4 hidden max-w-[502px] flex-grow md:block">
+          <div className="mx-4 hidden max-w-[704px] flex-grow lg:block xl:-mr-[42px]">
             <SearchBar
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
