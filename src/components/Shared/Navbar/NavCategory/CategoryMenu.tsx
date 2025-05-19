@@ -19,13 +19,13 @@ const CategoryMenu = () => {
 
               {/* Dropdown for subcategories */}
               {hasSubCategories ? (
-                <div className="invisible absolute left-0 z-50 mt-2 w-48 rounded-md bg-white opacity-0 shadow-lg transition-all duration-300 group-hover:visible group-hover:opacity-100">
+                <div className="invisible absolute left-0 z-50 mt-2 w-48 rounded-md bg-[#ccc] opacity-0 shadow-lg transition-all duration-300 group-hover:visible group-hover:opacity-100">
                   <div className="py-1" role="menu" aria-orientation="vertical">
                     {category.subcategories?.map((subCategory) => (
                       <Link
                         key={subCategory._id}
                         href={`/category/${category.slug}/${subCategory.slug}?label=${category.label}&subLabel=${subCategory.label}`}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block px-4 py-2 text-[14px] hover:bg-gray-100"
                         role="menuitem"
                       >
                         {subCategory.label}
