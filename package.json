@@ -13,11 +13,16 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.1",
+    "formik": "^2.4.6",
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
-    "react-redux": "^9.2.0"
+    "react-phone-number-input": "^3.4.12",
+    "react-redux": "^9.2.0",
+    "sonner": "^2.0.3",
+    "tailwind-merge": "^3.3.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

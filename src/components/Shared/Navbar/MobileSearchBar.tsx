@@ -16,12 +16,12 @@ export default function MobileSearchBar({
   handleSearch,
 }: MobileSearchBarProps) {
   return (
-    <div className="mt-4 md:hidden">
+    <div className="mt-4 lg:hidden">
       <form onSubmit={handleSearch} className="relative">
         <input
           type="search"
           placeholder="Enter Your Keyword..."
-          className="w-full rounded-[10px] border border-[#ced4da] bg-white px-[12px] py-[6px] focus:outline-none"
+          className="w-full rounded-[10px] border border-border-main bg-white px-[12px] py-[6px] focus:outline-none"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />

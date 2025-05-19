@@ -2,29 +2,30 @@
 
 import type React from "react";
 
-import { useState, useEffect } from "react";
-import SearchBar from "./SearchBar";
-import NavIcons from "./NavIcons";
-import UserDropdown from "./UserDropdown";
-import MobileSearchBar from "./MobileSearchBar";
+import { MenuIcon } from "@/components/icons/MenuIcon";
+import { useAppSelector } from "@/hooks/redux";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { FaCircleUser } from "react-icons/fa6";
 import CartDrawer from "./CartDrawer";
 import MenuDrawer from "./MenuDrawer";
-import Link from "next/link";
-import TopBar from "./TopBar";
-import { MenuIcon } from "@/components/ui/icons/MenuIcon";
+import MobileSearchBar from "./MobileSearchBar";
 import CategoryMenu from "./NavCategory/CategoryMenu";
+import NavIcons from "./NavIcons";
+import SearchBar from "./SearchBar";
+import TopBar from "./TopBar";
+import UserDropdown from "./UserDropdown";
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { user } = useAppSelector((state) => state.user);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     // Implement search functionality here
-    console.log("Searching for:", searchQuery);
     setIsSearchOpen(false);
   };
 
@@ -61,10 +62,10 @@ export default function Navbar() {
   return (
     <header>
       <TopBar />
-      <nav className="relative z-10 bg-black px-[16px] py-[16px]">
-        <div className="container mx-auto flex items-center justify-between">
+      <nav className="relative z-10 bg-black px-[16px] py-[10px]">
+        <div className="main_container mx-auto flex items-center justify-between">
           {/* Hamburger Menu - Mobile only */}
-          <div className="md:hidden">
+          <div className="lg:hidden mr-[0px] sm:mr-[10px] lg:mr-[0px]">
             <button className="text-white" onClick={() => setIsMenuOpen(true)}>
               <MenuIcon />
             </button>
@@ -78,7 +79,7 @@ export default function Navbar() {
           </div>
 
           {/* Search Bar - Desktop only */}
-          <div className="mx-4 hidden max-w-[502px] flex-grow md:block">
+          <div className="mx-4 hidden max-w-[704px] flex-grow lg:block xl:-mr-[42px]">
             <SearchBar
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -94,7 +95,13 @@ export default function Navbar() {
               cartItemsCount={cartItems.reduce((total, item) => total + item.quantity, 0)}
             />
 
-            <UserDropdown isOpen={isUserDropdownOpen} setIsOpen={setIsUserDropdownOpen} />
+            {user ? (
+              <UserDropdown />
+            ) : (
+              <Link href={"/login"} className="text-white">
+                <FaCircleUser size={22} />
+              </Link>
+            )}
           </div>
         </div>
 
