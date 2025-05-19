@@ -3,7 +3,7 @@ import { useAppSelector } from "@/hooks/redux";
 import Link from "next/link";
 
 const DetailsAndPrice = () => {
-    const cartItems = useAppSelector((state) => state?.cart?.items) ?? [];
+    const cartItems = useAppSelector((state) => state?.cart?.checkedItems) ?? [];
 
     const { subtotal, totalDiscount } = cartItems?.reduce(
         (acc, item) => {

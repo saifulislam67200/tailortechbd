@@ -7,6 +7,9 @@ export type TCartItem = {
     discount: number;
     quantity: number;
     image?: string;
+    color?: string;
+    size: string;
+    stock: number;
 };
 
 type TCartState = {
@@ -67,8 +70,15 @@ const cartSlice = createSlice({
             state.items = state.items.filter(item => !checkedIds.has(item.id));
             state.checkedItems = [];
         },
+        toggleSelectAll(state) {
+            if (state.checkedItems.length === state.items.length) {
+                state.checkedItems = [];
+            } else {
+                state.checkedItems = [...state.items];
+            }
+        },
     },
 });
 
-export const { addToCart, removeFromCart, updateQuantity, clearCart, setLoading, setCartState, toggleCheckItem, deleteCheckedItems } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateQuantity, clearCart, setLoading, setCartState, toggleCheckItem, deleteCheckedItems, toggleSelectAll } = cartSlice.actions;
 export default cartSlice.reducer;

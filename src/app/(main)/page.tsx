@@ -14,7 +14,10 @@ export default function Home() {
       price: product?.price,
       discount: product?.discount,
       quantity: 1,
-      image: product?.colors?.[0]?.images?.[0] || "", // Fallback to a default image if not available
+      image: product?.colors?.[0]?.images?.[0] || "",
+      color: "red",
+      size: "XXl",
+      stock: 5
     };
 
     dispatch(addToCart(cartData));

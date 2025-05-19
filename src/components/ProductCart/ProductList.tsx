@@ -2,9 +2,22 @@
 import { BiSupport } from "react-icons/bi"
 import CartCard from "./CartCard"
 import { useAppSelector } from "@/hooks/redux";
+import { useDispatch } from "react-redux";
+import { deleteCheckedItems, toggleSelectAll } from "@/redux/features/cart/cartSlice";
 
 const ProductList = () => {
-    const cartItems = useAppSelector((state) => state?.cart?.items) ?? [];
+    const { items: cartItems, checkedItems } = useAppSelector((state) => state?.cart) ?? [];
+    const dispatch = useDispatch();
+
+    const handleDeleteCheckedProducts = () => {
+        dispatch(deleteCheckedItems())
+    }
+
+    const handleSelectAll = () => {
+        dispatch(toggleSelectAll());
+    }
+
+
     return (
         <div className="w-full  bg-white p-[5px]">
             <div className="h-[40px] bg-tertiary flex items-center justify-between px-[8px]  sm:px-[16px] py-[8px]">
@@ -16,10 +29,10 @@ const ProductList = () => {
             </div>
             <div className="flex justify-between items-center mt-[27px] pl-[20px]  md:pl-[35px] pr-[12px]">
                 <div className="flex items-center gap-[35px]">
-                    <input type="checkbox" name="" id="select-all" className="cursor-pointer" />
+                    <input checked={cartItems?.length === checkedItems?.length} onClick={() => handleSelectAll()} type="checkbox" name="" id="select-all" className="cursor-pointer" />
                     <label htmlFor="select-all" className="text-[16px] cursor-pointer">Check All</label>
                 </div>
-                <button className="bg-quaternary px-[10px] rounded-full font-bold text-info">Delete</button>
+                <button onClick={handleDeleteCheckedProducts} className="bg-quaternary px-[10px] rounded-full font-bold text-info">Delete</button>
             </div>
             {
                 (cartItems?.length > 0) ? (
