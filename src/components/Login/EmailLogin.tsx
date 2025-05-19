@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
 import Button from "../ui/Button";
+import FormMessage, { IFormMessage } from "../ui/FormMessage";
 import Input from "../ui/Input";
 const initialValues = { email: "", password: "" };
 const validationSchema = yup.object({
@@ -16,12 +17,13 @@ const validationSchema = yup.object({
 });
 const EmailLogin = () => {
   const [login, { isLoading }] = useLoginUserMutation(undefined);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [formMessage, setFormMessage] = useState<IFormMessage | null>(null);
 
   const dispatch = useDispatch();
 
   const router = useRouter();
   const onSubmit = async (values: typeof initialValues) => {
+    setFormMessage(null);
     const res = await login({
       ...values,
       mode: "email",
@@ -29,16 +31,16 @@ const EmailLogin = () => {
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
       if (error.data.message) {
-        setFormError(error.data.message);
+        setFormMessage({ message: error.data.message, type: "error" });
       } else {
-        setFormError("Something went wrong");
+        setFormMessage({ message: "Something went wrong", type: "error" });
       }
       return;
     }
 
     dispatch(setUser(res.data?.data.result as IUser));
 
-    setFormError(null);
+    setFormMessage(null);
     router.push("/");
   };
   return (
@@ -60,7 +62,7 @@ const EmailLogin = () => {
             )}
           </div>
 
-          {formError && <span className="text-[12px] text-danger">{formError}</span>}
+          <FormMessage formMessage={formMessage} />
           <Button isLoading={isLoading} type="submit" className="w-full">
             Login
           </Button>

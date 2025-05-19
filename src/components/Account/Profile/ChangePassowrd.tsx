@@ -1,5 +1,6 @@
 "use client";
 import Button from "@/components/ui/Button";
+import FormMessage, { IFormMessage } from "@/components/ui/FormMessage";
 import Input from "@/components/ui/Input";
 import { useChangePasswordMutation } from "@/redux/features/user/user.api";
 import { IQueruMutationErrorResponse } from "@/types";
@@ -24,19 +25,20 @@ const validationSchema = Yup.object({
 
 const ChangePassword = () => {
   const [changePassword, { isLoading }] = useChangePasswordMutation();
-  const [formError, setFormError] = useState<string | null>(null);
+  const [formMessage, setFormMessage] = useState<IFormMessage | null>(null);
   const handleSubmit = async (values: typeof initialValues) => {
+    setFormMessage(null);
     const res = await changePassword(values);
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
       if (error.data.message) {
-        setFormError(error.data.message);
+        setFormMessage({ message: error.data.message, type: "error" });
       } else {
-        setFormError("Something went wrong");
+        setFormMessage({ message: "Something went wrong", type: "error" });
       }
       return;
     }
-    setFormError("Password changed successfully");
+    setFormMessage({ message: "Password updated successfully", type: "success" });
   };
 
   return (
@@ -91,9 +93,8 @@ const ChangePassword = () => {
               />
             </div>
           </div>
-          {formError && <span className="text-[12px] text-red-500">{formError}</span>}
-
-          <Button isLoading={isLoading} type="submit" className="mt-[16px] bg-pirmary-foreground">
+          <FormMessage formMessage={formMessage} />
+          <Button isLoading={isLoading} type="submit" className="mt-[16px] bg-primary-foreground">
             Update Password
           </Button>
         </Form>

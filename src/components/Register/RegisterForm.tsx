@@ -11,6 +11,7 @@ import { isPossiblePhoneNumber, isValidPhoneNumber } from "react-phone-number-in
 import * as Yup from "yup";
 import CountrySelector from "../ui/CountrySelector";
 import FormCard from "../ui/FormCard";
+import FormMessage, { IFormMessage } from "../ui/FormMessage";
 import Input from "../ui/Input";
 const generateVerificationCode = () => {
   return Math.floor(100000 + Math.random() * 900000);
@@ -28,7 +29,7 @@ const RegisterForm = () => {
   const [verificationCode, setVerificationCode] = useState<number>(generateVerificationCode());
 
   const [registerUser, { isLoading }] = useRegisterCustomerMutation();
-  const [formError, setFormError] = useState<string | null>(null);
+  const [formMessage, setFormMessage] = useState<IFormMessage | null>(null);
 
   const router = useRouter();
 
@@ -36,7 +37,7 @@ const RegisterForm = () => {
     values: typeof initialValues,
     helper: FormikHelpers<typeof initialValues>
   ) => {
-    setFormError(null);
+    setFormMessage(null);
     if (!country) {
       helper.setFieldError("phoneNumber", "* Country is required");
       return;
@@ -52,14 +53,15 @@ const RegisterForm = () => {
       phoneNumber: phone,
       password: values.password,
       fullName: values.fullName,
+      geo_profile: { country: country.name, phone_code: country.dial_code },
     });
     const error = res.error as IQueruMutationErrorResponse;
 
     if (error) {
       if (error.data.message) {
-        setFormError(error.data.message);
+        setFormMessage({ message: error.data.message, type: "error" });
       } else {
-        setFormError("Something went wrong");
+        setFormMessage({ message: "Something went wrong", type: "error" });
       }
       return;
     }
@@ -94,7 +96,7 @@ const RegisterForm = () => {
 
             <div className="flex flex-col gap-[5px]">
               <div className="flex items-center justify-start gap-0">
-                <span className="text-strong border-y-[1px] border-l-[1px] border-border-main bg-[#e9ecef] px-[12px] py-[6px] text-[12px]">
+                <span className="border-y-[1px] border-l-[1px] border-border-main bg-solid-slab px-[12px] py-[6px] text-[12px] text-strong">
                   {country?.dial_code || "+880"}
                 </span>
                 <Field
@@ -148,7 +150,7 @@ const RegisterForm = () => {
                 )}
               </div>
             </div>
-            {formError ? <p className="text-danger">{formError}</p> : ""}
+            <FormMessage formMessage={formMessage} />
             <button
               disabled={isLoading}
               type="submit"

@@ -24,7 +24,7 @@ const AccountRouting = () => {
           <Link
             href={route.path}
             key={route.path}
-            className={`center w-full border-b-[1px] border-border-main px-[20px] py-[5px] font-[700] ${route.path === path ? "bg-pirmary-foreground text-white" : ""}`}
+            className={`center w-full border-b-[1px] border-border-main px-[20px] py-[5px] font-[700] ${route.path === path ? "bg-primary-foreground text-white" : ""}`}
           >
             {route.name}
           </Link>

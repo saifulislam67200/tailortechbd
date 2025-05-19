@@ -1,5 +1,5 @@
 export type TRoles = "user" | "admin";
-
+export type TGender = "male" | "female";
 export interface IUser {
   _id: string;
   fullName: string;
@@ -8,6 +8,12 @@ export interface IUser {
   password: string;
   phoneNumber: string;
   isVerified: boolean;
+  gender?: TGender;
   createdAt: string;
+  updatedAt: string;
+  geo_profile: {
+    country: string;
+    phone_code: string;
+  };
   role: TRoles;
 }

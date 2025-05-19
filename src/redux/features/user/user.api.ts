@@ -6,7 +6,7 @@ const userApi = api.injectEndpoints({
     // Create blog post
     registerCustomer: builder.mutation<
       { data: { result: IUser; token: string } },
-      Pick<IUser, "password" | "phoneNumber" | "fullName">
+      Pick<IUser, "password" | "phoneNumber" | "fullName" | "geo_profile">
     >({
       query: (post) => ({
         url: "/user/signup",
@@ -61,6 +61,16 @@ const userApi = api.injectEndpoints({
       },
       providesTags: ["user"],
     }),
+    updateProfile: builder.mutation<{ data: IUser }, Partial<IUser>>({
+      query: (payload) => {
+        return {
+          url: `/user/update-profile`,
+          method: "PATCH",
+          body: payload,
+        };
+      },
+      invalidatesTags: ["user"],
+    }),
   }),
 });
 export const {
@@ -70,4 +80,5 @@ export const {
   useSendVerificationOtpMutation,
   useChangePasswordMutation,
   useVerifyOtpMutation,
+  useUpdateProfileMutation,
 } = userApi;

@@ -8,6 +8,7 @@ import { isPossiblePhoneNumber, isValidPhoneNumber } from "react-phone-number-in
 import * as yup from "yup";
 import Button from "../ui/Button";
 import CountrySelector from "../ui/CountrySelector";
+import FormMessage, { IFormMessage } from "../ui/FormMessage";
 import Input from "../ui/Input";
 const initialValues = { phoneNumber: "", password: "" };
 const validationSchema = yup.object({
@@ -18,7 +19,7 @@ const PhoneNumberLogin = () => {
   const [country, setCountry] = useState<ICountry>();
 
   const [login, { isLoading }] = useLoginUserMutation(undefined);
-  const [formError, setFormError] = useState<string | null>(null);
+  const [formMessage, setFormMessage] = useState<IFormMessage | null>(null);
 
   const router = useRouter();
 
@@ -26,6 +27,7 @@ const PhoneNumberLogin = () => {
     values: typeof initialValues,
     helper: FormikHelpers<typeof initialValues>
   ) => {
+    setFormMessage(null);
     if (!country) {
       helper.setFieldError("phoneNumber", "* Country is required");
       return;
@@ -46,14 +48,14 @@ const PhoneNumberLogin = () => {
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
       if (error.data.message) {
-        setFormError(error.data.message);
+        setFormMessage({ message: error.data.message, type: "error" });
       } else {
-        setFormError("Something went wrong");
+        setFormMessage({ message: "Something went wrong", type: "error" });
       }
       return;
     }
 
-    setFormError(null);
+    setFormMessage(null);
     router.push("/");
   };
   return (
@@ -63,7 +65,7 @@ const PhoneNumberLogin = () => {
           <CountrySelector onCountrySelect={setCountry} />
           <div className="flex flex-col gap-[5px]">
             <div className="flex items-center justify-start gap-0">
-              <span className="text-strong border-y-[1px] border-l-[1px] border-border-main bg-[#e9ecef] px-[12px] py-[6px] text-[12px]">
+              <span className="border-y-[1px] border-l-[1px] border-border-main bg-solid-slab px-[12px] py-[6px] text-[12px] text-strong">
                 {country?.dial_code || "+880"}
               </span>
               <Field
@@ -84,7 +86,7 @@ const PhoneNumberLogin = () => {
               <span className="text-[12px] text-danger">{errors.password}</span>
             )}
           </div>
-          {formError && <span className="text-[12px] text-danger">{formError}</span>}
+          <FormMessage formMessage={formMessage} />
           <Button isLoading={isLoading} type="submit" className="w-full">
             Login
           </Button>

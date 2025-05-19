@@ -26,11 +26,11 @@ const LoginView = () => {
         <div className="flex items-center justify-between gap-[10px]">
           <Link
             href={"/forgot-password"}
-            className={"text-[14px] text-pirmary-foreground hover:underline"}
+            className={"text-[14px] text-primary-foreground hover:underline"}
           >
             Forgot Password ?
           </Link>
-          <span className={"text-[14px] text-pirmary-foreground"}>
+          <span className={"text-[14px] text-primary-foreground"}>
             New Customer?
             <Link href={"/register"} className="font-[600] hover:underline">
               {" "}

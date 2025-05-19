@@ -106,7 +106,7 @@ const VerificationView = () => {
       <FormCard headerButtons={[{ title: "Verification" }]}>
         <form onSubmit={handleVerify} className="flex flex-col gap-[10px]">
           <div className="flex items-center justify-start gap-0">
-            <span className="center text-strong h-[32px] border-y-[1px] border-l-[1px] border-border-main bg-[#e9ecef] px-[12px] py-[6px] text-[12px]">
+            <span className="center h-[32px] border-y-[1px] border-l-[1px] border-border-main bg-solid-slab px-[12px] py-[6px] text-[12px] text-strong">
               <BsFillPhoneFill />
             </span>
             <Input required name="otp" type="number" placeholder="Enter Your Verification Code" />
@@ -115,7 +115,7 @@ const VerificationView = () => {
           <Button disabled={isLoading} type="submit" className="w-full">
             {isLoading ? "Verifying..." : "Verify"}
           </Button>
-          <span className="text-strong text-[14px]">
+          <span className="text-[14px] text-strong">
             didn&apos;t receive the code?{" "}
             {remainingTime > 0 ? (
               `Resend in ${dateUtils.formatSecondsToMMSS(remainingTime)}`
