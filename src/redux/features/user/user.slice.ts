@@ -10,7 +10,7 @@ const initialState: TAuthState = {
   isLoading: true,
 };
 const userSlice = createSlice({
-  name: "givingGroup",
+  name: "user",
   initialState,
   reducers: {
     setUser(state, action: PayloadAction<IUser | null>) {

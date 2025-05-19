@@ -60,12 +60,12 @@ export default function Navbar() {
   ];
 
   return (
-    <header>
+    <header style={{ boxShadow: "rgba(0,0,0,.19) 0 10px 20px,rgba(0,0,0,.23) 0 6px 6px" }}>
       <TopBar />
       <nav className="relative z-10 bg-black px-[16px] py-[10px]">
         <div className="main_container mx-auto flex items-center justify-between">
           {/* Hamburger Menu - Mobile only */}
-          <div className="lg:hidden mr-[0px] sm:mr-[10px] lg:mr-[0px]">
+          <div className="mr-[0px] sm:mr-[10px] lg:mr-[0px] lg:hidden">
             <button className="text-white" onClick={() => setIsMenuOpen(true)}>
               <MenuIcon />
             </button>
