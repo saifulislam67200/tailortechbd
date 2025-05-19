@@ -26,15 +26,15 @@ const DetailsAndPrice = () => {
                 <ul className="px-[13px] pt-[20px] pb-[23px]">
                     <li className="flex justify-between items-center mb-[8px]">
                         <p className="text-[14px] font-bold">Subtotal</p>
-                        <p className="text-[14px] font-bold">TK {subtotal}</p>
+                        <p className="text-[14px] font-bold">TK {parseFloat(subtotal.toFixed(2))}</p>
                     </li>
                     <li className="flex justify-between items-center mb-[8px]">
                         <p className="text-[14px] font-bold">Ecom Discount</p>
-                        <p className="text-[14px] font-bold">TK {totalDiscount}</p>
+                        <p className="text-[14px] font-bold">TK {parseFloat(totalDiscount.toFixed(2))}</p>
                     </li>
                     <li className="flex justify-between items-center">
                         <p className="text-[14px] font-bold">Total</p>
-                        <p className="text-[14px] font-bold">TK {total}</p>
+                        <p className="text-[14px] font-bold">TK {parseFloat(total.toFixed(2))}</p>
                     </li>
                 </ul>
             </div>

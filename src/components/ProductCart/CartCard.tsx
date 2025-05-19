@@ -1,35 +1,30 @@
 "use client";
 import { useAppDispatch } from "@/hooks/redux";
-import { removeFromCart, TCartItem } from "@/redux/features/cart/cartSlice";
+import { removeFromCart, TCartItem, updateQuantity } from "@/redux/features/cart/cartSlice";
 import Image from "next/image"
-import { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri"
 
 
 const CartCard = ({ item }: { item: TCartItem }) => {
-    const [quantity, setQuantity] = useState(1);
     const dispatch = useAppDispatch();
 
-    const availableQuantity = 10;
-
-    const handleQuantity = (type: "inc" | "dec") => {
-        setQuantity(prev => {
-            if (type === "inc") {
-                return prev < availableQuantity ? prev + 1 : prev;
-            } else {
-                return prev > 1 ? prev - 1 : prev;
-            }
-        });
+    const handleQuantity = (type: "inc" | "dec", id: string) => {
+        if (type === "inc") {
+            dispatch(updateQuantity({ id, quantity: item?.quantity + 1 }));
+        } else {
+            dispatch(updateQuantity({ id, quantity: item?.quantity - 1 }));
+        }
     }
 
     const handleRemoveProduct = (id: string) => {
         dispatch(removeFromCart(id))
     };
 
+
     return (
         <div className="pt-[20px] pb-[14px] border-b-[1px] border-quaternary mx-[10px]">
             <div className="flex items-center pl-[10px] md:pl-[25px]">
-                <input type="checkbox" name="" id="" />
+                <input type="checkbox" name="" id="" className="cursor-pointer" />
 
                 <div className="max-w-[70px] min-w-[70px] h-[70px] ml-[22px] md:ml-[53px] mr-[16px] md:mr-[35px]">
                     <Image
@@ -49,20 +44,19 @@ const CartCard = ({ item }: { item: TCartItem }) => {
                 <div className="flex items-center h-[18px]">
                     <button
                         className="cursor-pointer px-[5px] flex items-center border"
-                        onClick={() => handleQuantity("dec")}
-                        disabled={quantity <= 1}
+                        onClick={() => handleQuantity("dec", item?.id)}
+                        disabled={item?.quantity <= 1}
                     >-</button>
                     <div className="w-[64px] px-[12px] border-t border-b border-quaternary flex items-start justify-center">
-                        {quantity}
+                        {item?.quantity}
                     </div>
                     <button
                         className="cursor-pointer px-[5px] flex items-center border"
-                        onClick={() => handleQuantity("inc")}
-                        disabled={quantity >= availableQuantity}
+                        onClick={() => handleQuantity("inc", item?.id)}
                     >+</button>
                 </div>
 
-                <p className="text-[13px] ml-[20px] mr-[50px]">Tk <span className="font-semibold">{item?.price}</span></p>
+                <p className="text-[13px] ml-[20px] mr-[50px]">Tk <span className="font-semibold">{item?.price} X </span></p>
 
                 <button onClick={() => handleRemoveProduct(item?.id)} className="cursor-pointer w-[25px] h-[25px] bg-quaternary flex justify-center items-center">
                     <RiDeleteBin6Line />

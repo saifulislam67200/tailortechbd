@@ -100,8 +100,8 @@ function CartItem({ item }: { item: CartItem }) {
         </p>
       </div>
 
-      <button onClick={() => handleRemoveItem(item?.id)}>
-        <RiDeleteBin6Line className="text-blue-500" />
+      <button onClick={() => handleRemoveItem(item?.id)} className="w-[30px] h-[30px] cursor-pointer flex justify-end items-center">
+        <RiDeleteBin6Line className="text-blue-500 " />
       </button>
     </div>
   );
