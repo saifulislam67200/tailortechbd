@@ -45,17 +45,52 @@ export default function Navbar() {
   const cartItems = [
     {
       id: 1,
-      name: "Product 1",
+      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS 16GB RAM 512GB SSD 16 Inch FHD+ WUXGA Display Off Black Gaming Laptop ",
       price: 99.99,
       quantity: 1,
-      image: "/placeholder.svg?height=80&width=80",
+      image: "/macbook.jpeg",
+    },
+    {
+      id: 1,
+      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS 16GB RAM 512GB SSD 16 Inch FHD+ WUXGA Display Off Black Gaming Laptop ",
+      price: 99.99,
+      quantity: 1,
+      image: "/macbook.jpeg",
+    },
+    {
+      id: 1,
+      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS 16GB RAM 512GB SSD 16 Inch FHD+ WUXGA Display Off Black Gaming Laptop ",
+      price: 99.99,
+      quantity: 1,
+      image: "/macbook.jpeg",
+    },
+    {
+      id: 1,
+      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS 16GB RAM 512GB SSD 16 Inch FHD+ WUXGA Display Off Black Gaming Laptop ",
+      price: 99.99,
+      quantity: 1,
+      image: "/macbook.jpeg",
+    },
+    {
+      id: 1,
+      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS 16GB RAM 512GB SSD 16 Inch FHD+ WUXGA Display Off Black Gaming Laptop ",
+      price: 99.99,
+      quantity: 1,
+      image: "/macbook.jpeg",
+    },
+    {
+      id: 1,
+      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS 16GB RAM 512GB SSD 16 Inch FHD+ WUXGA Display Off Black Gaming Laptop ",
+      price: 99.99,
+      quantity: 1,
+      image: "/macbook.jpeg",
     },
     {
       id: 2,
-      name: "Product 2",
+      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS",
       price: 149.99,
       quantity: 2,
-      image: "/placeholder.svg?height=80&width=80",
+      image: "/macbook.jpeg",
     },
   ];
 
