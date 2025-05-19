@@ -1,11 +1,20 @@
 "use client";
-import { categories } from "@/mock/category";
+// import { categories } from "@/mock/category";
+import { useGetDisplayedCategoriesQuery } from "@/redux/category/category.api";
 import Link from "next/link";
 const CategoryMenu = () => {
+  const { data } = useGetDisplayedCategoriesQuery();
+  const categories = data?.data;
+
   return (
     <div className="hidden items-center justify-center bg-black pb-[12px] lg:flex">
       <div className="flex gap-[16px] sm:ml-[24px] sm:space-x-[20px]">
-        {categories.map((category) => {
+        {!categories ||
+          (categories.length === 0 && (
+            <span className="text-sm text-gray-400">No categories available at the moment.</span>
+          ))}
+
+        {categories?.map((category) => {
           const hasSubCategories = category?.subcategories?.length;
 
           return (
