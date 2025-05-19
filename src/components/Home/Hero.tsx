@@ -18,7 +18,7 @@ const Hero = () => {
       <div className="flex flex-col gap-[8px] lg:flex-row ">
         {/* Left Side - Main Banner */}
         <div className="w-full lg:w-2/3">
-          <div className="relative mb-[4px] w-full aspect-[834.66/434.7] lg:h-[434.7px]">
+          <div className="relative mb-[4px] w-full aspect-[834.66/434.7]">
             <Swiper
               style={{ width: "100%", height: "100%" }}
               spaceBetween={20}
