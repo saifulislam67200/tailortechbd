@@ -1,7 +1,25 @@
+"use client";
 import Image from "next/image"
+import { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri"
 
-const CartCard = () => {
+interface CartCardProps {
+    availableQuantity?: number; // Optional, default to 10 if not provided
+}
+
+const CartCard = ({ availableQuantity = 10 }: CartCardProps) => {
+    const [quantity, setQuantity] = useState(1);
+
+    const handleQuantity = (type: "inc" | "dec") => {
+        setQuantity(prev => {
+            if (type === "inc") {
+                return prev < availableQuantity ? prev + 1 : prev;
+            } else {
+                return prev > 1 ? prev - 1 : prev;
+            }
+        });
+    }
+
     return (
         <div className="pt-[20px] pb-[14px] border-b-[1px] border-quaternary mx-[10px]">
             <div className="flex items-center pl-[10px] md:pl-[25px]">
@@ -23,11 +41,19 @@ const CartCard = () => {
 
             <div className="flex justify-end pr-[10px] mt-[10px] md:mt-[0px]">
                 <div className="flex items-center h-[18px]">
-                    <button className="cursor-pointer px-[5px] flex items-center border">-</button>
-                    <div className="w-[64px] px-[12px] border-t border-b border-quaternary flex items-start">
-                        1
+                    <button
+                        className="cursor-pointer px-[5px] flex items-center border"
+                        onClick={() => handleQuantity("dec")}
+                        disabled={quantity <= 1}
+                    >-</button>
+                    <div className="w-[64px] px-[12px] border-t border-b border-quaternary flex items-start justify-center">
+                        {quantity}
                     </div>
-                    <button className="cursor-pointer px-[5px] flex items-center border">+</button>
+                    <button
+                        className="cursor-pointer px-[5px] flex items-center border"
+                        onClick={() => handleQuantity("inc")}
+                        disabled={quantity >= availableQuantity}
+                    >+</button>
                 </div>
 
                 <p className="text-[13px] ml-[20px] mr-[50px]">Tk <span className="font-semibold">700</span></p>

@@ -28,7 +28,6 @@ const ProductList = () => {
                 <CartCard />
                 <CartCard />
             </div>
-
         </div>
     )
 }

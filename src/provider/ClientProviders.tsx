@@ -1,14 +1,18 @@
 "use client";
-import { store } from "@/redux/store";
+import { persistor, store } from "@/redux/store";
 import { Provider } from "react-redux";
 import { Toaster } from "sonner";
 import AuthProvider from "./AuthProvider";
+import { PersistGate } from "redux-persist/integration/react";
+
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
       <Toaster />
-      <AuthProvider>{children}</AuthProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <AuthProvider>{children}</AuthProvider>
+      </PersistGate>
     </Provider>
   );
 }
