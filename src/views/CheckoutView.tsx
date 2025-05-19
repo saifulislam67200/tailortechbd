@@ -85,7 +85,10 @@ const CheckoutView = () => {
       });
       return;
     }
-    const payload: Omit<IOrder, "status" | "paymentStatus" | "totalProductAmount" | "user"> = {
+    const payload: Omit<
+      IOrder,
+      "status" | "paymentStatus" | "totalProductAmount" | "user" | "_id"
+    > = {
       ...values,
       billingAddress: !isSameBillingAddress
         ? {
@@ -119,7 +122,7 @@ const CheckoutView = () => {
       return;
     }
     // change it with order success page
-    router.push(`/account/profile`);
+    router.push(`/order/success?o_id=${res.data?.data._id}`);
   };
 
   return (

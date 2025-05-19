@@ -29,6 +29,7 @@ export interface IBillingAddress {
 }
 
 export interface IOrder {
+  _id: string;
   user: string;
   shippingAddress: IShippingAddress;
   billingAddress?: IBillingAddress;
