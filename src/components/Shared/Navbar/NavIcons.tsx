@@ -1,21 +1,21 @@
 "use client";
-
 import Link from "next/link";
 import { FiSearch, FiRefreshCw } from "react-icons/fi";
 import { FaCartArrowDown } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
+import { useAppSelector } from "@/hooks/redux";
 
 interface NavIconsProps {
   setIsSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsCartOpen: (isOpen: boolean) => void;
-  cartItemsCount: number;
 }
 
 export default function NavIcons({
   setIsSearchOpen,
   setIsCartOpen,
-  cartItemsCount,
 }: NavIconsProps) {
+  const cartItems = useAppSelector((state) => state?.cart?.items);
+
   return (
     <>
       <button
@@ -28,11 +28,9 @@ export default function NavIcons({
 
       <button onClick={() => setIsCartOpen(true)} className="cursor-pointer relative hidden lg:flex text-white" aria-label="Cart">
         <FaCartArrowDown size={22} />
-        {cartItemsCount > 0 && (
-          <span className="absolute -top-[12px] -right-[12px] flex h-[20px] w-[20px] items-center justify-center rounded-full bg-danger text-[12px] text-white">
-            {cartItemsCount}
-          </span>
-        )}
+        <span className="absolute -top-[12px] -right-[12px] flex h-[20px] w-[20px] items-center justify-center rounded-full bg-danger text-[12px] text-white">
+          {cartItems?.length}
+        </span>
       </button>
 
       <Link href="/wishlist" className="relative  text-white" aria-label="wishlist">

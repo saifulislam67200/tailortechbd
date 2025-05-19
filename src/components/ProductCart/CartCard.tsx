@@ -1,14 +1,16 @@
 "use client";
+import { useAppDispatch } from "@/hooks/redux";
+import { removeFromCart, TCartItem } from "@/redux/features/cart/cartSlice";
 import Image from "next/image"
 import { useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri"
 
-interface CartCardProps {
-    availableQuantity?: number; // Optional, default to 10 if not provided
-}
 
-const CartCard = ({ availableQuantity = 10 }: CartCardProps) => {
+const CartCard = ({ item }: { item: TCartItem }) => {
     const [quantity, setQuantity] = useState(1);
+    const dispatch = useAppDispatch();
+
+    const availableQuantity = 10;
 
     const handleQuantity = (type: "inc" | "dec") => {
         setQuantity(prev => {
@@ -20,6 +22,10 @@ const CartCard = ({ availableQuantity = 10 }: CartCardProps) => {
         });
     }
 
+    const handleRemoveProduct = (id: string) => {
+        dispatch(removeFromCart(id))
+    };
+
     return (
         <div className="pt-[20px] pb-[14px] border-b-[1px] border-quaternary mx-[10px]">
             <div className="flex items-center pl-[10px] md:pl-[25px]">
@@ -27,7 +33,7 @@ const CartCard = ({ availableQuantity = 10 }: CartCardProps) => {
 
                 <div className="max-w-[70px] min-w-[70px] h-[70px] ml-[22px] md:ml-[53px] mr-[16px] md:mr-[35px]">
                     <Image
-                        src="/macbook.jpeg"
+                        src={item?.image || ""}
                         width={300}
                         height={300}
                         alt="product-image"
@@ -35,7 +41,7 @@ const CartCard = ({ availableQuantity = 10 }: CartCardProps) => {
                     />
                 </div>
                 <h1 className="text-black text-[12px] sm:text-[14px] font-bold">
-                    Lenovo IdeaPad Gaming 3 15ACH6 AMD Ryzen 5 5500H 8GB RAM 512GB SSD 15.6 Inch FHD Display Shadow Black Gaming Laptop
+                    {item?.name}
                 </h1>
             </div>
 
@@ -56,9 +62,9 @@ const CartCard = ({ availableQuantity = 10 }: CartCardProps) => {
                     >+</button>
                 </div>
 
-                <p className="text-[13px] ml-[20px] mr-[50px]">Tk <span className="font-semibold">700</span></p>
+                <p className="text-[13px] ml-[20px] mr-[50px]">Tk <span className="font-semibold">{item?.price}</span></p>
 
-                <button className="cursor-pointer w-[25px] h-[25px] bg-quaternary flex justify-center items-center">
+                <button onClick={() => handleRemoveProduct(item?.id)} className="cursor-pointer w-[25px] h-[25px] bg-quaternary flex justify-center items-center">
                     <RiDeleteBin6Line />
                 </button>
             </div>
