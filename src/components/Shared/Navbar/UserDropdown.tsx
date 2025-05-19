@@ -24,10 +24,10 @@ export default function UserDropdown() {
   }, [setIsOpen]);
 
   return (
-    <div className="relative hidden md:block" ref={dropdownRef}>
+    <div className="relative hidden lg:block" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center text-white"
+        className="flex items-center text-white cursor-pointer"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >

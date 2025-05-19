@@ -16,7 +16,7 @@ export default function MobileSearchBar({
   handleSearch,
 }: MobileSearchBarProps) {
   return (
-    <div className="mt-4 md:hidden">
+    <div className="mt-4 lg:hidden">
       <form onSubmit={handleSearch} className="relative">
         <input
           type="search"

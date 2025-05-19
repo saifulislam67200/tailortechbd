@@ -23,7 +23,7 @@
   --info: rgb(134, 133, 133);
   --danger: rgb(220, 53, 69);
   --font-system: system-ui, "Segoe UI", Roboto, sans-serif;
-  --pirmary-foreground: #000;
+  --primary-foreground: #000;
   --border-main: #ced4da;
   --border-muted: #00000020;
   --strong: #212529;
@@ -32,7 +32,7 @@
 }
 
 @theme {
-  --color-pirmary-foreground: var(--pirmary-foreground);
+  --color-primary-foreground: var(--primary-foreground);
   --color-background: var(--background);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);

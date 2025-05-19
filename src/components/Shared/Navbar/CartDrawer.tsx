@@ -24,9 +24,8 @@ export default function CartDrawer({ isOpen, setIsOpen, cartItems }: CartDrawerP
   return (
     <>
       <div
-        className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${
-          isOpen ? "opacity-50" : "pointer-events-none opacity-0"
-        }`}
+        className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${isOpen ? "opacity-50" : "pointer-events-none opacity-0"
+          }`}
         onClick={() => setIsOpen(false)}
         aria-hidden={!isOpen}
       />
@@ -34,16 +33,15 @@ export default function CartDrawer({ isOpen, setIsOpen, cartItems }: CartDrawerP
       {/* Drawer - fully opaque */}
       <div
         ref={drawerRef}
-        className={`fixed top-0 right-0 z-50 h-full w-4/5 transform bg-white transition-transform duration-300 ease-in-out sm:w-[384px] ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed top-0 right-0 z-50 h-full w-4/5 transform bg-white transition-transform duration-300 ease-in-out sm:w-[384px] ${isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b p-[16px]">
           <h2 className="text-xl font-semibold">Your Cart</h2>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-gray-500 hover:text-gray-700"
+            className="cursor-pointer text-gray-500 hover:text-gray-700"
             aria-label="Close cart"
           >
             <FiX size={24} />
