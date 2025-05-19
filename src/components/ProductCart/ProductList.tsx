@@ -15,16 +15,13 @@ const ProductList = () => {
 
             <div className="flex justify-between items-center mt-[27px] pl-[20px]  md:pl-[35px] pr-[12px]">
                 <div className="flex items-center gap-[35px]">
-                    <input type="checkbox" name="" id="" />
-                    <label htmlFor="" className="text-[16px]">Check All</label>
+                    <input type="checkbox" name="" id="select-all" className="cursor-pointer" />
+                    <label htmlFor="select-all" className="text-[16px] cursor-pointer">Check All</label>
                 </div>
                 <button className="bg-quaternary px-[10px] rounded-full font-bold text-info">Delete</button>
             </div>
 
             <div>
-                <CartCard />
-                <CartCard />
-                <CartCard />
                 <CartCard />
                 <CartCard />
                 <CartCard />

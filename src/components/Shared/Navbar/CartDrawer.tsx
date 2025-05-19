@@ -2,7 +2,11 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { FiX, FiShoppingCart } from "react-icons/fi";
+import { FiShoppingCart } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
+import Link from "next/link";
+import { FaCartPlus } from "react-icons/fa";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface CartItem {
   id: number;
@@ -33,22 +37,24 @@ export default function CartDrawer({ isOpen, setIsOpen, cartItems }: CartDrawerP
       {/* Drawer - fully opaque */}
       <div
         ref={drawerRef}
-        className={`fixed top-0 right-0 z-50 h-full w-4/5 transform bg-white transition-transform duration-300 ease-in-out sm:w-[384px] ${isOpen ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-0 right-0 z-50 h-full transform bg-white transition-transform duration-300 ease-in-out w-full sm:w-[75vw] lg:w-[384px] ${isOpen ? "translate-x-0" : "translate-x-full"
           }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b p-[16px]">
-          <h2 className="text-xl font-semibold">Your Cart</h2>
+        <div className="flex items-center justify-between border-b p-[16px] bg-quaternary">
+          <h2 className="text-[16px] font-bold flex items-center gap-[3px]"><FaCartPlus size={18} />
+            Cart(10)</h2>
           <button
             onClick={() => setIsOpen(false)}
-            className="cursor-pointer text-gray-500 hover:text-gray-700"
+            className="cursor-pointer font-bold"
             aria-label="Close cart"
           >
-            <FiX size={24} />
+            <IoCloseSharp size={20} />
+
           </button>
         </div>
 
-        <div className="h-[calc(100vh-180px)] overflow-y-auto p-4">
+        <div className="h-[calc(100vh-150px)] overflow-y-auto px-[10px]">
           {cartItems.length > 0 ? (
             <>
               {cartItems.map((item) => (
@@ -59,7 +65,6 @@ export default function CartDrawer({ isOpen, setIsOpen, cartItems }: CartDrawerP
             <EmptyCart setIsOpen={setIsOpen} />
           )}
         </div>
-
         {cartItems.length > 0 && <CartFooter cartItems={cartItems} setIsOpen={setIsOpen} />}
       </div>
     </>
@@ -68,8 +73,8 @@ export default function CartDrawer({ isOpen, setIsOpen, cartItems }: CartDrawerP
 
 function CartItem({ item }: { item: CartItem }) {
   return (
-    <div className="flex items-center border-b py-4">
-      <div className="relative h-20 w-20 flex-shrink-0">
+    <div className="flex items-center border-b border-quaternary py-4">
+      <div className="relative w-[76px] h-[76px] flex-shrink-0">
         <Image
           src={item.image || "/placeholder.svg"}
           alt={item.name}
@@ -79,19 +84,14 @@ function CartItem({ item }: { item: CartItem }) {
       </div>
       <div className="ml-4 flex-grow">
         <h3 className="text-sm font-medium">{item.name}</h3>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm ">
           ${item.price.toFixed(2)} x {item.quantity}
         </p>
       </div>
-      <div className="flex items-center">
-        <button className="px-2 text-gray-500 hover:text-gray-700" aria-label="Decrease quantity">
-          -
-        </button>
-        <span className="mx-1">{item.quantity}</span>
-        <button className="px-2 text-gray-500 hover:text-gray-700" aria-label="Increase quantity">
-          +
-        </button>
-      </div>
+
+      <button className="pl-[10px]">
+        <RiDeleteBin6Line className="text-blue-500" />
+      </button>
     </div>
   );
 }
@@ -121,18 +121,13 @@ function CartFooter({
   const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
   return (
-    <div className="absolute right-0 bottom-0 left-0 border-t bg-white p-4">
-      <div className="mb-4 flex justify-between">
+    <div className="absolute right-0 bottom-0 left-0 bg-white p-[8px]">
+      <hr className="border-t border-quaternary" />
+      <div className=" flex justify-between py-[8px]">
         <span className="font-medium">Subtotal:</span>
         <span className="font-semibold">${subtotal.toFixed(2)}</span>
       </div>
-      <button className="w-full rounded-md bg-black py-3 text-white">Checkout</button>
-      <button
-        onClick={() => setIsOpen(false)}
-        className="mt-2 w-full py-2 text-gray-700 hover:text-gray-900"
-      >
-        Continue Shopping
-      </button>
+      <Link href="/cart" onClick={() => setIsOpen(false)} className="w-full h-[26px] bg-black mb-[8px] flex justify-center items-center text-[12px] font-bold text-white">View Cart</Link>
     </div>
   );
 }
