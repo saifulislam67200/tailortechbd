@@ -7,16 +7,21 @@ export type TCartItem = {
     discount: number;
     quantity: number;
     image?: string;
+    color?: string;
+    size: string;
+    stock: number;
 };
 
 type TCartState = {
     items: TCartItem[];
     isLoading: boolean;
+    checkedItems: TCartItem[]
 };
 
 const initialState: TCartState = {
     items: [],
     isLoading: false,
+    checkedItems: []
 };
 
 const cartSlice = createSlice({
@@ -33,6 +38,7 @@ const cartSlice = createSlice({
         },
         removeFromCart(state, action: PayloadAction<string>) {
             state.items = state.items.filter(item => item.id !== action.payload);
+            state.checkedItems = state.checkedItems.filter(item => item.id !== action.payload);
         },
         updateQuantity(state, action: PayloadAction<{ id: string; quantity: number }>) {
             const item = state.items.find(i => i.id === action.payload.id);
@@ -42,6 +48,7 @@ const cartSlice = createSlice({
         },
         clearCart(state) {
             state.items = [];
+            state.checkedItems = [];
         },
         setLoading(state, action: PayloadAction<boolean>) {
             state.isLoading = action.payload;
@@ -49,8 +56,29 @@ const cartSlice = createSlice({
         setCartState(_state, action: PayloadAction<TCartState>) {
             return action.payload;
         },
+        toggleCheckItem(state, action: PayloadAction<TCartItem>) {
+            const exists = state.checkedItems.find(item => item.id === action.payload.id);
+            if (exists) {
+                state.checkedItems = state.checkedItems.filter(item => item.id !== action.payload.id);
+            } else {
+                state.checkedItems.push(action.payload);
+            }
+        },
+
+        deleteCheckedItems(state) {
+            const checkedIds = new Set(state.checkedItems.map(item => item.id));
+            state.items = state.items.filter(item => !checkedIds.has(item.id));
+            state.checkedItems = [];
+        },
+        toggleSelectAll(state) {
+            if (state.checkedItems.length === state.items.length) {
+                state.checkedItems = [];
+            } else {
+                state.checkedItems = [...state.items];
+            }
+        },
     },
 });
 
-export const { addToCart, removeFromCart, updateQuantity, clearCart, setLoading, setCartState } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateQuantity, clearCart, setLoading, setCartState, toggleCheckItem, deleteCheckedItems, toggleSelectAll } = cartSlice.actions;
 export default cartSlice.reducer;
