@@ -1,11 +1,11 @@
-import React from "react";
+import { IProduct } from "@/types/product";
 import Image from "next/image";
-import { FiRefreshCw } from "react-icons/fi";
+import Link from "next/link";
+import React from "react";
+import { BsDot } from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
-import { IProduct } from "@/types/product";
-import Link from "next/link";
-import { BsDot } from "react-icons/bs";
+import { FiRefreshCw } from "react-icons/fi";
 
 interface ProductCardProps {
   product: IProduct;
@@ -18,9 +18,10 @@ const SubCategoryCard: React.FC<ProductCardProps> = ({ product }) => {
       <Link href={`products/${product?._id}`}>
         <div className="relative aspect-square overflow-hidden">
           <Image
-            src={product.colors?.[0]?.images?.[0] || ""}
+            src={product.images?.[0] || "/"}
             alt={product.name}
-            fill
+            width={200}
+            height={200}
             className="object-cover transition-transform duration-500 group-hover:scale-110"
           />
         </div>
@@ -40,18 +41,18 @@ const SubCategoryCard: React.FC<ProductCardProps> = ({ product }) => {
       </div>
 
       {/* Content section */}
-      <div className="flex flex-col justify-between p-[8px] h-full">
+      <div className="flex h-full flex-col justify-between p-[8px]">
         <Link href={`products/${product?._id}`} className="flex-grow">
-          <h3 className="line-clamp-1 text-[14px] font-bold">
-            {product.name}
-          </h3>
+          <h3 className="line-clamp-1 text-[14px] font-bold">{product.name}</h3>
 
           {/* Specifications list */}
-          <ul className="mt-2 space-y-1 text-[13px] text-left min-h-[90px]">
+          <ul className="mt-2 min-h-[90px] space-y-1 text-left text-[13px]">
             {product.specifications?.slice(0, 4).map((spec, index) => (
               <li key={index} className="flex items-start gap-1">
                 <BsDot className="text-[20px]" />
-                <span className="line-clamp-1">{spec.label}: {spec.value}</span>
+                <span className="line-clamp-1">
+                  {spec.label}: {spec.value}
+                </span>
               </li>
             ))}
           </ul>
@@ -59,7 +60,7 @@ const SubCategoryCard: React.FC<ProductCardProps> = ({ product }) => {
 
         <div className="mt-auto pt-2 text-center">
           <p className="text-[15px] font-semibold text-black">Tk {product.price}</p>
-          <button className="mt-1 w-full bg-secondary py-[6px] text-sm font-bold border border-[#c5c5c5] cursor-pointer">
+          <button className="mt-1 w-full cursor-pointer border border-[#c5c5c5] bg-secondary py-[6px] text-sm font-bold">
             Add to Cart
           </button>
         </div>
