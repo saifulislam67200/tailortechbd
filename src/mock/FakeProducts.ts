@@ -1,160 +1,177 @@
-export const fakeProducts = [
+export const products = [
   {
-    name: "UltraSlim Laptop",
-    slug: "ultraslim-laptop",
-    description: "A sleek and lightweight laptop perfect for professionals on the go.",
-    price: 1299.99,
-    brand: "60d21b4667d0d8992e610c85",
+    _id: '1',
+    name: "Men's Casual Cotton Shirt",
+    slug: "mens-casual-cotton-shirt",
+    description: "Breathable and stylish cotton shirt for daily comfort. Perfect for casual outings and semi-formal wear.",
+    price: 1899,
+    brand: "TailorTech Originals",
     colors: [
       {
-        color: "Silver",
+        color: "Navy Blue",
         sizes: [
-          { size: "13-inch", stock: 25 },
-          { size: "15-inch", stock: 15 },
+          { size: "M", stock: 10 },
+          { size: "L", stock: 8 },
+          { size: "XL", stock: 6 }
         ],
-        images: ["/macbook.jpeg"],
-      },
-      {
-        color: "Space Gray",
-        sizes: [
-          { size: "13-inch", stock: 30 },
-          { size: "15-inch", stock: 10 },
-        ],
-        images: ["/macbook.jpeg"],
-      },
+        images: [
+          "https://example.com/images/navy-shirt-front.jpg",
+          "https://example.com/images/navy-shirt-back.jpg"
+        ]
+      }
     ],
-    categories: ["60d21b4967d0d8992e610c90", "60d21b4967d0d8992e610c91"],
+    category: "Men's Clothing",
     avgRating: 4.5,
-    _id: "aoiasdffta",
-    images: ["/macbook.jpeg"],
-    discount: 10,
-    specifications: [
-      { label: "Processor", value: "Intel Core i7" },
-      { label: "RAM", value: "16GB" },
-      { label: "Storage", value: "512GB SSD" },
-      { label: "Display", value: "13.3-inch Retina" },
-    ],
-  },
-  {
-    name: "ProBook 450",
-    slug: "probook-450",
-    description: "A reliable business laptop with robust performance and security features.",
-    price: 999.99,
-    _id: "ao245435ifta",
-    images: ["/macbook.jpeg"],
-    brand: "60d21b4667d0d8992e610c86",
-    colors: [
-      {
-        color: "Black",
-        sizes: [
-          { size: "14-inch", stock: 20 },
-          { size: "15.6-inch", stock: 25 },
-        ],
-        images: ["/macbook.jpeg"],
-      },
-    ],
-    categories: ["60d21b4967d0d8992e610c92"],
-    avgRating: 4.2,
-    discount: 5,
-    specifications: [
-      { label: "Processor", value: "AMD Ryzen 5" },
-      { label: "RAM", value: "8GB" },
-      { label: "Storage", value: "256GB SSD" },
-      { label: "Display", value: "15.6-inch Full HD" },
-    ],
-  },
-  {
-    name: "Gaming Beast X",
-    slug: "gaming-beast-x",
-    _id: "ao85sifta",
-    images: ["/macbook.jpeg"],
-    description: "High-performance gaming laptop with advanced cooling and graphics.",
-    price: 1899.99,
-    brand: "60d21b4667d0d8992e610c87",
-    colors: [
-      {
-        color: "Red",
-        sizes: [
-          { size: "15-inch", stock: 10 },
-          { size: "17-inch", stock: 5 },
-        ],
-        images: ["/macbook.jpeg"],
-      },
-      {
-        color: "Black",
-        sizes: [
-          { size: "15-inch", stock: 8 },
-          { size: "17-inch", stock: 7 },
-        ],
-        images: ["/macbook.jpeg"],
-      },
-    ],
-    categories: ["60d21b4967d0d8992e610c93", "60d21b4967d0d8992e610c94"],
-    avgRating: 4.8,
     discount: 15,
     specifications: [
-      { label: "Processor", value: "Intel Core i9" },
-      { label: "RAM", value: "32GB" },
-      { label: "Storage", value: "1TB SSD" },
-      { label: "Graphics", value: "NVIDIA RTX 3080" },
+      { label: "Material", value: "100% Cotton" },
+      { label: "Fit", value: "Regular Fit" },
+      { label: "Sleeves", value: "Full Sleeves" }
     ],
+    tag: "Men's Shirt",
+    images: ["https://example.com/images/navy-shirt-main.jpg"]
   },
   {
-    name: "EcoBook Air",
-    slug: "ecobook-air",
-    _id: "awertwr4635737oifta",
-
-    description: "An environmentally friendly laptop made with recycled materials.",
-    price: 849.99,
-    brand: "60d21b4667d0d8992e610c88",
+    _id: '2',
+    name: "Royal Silk Saree",
+    slug: "royal-silk-saree",
+    description: "Elegant traditional silk saree with fine zari border. Perfect for weddings and festive occasions.",
+    price: 5299,
+    brand: "Ethnic Elegance",
     colors: [
       {
-        color: "Green",
-        sizes: [
-          { size: "13-inch", stock: 12 },
-          { size: "14-inch", stock: 18 },
-        ],
-        images: ["/macbook.jpeg"],
-      },
+        color: "Red & Gold",
+        sizes: [{ size: "Free Size", stock: 12 }],
+        images: [
+          "https://example.com/images/silk-saree-1.jpg",
+          "https://example.com/images/silk-saree-2.jpg"
+        ]
+      }
     ],
-    categories: ["60d21b4967d0d8992e610c95"],
-    avgRating: 4.0,
-    discount: 7,
+    category: "Women's Saree",
+    avgRating: 4.9,
+    discount: 20,
     specifications: [
-      { label: "Processor", value: "Intel Core i5" },
-      { label: "RAM", value: "8GB" },
-      { label: "Storage", value: "256GB SSD" },
-      { label: "Battery Life", value: "12 hours" },
+      { label: "Fabric", value: "Silk" },
+      { label: "Blouse", value: "Included" },
+      { label: "Length", value: "6.3 meters including blouse" }
     ],
+    tag: "Saree",
+    images: ["https://example.com/images/silk-saree-main.jpg"]
   },
   {
-    name: "StudentMate 11",
-    slug: "studentmate-11",
-    _id: "aoifta",
-
-    description: "Affordable and compact laptop ideal for students and everyday tasks.",
-    price: 499.99,
-    brand: "60d21b4667d0d8992e610c89",
+    _id: '3',
+    name: "Kids Printed Cotton T-Shirt",
+    slug: "kids-printed-cotton-tshirt",
+    description: "Soft and comfy cotton t-shirt with cute animal print. Ideal for playful days.",
+    price: 599,
+    brand: "HappyKidz",
     colors: [
       {
-        color: "Blue",
-        sizes: [{ size: "11.6-inch", stock: 30 }],
-        images: ["/macbook.jpeg"],
-      },
-      {
-        color: "White",
-        sizes: [{ size: "11.6-inch", stock: 25 }],
-        images: ["/macbook.jpeg"],
-      },
+        color: "Yellow",
+        sizes: [
+          { size: "2-3Y", stock: 10 },
+          { size: "4-5Y", stock: 8 }
+        ],
+        images: ["https://example.com/images/kids-yellow-tshirt.jpg"]
+      }
     ],
-    categories: ["60d21b4967d0d8992e610c96"],
-    avgRating: 3.8,
+    category: "Kids Wear",
+    avgRating: 4.6,
+    discount: 5,
+    specifications: [
+      { label: "Material", value: "Cotton" },
+      { label: "Neck", value: "Round Neck" }
+    ],
+    tag: "Kids",
+    images: ["https://example.com/images/kids-tshirt-main.jpg"]
+  },
+  {
+    _id: '4',
+    name: "Men's Slim Fit Joggers",
+    slug: "mens-slim-fit-joggers",
+    description: "Modern slim-fit joggers made for active and casual lifestyles. Flexible, durable, and stylish.",
+    price: 1499,
+    brand: "UrbanFlex",
+    colors: [
+      {
+        color: "Grey",
+        sizes: [
+          { size: "M", stock: 7 },
+          { size: "L", stock: 5 },
+          { size: "XL", stock: 4 }
+        ],
+        images: [
+          "https://example.com/images/grey-jogger-1.jpg",
+          "https://example.com/images/grey-jogger-2.jpg"
+        ]
+      }
+    ],
+    category: "Bottomwear",
+    avgRating: 4.4,
+    discount: 10,
+    specifications: [
+      { label: "Material", value: "Cotton Blend" },
+      { label: "Fit", value: "Slim Fit" },
+      { label: "Pockets", value: "Side & Back Pockets" }
+    ],
+    tag: "Joggers",
+    images: ["https://example.com/images/jogger-main.jpg"]
+  },
+  {
+    _id: '5',
+    name: "Stylish Women's Handbag",
+    slug: "stylish-womens-handbag",
+    description: "Trendy and spacious handbag with multiple compartments. Ideal for everyday use.",
+    price: 2299,
+    brand: "Classique",
+    colors: [
+      {
+        color: "Black",
+        sizes: [{ size: "Standard", stock: 20 }],
+        images: [
+          "https://example.com/images/black-handbag-1.jpg",
+          "https://example.com/images/black-handbag-2.jpg"
+        ]
+      }
+    ],
+    category: "Accessories",
+    avgRating: 4.7,
     discount: 12,
     specifications: [
-      { label: "Processor", value: "Intel Celeron" },
-      { label: "RAM", value: "4GB" },
-      { label: "Storage", value: "128GB eMMC" },
-      { label: "Weight", value: "2.5 lbs" },
+      { label: "Material", value: "PU Leather" },
+      { label: "Closure", value: "Zipper" },
+      { label: "Compartments", value: "3 main, 2 inner pockets" }
     ],
+    tag: "Bags",
+    images: ["https://example.com/images/black-handbag-main.jpg"]
   },
+  {
+    _id: '6',
+    name: "Stylish Women's Handbag",
+    slug: "stylish-womens-handbag",
+    description: "Trendy and spacious handbag with multiple compartments. Ideal for everyday use.",
+    price: 2299,
+    brand: "Classique",
+    colors: [
+      {
+        color: "Black",
+        sizes: [{ size: "Standard", stock: 20 }],
+        images: [
+          "https://example.com/images/black-handbag-1.jpg",
+          "https://example.com/images/black-handbag-2.jpg"
+        ]
+      }
+    ],
+    category: "Accessories",
+    avgRating: 4.7,
+    discount: 12,
+    specifications: [
+      { label: "Material", value: "PU Leather" },
+      { label: "Closure", value: "Zipper" },
+      { label: "Compartments", value: "3 main, 2 inner pockets" }
+    ],
+    tag: "Bags",
+    images: ["https://example.com/images/black-handbag-main.jpg"]
+  }
 ];
