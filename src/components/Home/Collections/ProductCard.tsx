@@ -9,6 +9,7 @@ import { IProduct } from "@/types/product";
 import { useAppDispatch } from "@/hooks/redux";
 import { addToCart } from "@/redux/features/cart/cartSlice";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface ProductCardProps {
   product: IProduct;
@@ -35,42 +36,46 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <div className="group relative overflow-hidden bg-white transition-all duration-300 hover:shadow-[0_0_6px_2px_rgba(33,33,33,0.2)]">
       {/* Image */}
-      <div className="relative aspect-square overflow-hidden">
-        <Image
-          src={product.colors?.[0]?.images?.[0] || ""}
-          alt={product.name}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-110"
-        />
-
-        {/* Icons */}
-        <div className="absolute top-1/2 right-2 flex -translate-y-1/2 flex-col gap-[5px] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <button
-            onClick={() => handleAddCart(product)}
-            className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white"
-          >
-            <FaCartArrowDown className="text-[15px]" />
-          </button>
-          <button className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white">
-            <FiRefreshCw className="text-[15px]" />
-          </button>
-          <button className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white">
-            <FaHeart className="text-[15px]" />
-          </button>
-          <button className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white">
-            <FaEye className="text-[15px]" />
-          </button>
+      <Link href={`products/${product?._id}`}>
+        <div className="relative aspect-square overflow-hidden">
+          <Image
+            src={product.colors?.[0]?.images?.[0] || ""}
+            alt={product.name}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
+          />
         </div>
+      </Link>
+
+      {/* Icons */}
+      <div className="absolute top-1/2 right-2 flex -translate-y-1/2 flex-col gap-[5px] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <button
+          onClick={() => handleAddCart(product)}
+          className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white"
+        >
+          <FaCartArrowDown className="text-[15px]" />
+        </button>
+        <button className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white">
+          <FiRefreshCw className="text-[15px]" />
+        </button>
+        <button className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white">
+          <FaHeart className="text-[15px]" />
+        </button>
+        <button className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white">
+          <FaEye className="text-[15px]" />
+        </button>
       </div>
 
       {/* Content section */}
-      <div className="p-[8px]">
-        <h3 className="line-clamp-1 text-center text-[14px] font-bold hover:text-[#0d6efd]">
-          {product.name}
-        </h3>
-        <p className="mt-1 line-clamp-2 text-center text-[13px]">{product.description}</p>
-        <p className="mt-2 text-center text-[14px] font-bold text-strong">Tk {product.price}</p>
-      </div>
+      <Link href={`products/${product?._id}`}>
+        <div className="p-[8px]">
+          <h3 className="line-clamp-1 text-center text-[14px] font-bold hover:text-[#0d6efd]">
+            {product.name}
+          </h3>
+          <p className="mt-1 line-clamp-2 text-center text-[13px]">{product.description}</p>
+          <p className="mt-2 text-center text-[14px] font-bold text-strong">Tk {product.price}</p>
+        </div>
+      </Link>
     </div>
   );
 };
