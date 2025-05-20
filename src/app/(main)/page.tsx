@@ -1,3 +1,4 @@
+import Collections from "@/components/Home/Collections";
 import Hero from "@/components/Home/Hero";
 import Services from "@/components/Home/Services";
 import TopCategories from "@/components/Home/TopCategories";
@@ -8,6 +9,7 @@ export default function Home() {
       <Hero />
       <Services />
       <TopCategories />
+      <Collections />
     </main>
   );
 }
