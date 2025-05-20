@@ -23,7 +23,7 @@ export interface IProduct {
   price: number;
   brand: string;
   colors: IColor[];
-  categories: string | ICategory;
+  category: string | ICategory;
   avgRating: number;
   // stock: number;
   discount: number;
