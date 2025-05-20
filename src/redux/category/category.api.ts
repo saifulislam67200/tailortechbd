@@ -1,16 +1,21 @@
 import { api } from "@/redux/api/api";
-import { ICategory } from "@/types/category"; 
+import { ICategory } from "@/types/category";
+import { IMeta } from "@/types/meta";
+import { generateQueryParams } from "@/utils/generateQueryParams";
 
 const categoryApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getDisplayedCategories: builder.query<{ data: ICategory[] }, void>({
-      query: () => ({
-        url: "/category/get?mode=tree",
-        method: "GET",
-      }),
+    getAllCategories: builder.query<{ data: ICategory[]; meta: IMeta }, Record<string, string | number>>({
+      query: (queryParams) => {
+        const queryString = generateQueryParams(queryParams);
+        return {
+          url: `/category/get?${queryString}`,
+          method: "GET",
+        };
+      },
       providesTags: ["categories"],
     }),
   }),
 });
 
-export const { useGetDisplayedCategoriesQuery } = categoryApi;
+export const { useGetAllCategoriesQuery } = categoryApi;
