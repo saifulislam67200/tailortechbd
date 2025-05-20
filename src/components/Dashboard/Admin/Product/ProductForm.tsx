@@ -3,18 +3,21 @@
 import Button from "@/components/ui/Button";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Input from "@/components/ui/Input";
-import TextArea from "@/components/ui/TextArea";
+import RichTextArea from "@/components/ui/RichTextArea";
+import { IProduct } from "@/types/product";
 import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
 import { BiPlusCircle } from "react-icons/bi";
 import { BsTrash2 } from "react-icons/bs";
 import * as Yup from "yup";
+import ProductImageUploader from "./ProductImageUploader";
 
-const initialValues = {
+const initialValues: Omit<IProduct, "avgRating" | "brand" | "slug" | "_id"> = {
   name: "",
   description: "",
   price: 0,
   discount: 0,
   tag: "",
+  category: "",
   images: [],
   specifications: [{ label: "", value: "" }],
   colors: [
@@ -33,6 +36,7 @@ const validationSchema = Yup.object().shape({
   discount: Yup.number().min(0).max(100),
   tag: Yup.string(),
   images: Yup.array().of(Yup.string().url("Must be a valid URL")),
+  category: Yup.string().required("Category is required"),
   specifications: Yup.array().of(
     Yup.object().shape({
       label: Yup.string().required("Plase enter a title for this specification"),
@@ -79,7 +83,10 @@ export default function ProductForm() {
 
           <div className="w-full">
             <label className={labelClass}>Description</label>
-            <Field as={TextArea} name="description" placeholder="Description" />
+            {/* <Field as={TextArea} name="description" placeholder="Description" /> */}
+
+            <RichTextArea />
+
             {touched.description && errors.description && (
               <span className="text-danger">{errors.description}</span>
             )}
@@ -106,6 +113,9 @@ export default function ProductForm() {
             <Field as={Input} name="tag" placeholder="Tag" />
           </div>
 
+          <HorizontalLine className="my-[16px]" />
+          <SectionTitle>Product Image Gallery</SectionTitle>
+          <ProductImageUploader onChange={() => {}} />
           <HorizontalLine className="my-[16px]" />
 
           <div className="flex flex-col gap-[5px]">
@@ -270,9 +280,7 @@ export default function ProductForm() {
             </FieldArray>
           </div>
 
-          <button type="submit" className="rounded bg-blue-600 px-4 py-2 text-white">
-            Submit Product
-          </button>
+          <Button className="mt-[26px]">Add Product</Button>
         </Form>
       )}
     </Formik>

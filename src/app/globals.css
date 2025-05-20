@@ -90,3 +90,7 @@ input[type="number"] {
   appearance: textfield;
   -moz-appearance: textfield;
 }
+
+.ql-container {
+  height: calc(100% - 42.8px) !important;
+}

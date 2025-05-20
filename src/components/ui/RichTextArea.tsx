@@ -11,14 +11,21 @@ interface IProps {
   handleBlur?: () => void;
 }
 
-const RichTextArea: React.FC<IProps> = ({ className, defaultValue, onChange, style, height, handleBlur }) => {
-  const editorHeight = height || 200;
+const RichTextArea: React.FC<IProps> = ({
+  className,
+  defaultValue,
+  onChange,
+  style,
+  height,
+  handleBlur,
+}) => {
+  const editorHeight = height || 400;
 
   const [value, setValue] = useState(defaultValue || "");
   const toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // toggled buttons
     ["blockquote", "code-block"],
-    ["link", "video", "formula"],
+    ["link", "video", "formula", "image"],
 
     [{ header: 1 }, { header: 2 }], // custom button values
     [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
