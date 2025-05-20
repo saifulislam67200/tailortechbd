@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import PlusIcon from "@/components/icons/PlusIcon";
 import { IoHome } from "react-icons/io5";
-import { useGetDisplayedCategoriesQuery } from "@/redux/category/category.api";
+import { useGetAllCategoriesQuery } from "@/redux/category/category.api";
 
 interface CategoryAccordionProps {
   setIsOpen: (open: boolean) => void;
@@ -20,7 +20,9 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
     }));
   };
 
-  const { data } = useGetDisplayedCategoriesQuery();
+  const { data } = useGetAllCategoriesQuery({
+  mode: "tree",
+});
   const categories = data?.data;
 
   return (
@@ -38,7 +40,9 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
               onClick={() => toggleCategory(category._id)}
               className="flex w-full items-center justify-between p-[8px] text-left text-white transition-colors"
             >
-              <span className="flex items-center font-medium text-white text-[13px]">{category.label}</span>
+              <span className="flex items-center text-[13px] font-medium text-white">
+                {category.label}
+              </span>
               <PlusIcon size="size-4" />
             </button>
 

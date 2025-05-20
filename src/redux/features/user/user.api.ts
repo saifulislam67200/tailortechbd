@@ -26,6 +26,13 @@ const userApi = api.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
+    logoutUser: builder.mutation<{ data: null }, undefined>({
+      query: () => ({
+        url: "/user/logout",
+        method: "POST",
+      }),
+      invalidatesTags: ["user"],
+    }),
     changePassword: builder.mutation({
       query: (payload: { oldPassword: string; password: string }) => ({
         url: "/user/change-password",
@@ -81,4 +88,5 @@ export const {
   useChangePasswordMutation,
   useVerifyOtpMutation,
   useUpdateProfileMutation,
+  useLogoutUserMutation,
 } = userApi;

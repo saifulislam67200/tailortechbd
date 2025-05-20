@@ -74,7 +74,7 @@ export default function ServicesSection() {
         {servicesMobile.map((service) => (
           <div key={service.id} className="w-[48%] h-[44px]">
             <div className="flex w-full h-full items-center bg-white">
-              <div className="flex w-1/4 h-full items-center justify-center bg-[#72BF44] p-[10px]">
+              <div className="flex w-1/4 h-full items-center justify-center bg-primary p-[10px]">
                   {service.icon}
               </div>
               <div className="w-3/4 h-full p-[10px]">

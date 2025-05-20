@@ -7,6 +7,7 @@ import { useAppSelector } from "@/hooks/redux";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaCircleUser } from "react-icons/fa6";
+import Logo from "../Logo";
 import CartDrawer from "./CartDrawer";
 import MenuDrawer from "./MenuDrawer";
 import MobileSearchBar from "./MobileSearchBar";
@@ -58,11 +59,7 @@ export default function Navbar() {
           </div>
 
           {/* Logo */}
-          <div className="flex flex-1 justify-center md:flex-none md:justify-start">
-            <Link href={"/"} className="text-[28px] font-bold text-white">
-              Bd<span className="text-primary">Shop</span>
-            </Link>
-          </div>
+          <Logo />
 
           {/* Search Bar - Desktop only */}
           <div className="mx-4 hidden max-w-[704px] flex-grow lg:block xl:-mr-[42px]">

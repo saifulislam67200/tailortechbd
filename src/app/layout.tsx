@@ -1,15 +1,9 @@
+import { ClientProviders } from "@/provider/ClientProviders";
+import { metadata as MainMeta } from "@/utils/meta";
 import type { Metadata } from "next";
 import "./globals.css";
-import { ClientProviders } from "@/provider/ClientProviders";
 
-export const metadata: Metadata = {
-  title: "BD Shop",
-  description:
-    "Explore the intersection of creativity and technology. Turning ideas into innovative digital experiences.",
-  icons: {
-    icon: "/favicon.png",
-  },
-};
+export const metadata: Metadata = MainMeta;
 
 export default function RootLayout({
   children,

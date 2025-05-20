@@ -1,9 +1,11 @@
 "use client";
 // import { categories } from "@/mock/category";
-import { useGetDisplayedCategoriesQuery } from "@/redux/category/category.api";
+import { useGetAllCategoriesQuery } from "@/redux/category/category.api";
 import Link from "next/link";
 const CategoryMenu = () => {
-  const { data } = useGetDisplayedCategoriesQuery();
+  const { data } = useGetAllCategoriesQuery({
+  mode: "tree",
+});
   const categories = data?.data;
 
   return (
