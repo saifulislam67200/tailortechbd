@@ -20,11 +20,19 @@ export interface IShippingAddress {
   district: string;
   upazila: string;
   address: string;
+  phoneNumber: string;
+}
+export interface IBillingAddress {
+  name: string;
+  address: string;
+  phoneNumber: string;
 }
 
 export interface IOrder {
+  _id: string;
   user: string;
   shippingAddress: IShippingAddress;
+  billingAddress?: IBillingAddress;
   orderItems: IOrderItem[];
   totalProductAmount: number;
   deliveryFee?: number;

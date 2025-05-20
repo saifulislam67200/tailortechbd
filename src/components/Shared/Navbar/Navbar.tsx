@@ -7,6 +7,7 @@ import { useAppSelector } from "@/hooks/redux";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaCircleUser } from "react-icons/fa6";
+import Logo from "../Logo";
 import CartDrawer from "./CartDrawer";
 import MenuDrawer from "./MenuDrawer";
 import MobileSearchBar from "./MobileSearchBar";
@@ -22,6 +23,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { user } = useAppSelector((state) => state.user);
+  const cartItems = useAppSelector((state) => state?.cart?.items);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,61 +43,11 @@ export default function Navbar() {
     };
   }, [isCartOpen, isMenuOpen]);
 
-  // Sample cart items
-  const cartItems = [
-    {
-      id: 1,
-      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS 16GB RAM 512GB SSD 16 Inch FHD+ WUXGA Display Off Black Gaming Laptop ",
-      price: 99.99,
-      quantity: 1,
-      image: "/macbook.jpeg",
-    },
-    {
-      id: 2,
-      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS 16GB RAM 512GB SSD 16 Inch FHD+ WUXGA Display Off Black Gaming Laptop ",
-      price: 99.99,
-      quantity: 1,
-      image: "/macbook.jpeg",
-    },
-    {
-      id: 3,
-      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS 16GB RAM 512GB SSD 16 Inch FHD+ WUXGA Display Off Black Gaming Laptop ",
-      price: 99.99,
-      quantity: 1,
-      image: "/macbook.jpeg",
-    },
-    {
-      id: 4,
-      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS 16GB RAM 512GB SSD 16 Inch FHD+ WUXGA Display Off Black Gaming Laptop ",
-      price: 99.99,
-      quantity: 1,
-      image: "/macbook.jpeg",
-    },
-    {
-      id: 5,
-      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS 16GB RAM 512GB SSD 16 Inch FHD+ WUXGA Display Off Black Gaming Laptop ",
-      price: 99.99,
-      quantity: 1,
-      image: "/macbook.jpeg",
-    },
-    {
-      id: 6,
-      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS 16GB RAM 512GB SSD 16 Inch FHD+ WUXGA Display Off Black Gaming Laptop ",
-      price: 99.99,
-      quantity: 1,
-      image: "/macbook.jpeg",
-    },
-    {
-      id: 7,
-      name: "Asus TUF Gaming A16 Advantage Edition FA617NTR AMD Ryzen 7 7435HS",
-      price: 149.99,
-      quantity: 2,
-      image: "/macbook.jpeg",
-    },
-  ];
-
   return (
-    <header style={{ boxShadow: "rgba(0,0,0,.19) 0 10px 20px,rgba(0,0,0,.23) 0 6px 6px" }}>
+    <header
+      style={{ boxShadow: "rgba(0,0,0,.19) 0 10px 20px,rgba(0,0,0,.23) 0 6px 6px" }}
+      className="sticky top-0 z-50"
+    >
       <TopBar />
       <nav className="relative z-10 bg-black px-[16px] py-[10px]">
         <div className="main_container mx-auto flex items-center justify-between">
@@ -107,11 +59,7 @@ export default function Navbar() {
           </div>
 
           {/* Logo */}
-          <div className="flex flex-1 justify-center md:flex-none md:justify-start">
-            <Link href={"/"} className="text-[28px] font-bold text-white">
-              Bd<span className="text-primary">Shop</span>
-            </Link>
-          </div>
+          <Logo />
 
           {/* Search Bar - Desktop only */}
           <div className="mx-4 hidden max-w-[704px] flex-grow lg:block xl:-mr-[42px]">
@@ -124,11 +72,7 @@ export default function Navbar() {
 
           {/* Icons */}
           <div className="flex items-center space-x-4">
-            <NavIcons
-              setIsSearchOpen={setIsSearchOpen}
-              setIsCartOpen={setIsCartOpen}
-              cartItemsCount={cartItems.reduce((total, item) => total + item.quantity, 0)}
-            />
+            <NavIcons setIsSearchOpen={setIsSearchOpen} setIsCartOpen={setIsCartOpen} />
 
             {user ? (
               <UserDropdown />

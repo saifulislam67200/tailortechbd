@@ -20,7 +20,10 @@ const persistConfig = {
   storage,
 };
 const persistAuthReducer = persistReducer({ ...persistConfig, key: "user" }, userReducer);
-const persistCheckoutReducer = persistReducer({ ...persistConfig, key: "user" }, checkoutReducer);
+const persistCheckoutReducer = persistReducer(
+  { ...persistConfig, key: "checkout" },
+  checkoutReducer
+);
 const persistCartReducer = persistReducer({ ...persistConfig, key: "cart" }, cartReducer);
 
 export const store = configureStore({

@@ -7,13 +7,16 @@ import { IoCloseSharp } from "react-icons/io5";
 import Link from "next/link";
 import { FaCartPlus } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { removeFromCart } from "@/redux/features/cart/cartSlice";
 
 interface CartItem {
-  id: number;
+  id: string;
   name: string;
   price: number;
+  discount: number;
   quantity: number;
-  image: string;
+  image?: string;
 }
 
 interface CartDrawerProps {
@@ -22,8 +25,10 @@ interface CartDrawerProps {
   cartItems: CartItem[];
 }
 
-export default function CartDrawer({ isOpen, setIsOpen, cartItems }: CartDrawerProps) {
+export default function CartDrawer({ isOpen, setIsOpen }: CartDrawerProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
+  const cartItems = useAppSelector((state) => state?.cart?.items);
+
 
   return (
     <>
@@ -43,7 +48,7 @@ export default function CartDrawer({ isOpen, setIsOpen, cartItems }: CartDrawerP
       >
         <div className="flex items-center justify-between border-b p-[16px] bg-quaternary">
           <h2 className="text-[16px] font-bold flex items-center gap-[3px]"><FaCartPlus size={18} />
-            Cart(10)</h2>
+            Cart({cartItems?.length})</h2>
           <button
             onClick={() => setIsOpen(false)}
             className="cursor-pointer font-bold"
@@ -72,6 +77,12 @@ export default function CartDrawer({ isOpen, setIsOpen, cartItems }: CartDrawerP
 }
 
 function CartItem({ item }: { item: CartItem }) {
+  const dispatch = useAppDispatch();
+
+  const handleRemoveItem = (id: string) => {
+    dispatch(removeFromCart(id))
+  }
+
   return (
     <div className="flex items-center border-b border-quaternary py-4">
       <div className="relative w-[76px] h-[76px] flex-shrink-0">
@@ -89,8 +100,8 @@ function CartItem({ item }: { item: CartItem }) {
         </p>
       </div>
 
-      <button className="pl-[10px]">
-        <RiDeleteBin6Line className="text-blue-500" />
+      <button onClick={() => handleRemoveItem(item?.id)} className="w-[30px] h-[30px] cursor-pointer flex justify-end items-center">
+        <RiDeleteBin6Line className="text-blue-500 " />
       </button>
     </div>
   );
@@ -101,12 +112,13 @@ function EmptyCart({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) {
     <div className="flex h-full flex-col items-center justify-center">
       <FiShoppingCart size={48} className="mb-4 text-gray-300" />
       <p className="text-gray-500">Your cart is empty</p>
-      <button
+      <Link
+        href="/"
         onClick={() => setIsOpen(false)}
         className="mt-4 rounded-md bg-gray-800 px-4 py-2 text-white hover:bg-gray-700"
       >
         Continue Shopping
-      </button>
+      </Link>
     </div>
   );
 }
