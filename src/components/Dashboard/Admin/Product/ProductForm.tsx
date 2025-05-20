@@ -12,8 +12,8 @@ import * as Yup from "yup";
 const initialValues = {
   name: "",
   description: "",
-  price: "",
-  discount: "",
+  price: 0,
+  discount: 0,
   tag: "",
   images: [],
   specifications: [{ label: "", value: "" }],
@@ -21,7 +21,7 @@ const initialValues = {
     {
       color: "",
       images: [],
-      sizes: [{ size: "", stock: "" }],
+      sizes: [{ size: "", stock: 0 }],
     },
   ],
 };

@@ -17,6 +17,7 @@ export interface IProductSpecification {
 }
 
 export interface IProduct {
+  _id: string;
   name: string;
   slug: string;
   description: string;
@@ -28,4 +29,6 @@ export interface IProduct {
   // stock: number;
   discount: number;
   specifications: IProductSpecification[];
+  tag?: string;
+  images: string[];
 }
