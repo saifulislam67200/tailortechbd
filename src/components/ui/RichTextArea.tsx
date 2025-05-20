@@ -11,14 +11,21 @@ interface IProps {
   handleBlur?: () => void;
 }
 
-const RichTextArea: React.FC<IProps> = ({ className, defaultValue, onChange, style, height, handleBlur }) => {
-  const editorHeight = height || 200;
+const RichTextArea: React.FC<IProps> = ({
+  className,
+  defaultValue,
+  onChange,
+  style,
+  height,
+  handleBlur,
+}) => {
+  const editorHeight = height || 400;
 
   const [value, setValue] = useState(defaultValue || "");
   const toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // toggled buttons
     ["blockquote", "code-block"],
-    ["link", "video", "formula"],
+    ["link", "video", "formula", "image"],
 
     [{ header: 1 }, { header: 2 }], // custom button values
     [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
@@ -35,23 +42,28 @@ const RichTextArea: React.FC<IProps> = ({ className, defaultValue, onChange, sty
 
     ["clean"], // remove formatting button
   ];
+
   return (
     <ReactQuill
       modules={{
         toolbar: toolbarOptions,
+      }}
+      onChangeSelection={(...arg) => {
+        console.log(arg);
       }}
       style={{
         height: editorHeight + "px",
 
         ...style,
       }}
+      onBlur={handleBlur}
       className={className || ""}
       theme="snow"
       value={value}
-      onBlur={handleBlur}
-      onChange={(e) => {
-        setValue(e);
-        if (onChange) onChange(e);
+      onChange={(content, _delta, _source, editor) => {
+        setValue(content);
+        console.log(editor.getContents());
+        if (onChange) onChange(content);
       }}
     />
   );

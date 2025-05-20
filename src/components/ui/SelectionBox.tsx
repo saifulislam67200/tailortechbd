@@ -14,19 +14,30 @@ interface SelectionBoxProps {
   onSelect: (item: ISelectOption) => void;
   defaultValue?: ISelectOption;
   displayValue?: string;
+  onSeachInputChange?: (value: string) => void;
+  defaultSearch?: boolean;
 }
 
-const SelectionBox = ({ data, onSelect, defaultValue, displayValue }: SelectionBoxProps) => {
+const SelectionBox = ({
+  data,
+  onSelect,
+  defaultValue,
+  displayValue,
+  defaultSearch = true,
+  onSeachInputChange,
+}: SelectionBoxProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<ISelectOption | null>(defaultValue || null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const filtered = data.filter(
-    (item) =>
-      item.label.toLowerCase().includes(search.toLowerCase()) ||
-      item.value.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = defaultSearch
+    ? data.filter(
+        (item) =>
+          item.label.toLowerCase().includes(search.toLowerCase()) ||
+          item.value.toLowerCase().includes(search.toLowerCase())
+      )
+    : data;
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -66,13 +77,16 @@ const SelectionBox = ({ data, onSelect, defaultValue, displayValue }: SelectionB
             placeholder="Search..."
             className="sticky top-0 w-full border-b border-gray-200 bg-white px-3 py-2 outline-none"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              onSeachInputChange?.(e.target.value);
+            }}
             autoFocus
           />
           {filtered.length > 0 ? (
-            filtered.map((item) => (
+            filtered.map((item, i) => (
               <div
-                key={item.value}
+                key={item.value + i}
                 className="cursor-pointer border-b-[1px] border-border-muted px-3 py-2 hover:bg-blue-100"
                 onClick={() => {
                   onSelect(item);

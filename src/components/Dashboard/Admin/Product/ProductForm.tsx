@@ -3,18 +3,22 @@
 import Button from "@/components/ui/Button";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Input from "@/components/ui/Input";
-import TextArea from "@/components/ui/TextArea";
-import { ErrorMessage, Field, FieldArray, Form, Formik } from "formik";
+import RichTextArea from "@/components/ui/RichTextArea";
+import { IProduct } from "@/types/product";
+import { ErrorMessage, Field, FieldArray, Form, Formik, FormikHelpers } from "formik";
 import { BiPlusCircle } from "react-icons/bi";
 import { BsTrash2 } from "react-icons/bs";
 import * as Yup from "yup";
+import CategorySelector from "./CategorySelector";
+import ProductImageUploader from "./ProductImageUploader";
 
-const initialValues = {
+const initialValues: Omit<IProduct, "avgRating" | "brand" | "slug" | "_id"> = {
   name: "",
   description: "",
   price: 0,
   discount: 0,
   tag: "",
+  category: "",
   images: [],
   specifications: [{ label: "", value: "" }],
   colors: [
@@ -32,7 +36,10 @@ const validationSchema = Yup.object().shape({
   price: Yup.number().required("Price is required").min(0, "Price must be >= 0"),
   discount: Yup.number().min(0).max(100),
   tag: Yup.string(),
-  images: Yup.array().of(Yup.string().url("Must be a valid URL")),
+  images: Yup.array()
+    .min(1, "At least one image is required")
+    .of(Yup.string().url("Must be a valid URL")),
+  category: Yup.string().required("Category is required"),
   specifications: Yup.array().of(
     Yup.object().shape({
       label: Yup.string().required("Plase enter a title for this specification"),
@@ -42,7 +49,7 @@ const validationSchema = Yup.object().shape({
   colors: Yup.array().of(
     Yup.object().shape({
       color: Yup.string().required("Please enter a color name"),
-      images: Yup.array().of(Yup.string().url("Must be a valid URL")),
+      images: Yup.array().of(Yup.string().url("Must be a valid URL")).optional(),
       sizes: Yup.array().of(
         Yup.object().shape({
           size: Yup.string().required("Please enter a size for this color"),
@@ -65,10 +72,20 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default function ProductForm() {
+export default function ProductForm({
+  onSubmit,
+  defaultValue,
+}: {
+  defaultValue?: typeof initialValues;
+  onSubmit: (data: typeof initialValues, helper: FormikHelpers<typeof initialValues>) => void;
+}) {
   return (
-    <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={() => {}}>
-      {({ values, errors, touched }) => (
+    <Formik
+      initialValues={defaultValue || initialValues}
+      validationSchema={validationSchema}
+      onSubmit={onSubmit}
+    >
+      {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
         <Form className="flex flex-col gap-[16px]">
           <SectionTitle>Basic Information</SectionTitle>
           <div className="w-full">
@@ -79,7 +96,16 @@ export default function ProductForm() {
 
           <div className="w-full">
             <label className={labelClass}>Description</label>
-            <Field as={TextArea} name="description" placeholder="Description" />
+            {/* <Field as={TextArea} name="description" placeholder="Description" /> */}
+
+            <RichTextArea
+              onChange={(e) => {
+                setFieldValue("description", e);
+              }}
+              handleBlur={() => setFieldTouched("description", true)}
+              defaultValue={values.description}
+            />
+
             {touched.description && errors.description && (
               <span className="text-danger">{errors.description}</span>
             )}
@@ -101,11 +127,29 @@ export default function ProductForm() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-[5px]">
-            <label className={labelClass}>Tag</label>
-            <Field as={Input} name="tag" placeholder="Tag" />
+          <div className="flex items-start justify-start gap-[16px]">
+            <div className="flex w-full flex-col gap-[5px]">
+              <label className={labelClass}>Tag</label>
+              <Field as={Input} name="tag" placeholder="Tag" />
+            </div>
+            <div className="flex w-full flex-col gap-[5px]">
+              <label className={labelClass}>Category</label>
+              <CategorySelector onSelect={({ value }) => setFieldValue("category", value)} />
+
+              <ErrorMessage name="category" component="span" className="text-sm text-danger" />
+            </div>
           </div>
 
+          <HorizontalLine className="my-[16px]" />
+          <SectionTitle>Product Image Gallery</SectionTitle>
+          <ProductImageUploader
+            defaultImages={defaultValue?.images}
+            onChange={(urls) => {
+              setFieldValue("images", urls || []);
+            }}
+          />
+
+          <ErrorMessage name="images" component="span" className="text-sm text-danger" />
           <HorizontalLine className="my-[16px]" />
 
           <div className="flex flex-col gap-[5px]">
@@ -254,6 +298,14 @@ export default function ProductForm() {
                           </div>
                         )}
                       </FieldArray>
+                      <ProductImageUploader
+                        defaultImages={defaultValue?.colors[i].images}
+                        inputId={`colors.${i}.image_uploader`}
+                        onChange={(urls) => setFieldValue(`colors.${i}.images`, urls)}
+                      >
+                        <h6 className="font-[700]">You can upload image for this color </h6>
+                        <p className="text-muted">uploading image for color variant is optional</p>
+                      </ProductImageUploader>
                     </div>
                   ))}
                   <button
@@ -270,9 +322,7 @@ export default function ProductForm() {
             </FieldArray>
           </div>
 
-          <button type="submit" className="rounded bg-blue-600 px-4 py-2 text-white">
-            Submit Product
-          </button>
+          <Button className="mt-[26px]">Add Product</Button>
         </Form>
       )}
     </Formik>

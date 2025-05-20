@@ -1,12 +1,8 @@
-import ProductForm from "@/components/Dashboard/Admin/Product/ProductForm";
 import { getPageMetaData } from "@/utils/meta";
+import ProductCreateView from "@/views/Dashboard/Admin/ProductCreateView";
 export const metadata = getPageMetaData("Create Product");
 const page = () => {
-  return (
-    <div className="bg-white p-[16px]">
-      <ProductForm />;
-    </div>
-  );
+  return <ProductCreateView />;
 };
 
 export default page;
