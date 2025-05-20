@@ -28,4 +28,6 @@ export interface IProduct {
   // stock: number;
   discount: number;
   specifications: IProductSpecification[];
+  tag?: string;
+  images: string[];
 }
