@@ -53,7 +53,7 @@ const categories: Category[] = [
   {
     _id: "7",
     label: "Bags & Purses",
-    thumbnail: "/images/home/top-categories/top-categories3.jpg",
+    thumbnail: "/images/home/top-categories/top-categories4.jpg",
     slug: "bags-purses",
   },
   {
@@ -124,44 +124,3 @@ const TopCategories: FC = () => {
 };
 
 export default TopCategories;
-
-
-
-
-
-
-// const TopCategories: FC = () => {
-//   // const { data } = useGetAllCategoriesQuery({
-//   //   mode: "tree",
-//   // });
-//   // const categories = data?.data;
-//   return (
-//     <section className="bg-white py-[30px]">
-//       <Title title="Top Categories" linkText="See all categories" href="/categories" />
-
-//       <div className="mt-[16px] grid grid-cols-2 gap-[16px] md:grid-cols-3 md:gap-6 lg:grid-cols-8">
-//         {categories?.map((category) => (
-//           <Link
-//             href={`/category/${category.slug}`}
-//             key={category._id}
-//             className="group block overflow-hidden rounded-lg transition-all duration-300"
-//           >
-//             <div className="relative mx-auto aspect-square w-full max-w-[150px] overflow-hidden rounded-md">
-//               <Image
-//                 src={category.thumbnail || "/images/home/top-categories/top-categories3.jpg"}
-//                 alt={category.label}
-//                 fill
-//                 className="object-cover transition-transform duration-300 group-hover:scale-105"
-//               />
-//             </div>
-//             <div className="line-clamp-1 py-[8px] px-[6px] text-center">
-//               <h3 className="font-medium ">{category.label}</h3>
-//             </div>
-//           </Link>
-//         ))}
-//       </div>
-//     </section>
-//   );
-// };
-
-// export default TopCategories;
