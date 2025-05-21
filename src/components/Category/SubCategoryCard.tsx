@@ -2,7 +2,6 @@ import { IProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { BsDot } from "react-icons/bs";
 import { FaEye } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
 import { FiRefreshCw } from "react-icons/fi";
@@ -44,18 +43,6 @@ const SubCategoryCard: React.FC<ProductCardProps> = ({ product }) => {
       <div className="flex h-full flex-col justify-between p-[8px]">
         <Link href={`products/${product?._id}`} className="flex-grow">
           <h3 className="line-clamp-1 text-[14px] font-bold">{product.name}</h3>
-
-          {/* Specifications list */}
-          <ul className="mt-2 min-h-[90px] space-y-1 text-left text-[13px]">
-            {product.specifications?.slice(0, 4).map((spec, index) => (
-              <li key={index} className="flex items-start gap-1">
-                <BsDot className="text-[20px]" />
-                <span className="line-clamp-1">
-                  {spec.label}: {spec.value}
-                </span>
-              </li>
-            ))}
-          </ul>
         </Link>
 
         <div className="mt-auto pt-2 text-center">

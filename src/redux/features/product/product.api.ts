@@ -11,6 +11,13 @@ const productApi = api.injectEndpoints({
       }),
       invalidatesTags: ["product"],
     }),
+    getProductByProductSlug: builder.query<{ data: IProduct }, string>({
+      query: (slug) => ({
+        url: `/product/get/${slug}`,
+        method: "GET",
+      }),
+      providesTags: ["product"],
+    }),
   }),
 });
-export const { useCreateProductMutation } = productApi;
+export const { useCreateProductMutation, useGetProductByProductSlugQuery } = productApi;

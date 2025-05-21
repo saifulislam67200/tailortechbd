@@ -32,7 +32,7 @@ const ProductCreateView = () => {
     <div className="flex flex-col gap-[20px]">
       <Breadcrumb />
       <div className="bg-white p-[16px]">
-        <ProductForm onSubmit={(value) => handleSubmit(value)} />;
+        <ProductForm formLabel="Create a new product" onSubmit={(value) => handleSubmit(value)} />;
       </div>
     </div>
   );

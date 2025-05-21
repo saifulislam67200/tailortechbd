@@ -53,7 +53,6 @@ const RichTextArea: React.FC<IProps> = ({
       }}
       style={{
         height: editorHeight + "px",
-
         ...style,
       }}
       onBlur={handleBlur}
