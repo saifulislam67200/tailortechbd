@@ -18,6 +18,24 @@ const productApi = api.injectEndpoints({
       }),
       providesTags: ["product"],
     }),
+    updateProductByProductId: builder.mutation<
+      { data: IProduct },
+      { payload: Partial<IProduct>; productId: string }
+    >({
+      query: ({ productId, payload }) => ({
+        url: `/product/update/${productId}`,
+        method: "PUT",
+        body: {
+          ...payload,
+          _id: undefined,
+        },
+      }),
+      invalidatesTags: ["product"],
+    }),
   }),
 });
-export const { useCreateProductMutation, useGetProductByProductSlugQuery } = productApi;
+export const {
+  useCreateProductMutation,
+  useGetProductByProductSlugQuery,
+  useUpdateProductByProductIdMutation,
+} = productApi;

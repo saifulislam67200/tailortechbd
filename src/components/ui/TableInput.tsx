@@ -7,7 +7,7 @@ interface IProps {
   onChange?: (value: string[][]) => void;
 }
 
-const TableInpuut: React.FC<IProps> = ({ defaultValue, onChange }) => {
+const TableInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
   const [tableData, setTableData] = useState<string[][]>(
     defaultValue?.length
       ? defaultValue
@@ -20,7 +20,7 @@ const TableInpuut: React.FC<IProps> = ({ defaultValue, onChange }) => {
   );
 
   const handleCellChange = (row: number, col: number, value: string) => {
-    const updated = [...tableData];
+    const updated = tableData.map((inner) => [...inner]);
     updated[row][col] = value;
     setTableData(updated);
     onChange?.(updated);
@@ -61,6 +61,7 @@ const TableInpuut: React.FC<IProps> = ({ defaultValue, onChange }) => {
           {tableData[0]?.map((_, colIndex) => (
             <div key={colIndex} className={`flex w-full justify-center`}>
               <button
+                type="button"
                 onClick={() => deleteColumn(colIndex)}
                 className="center mb-1 aspect-square w-[30px] cursor-pointer rounded-full border border-border-muted bg-transparent text-[16px] text-danger"
                 title="Delete Column"
@@ -92,6 +93,7 @@ const TableInpuut: React.FC<IProps> = ({ defaultValue, onChange }) => {
             <div className="flex h-[40px] w-[40px] shrink-0 items-center justify-center">
               {rowIndex !== 0 ? (
                 <button
+                  type="button"
                   onClick={() => deleteRow(rowIndex)}
                   className="center aspect-square w-[30px] cursor-pointer rounded-full border border-border-muted bg-transparent text-[16px] text-danger"
                   title="Delete Row"
@@ -100,6 +102,7 @@ const TableInpuut: React.FC<IProps> = ({ defaultValue, onChange }) => {
                 </button>
               ) : (
                 <button
+                  type="button"
                   onClick={addColumn}
                   className="center center h-[30px] w-[30px] cursor-pointer rounded-full border border-border-muted text-muted"
                 >
@@ -113,6 +116,7 @@ const TableInpuut: React.FC<IProps> = ({ defaultValue, onChange }) => {
 
       {/* Add Row and Column Buttons */}
       <button
+        type="button"
         onClick={addRow}
         className="mt-4 cursor-pointer rounded-full border border-border-muted px-4 py-2 text-muted"
       >
@@ -122,4 +126,4 @@ const TableInpuut: React.FC<IProps> = ({ defaultValue, onChange }) => {
   );
 };
 
-export default TableInpuut;
+export default TableInput;

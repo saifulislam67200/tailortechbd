@@ -4,7 +4,7 @@ import Button from "@/components/ui/Button";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Input from "@/components/ui/Input";
 import RichTextArea from "@/components/ui/RichTextArea";
-import TableInpuut from "@/components/ui/TableInput";
+import TableInput from "@/components/ui/TableInput";
 import { IProduct } from "@/types/product";
 import { ErrorMessage, Field, FieldArray, Form, Formik, FormikHelpers } from "formik";
 import { BsTrash2 } from "react-icons/bs";
@@ -41,12 +41,7 @@ const validationSchema = Yup.object().shape({
     .min(1, "At least one image is required")
     .of(Yup.string().url("Must be a valid URL")),
   category: Yup.string().required("Category is required"),
-  // specifications: Yup.array().of(
-  //   Yup.object().shape({
-  //     label: Yup.string().required("Plase enter a title for this specification"),
-  //     value: Yup.string().required("Please enter a value for this specification"),
-  //   })
-  // ),
+
   colors: Yup.array().of(
     Yup.object().shape({
       color: Yup.string().required("Please enter a color name"),
@@ -77,8 +72,10 @@ export default function ProductForm({
   onSubmit,
   defaultValue,
   formLabel,
+  isLoading = false,
 }: {
   formLabel?: string;
+  isLoading?: boolean;
   defaultValue?: typeof initialValues;
   onSubmit: (data: typeof initialValues, helper: FormikHelpers<typeof initialValues>) => void;
 }) {
@@ -90,7 +87,7 @@ export default function ProductForm({
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
         <Form className="flex flex-col gap-[16px]">
-          <h4 className="text-[26px] font-[700]">{formLabel || "Product Form"}</h4>
+          <h4 className="line-clamp-1 text-[26px] font-[700]">{formLabel || "Product Form"}</h4>
           <SectionTitle>Basic Information</SectionTitle>
           <div className="w-full">
             <label className={labelClass}>Product Name</label>
@@ -158,7 +155,7 @@ export default function ProductForm({
 
           <div className="flex w-full flex-col gap-[5px]">
             <SectionTitle>Product Chart (Size)</SectionTitle>
-            <TableInpuut
+            <TableInput
               defaultValue={defaultValue?.chart}
               onChange={(data) => setFieldValue("chart", data)}
             />
@@ -271,7 +268,9 @@ export default function ProductForm({
             </FieldArray>
           </div>
 
-          <Button className="mt-[26px]">Add Product</Button>
+          <Button type="submit" isLoading={isLoading} className="mt-[26px]">
+            Add Product
+          </Button>
         </Form>
       )}
     </Formik>

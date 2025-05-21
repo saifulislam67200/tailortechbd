@@ -3,6 +3,7 @@
 import { deepEqual } from "assert";
 import { useEffect, useRef, useState } from "react";
 import { FaCaretDown } from "react-icons/fa6";
+import { twMerge } from "tailwind-merge";
 
 export interface ISelectOption {
   label: string;
@@ -16,6 +17,8 @@ interface SelectionBoxProps {
   displayValue?: string;
   onSeachInputChange?: (value: string) => void;
   defaultSearch?: boolean;
+  showSearch?: boolean;
+  className?: string;
 }
 
 const SelectionBox = ({
@@ -24,6 +27,8 @@ const SelectionBox = ({
   defaultValue,
   displayValue,
   defaultSearch = true,
+  showSearch = true,
+  className,
   onSeachInputChange,
 }: SelectionBoxProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,7 +61,7 @@ const SelectionBox = ({
   }, [deepEqual]);
 
   return (
-    <div className="relative w-full" ref={dropdownRef}>
+    <div className={twMerge("relative w-full", className)} ref={dropdownRef}>
       <button
         type="button"
         className="relative w-full cursor-pointer rounded border border-border-main bg-white px-[12px] py-[6px] text-start text-[12px] font-normal"
@@ -72,17 +77,21 @@ const SelectionBox = ({
 
       {isOpen && (
         <div className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded border border-gray-300 bg-white shadow">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="sticky top-0 w-full border-b border-gray-200 bg-white px-3 py-2 outline-none"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              onSeachInputChange?.(e.target.value);
-            }}
-            autoFocus
-          />
+          {showSearch ? (
+            <input
+              type="text"
+              placeholder="Search..."
+              className="sticky top-0 w-full border-b border-gray-200 bg-white px-3 py-2 outline-none"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                onSeachInputChange?.(e.target.value);
+              }}
+              autoFocus
+            />
+          ) : (
+            ""
+          )}
           {filtered.length > 0 ? (
             filtered.map((item, i) => (
               <div
