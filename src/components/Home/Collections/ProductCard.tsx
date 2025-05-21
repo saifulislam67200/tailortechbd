@@ -9,6 +9,7 @@ import { IProduct } from "@/types/product";
 import { useAppDispatch } from "@/hooks/redux";
 import { addToCart } from "@/redux/features/cart/cartSlice";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface ProductCardProps {
   product: IProduct;
@@ -16,6 +17,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const handleAddCart = (product: IProduct) => {
     const cartData = {
       id: product?._id,
@@ -32,6 +34,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     dispatch(addToCart(cartData));
     toast.success(`${product.name} added to cart`);
   };
+
+  const handleProductDetails = (slug: string) => {
+    router.push(`/product-details/${slug}`)
+  };
+
+
   return (
     <div className="group relative overflow-hidden bg-white transition-all duration-300 hover:shadow-[0_0_6px_2px_rgba(33,33,33,0.2)]">
       {/* Image */}
@@ -40,7 +48,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           src={product.colors?.[0]?.images?.[0] || ""}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-500 group-hover:scale-110"
+          className="object-cover transition-transform duration-500 group-hover:scale-110 cursor-pointer"
+          onClick={() => handleProductDetails(product?.slug)}
         />
 
         {/* Icons */}
@@ -64,8 +73,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       </div>
 
       {/* Content section */}
-      <div className="p-[8px]">
-        <h3 className="line-clamp-1 text-center text-[14px] font-bold hover:text-[#0d6efd]">
+      <div
+        onClick={() => handleProductDetails(product?.slug)}
+        className="p-[8px] cursor-pointer">
+        <h3
+          className="line-clamp-1 text-center text-[14px] font-bold hover:text-[#0d6efd]">
           {product.name}
         </h3>
         <p className="mt-1 line-clamp-2 text-center text-[13px]">{product.description}</p>
