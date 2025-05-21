@@ -1,48 +1,86 @@
 "use client";
-import { useAppSelector } from "@/hooks/redux";
-import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { addItemsOnCheckout } from "@/redux/features/checkout/checkout.slice";
+import { IOrderItem } from "@/types/order";
+import { useRouter } from "next/navigation";
 
 const DetailsAndPrice = () => {
-    const cartItems = useAppSelector((state) => state?.cart?.checkedItems) ?? [];
+  const cartItems = useAppSelector((state) => state?.cart?.checkedItems) ?? [];
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
-    const { subtotal, totalDiscount } = cartItems?.reduce(
-        (acc, item) => {
-            acc.subtotal += item?.price * item?.quantity;
-            acc.totalDiscount += item?.discount * item?.quantity;
-            return acc;
+  const { subtotal, totalDiscount } = cartItems?.reduce(
+    (acc, item) => {
+      const itemSubtotal = item?.price * item?.quantity;
+      const itemDiscountAmount = (item?.price * item?.discount * item?.quantity) / 100;
+
+      acc.subtotal += itemSubtotal;
+      acc.totalDiscount += itemDiscountAmount;
+      return acc;
+    },
+    { subtotal: 0, totalDiscount: 0 }
+  );
+
+  const total = subtotal - totalDiscount;
+
+  const handleCheckout = () => {
+    const payload: (IOrderItem & { discount?: number })[] = [];
+
+    cartItems.forEach((item) => {
+      payload.push({
+        product_id: item?.id,
+        product: {
+          image: item?.image || "",
+          name: item?.name,
+          price: item?.price,
         },
-        { subtotal: 0, totalDiscount: 0 }
-    );
+        color: item?.color || "",
+        quantity: item?.quantity,
+        size: item?.size || "",
+        discount: item?.discount,
+      });
+    });
+    dispatch(addItemsOnCheckout(payload));
+    router.push("/checkout");
+  };
 
-    const total = subtotal - totalDiscount;
-
-    return (
-        <div className="w-full lg:max-w-[350px] xl:max-w-[400px] 2xl:max-w-[578px] h-[246px]">
-            <div className=" bg-white p-[5px] mb-[16px]">
-                <div className="h-[40px] bg-tertiary">
-                    <p className="text-[16px] font-bold capitalize text-black px-[16px] py-[8px]">Price details</p>
-                </div>
-
-                <ul className="px-[13px] pt-[20px] pb-[23px]">
-                    <li className="flex justify-between items-center mb-[8px]">
-                        <p className="text-[14px] font-bold">Subtotal</p>
-                        <p className="text-[14px] font-bold">TK {parseFloat(subtotal.toFixed(2))}</p>
-                    </li>
-                    <li className="flex justify-between items-center mb-[8px]">
-                        <p className="text-[14px] font-bold">Ecom Discount</p>
-                        <p className="text-[14px] font-bold">TK {parseFloat(totalDiscount.toFixed(2))}</p>
-                    </li>
-                    <li className="flex justify-between items-center">
-                        <p className="text-[14px] font-bold">Total</p>
-                        <p className="text-[14px] font-bold">TK {parseFloat(total.toFixed(2))}</p>
-                    </li>
-                </ul>
-            </div>
-
-            <button className="w-full h-[26px] bg-black mb-[8px] flex justify-center items-center text-[12px] font-bold text-white">Continue Shopping</button>
-            <Link href="/checkout" className="w-full h-[26px] bg-primary  flex justify-center items-center text-[12px] font-bold text-white">Checkout</Link>
+  return (
+    <div className="h-[246px] w-full lg:max-w-[350px] xl:max-w-[400px] 2xl:max-w-[578px]">
+      <div className="mb-[16px] bg-white p-[5px]">
+        <div className="h-[40px] bg-tertiary">
+          <p className="px-[16px] py-[8px] text-[16px] font-bold text-black capitalize">
+            Price details
+          </p>
         </div>
-    );
+
+        <ul className="px-[13px] pt-[20px] pb-[23px]">
+          <li className="mb-[8px] flex items-center justify-between">
+            <p className="text-[14px] font-bold">Subtotal</p>
+            <p className="text-[14px] font-bold">TK {parseFloat(subtotal.toFixed(2))}</p>
+          </li>
+          <li className="mb-[8px] flex items-center justify-between">
+            <p className="text-[14px] font-bold">Ecom Discount</p>
+            <p className="text-[14px] font-bold">TK {parseFloat(totalDiscount.toFixed(2))}</p>
+          </li>
+          <li className="flex items-center justify-between">
+            <p className="text-[14px] font-bold">Total</p>
+            <p className="text-[14px] font-bold">TK {parseFloat(total.toFixed(2))}</p>
+          </li>
+        </ul>
+      </div>
+
+      <button className="mb-[8px] flex h-[26px] w-full items-center justify-center bg-black text-[12px] font-bold text-white">
+        Continue Shopping
+      </button>
+      <button
+        disabled={cartItems?.length === 0}
+        onClick={handleCheckout}
+        className="flex h-[26px] w-full cursor-pointer items-center justify-center bg-primary text-[12px] font-bold text-white disabled:opacity-50"
+      >
+        Checkout
+      </button>
+    </div>
+  );
 };
 
 export default DetailsAndPrice;

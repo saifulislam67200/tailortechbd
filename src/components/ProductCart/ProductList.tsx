@@ -1,47 +1,51 @@
 "use client";
-import { BiSupport } from "react-icons/bi"
-import CartCard from "./CartCard"
 import { useAppSelector } from "@/hooks/redux";
-import { useDispatch } from "react-redux";
 import { deleteCheckedItems, toggleSelectAll } from "@/redux/features/cart/cartSlice";
+import { BiSupport } from "react-icons/bi";
+import { useDispatch } from "react-redux";
+import CartCard from "./CartCard";
 
 const ProductList = () => {
-    const { items: cartItems, checkedItems } = useAppSelector((state) => state?.cart) ?? [];
-    const dispatch = useDispatch();
+  const { items: cartItems, checkedItems } = useAppSelector((state) => state?.cart) ?? [];
+  const dispatch = useDispatch();
 
-    const handleDeleteCheckedProducts = () => {
-        dispatch(deleteCheckedItems())
-    }
+  const handleDeleteCheckedProducts = () => {
+    dispatch(deleteCheckedItems());
+  };
 
-    const handleSelectAll = () => {
-        dispatch(toggleSelectAll());
-    }
+  const handleSelectAll = () => {
+    dispatch(toggleSelectAll());
+  };
 
-
-    return (
-        <div className="w-full  bg-white p-[5px]">
-            <div className="h-[40px] bg-tertiary flex items-center justify-between px-[8px]  sm:px-[16px] py-[8px]">
-                <p className="text-[12px] sm:text-[16px] font-bold text-black">You have ({cartItems?.length}) items in your cart</p>
-                <p className="text-[12px] sm:text-[15px] font-bold text-primary flex items-center gap-[3px] underline">
-                    <BiSupport />
-                    Need Help?
-                </p>
-            </div>
-            <div className="flex justify-between items-center mt-[27px] pl-[20px]  md:pl-[35px] pr-[12px]">
-                <div className="flex items-center gap-[35px]">
-                    <input checked={cartItems?.length === checkedItems?.length} onClick={() => handleSelectAll()} type="checkbox" name="" id="select-all" className="cursor-pointer" />
-                    <label htmlFor="select-all" className="text-[16px] cursor-pointer">Check All</label>
-                </div>
-                <button onClick={handleDeleteCheckedProducts} className="bg-quaternary px-[10px] rounded-full font-bold text-info">Delete</button>
-            </div>
-            {
-                (cartItems?.length > 0) ? (
-                    cartItems?.map((item) => <CartCard key={item?.id} item={item} />)
-                ) :
-                    (<h3 className="text-info text-[16px] mt-[30px] text-center">Cart Empty, No Product Added</h3>)
-            }
+  return (
+    <div className="w-full bg-white p-[5px]">
+      <div className="flex h-[40px] items-center justify-between bg-tertiary px-[8px] py-[8px] sm:px-[16px]">
+        <p className="text-[12px] font-bold text-black sm:text-[16px]">
+          You have ({cartItems?.length}) items in your cart
+        </p>
+        <p className="flex items-center gap-[3px] text-[12px] font-bold text-primary underline sm:text-[15px]">
+          <BiSupport />
+          Need Help?
+        </p>
+      </div>
+      <div className="mt-[27px] flex items-center justify-between pr-[12px] pl-[20px] md:pl-[35px]">
+        <div className="flex items-center gap-[35px]">
+          <input onChange={() => { }} checked={cartItems?.length === checkedItems?.length} onClick={() => handleSelectAll()} type="checkbox" name="" id="select-all" className="cursor-pointer" />
+          <label htmlFor="select-all" className="cursor-pointer text-[16px]"> Check All </label>
         </div>
-    )
-}
+        <button onClick={handleDeleteCheckedProducts} className="rounded-full bg-quaternary px-[10px] font-bold text-info">
+          Delete
+        </button>
+      </div>
+      {cartItems?.length > 0 ? (
+        cartItems?.map((item) => <CartCard key={item?.id} item={item} />)
+      ) : (
+        <h3 className="mt-[30px] text-center text-[16px] text-info">
+          Cart Empty, No Product Added
+        </h3>
+      )}
+    </div>
+  );
+};
 
 export default ProductList;

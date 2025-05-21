@@ -1,11 +1,11 @@
 "use client";
 import { IDashboardNavLinks } from "@/utils/dashboardNavLinks";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import LogoutButton from "../../ui/LogoutButton";
-import Logo from "../Logo";
 
 const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: number }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,7 +61,7 @@ const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
   return (
     <div className="flex h-full w-[256px] shrink-0 flex-col justify-between border-r-[1px] border-border-muted bg-white p-4">
       <div className="flex flex-col">
-        <Logo className="text-strong" />
+        <Image src="/images/logos/logo.png" alt="logo" width={100} height={100} className="mb-4" />
         <span className="my-[20px] h-[1px] w-full bg-border-muted" />
         <div className="gap-[] flex flex-col">
           {navlinks?.map((link, index) => (

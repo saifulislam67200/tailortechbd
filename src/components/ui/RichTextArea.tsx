@@ -42,23 +42,28 @@ const RichTextArea: React.FC<IProps> = ({
 
     ["clean"], // remove formatting button
   ];
+
   return (
     <ReactQuill
       modules={{
         toolbar: toolbarOptions,
+      }}
+      onChangeSelection={(...arg) => {
+        console.log(arg);
       }}
       style={{
         height: editorHeight + "px",
 
         ...style,
       }}
+      onBlur={handleBlur}
       className={className || ""}
       theme="snow"
       value={value}
-      onBlur={handleBlur}
-      onChange={(e) => {
-        setValue(e);
-        if (onChange) onChange(e);
+      onChange={(content, _delta, _source, editor) => {
+        setValue(content);
+        console.log(editor.getContents());
+        if (onChange) onChange(content);
       }}
     />
   );

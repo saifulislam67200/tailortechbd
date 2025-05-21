@@ -1,10 +1,10 @@
+import CardSkeleton from "@/components/Home/Collections/CardSkeleton";
 import Collections from "@/components/Home/Collections/Collections";
 import Hero from "@/components/Home/Hero";
+import Services from "@/components/Home/Services";
 import TopCategories from "@/components/Home/TopCategories";
-import Services  from '@/components/Home/Services';
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { Suspense } from "react";
-import CardSkeleton from "@/components/Home/Collections/CardSkeleton";
 
 export default function Home() {
   return (

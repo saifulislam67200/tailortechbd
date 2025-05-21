@@ -7,6 +7,7 @@ export interface ProductDetailsProps {
 }
 
 const page = ({ params }: ProductDetailsProps) => {
+
     return (
         <div>
             <ProductDetails params={params} />

@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import { useUploadMultipleFileMutation } from "@/redux/features/upload/upload.api";
-import { ChangeEvent, DragEvent, useState } from "react";
+import { useUploadSingleFileMutation } from "@/redux/features/upload/upload.api";
+import Image from "next/image";
+import { ChangeEvent, DragEvent, useEffect, useRef, useState } from "react";
+import { CgSpinnerTwo } from "react-icons/cg";
 import { MdOutlineFileUpload } from "react-icons/md";
 import { toast } from "sonner";
 
@@ -9,12 +11,47 @@ interface IProps {
   onFileUpload?: (file: File[] | null) => void;
   onChange: (file: string[] | null) => void;
   defaultImages?: string[];
+  children?: React.ReactNode;
+  inputId?: string;
 }
 
-const imageDisplay = (preview: File | string, onRemove: () => void) => {
+const ImageDisplay = ({
+  preview,
+  onRemove,
+  onUploaded,
+}: {
+  preview: string | File;
+  onRemove: () => void;
+  onUploaded?: (url: string) => void;
+}) => {
+  const [uploadSingleFile, { isLoading }] = useUploadSingleFileMutation(undefined);
+  const hasUploaded = useRef(false);
+
+  useEffect(() => {
+    const handleSaveImages = async () => {
+      if (typeof preview === "string" || hasUploaded.current) return;
+
+      hasUploaded.current = true; // prevent duplicate uploads
+
+      try {
+        const formData = new FormData();
+        formData.append("file", preview);
+
+        const res = await uploadSingleFile(formData);
+        const url = res?.data?.data || "";
+
+        onUploaded?.(url);
+      } catch {
+        toast.error("Something went wrong while uploading your images");
+      }
+    };
+
+    handleSaveImages();
+  }, []);
+
   return (
-    <div className="center border-input relative h-[150px] w-[150px] shrink-0 rounded-[8px] border-[1px]">
-      <img
+    <div className="center relative h-[150px] w-[150px] shrink-0 rounded-[8px] border-[1px] border-border-muted">
+      <Image
         width={150}
         height={150}
         src={typeof preview === "string" ? preview : URL.createObjectURL(preview)}
@@ -22,10 +59,18 @@ const imageDisplay = (preview: File | string, onRemove: () => void) => {
         className="h-auto max-h-full w-full rounded-lg object-cover shadow-md"
       />
 
+      {isLoading ? (
+        <span className="center absolute top-0 left-0 h-full w-full bg-black/40">
+          <CgSpinnerTwo className="animate-spin text-3xl text-primary" />
+        </span>
+      ) : (
+        ""
+      )}
+
       <button
         type="button"
         onClick={onRemove}
-        className="absolute top-1 right-1 h-[16px] w-[16px] rounded-full bg-danger text-xs text-white"
+        className="absolute top-1 right-1 z-[2] h-[16px] w-[16px] cursor-pointer rounded-full bg-danger text-xs text-white"
         title="Remove image"
       >
         &times;
@@ -34,66 +79,39 @@ const imageDisplay = (preview: File | string, onRemove: () => void) => {
   );
 };
 
-const ProductImageUploader: React.FC<IProps> = ({ onFileUpload, onChange, defaultImages = [] }) => {
-  const [files, setFiles] = useState<File[]>([]);
+const ProductImageUploader: React.FC<IProps> = ({
+  children,
+  onChange,
+  defaultImages = [],
+  inputId,
+}) => {
+  const [files, setFiles] = useState<{ file: File; id: string }[]>([]);
   const [savedImages, setSavedImages] = useState<string[]>(defaultImages || []);
-  const [uploadMultiImage, { isLoading }] = useUploadMultipleFileMutation(undefined);
-
-  const imageSizeImMb = files.reduce((acc, curr) => acc + curr.size, 0) / 1024 / 1024;
 
   const handleDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-
-    if (imageSizeImMb >= 10) {
-      return toast.error(
-        "Image size should be less than 10mb, save your image before uploading new image"
-      );
-    }
 
     const files = Array.from(event.dataTransfer.files);
 
     const types = ["image/jpeg", "image/png", "image/gif", "image/jpeg"];
 
     const validFiles = files.filter((file) => types.includes(file.type)) || [];
+    const newFilesWithIds = validFiles.map((file) => ({ file, id: crypto.randomUUID() }));
 
-    setFiles((prevImages) => [...prevImages, ...validFiles]);
+    setFiles((prevImages) => [...prevImages, ...newFilesWithIds]);
   };
   const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
 
-  const removeImage = (index: number) => {
-    setFiles((prevImages) => prevImages.filter((_, i) => i !== index));
+  const removeFile = (id: string) => {
+    setFiles((prevImages) => prevImages.filter((file, i) => file.id !== id));
   };
 
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (imageSizeImMb >= 10) {
-      return toast.error(
-        "Image size should be less than 10mb, save your image before uploading new image"
-      );
-    }
     const files = Array.from(event.target.files || []);
-    setFiles((prevImages) => [...prevImages, ...files]);
-    handleSaveImages();
-  };
-
-  const handleSaveImages = async () => {
-    try {
-      const formData = new FormData();
-      files.forEach((image) => {
-        formData.append("images", image);
-      });
-
-      const res = await uploadMultiImage(formData);
-      const ulrs = res?.data?.data || [];
-      onChange([...savedImages, ...ulrs]);
-      setSavedImages([...savedImages, ...ulrs]);
-
-      setFiles([]);
-      toast.success("Images uploaded successfully");
-    } catch {
-      toast.error("Something went wrong while uploading your images");
-    }
+    const newFiles = files.map((file) => ({ file, id: crypto.randomUUID() }));
+    setFiles((prevImages) => [...prevImages, ...newFiles]);
   };
 
   const handleRemoveSavedImage = (index: number) => {
@@ -104,11 +122,11 @@ const ProductImageUploader: React.FC<IProps> = ({ onFileUpload, onChange, defaul
 
   return (
     <div className="min-h-[100px] w-full border-[1px] border-border-main p-[16px]">
-      <h3 className="text-[20px] font-[600] text-strong">Upload Product Image</h3>
+      {children || <h3 className="text-[20px] font-[600] text-strong">Upload Product Image</h3>}
 
       <div onDrop={handleDrop} onDragOver={handleDragOver}>
         <label
-          htmlFor="image-uploader"
+          htmlFor={inputId || "image-uploader"}
           className="center mt-[20px] h-[170px] cursor-pointer flex-col border-[2px] border-dashed border-border-main bg-solid-slab"
         >
           <MdOutlineFileUpload className="text-[50px] text-muted" />
@@ -117,25 +135,31 @@ const ProductImageUploader: React.FC<IProps> = ({ onFileUpload, onChange, defaul
         </label>
       </div>
       <input
-        id="image-uploader"
+        id={inputId || "image-uploader"}
+        multiple
         type="file"
         className="hidden"
         accept=".png, .jpg, .jpeg, .gif, .webp"
         onChange={handleImageChange}
       />
 
-      {defaultImages.length > 0 && (
-        <div className="mt-4 grid grid-cols-2 gap-4">
-          {defaultImages.map((img, index) => (
-            <img
-              key={index}
-              src={img}
-              alt={`Uploaded ${index}`}
-              className="h-[100px] w-full rounded border object-cover"
-            />
-          ))}
-        </div>
-      )}
+      <div className="mt-4 flex items-center justify-start gap-4">
+        {files.map((file, index) => (
+          <ImageDisplay
+            key={index}
+            preview={file.file}
+            onRemove={() => removeFile(file.id)}
+            onUploaded={(url) => {
+              removeFile(file.id);
+              setSavedImages((prev) => [...prev, url]);
+              onChange([...savedImages, url]);
+            }}
+          />
+        ))}
+        {savedImages.map((url, index) => (
+          <ImageDisplay key={index} preview={url} onRemove={() => handleRemoveSavedImage(index)} />
+        ))}
+      </div>
     </div>
   );
 };

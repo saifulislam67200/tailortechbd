@@ -1,4 +1,5 @@
 "use client";
+import { IProduct } from "@/types/product";
 import Image from "next/image";
 import { useState } from "react";
 import "swiper/css";
@@ -10,10 +11,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
 
 
-const ProductDetailsSlider = () => {
+const ProductDetailsSlider = ({ ...product }: IProduct) => {
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
-
 
     const images = [
         "/macbook.jpeg",
@@ -21,11 +21,14 @@ const ProductDetailsSlider = () => {
         "/macbook.jpeg"
     ];
 
+
+    console.log(product, "from product details slider")
+
+
     return (
         <section className=" bg-white pl-[5px] pr-[5px] xl:pl-[30px] xl:pr-[20px] 2xl:pl-[60px] 2xl:pr-[55px] pt-[14px]">
             <div className="flex flex-col-reverse items-center lg:items-start lg:flex-row lg:gap-[20px] xl:gap-[90px]">
                 {/* thumbnail images ,vertical on desktop, horizontal on mobile */}
-
                 <div className="lg:w-[80px] mt-[5px]">
                     <Swiper
                         onSwiper={setThumbsSwiper}
@@ -47,10 +50,7 @@ const ProductDetailsSlider = () => {
                     >
                         {images.map((img, index) => (
                             <SwiperSlide key={index} className="!h-[80px] !w-[80px]">
-                                <div
-                                    className={`relative h-[60px] md:h-[80px] w-[60px] md:w-[80px] cursor-pointer overflow-hidden  border transition-all duration-300  p-[5px] ${activeIndex === index ? "border-info-light" : "border-transparent"
-                                        }`}
-                                >
+                                <div className={`relative h-[60px] md:h-[80px] w-[60px] md:w-[80px] cursor-pointer overflow-hidden  border transition-all duration-300  p-[5px] ${activeIndex === index ? "border-info-light" : "border-transparent"}`}>
                                     <Image
                                         src={img}
                                         width={80}
