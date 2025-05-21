@@ -15,10 +15,9 @@ const DetailedInfo = () => {
             {/* colors  */}
             <h1 className=" mt-[30px] text-[20px]">Colors:</h1>
             <div className="flex items-center gap-[20px] mt-[5px]">
-                {[1, 2, 3, 4]?.map((item, index) => (
+                {["red", "green", "yellow"]?.map((item, index) => (
                     <div key={index} >
-                        <button className="cursor-pointer w-[20px] h-[20px] sm:w-[25px] sm:h-[25px] bg-red-500 rounded-full border-2 border-info "></button>
-                        <p className="text-[12px] text-info text-center leading-[8px]">Red</p>
+                        <button className={`cursor-pointer w-[20px] h-[20px] sm:w-[25px] sm:h-[25px] bg-${item}-500 rounded-full`}></button>
                     </div>
                 ))}
             </div>

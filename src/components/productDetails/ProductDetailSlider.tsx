@@ -26,8 +26,8 @@ const ProductDetailsSlider = ({ ...product }: IProduct) => {
 
 
     return (
-        <section className=" bg-white pl-[5px] pr-[5px] xl:pl-[30px] xl:pr-[20px] 2xl:pl-[60px] 2xl:pr-[55px] pt-[14px]">
-            <div className="flex flex-col-reverse items-center lg:items-start lg:flex-row lg:gap-[20px] xl:gap-[90px]">
+        <section className=" bg-white px-[10px] md:px-[20px] pt-[14px]">
+            <div className="flex flex-col-reverse items-center lg:items-start lg:flex-row lg:gap-[20px] xl:gap-[30px]">
                 {/* thumbnail images ,vertical on desktop, horizontal on mobile */}
                 <div className="lg:w-[80px] mt-[5px]">
                     <Swiper
@@ -76,12 +76,12 @@ const ProductDetailsSlider = ({ ...product }: IProduct) => {
                 >
                     {images.map((img, index) => (
                         <SwiperSlide key={index}>
-                            <div className="w-full 2xl:max-w-[600px] xl:min-h-[593px] h-full border border-info-light p-[5px] lg:p-[0px]">
+                            <div className="w-full 2xl:max-w-[730px] xl:min-h-[700px] h-full border border-info-light p-[5px] lg:p-[0px]">
                                 <Image
                                     src={img}
-                                    width={2000}
-                                    height={2000}
-                                    className="object-cover w-full xl:min-h-[593px] object-center"
+                                    width={1000}
+                                    height={1000}
+                                    className="object-cover w-full xl:min-h-[700px] object-center"
                                     alt={`Product image ${index + 1}`}
                                     priority={index < 2}
                                 />
@@ -91,7 +91,6 @@ const ProductDetailsSlider = ({ ...product }: IProduct) => {
                 </Swiper>
             </div>
 
-            <h1 className="pt-[16px] pb-[50px]">N.B. Image may differ with actual products layout, color, size & dimension. No claim will be accepted for image mismatch. Product data used in this website is based solely on its manufacturer provided information, authenticity and accuracy are their responsibility only.</h1>
         </section>
     );
 };

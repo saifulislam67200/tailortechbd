@@ -3,6 +3,7 @@ import Breadcrumb from "../ui/BreadCrumbs";
 import DetailedInfo from "./DetailedInfo";
 import ProductDetailsSlider from "./ProductDetailSlider";
 import { ProductDetailsProps } from "@/app/(main)/product-details/[slug]/page";
+import DetailsAndInformation from "./DetailsAndInformation";
 
 
 const ProductDetails = async ({ params }: ProductDetailsProps) => {
@@ -24,6 +25,7 @@ const ProductDetails = async ({ params }: ProductDetailsProps) => {
                 <ProductDetailsSlider {...product} />
                 <DetailedInfo  {...product} />
             </div>
+            <DetailsAndInformation  {...product} />
         </div>
     )
 };
