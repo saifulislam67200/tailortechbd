@@ -1,6 +1,6 @@
 "use client";
 import CustomerReview from "./CustomerReview";
-import DetailsPageSimilarProduct from "./DetailsPageSimilarProduct";
+import DetailsPageTOPProduct from "./DetailsPageTopProduct";
 import QuestionAnswer from "./QuestionAnswer";
 
 const DetailsAndInformation = ({ ...product }) => {
@@ -25,7 +25,7 @@ const DetailsAndInformation = ({ ...product }) => {
         <CustomerReview productId={product?._id} />
       </div>
 
-      <DetailsPageSimilarProduct />
+      <DetailsPageTOPProduct />
     </section>
   );
 };

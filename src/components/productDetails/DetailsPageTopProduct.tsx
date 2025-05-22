@@ -1,19 +1,19 @@
 import React from "react";
 import Title from "../ui/Title";
-import SimilarProductCard from "./SimilarProductCard";
 import { products } from "@/mock/FakeProducts";
+import TopProductCard from "./TopProductCard";
 
-const DetailsPageSimilarProduct = () => {
+const DetailsPageTOPProduct = () => {
   return (
     <div className="w-full md:max-w-[432px]">
-      <Title title="RELATED PRODUCTS" className="!text-[14px]" />
+      <Title title="TOP PRODUCTS" className="!text-[14px]" />
       <div className="mt-[10px] w-full space-y-[10px]">
         {products.map((product, index) => (
-          <SimilarProductCard key={index} {...product} />
+          <TopProductCard key={index} {...product} />
         ))}
       </div>
     </div>
   );
 };
 
-export default DetailsPageSimilarProduct;
+export default DetailsPageTOPProduct;
