@@ -46,11 +46,11 @@ export default function Navbar() {
   return (
     <>
       <TopBar />
-      <nav className="sticky top-0 z-10 bg-black px-[16px] py-[10px]">
+      <nav className="sticky top-0 z-10 border-b-[1px] border-border-muted bg-white px-[16px] py-[10px]">
         <div className="main_container mx-auto flex items-center justify-between">
           {/* Hamburger Menu - Mobile only */}
           <div className="mr-[0px] sm:mr-[10px] lg:mr-[0px] lg:hidden">
-            <button className="text-white" onClick={() => setIsMenuOpen(true)}>
+            <button className="text-black" onClick={() => setIsMenuOpen(true)}>
               <MenuIcon />
             </button>
           </div>

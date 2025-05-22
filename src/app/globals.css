@@ -19,8 +19,8 @@
 
 :root {
   --background: #f2f2f2;
-  --primary: #72bf44;
-  --secondary: #d7d7d7;
+  --primary: #101949;
+  --secondary: #f20003;
   --tertiary: #e9e9e9;
   --quaternary: #cccccc;
   --info: #868585;
@@ -53,9 +53,6 @@
   --color-border-muted: var(--border-muted);
   --color-solid-slab: var(--solid-slab);
   --color-success: var(--success);
-}
-
-body {
 }
 
 body {
