@@ -2,8 +2,9 @@ import { notFound } from "next/navigation";
 import Breadcrumb from "../ui/BreadCrumbs";
 import DetailedInfo from "./DetailedInfo";
 import ProductDetailsSlider from "./ProductDetailSlider";
-import { ProductDetailsProps } from "@/app/(main)/product-details/[slug]/page";
+import { ProductDetailsProps } from "@/app/(main)/products/[slug]/page";
 import DetailsAndInformation from "./DetailsAndInformation";
+import RelatedProducts from "./RelatedProducts";
 
 const ProductDetails = async ({ params }: ProductDetailsProps) => {
   const slug = (await params)?.slug;
@@ -22,9 +23,10 @@ const ProductDetails = async ({ params }: ProductDetailsProps) => {
       <Breadcrumb />
       <div className="mt-[10px] grid grid-cols-1 gap-[10px] lg:grid-cols-2">
         <ProductDetailsSlider {...product} />
-        <DetailedInfo {...product} />
+        <DetailedInfo product={product} />
       </div>
       <DetailsAndInformation {...product} />
+      <RelatedProducts />
     </div>
   );
 };

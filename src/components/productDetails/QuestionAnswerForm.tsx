@@ -40,8 +40,7 @@ const QuestionAnswerForm = ({ productId }: { productId: string }) => {
                 id="question"
                 name="question"
                 as="textarea"
-                rows={4}
-                className="h-[150px] w-full rounded-[5px] border border-quaternary p-[10px] focus:outline-none"
+                className="h-[80px] w-full rounded-[5px] border border-quaternary p-[10px] focus:outline-none lg:h-[150px]"
               />
               <ErrorMessage name="question" component="div" className="text-[12px] text-red-500" />
             </div>

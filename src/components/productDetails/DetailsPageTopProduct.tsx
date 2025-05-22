@@ -8,9 +8,7 @@ const DetailsPageTOPProduct = () => {
     <div className="w-full md:max-w-[432px]">
       <Title title="TOP PRODUCTS" className="!text-[14px]" />
       <div className="mt-[10px] w-full space-y-[10px]">
-        {products.map((product, index) => (
-          <TopProductCard key={index} {...product} />
-        ))}
+        {products?.map((product, index) => <TopProductCard key={index} {...product} />)}
       </div>
     </div>
   );
