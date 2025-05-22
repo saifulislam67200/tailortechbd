@@ -29,7 +29,7 @@ export default function UserDropdown() {
     <div className="relative hidden lg:block" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex cursor-pointer items-center text-white"
+        className="flex cursor-pointer items-center text-primary"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
@@ -39,10 +39,10 @@ export default function UserDropdown() {
 
       {/* User Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 z-20 mt-2 w-48 rounded-md border border-gray-200 bg-white py-1 shadow-lg">
+        <div className="absolute right-0 z-20 mt-2 w-48 rounded-md border border-solid-slab bg-white py-1 shadow-lg">
           <Link
             href="/account/profile"
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-solid-slab"
           >
             Profile
           </Link>
@@ -68,7 +68,12 @@ export default function UserDropdown() {
               </Link>
             </>
           ) : (
-            ""
+            <Link
+              href="/dashboard/admin"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >
+              Dashboard
+            </Link>
           )}
           <div className="my-1 border-t border-gray-100"></div>
           <button className="block w-full px-4 py-2 text-left text-sm text-danger hover:bg-gray-100">

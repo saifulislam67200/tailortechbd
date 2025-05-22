@@ -55,7 +55,7 @@ const ProductAddToCartModal = ({ children, product }: Props) => {
       ) : (
         <button
           onClick={handleClick}
-          className="mt-1 w-full cursor-pointer border border-[#c5c5c5] bg-secondary py-[6px] text-sm font-bold"
+          className="mt-1 w-full cursor-pointer border border-[#c5c5c5] bg-primary py-[6px] text-sm font-bold text-white"
         >
           Add to Cart
         </button>

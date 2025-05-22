@@ -6,3 +6,20 @@ export const truncateWords = (str: string, numWords = 5) => {
 export const truncateChars = (str: string, maxChars = 100): string => {
   return str.length > maxChars ? str.slice(0, maxChars) + "…" : str;
 };
+export const generateQueryParams = (params: Record<string, unknown>) => {
+  let queryString = "";
+  const entries = Object.entries(params);
+
+  entries.forEach(([key, value], i) => {
+    const isLast = i === entries.length - 1;
+    if (value) {
+      if (isLast) {
+        queryString += `${key}=${value}`;
+      } else {
+        queryString += `${key}=${value}&`;
+      }
+    }
+  });
+
+  return queryString;
+};

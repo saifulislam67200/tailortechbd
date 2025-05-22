@@ -1,6 +1,6 @@
 import { api } from "@/redux/api/api";
 import { IProduct } from "@/types/product";
-import { generateQueryParams } from "@/utils/generateQueryParams";
+import { generateQueryParams } from "@/utils";
 
 const productApi = api.injectEndpoints({
   endpoints: (builder) => ({

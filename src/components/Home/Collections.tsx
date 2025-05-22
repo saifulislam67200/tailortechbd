@@ -32,7 +32,9 @@ const Collections = async () => {
       <Title title="Latest Collections" className="!text-[14px]" />
 
       <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-        {collections?.map((item) => <ProductSecondaryCard key={item._id} product={item} />)}
+        {collections?.map((item) => (
+          <ProductSecondaryCard className="h-full" key={item._id} product={item} />
+        ))}
       </div>
     </section>
   );

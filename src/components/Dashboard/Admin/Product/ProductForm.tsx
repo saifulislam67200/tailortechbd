@@ -245,7 +245,7 @@ export default function ProductForm({
                         )}
                       </FieldArray>
                       <ProductImageUploader
-                        defaultImages={defaultValue?.colors[i].images}
+                        defaultImages={defaultValue?.colors[i]?.images}
                         inputId={`colors.${i}.image_uploader`}
                         onChange={(urls) => setFieldValue(`colors.${i}.images`, urls)}
                       >

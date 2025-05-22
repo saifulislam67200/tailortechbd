@@ -1,7 +1,7 @@
 import { api } from "@/redux/api/api";
 import { ICategory } from "@/types/category";
 import { IMeta } from "@/types/meta";
-import { generateQueryParams } from "@/utils/generateQueryParams";
+import { generateQueryParams } from "@/utils";
 
 const categoryApi = api.injectEndpoints({
   endpoints: (builder) => ({

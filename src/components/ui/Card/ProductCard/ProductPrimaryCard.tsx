@@ -15,7 +15,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
       {/* Image */}
       <Link
         href={`/product/${product?.slug}`}
-        className="flex aspect-square w-full items-center justify-start bg-white"
+        className="flex aspect-square max-h-[279px] w-full items-center justify-start bg-white"
       >
         <Image
           src={product.images?.[0] || "/"}
