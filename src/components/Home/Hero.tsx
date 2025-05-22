@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
 import Image from "next/image";
+import { useState } from "react";
+import { Autoplay } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 
@@ -11,14 +11,13 @@ const Hero = () => {
   const [activeSlide, setActiveSlide] = useState(0);
 
   const leftImages = ["/images/home/banner1.webp", "/images/home/banner11.webp"];
-  const rightImages = ["/images/home/banner2.webp", "/images/home/banner3.webp"];
 
   return (
     <div className="mt-[16px]">
-      <div className="flex flex-col gap-[8px] lg:flex-row ">
+      <div className="flex flex-col gap-[8px] lg:flex-row">
         {/* Left Side - Main Banner */}
-        <div className="w-full lg:w-2/3">
-          <div className="relative mb-[4px] w-full aspect-[834.66/434.7]">
+        <div className="w-full">
+          <div className="relative mb-[4px] aspect-[834.66/250] w-full">
             <Swiper
               style={{ width: "100%", height: "100%" }}
               spaceBetween={20}
@@ -57,25 +56,6 @@ const Hero = () => {
               />
             ))}
           </div>
-        </div>
-
-        {/* Right Side*/}
-        <div className="flex w-full flex-row flex-wrap gap-[4px] md:flex-row lg:w-1/3 lg:flex-col">
-          {rightImages.map((image, index) => (
-            <div
-              key={index}
-              className="relative flex-1 lg:w-full lg:h-[215.2px]"
-            >
-              <div className="relative h-full w-full aspect-[413.33/215.2]">
-                <Image
-                  src={image}
-                  alt={`banner-${index + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </div>

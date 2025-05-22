@@ -3,12 +3,14 @@ import { ICategory } from "./category";
 export interface ISize {
   size: string;
   stock: number;
+  _id?: string;
 }
 
 export interface IColor {
   color: string;
   sizes: ISize[];
   images?: string[];
+  _id?: string;
 }
 
 export interface IProduct {

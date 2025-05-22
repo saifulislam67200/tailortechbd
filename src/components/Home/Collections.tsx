@@ -1,10 +1,14 @@
+import { baseUrl } from "@/redux/api/api";
 import { IProduct } from "@/types/product";
-import Title from "../../ui/Title";
-import ProductCard from "../../ui/Card/ProductCard/ProductSecondaryCard";
+import ProductSecondaryCard from "../ui/Card/ProductCard/ProductSecondaryCard";
+import Title from "../ui/Title";
 const Collections = async () => {
-  const res = await fetch("http://localhost:5000/api/v1/product/get", {
-    next: { revalidate: 60 * 60 },
-  });
+  const res = await fetch(
+    `${baseUrl}/product/get?limit=15&fields=name,slug,images,price,discount,colors,description`,
+    {
+      next: { revalidate: 60 * 60 },
+    }
+  );
 
   if (!res.ok) {
     return (
@@ -25,10 +29,10 @@ const Collections = async () => {
 
   return (
     <section className="w-full py-[16px]">
-      <Title title="Collections" className="!text-[14px]" />
+      <Title title="Latest Collections" className="!text-[14px]" />
 
       <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-        {collections?.map((item) => <ProductCard key={item._id} product={item} />)}
+        {collections?.map((item) => <ProductSecondaryCard key={item._id} product={item} />)}
       </div>
     </section>
   );
