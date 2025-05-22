@@ -30,23 +30,10 @@ const ProductList = () => {
       </div>
       <div className="mt-[27px] flex items-center justify-between pr-[12px] pl-[20px] md:pl-[35px]">
         <div className="flex items-center gap-[35px]">
-          <input
-            onChange={() => {}}
-            checked={cartItems?.length === checkedItems?.length}
-            onClick={() => handleSelectAll()}
-            type="checkbox"
-            name=""
-            id="select-all"
-            className="cursor-pointer"
-          />
-          <label htmlFor="select-all" className="cursor-pointer text-[16px]">
-            Check All
-          </label>
+          <input onChange={() => { }} checked={cartItems?.length === checkedItems?.length} onClick={() => handleSelectAll()} type="checkbox" name="" id="select-all" className="cursor-pointer" />
+          <label htmlFor="select-all" className="cursor-pointer text-[16px]"> Check All </label>
         </div>
-        <button
-          onClick={handleDeleteCheckedProducts}
-          className="rounded-full bg-quaternary px-[10px] font-bold text-info"
-        >
+        <button onClick={handleDeleteCheckedProducts} className="rounded-full bg-quaternary px-[10px] font-bold text-info">
           Delete
         </button>
       </div>
