@@ -9,11 +9,11 @@ const CategoryMenu = () => {
   const categories = data?.data;
 
   return (
-    <div className="hidden items-center justify-center bg-black pb-[12px] lg:flex">
+    <div className="hidden items-center justify-center bg-white py-[12px] lg:flex">
       <div className="flex gap-[16px] sm:ml-[24px] sm:space-x-[20px]">
         {!categories ||
           (categories.length === 0 && (
-            <span className="text-sm text-gray-400">No categories available at the moment.</span>
+            <span className="text-sm text-solid-slab">No categories available at the moment.</span>
           ))}
 
         {categories?.map((category) => {
@@ -23,7 +23,7 @@ const CategoryMenu = () => {
             <div key={category._id} className="group">
               <Link
                 href={`/shop/${category.slug}`}
-                className="group/category flex items-center gap-[5px] px-1 pt-1 text-sm text-[16px] font-bold text-white"
+                className="group/category flex items-center gap-[5px] px-1 pt-1 text-sm text-[16px] font-bold text-black"
               >
                 {category.label}
               </Link>

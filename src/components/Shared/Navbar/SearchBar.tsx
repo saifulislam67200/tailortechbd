@@ -46,7 +46,7 @@ export default function SearchBar() {
     <div className="relative">
       <form
         onSubmit={handleSearch}
-        className="flex h-[38px] items-center justify-start gap-[0px] overflow-hidden rounded-[10px] bg-white"
+        className="flex h-[38px] items-center justify-start gap-[0px] overflow-hidden rounded-[10px] border-[1px] border-border-main bg-white"
       >
         <input
           type="text"
