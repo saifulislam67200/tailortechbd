@@ -62,8 +62,8 @@ const labelClass = "text-[14px] font-[600] text-black";
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="w-full bg-tertiary px-[16px] py-[8px]">
-      <span className="text-[16px] font-[700]">{children}</span>
+    <div className="w-full bg-dashboard/10 px-[16px] py-[8px]">
+      <span className="text-[16px] font-[700] text-dashboard">{children}</span>
     </div>
   );
 };

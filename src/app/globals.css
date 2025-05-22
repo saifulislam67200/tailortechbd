@@ -34,6 +34,7 @@
   --muted: #6f6f6f;
   --solid-slab: #e9ecef;
   --success: #198754;
+  --dashboard: #4154f1;
 }
 
 @theme {
@@ -53,6 +54,8 @@
   --color-border-muted: var(--border-muted);
   --color-solid-slab: var(--solid-slab);
   --color-success: var(--success);
+
+  --color-dashboard: var(--dashboard);
 }
 
 body {

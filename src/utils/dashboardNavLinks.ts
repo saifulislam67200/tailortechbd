@@ -1,10 +1,9 @@
 "use client";
-import { FaBoxes } from "react-icons/fa";
 import { MdInventory2 } from "react-icons/md";
 import { VscGraphLine } from "react-icons/vsc";
 export interface IDashboardNavLinks {
   label: string;
-  icon: React.ElementType;
+  icon?: React.ElementType;
   path?: string;
   children?: IDashboardNavLinks[];
 }
@@ -22,12 +21,10 @@ export const admin: IDashboardNavLinks[] = [
       {
         label: "All Products",
         path: "/dashboard/admin/products",
-        icon: FaBoxes,
       },
       {
         label: "Create New Product",
         path: "/dashboard/admin/product-create",
-        icon: FaBoxes,
       },
     ],
   },

@@ -1,17 +1,28 @@
 "use client";
 import { IDashboardNavLinks } from "@/utils/dashboardNavLinks";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GoChevronDown } from "react-icons/go";
 import LogoutButton from "../../ui/LogoutButton";
 
 const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: number }) => {
+  const path = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [contentHeight, setContentHeight] = useState(0);
+
   const Icon = navlink.icon;
   const hasChildren = navlink.children && navlink.children.length > 0;
-  const path = usePathname();
+
+  const isChildActive = (link: IDashboardNavLinks): boolean => {
+    return link.children?.some((child) => child.path === path || isChildActive(child)) || false;
+  };
+
+  const isDirectlyActive = path === navlink.path;
+  const isDescendantActive = isChildActive(navlink);
+  const isActive = isDirectlyActive || isDescendantActive;
+  const isMainParent = depth === 0;
 
   const handleToggle = () => {
     if (hasChildren) {
@@ -19,35 +30,61 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
     }
   };
 
+  // Update height when open
+  useEffect(() => {
+    if (contentRef.current) {
+      setContentHeight(contentRef.current.scrollHeight);
+    }
+  }, [isOpen]);
+
   return (
-    <div className="py-2">
+    <div className={isMainParent ? "py-2" : ""}>
       {hasChildren ? (
         <div
-          className="flex cursor-pointer items-center justify-between gap-[8px] text-sm font-medium text-strong hover:text-primary"
+          className={`flex cursor-pointer items-center justify-between gap-[8px] px-[16px] py-[10px] text-sm font-medium hover:text-primary ${
+            isMainParent && isDescendantActive ? "bg-dashboard/5 text-dashboard" : "text-strong"
+          }`}
           onClick={handleToggle}
         >
-          <div className="flex items-center gap-[8px]">
-            <Icon className="h-4 w-4" />
+          <div className={`flex items-center gap-[8px] text-[15px] font-[600]`}>
+            {Icon ? <Icon className="h-4 w-4" /> : ""}
             <span className="select-none">{navlink.label}</span>
           </div>
-
-          <GoChevronDown className={`h-4 w-4 ${isOpen ? "rotate-180" : ""} duration-[0.3s]`} />
+          <GoChevronDown className={`h-4 w-4 ${isOpen ? "rotate-180" : ""} duration-300`} />
         </div>
       ) : (
         <Link
           href={navlink.path || "#"}
-          className={`flex cursor-pointer items-center gap-2 text-sm font-medium hover:text-primary ${
-            path === navlink.path ? "text-primary" : "text-strong"
+          className={`flex cursor-pointer items-center gap-2 rounded-[8px] px-[16px] py-[10px] text-[15px] font-[600] hover:text-primary ${
+            isDirectlyActive
+              ? isMainParent
+                ? "bg-dashboard/5 text-dashboard"
+                : "text-dashboard"
+              : "text-strong"
           }`}
-          onClick={handleToggle}
         >
-          <Icon className="h-4 w-4" />
-          <span className="select-none">{navlink.label}</span>
+          {depth !== 0 ? (
+            <span
+              className={`h-[6px] w-[6px] shrink-0 rounded-full border-[1px] border-dashboard ${
+                isActive ? "bg-dashboard" : "bg-transparent"
+              }`}
+            />
+          ) : (
+            ""
+          )}
+          {Icon ? <Icon className="h-4 w-4" /> : ""}
+          <span className="line-clamp-1 select-none">{navlink.label}</span>
         </Link>
       )}
 
-      {hasChildren && isOpen && (
-        <div className="mt-1 ml-4 pl-2">
+      {hasChildren && (
+        <div
+          ref={contentRef}
+          className="ml-4 overflow-hidden pl-2 transition-[max-height] duration-[0.5s] ease-in-out"
+          style={{
+            maxHeight: isOpen ? `${contentHeight}px` : "0px",
+          }}
+        >
           {navlink.children?.map((child, index) => (
             <NavBox key={index} navlink={child} depth={depth + 1} />
           ))}
@@ -59,11 +96,9 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
 
 const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
   return (
-    <div className="flex h-full w-[256px] shrink-0 flex-col justify-between border-r-[1px] border-border-muted bg-white p-4">
+    <div className="flex h-full w-[300px] shrink-0 flex-col justify-between border-r-[1px] border-border-muted bg-white p-[20px]">
       <div className="flex flex-col">
-        <Image src="/images/logos/logo.png" alt="logo" width={100} height={100} className="mb-4" />
-        <span className="my-[20px] h-[1px] w-full bg-border-muted" />
-        <div className="gap-[] flex flex-col">
+        <div className="flex flex-col gap-[0]">
           {navlinks?.map((link, index) => (
             <NavBox navlink={link} key={index + (link.path || "parent")} />
           ))}

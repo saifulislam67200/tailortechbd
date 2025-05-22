@@ -1,12 +1,11 @@
 import { footerLinks, socialLinks } from "@/utils/site";
 import Image from "next/image";
 import Link from "next/link";
-import SubcribeForm from "./SubcribeForm";
 
 const Footer = () => {
   return (
     <footer className="relative w-full overflow-hidden bg-white">
-      <SubcribeForm/>
+      {/* <SubcribeForm/> */}
       <div className="relative w-full bg-primary py-[40px]">
         <div className="main_container relative z-[2] flex w-full items-center justify-between">
           <div className="flex flex-col gap-[10px]">

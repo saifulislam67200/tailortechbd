@@ -39,7 +39,7 @@ const Breadcrumb = () => {
                     <FaLongArrowAltRight className="h-[16px] w-[14px]" />
                   </>
                 ) : (
-                  <span className="text-[14px] text-primary capitalize">
+                  <span className="text-[14px] font-[600] text-primary capitalize">
                     {truncateWords(segment.replace(/-/g, " ") as string, 10)}
                   </span>
                 )}
