@@ -1,4 +1,3 @@
-import { ProductDetailsProps } from "@/app/(main)/product/[slug]/page";
 import { baseUrl } from "@/redux/api/api";
 import { IProduct } from "@/types/product";
 import Breadcrumb from "../ui/BreadCrumbs";
@@ -7,8 +6,13 @@ import DetailsAndInformation from "./DetailsAndInformation";
 import ProductDetailsSlider from "./ProductDetailSlider";
 import RelatedProducts from "./RelatedProducts";
 
-const ProductDetails = async ({ params }: ProductDetailsProps) => {
-  const slug = (await params)?.slug;
+interface IProps {
+  params: Promise<{ slug: string }>;
+}
+
+const ProductDetails: React.FC<IProps> = async ({ params }) => {
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug || "";
 
   const res = await fetch(`${baseUrl}/product/get/${slug}`, {
     cache: "no-store",

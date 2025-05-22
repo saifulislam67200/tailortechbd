@@ -1,46 +1,27 @@
 import ProductDetails from "@/components/productDetails/ProductDetails";
 import { baseUrl } from "@/redux/api/api";
 import { IProduct } from "@/types/product";
-import type { Metadata } from "next";
 
-export interface ProductDetailsProps {
-  params: { slug: string };
-}
-
-async function getProductMeta(slug: string) {
-  const res = await fetch(`${baseUrl}/product/get/${slug}`, {
-    cache: "no-store",
-  });
-
-  if (!res.ok) {
-    return {
-      title: "Product Not Found",
-      description: "No details available for this product.",
-    };
-  }
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const res = await fetch(`${baseUrl}/product/get/${slug}`, { cache: "no-store" });
 
   const data = (await res.json()) as { data: IProduct };
+
+  if (!data) {
+    console.log("not found");
+  }
   return {
-    title: data.data.name || `Product: ${slug}`,
-    description: data.data.description || `Details and information about product ${slug}.`,
+    title: data?.data?.name || "Details | TailorTech",
+    description: data?.data?.description || "Product Details",
   };
 }
 
-export async function generateMetadata(props: Promise<ProductDetailsProps>): Promise<Metadata> {
-  const { params } = await props;
-  const meta = await getProductMeta(params?.slug);
-  return {
-    title: meta.title,
-    description: meta.description,
-  };
-}
-
-const page = ({ params }: ProductDetailsProps) => {
-  return (
-    <>
-      <ProductDetails params={params} />
-    </>
-  );
+const ProductPage = async (props: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}) => {
+  return <ProductDetails {...props} />;
 };
 
-export default page;
+export default ProductPage;
