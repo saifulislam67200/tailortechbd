@@ -10,12 +10,12 @@ interface ProductCardProps {
   product: IProduct;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductSecondaryCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <div className="group relative">
       <div className="group relative overflow-hidden bg-white transition-all duration-300 hover:shadow-[0_0_6px_2px_rgba(33,33,33,0.2)]">
         {/* Image */}
-        <Link href={`products/${product?.slug}`}>
+        <Link href={`/product/${product?.slug}`}>
           <div className="relative aspect-square overflow-hidden">
             <Image
               src={product.images?.[0] || "/"}
@@ -27,14 +27,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </Link>
 
         {/* Content section */}
-        <Link href={`products/${product?.slug}`}>
+        <Link href={`/product/${product?.slug}`}>
           <div className="p-[8px]">
             <h3 className="line-clamp-1 text-center text-[14px] font-bold hover:text-[#0d6efd]">
               {product.name}
             </h3>
             <p
               className="mt-1 line-clamp-2 text-center text-[13px]"
-              dangerouslySetInnerHTML={{ __html: product.description }}
+              dangerouslySetInnerHTML={{ __html: product.description || "" }}
             ></p>
             <p className="mt-2 text-center text-[14px] font-bold text-strong">Tk {product.price}</p>
           </div>
@@ -52,4 +52,4 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   );
 };
 
-export default ProductCard;
+export default ProductSecondaryCard;

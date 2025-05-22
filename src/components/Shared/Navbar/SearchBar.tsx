@@ -71,7 +71,7 @@ export default function SearchBar() {
         <div className="absolute top-[100%] left-0 max-h-[70vh] w-full overflow-auto border-[1px] border-border-muted bg-white">
           {data?.data?.map((product) => (
             <Link
-              href={`/products/${product.slug}`}
+              href={`/product/${product.slug}`}
               key={product._id}
               className="flex items-center justify-start gap-[10px] border-b-[1px] border-border-muted px-[16px] py-[8px] hover:bg-solid-slab/30"
             >
