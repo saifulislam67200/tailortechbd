@@ -22,7 +22,7 @@ const CategoryMenu = () => {
           return (
             <div key={category._id} className="group">
               <Link
-                href={`/category/${category.slug}`}
+                href={`/shop/${category.slug}`}
                 className="group/category flex items-center gap-[5px] px-1 pt-1 text-sm text-[16px] font-bold text-white"
               >
                 {category.label}
@@ -34,7 +34,7 @@ const CategoryMenu = () => {
                   {category.subcategories?.map((subCategory, i) => (
                     <Link
                       key={subCategory._id + i}
-                      href={`/category/${subCategory.slug}`}
+                      href={`/shop/${subCategory.slug}`}
                       className="block px-[16px] py-[4px] text-sm hover:bg-info hover:font-bold"
                       role="menuitem"
                     >

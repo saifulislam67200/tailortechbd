@@ -44,12 +44,9 @@ export default function Navbar() {
   }, [isCartOpen, isMenuOpen]);
 
   return (
-    <header
-      style={{ boxShadow: "rgba(0,0,0,.19) 0 10px 20px,rgba(0,0,0,.23) 0 6px 6px" }}
-      className="sticky top-0 z-50"
-    >
+    <>
       <TopBar />
-      <nav className="relative z-10 bg-black px-[16px] py-[10px]">
+      <nav className="sticky top-0 z-10 bg-black px-[16px] py-[10px]">
         <div className="main_container mx-auto flex items-center justify-between">
           {/* Hamburger Menu - Mobile only */}
           <div className="mr-[0px] sm:mr-[10px] lg:mr-[0px] lg:hidden">
@@ -63,11 +60,7 @@ export default function Navbar() {
 
           {/* Search Bar - Desktop only */}
           <div className="mx-4 hidden max-w-[704px] flex-grow lg:block xl:-mr-[42px]">
-            <SearchBar
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              handleSearch={handleSearch}
-            />
+            <SearchBar />
           </div>
 
           {/* Icons */}
@@ -101,6 +94,6 @@ export default function Navbar() {
 
       {/* Mobile Menu Drawer */}
       <MenuDrawer isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
-    </header>
+    </>
   );
 }
