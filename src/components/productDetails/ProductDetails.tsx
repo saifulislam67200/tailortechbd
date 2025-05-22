@@ -1,7 +1,6 @@
 import { ProductDetailsProps } from "@/app/(main)/product/[slug]/page";
 import { baseUrl } from "@/redux/api/api";
 import { IProduct } from "@/types/product";
-import { notFound } from "next/navigation";
 import Breadcrumb from "../ui/BreadCrumbs";
 import DetailedInfo from "./DetailedInfo";
 import DetailsAndInformation from "./DetailsAndInformation";
@@ -15,8 +14,6 @@ const ProductDetails = async ({ params }: ProductDetailsProps) => {
     cache: "no-store",
   });
 
-  if (!res.ok) return notFound();
-
   const data = (await res.json()) as { data: IProduct };
   const product = data?.data;
 
@@ -28,7 +25,7 @@ const ProductDetails = async ({ params }: ProductDetailsProps) => {
         <DetailedInfo product={product} />
       </div>
       <DetailsAndInformation product={product} />
-      <RelatedProducts />
+      <RelatedProducts slug={slug} />
     </div>
   );
 };

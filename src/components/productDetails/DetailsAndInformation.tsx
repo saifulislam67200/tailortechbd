@@ -1,4 +1,3 @@
-"use client";
 import { IProduct } from "@/types/product";
 import CustomerReview from "./CustomerReview";
 import DetailsPageTOPProduct from "./DetailsPageTopProduct";

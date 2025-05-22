@@ -28,7 +28,7 @@ async function getProductMeta(slug: string) {
 
 export async function generateMetadata(props: Promise<ProductDetailsProps>): Promise<Metadata> {
   const { params } = await props;
-  const meta = await getProductMeta(params.slug);
+  const meta = await getProductMeta(params?.slug);
   return {
     title: meta.title,
     description: meta.description,
