@@ -1,9 +1,10 @@
 "use client";
+import { IProduct } from "@/types/product";
 import CustomerReview from "./CustomerReview";
 import DetailsPageTOPProduct from "./DetailsPageTopProduct";
 import QuestionAnswer from "./QuestionAnswer";
 
-const DetailsAndInformation = ({ ...product }) => {
+const DetailsAndInformation = ({ product }: { product: IProduct }) => {
   return (
     <section className="mt-[15px] flex flex-col gap-[13px] md:flex-row">
       <div className="w-full">

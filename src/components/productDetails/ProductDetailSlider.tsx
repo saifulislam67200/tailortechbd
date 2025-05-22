@@ -41,7 +41,7 @@ const ProductDetailsSlider = ({ product }: { product: IProduct }) => {
             }}
             onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
           >
-            {images.map((img, index) => (
+            {images?.map((img, index) => (
               <SwiperSlide key={index} className="!h-[80px] !w-[80px]">
                 <div
                   className={`relative h-[60px] w-[60px] cursor-pointer overflow-hidden border p-[5px] transition-all duration-300 md:h-[80px] md:w-[80px] ${activeIndex === index ? "border-info-light" : "border-transparent"}`}
