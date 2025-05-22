@@ -1,10 +1,9 @@
-import React from "react";
-import Title from "../../ui/Title";
 import { IProduct } from "@/types/product";
-import ProductCard from "./ProductCard";
+import Title from "../../ui/Title";
+import ProductCard from "../../ui/Card/ProductCard/ProductSecondaryCard";
 const Collections = async () => {
   const res = await fetch("http://localhost:5000/api/v1/product/get", {
-    next: { revalidate: 1800 },
+    next: { revalidate: 60 * 60 },
   });
 
   if (!res.ok) {
@@ -29,9 +28,7 @@ const Collections = async () => {
       <Title title="Collections" className="!text-[14px]" />
 
       <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-        {collections?.map((item) => (
-          <ProductCard key={item._id} product={item} />
-        ))}
+        {collections?.map((item) => <ProductCard key={item._id} product={item} />)}
       </div>
     </section>
   );

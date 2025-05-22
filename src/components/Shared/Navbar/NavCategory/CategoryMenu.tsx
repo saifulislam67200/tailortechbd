@@ -4,8 +4,8 @@ import { useGetAllCategoriesQuery } from "@/redux/category/category.api";
 import Link from "next/link";
 const CategoryMenu = () => {
   const { data } = useGetAllCategoriesQuery({
-  mode: "tree",
-});
+    mode: "tree",
+  });
   const categories = data?.data;
 
   return (
@@ -22,7 +22,7 @@ const CategoryMenu = () => {
           return (
             <div key={category._id} className="group">
               <Link
-                href={`/category/${category.slug}?label=${category.label}`}
+                href={`/category/${category.slug}`}
                 className="group/category flex items-center gap-[5px] px-1 pt-1 text-sm text-[16px] font-bold text-white"
               >
                 {category.label}
@@ -34,7 +34,7 @@ const CategoryMenu = () => {
                   {category.subcategories?.map((subCategory, i) => (
                     <Link
                       key={subCategory._id + i}
-                      href={`/category/${category.slug}/${subCategory.slug}?label=${category.label}&subLabel=${subCategory.label}`}
+                      href={`/category/${subCategory.slug}`}
                       className="block px-[16px] py-[4px] text-sm hover:bg-info hover:font-bold"
                       role="menuitem"
                     >

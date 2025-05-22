@@ -94,3 +94,8 @@ input[type="number"] {
 .ql-container {
   height: calc(100% - 42.8px) !important;
 }
+
+.gridResponsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(246px, 279px));
+}

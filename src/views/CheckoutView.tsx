@@ -8,6 +8,7 @@ import Input from "@/components/ui/Input";
 import SelectionBox from "@/components/ui/SelectionBox";
 import TextArea from "@/components/ui/TextArea";
 import { useAppSelector } from "@/hooks/redux";
+import { clearCart } from "@/redux/features/cart/cartSlice";
 import {
   useGetDistrictsQuery,
   useGetDivisionsQuery,
@@ -21,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
+import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object({
@@ -41,6 +43,8 @@ const CheckoutView = () => {
   const [creaeOrder, { isLoading }] = useCreateOrderMutation();
   const { items } = useAppSelector((state) => state.checkout);
   const { user } = useAppSelector((state) => state.user);
+
+  const dispatch = useDispatch();
 
   const [formMessage, setFormMessage] = useState<IFormMessage | null>(null);
   const [isSameBillingAddress, setIsSameBillingAddress] = useState(true);
@@ -122,6 +126,7 @@ const CheckoutView = () => {
       return;
     }
     // change it with order success page
+    dispatch(clearCart());
     router.push(`/order/success?o_id=${res.data?.data._id}`);
   };
 

@@ -11,11 +11,6 @@ export interface IColor {
   images?: string[];
 }
 
-export interface IProductSpecification {
-  label: string;
-  value: string;
-}
-
 export interface IProduct {
   _id: string;
   name: string;
@@ -28,7 +23,7 @@ export interface IProduct {
   avgRating: number;
   // stock: number;
   discount: number;
-  specifications: IProductSpecification[];
   tag?: string;
   images: string[];
+  chart: string[][];
 }

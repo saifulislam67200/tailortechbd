@@ -7,7 +7,7 @@ import { IProduct } from "@/types/product";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 const ProductCreateView = () => {
-  const [createProduct] = useCreateProductMutation();
+  const [createProduct, { isLoading }] = useCreateProductMutation();
   const router = useRouter();
 
   const handleSubmit = async (payload: Partial<IProduct>) => {
@@ -32,7 +32,12 @@ const ProductCreateView = () => {
     <div className="flex flex-col gap-[20px]">
       <Breadcrumb />
       <div className="bg-white p-[16px]">
-        <ProductForm onSubmit={(value) => handleSubmit(value)} />;
+        <ProductForm
+          isLoading={isLoading}
+          formLabel="Create a new product"
+          onSubmit={(value) => handleSubmit(value)}
+        />
+        ;
       </div>
     </div>
   );

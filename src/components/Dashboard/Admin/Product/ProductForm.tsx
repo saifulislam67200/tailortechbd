@@ -4,23 +4,24 @@ import Button from "@/components/ui/Button";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Input from "@/components/ui/Input";
 import RichTextArea from "@/components/ui/RichTextArea";
+import TableInput from "@/components/ui/TableInput";
 import { IProduct } from "@/types/product";
 import { ErrorMessage, Field, FieldArray, Form, Formik, FormikHelpers } from "formik";
-import { BiPlusCircle } from "react-icons/bi";
 import { BsTrash2 } from "react-icons/bs";
 import * as Yup from "yup";
 import CategorySelector from "./CategorySelector";
 import ProductImageUploader from "./ProductImageUploader";
 
-const initialValues: Omit<IProduct, "avgRating" | "brand" | "slug" | "_id"> = {
+const initialValues: Omit<IProduct, "avgRating" | "brand" | "slug" | "_id" | "specifications"> = {
   name: "",
   description: "",
+  chart: [],
   price: 0,
   discount: 0,
   tag: "",
   category: "",
   images: [],
-  specifications: [{ label: "", value: "" }],
+  // specifications: [{ label: "", value: "" }],
   colors: [
     {
       color: "",
@@ -40,12 +41,7 @@ const validationSchema = Yup.object().shape({
     .min(1, "At least one image is required")
     .of(Yup.string().url("Must be a valid URL")),
   category: Yup.string().required("Category is required"),
-  specifications: Yup.array().of(
-    Yup.object().shape({
-      label: Yup.string().required("Plase enter a title for this specification"),
-      value: Yup.string().required("Please enter a value for this specification"),
-    })
-  ),
+
   colors: Yup.array().of(
     Yup.object().shape({
       color: Yup.string().required("Please enter a color name"),
@@ -75,7 +71,11 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => {
 export default function ProductForm({
   onSubmit,
   defaultValue,
+  formLabel,
+  isLoading = false,
 }: {
+  formLabel?: string;
+  isLoading?: boolean;
   defaultValue?: typeof initialValues;
   onSubmit: (data: typeof initialValues, helper: FormikHelpers<typeof initialValues>) => void;
 }) {
@@ -87,6 +87,7 @@ export default function ProductForm({
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
         <Form className="flex flex-col gap-[16px]">
+          <h4 className="line-clamp-1 text-[26px] font-[700]">{formLabel || "Product Form"}</h4>
           <SectionTitle>Basic Information</SectionTitle>
           <div className="w-full">
             <label className={labelClass}>Product Name</label>
@@ -152,69 +153,14 @@ export default function ProductForm({
           <ErrorMessage name="images" component="span" className="text-sm text-danger" />
           <HorizontalLine className="my-[16px]" />
 
-          <div className="flex flex-col gap-[5px]">
-            <SectionTitle>Product Spesification</SectionTitle>
-            <FieldArray name="specifications">
-              {({ push, remove }) => (
-                <div className="mt-[20px] flex flex-col gap-[16px]">
-                  {values.specifications.map((spec, index) => (
-                    <div key={index} className="flex w-full items-start gap-[8px]">
-                      <div className="flex w-full flex-col gap-[8px]">
-                        <label className={labelClass}>Spesification Title</label>
-                        <Field
-                          as={Input}
-                          name={`specifications.${index}.label`}
-                          placeholder="Title of specification"
-                          className="flex-1 rounded border p-[8px]"
-                        />
-                        <ErrorMessage
-                          name={`specifications.${index}.label`}
-                          component="span"
-                          className="text-sm text-danger"
-                        />
-                      </div>
-
-                      <div className="flex w-full flex-col gap-[8px]">
-                        <div className="flex flex-col gap-[8px]">
-                          <label className={labelClass}>Spesification Value</label>
-                          <div className="flex w-full items-center gap-[8px]">
-                            <Field
-                              as={Input}
-                              name={`specifications.${index}.value`}
-                              placeholder="Value of specification"
-                              className="flex-1 rounded border p-[8px]"
-                            />{" "}
-                            <button
-                              className="cursor-pointer"
-                              type="button"
-                              onClick={() => remove(index)}
-                            >
-                              <BsTrash2 />
-                            </button>
-                          </div>
-                        </div>
-                        <ErrorMessage
-                          name={`specifications.${index}.value`}
-                          component="span"
-                          className="text-sm text-danger"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                  <Button
-                    className="w-fit bg-primary-foreground"
-                    type="button"
-                    onClick={() => push({ label: "", value: "" })}
-                  >
-                    <BiPlusCircle className="mr-1 inline" />
-                    Add Specification
-                  </Button>
-                </div>
-              )}
-            </FieldArray>
+          <div className="flex w-full flex-col gap-[5px]">
+            <SectionTitle>Product Chart (Size)</SectionTitle>
+            <TableInput
+              defaultValue={defaultValue?.chart}
+              onChange={(data) => setFieldValue("chart", data)}
+            />
           </div>
           <HorizontalLine className="my-[16px]" />
-          {/* Colors */}
           <div className="flex flex-col gap-[5px]">
             <SectionTitle>Product Color & Sizes</SectionTitle>
             <FieldArray name="colors">
@@ -322,7 +268,9 @@ export default function ProductForm({
             </FieldArray>
           </div>
 
-          <Button className="mt-[26px]">Add Product</Button>
+          <Button type="submit" isLoading={isLoading} className="mt-[26px]">
+            Add Product
+          </Button>
         </Form>
       )}
     </Formik>
