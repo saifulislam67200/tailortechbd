@@ -1,5 +1,6 @@
 "use client";
 import CustomerReview from "./CustomerReview";
+import DetailsPageSimilarProduct from "./DetailsPageSimilarProduct";
 import QuestionAnswer from "./QuestionAnswer";
 
 const DetailsAndInformation = ({ ...product }) => {
@@ -24,11 +25,7 @@ const DetailsAndInformation = ({ ...product }) => {
         <CustomerReview productId={product?._id} />
       </div>
 
-      <div className="w-full bg-white p-[10px] sm:p-[20px] md:max-w-[432px]">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eum accusamus molestias
-        accusantium porro eligendi voluptatibus explicabo. Asperiores dignissimos odio corrupti
-        dolor porro magni? Tempore beatae, debitis rerum cupiditate saepe corrupti.
-      </div>
+      <DetailsPageSimilarProduct />
     </section>
   );
 };
