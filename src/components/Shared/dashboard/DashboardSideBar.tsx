@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { BiChevronDown } from "react-icons/bi";
+import { GoChevronDown } from "react-icons/go";
 import LogoutButton from "../../ui/LogoutButton";
 
 const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: number }) => {
@@ -31,7 +31,7 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
             <span className="select-none">{navlink.label}</span>
           </div>
 
-          <BiChevronDown className={`h-4 w-4 ${isOpen ? "rotate-180" : ""} duration-[0.3s]`} />
+          <GoChevronDown className={`h-4 w-4 ${isOpen ? "rotate-180" : ""} duration-[0.3s]`} />
         </div>
       ) : (
         <Link
@@ -47,7 +47,7 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
       )}
 
       {hasChildren && isOpen && (
-        <div className="mt-1 ml-4 border-l border-border-muted pl-2">
+        <div className="mt-1 ml-4 pl-2">
           {navlink.children?.map((child, index) => (
             <NavBox key={index} navlink={child} depth={depth + 1} />
           ))}

@@ -1,5 +1,4 @@
-import React from "react";
-import formateCreateOrUpdateDate from "@/utils/FormateCreateOrUpdateDate";
+import dateUtils from "@/utils/date";
 import { IReview } from "./CustomerReview";
 
 interface CustomerReviewCardProps extends IReview {
@@ -27,7 +26,7 @@ const CustomerReviewCard = ({
       </div>
 
       <div className="text-xs text-gray-500">
-        By {name} · {formateCreateOrUpdateDate(createdAt)}
+        By {name} · {dateUtils.formateCreateOrUpdateDate(createdAt)}
       </div>
     </div>
   );

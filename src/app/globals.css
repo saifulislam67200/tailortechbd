@@ -26,7 +26,7 @@
   --info: #868585;
   --info-light: #f7efef;
   --danger: rgb(220, 53, 69);
-  --font-system: system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-primary: "Source Sans Pro", sans-serif;
   --primary-foreground: #000;
   --border-main: #ced4da;
   --border-muted: #00000020;
@@ -46,7 +46,7 @@
   --color-info: var(--info);
   --color-info-light: var(--info-light);
   --color-danger: var(--danger);
-  --font-system: var(--font-system);
+  --font-primary: var(--font-primary);
   --color-border-main: var(--border-main);
   --color-strong: var(--strong);
   --color-muted: var(--muted);
@@ -58,8 +58,8 @@
 body {
   background: var(--background);
   color: black;
-  font-family: "Source Sans Pro", sans-serif;
-  /* font-family: var(--font-system); */
+  /* font-family: "Source Sans Pro", sans-serif; */
+  font-family: var(--font-primary);
 }
 
 .center {

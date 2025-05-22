@@ -1,6 +1,7 @@
 "use client";
 import { FaBoxes } from "react-icons/fa";
-import { MdInventory2, MdSpaceDashboard } from "react-icons/md";
+import { MdInventory2 } from "react-icons/md";
+import { VscGraphLine } from "react-icons/vsc";
 export interface IDashboardNavLinks {
   label: string;
   icon: React.ElementType;
@@ -10,8 +11,8 @@ export interface IDashboardNavLinks {
 
 export const admin: IDashboardNavLinks[] = [
   {
-    icon: MdSpaceDashboard,
-    label: "Dashboard",
+    icon: VscGraphLine,
+    label: "Dashboard Statistics",
     path: "/dashboard/admin",
   },
   {
