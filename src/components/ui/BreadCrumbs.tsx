@@ -11,7 +11,7 @@ const Breadcrumb = () => {
   const pathSegments = pathname.split("/").filter((segment) => segment);
 
   return (
-    <nav className="flex w-full flex-wrap items-center justify-start gap-[7px] rounded-[3px] border-[1px] border-border-muted bg-white px-[16px] py-[6.4px] text-[10px] leading-[150%] font-medium">
+    <nav className="flex w-full flex-wrap items-center justify-start gap-[7px] rounded-[3px] border-[1px] border-border-muted bg-white px-[16px] py-[8px] text-[10px] leading-[150%] font-medium">
       {pathSegments.length === 0 ? (
         <span className="text-[14px] text-primary-foreground">Home</span>
       ) : (

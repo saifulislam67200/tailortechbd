@@ -1,6 +1,6 @@
 import { IProduct } from "@/types/product";
 import Title from "../../ui/Title";
-import ProductCard from "./ProductCard";
+import ProductCard from "../../ui/Card/ProductCard/ProductSecondaryCard";
 const Collections = async () => {
   const res = await fetch("http://localhost:5000/api/v1/product/get", {
     next: { revalidate: 60 * 60 },
