@@ -17,8 +17,8 @@ export const products = [
           { size: "XL", stock: 6 },
         ],
         images: [
-          "https://example.com/images/navy-shirt-front.jpg",
-          "https://example.com/images/navy-shirt-back.jpg",
+          "/macbook.jpeg",
+          "/macbook.jpeg",
         ],
       },
     ],
@@ -31,7 +31,7 @@ export const products = [
       { label: "Sleeves", value: "Full Sleeves" },
     ],
     tag: "Men's Shirt",
-    images: ["https://example.com/images/navy-shirt-main.jpg"],
+    images: ["/macbook.jpeg"],
   },
   {
     _id: "2",
@@ -47,8 +47,8 @@ export const products = [
         color: "Red & Gold",
         sizes: [{ size: "Free Size", stock: 12 }],
         images: [
-          "https://example.com/images/silk-saree-1.jpg",
-          "https://example.com/images/silk-saree-2.jpg",
+          "/macbook.jpeg",
+          "/macbook.jpeg",
         ],
       },
     ],

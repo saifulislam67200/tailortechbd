@@ -79,8 +79,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
                 id="reviewText"
                 name="reviewText"
                 as="textarea"
-                rows={4}
-                className="h-[150px] w-full rounded-[5px] border border-quaternary p-[10px] focus:outline-none"
+                className="h-[80px] w-full rounded-[5px] border border-quaternary p-[10px] focus:outline-none lg:h-[150px]"
               />
               <ErrorMessage
                 name="reviewText"
