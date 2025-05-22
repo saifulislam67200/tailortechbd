@@ -1,14 +1,13 @@
 import React from "react";
 import Breadcrumb from "../ui/BreadCrumbs";
+import Heading from "../ui/Heading";
 
 const PrivacyPolicy = () => {
   return (
     <div className="main_container flex min-h-[100dvh] w-full flex-col gap-[20px] py-[20px]">
       <Breadcrumb />
       <div className="bg-white p-[16px]">
-        <h2 className="bg-[#198754] py-[6px] text-center text-[18px] font-bold text-white md:py-[8px] md:text-[26px]">
-          Privacy Policy
-        </h2>
+        <Heading>Privacy Policy</Heading>
 
         <div className="mt-[32px] space-y-[24px]">
           <section>
@@ -18,14 +17,16 @@ const PrivacyPolicy = () => {
               personal data when you visit our website and tell you about your privacy rights and
               how the law protects you.
             </p>
-            <p className="text-[12px] md:text-[15px] font-semibold">
+            <p className="text-[12px] font-semibold md:text-[15px]">
               Please read this privacy policy carefully before using our services or submitting any
               personal information to us.
             </p>
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">1. Important Information and Who We Are</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              1. Important Information and Who We Are
+            </h3>
             <p className="mb-[16px] text-[12px] md:text-[15px]">
               TailorTech operates this website and is responsible for your personal data (referred
               to as &quot;we&quot;, &quot;us&quot;, or &quot;our&quot; in this privacy policy).
@@ -45,7 +46,9 @@ const PrivacyPolicy = () => {
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">2. The Data We Collect About You</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              2. The Data We Collect About You
+            </h3>
             <p className="mb-[16px] text-[12px] md:text-[15px]">
               Personal data means any information about an individual from which that person can be
               identified. We may collect, use, store, and transfer different kinds of personal data
@@ -102,7 +105,9 @@ const PrivacyPolicy = () => {
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">3. How We Collect Your Personal Data</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              3. How We Collect Your Personal Data
+            </h3>
             <p className="mb-[16px] text-[12px] md:text-[15px]">
               We use different methods to collect data from and about you including through:
             </p>
@@ -126,7 +131,9 @@ const PrivacyPolicy = () => {
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">4. How We Use Your Personal Data</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              4. How We Use Your Personal Data
+            </h3>
             <p className="mb-[16px] text-[12px] md:text-[15px]">
               We will only use your personal data when the law allows us to. Most commonly, we will
               use your personal data in the following circumstances:
@@ -140,17 +147,31 @@ const PrivacyPolicy = () => {
                 Where it is necessary for our legitimate interests (or those of a third party) and
                 your interests and fundamental rights do not override those interests.
               </li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">Where we need to comply with a legal obligation.</li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                Where we need to comply with a legal obligation.
+              </li>
               <li className="text-[12px] marker:text-primary md:text-[15px]">With your consent.</li>
             </ul>
             <p className="mt-4 mb-[16px]">Purposes for which we will use your personal data:</p>
             <ul className="list-disc space-y-[8px] pl-[24px]">
-              <li className="text-[12px] marker:text-primary md:text-[15px]">To register you as a new customer</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">To process and deliver your order</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">To manage your relationship with us</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">To enable you to participate in a promotion or survey</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">To administer and protect our business and this website</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">To deliver relevant website content and advertisements to you</li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                To register you as a new customer
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                To process and deliver your order
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                To manage your relationship with us
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                To enable you to participate in a promotion or survey
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                To administer and protect our business and this website
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                To deliver relevant website content and advertisements to you
+              </li>
               <li className="text-[12px] marker:text-primary md:text-[15px]">
                 To use data analytics to improve our website, products/services, marketing, customer
                 relationships, and experiences
@@ -159,19 +180,27 @@ const PrivacyPolicy = () => {
                 To make suggestions and recommendations to you about goods or services that may be
                 of interest to you
               </li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">To provide custom tailoring services based on your measurements</li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                To provide custom tailoring services based on your measurements
+              </li>
             </ul>
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">5. Disclosures of Your Personal Data</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              5. Disclosures of Your Personal Data
+            </h3>
             <p className="mb-[16px] text-[12px] md:text-[15px]">
               We may share your personal data with the parties set out below for the purposes stated
               in this privacy policy:
             </p>
             <ul className="list-disc space-y-[8px] pl-[24px]">
-              <li className="text-[12px] marker:text-primary md:text-[15px]">Service providers who provide IT and system administration services.</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">Professional advisers including lawyers, bankers, auditors, and insurers.</li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                Service providers who provide IT and system administration services.
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                Professional advisers including lawyers, bankers, auditors, and insurers.
+              </li>
               <li className="text-[12px] marker:text-primary md:text-[15px]">
                 Regulators and other authorities who require reporting of processing activities in
                 certain circumstances.
@@ -180,8 +209,12 @@ const PrivacyPolicy = () => {
                 Third parties to whom we may choose to sell, transfer, or merge parts of our
                 business or our assets.
               </li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">Payment processors to securely process your payment transactions.</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">Delivery and logistics providers to fulfill your orders.</li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                Payment processors to securely process your payment transactions.
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                Delivery and logistics providers to fulfill your orders.
+              </li>
             </ul>
             <p className="mt-4 text-[12px] md:text-[15px]">
               We require all third parties to respect the security of your personal data and to
@@ -192,7 +225,9 @@ const PrivacyPolicy = () => {
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">6. Cookies and Similar Technologies</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              6. Cookies and Similar Technologies
+            </h3>
             <p className="mb-[16px] text-[12px] md:text-[15px]">
               Our website uses cookies and similar tracking technologies to distinguish you from
               other users of our website. This helps us to provide you with a good experience when
@@ -221,7 +256,9 @@ const PrivacyPolicy = () => {
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">8. Data Retention</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              8. Data Retention
+            </h3>
             <p className="text-[12px] md:text-[15px]">
               We will only retain your personal data for as long as reasonably necessary to fulfill
               the purposes we collected it for, including for the purposes of satisfying any legal,
@@ -232,19 +269,35 @@ const PrivacyPolicy = () => {
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">9. Your Legal Rights</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              9. Your Legal Rights
+            </h3>
             <p className="mb-[16px] text-[12px] md:text-[15px]">
               Under certain circumstances, you have rights under data protection laws in relation to
               your personal data, including the right to:
             </p>
             <ul className="list-disc space-y-[8px] pl-[24px]">
-              <li className="text-[12px] marker:text-primary md:text-[15px]">Request access to your personal data</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">Request correction of your personal data</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">Request erasure of your personal data</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">Object to processing of your personal data</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">Request restriction of processing your personal data</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">Request transfer of your personal data</li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">Right to withdraw consent</li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                Request access to your personal data
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                Request correction of your personal data
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                Request erasure of your personal data
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                Object to processing of your personal data
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                Request restriction of processing your personal data
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                Request transfer of your personal data
+              </li>
+              <li className="text-[12px] marker:text-primary md:text-[15px]">
+                Right to withdraw consent
+              </li>
             </ul>
             <p className="mt-4 text-[12px] md:text-[15px]">
               If you wish to exercise any of these rights, please contact us using the details
@@ -253,7 +306,9 @@ const PrivacyPolicy = () => {
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">10. Children&apos;s Privacy</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              10. Children&apos;s Privacy
+            </h3>
             <p className="text-[12px] md:text-[15px]">
               Our website is not intended for children under 16 years of age. We do not knowingly
               collect personal data from children under 16. If you are a parent or guardian and you
@@ -265,7 +320,9 @@ const PrivacyPolicy = () => {
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">11. International Transfers</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              11. International Transfers
+            </h3>
             <p className="text-[12px] md:text-[15px]">
               We may transfer your personal data to countries outside your country of residence.
               When we do, we ensure a similar degree of protection is afforded to it by implementing
@@ -276,7 +333,9 @@ const PrivacyPolicy = () => {
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">12. Changes to This Privacy Policy</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              12. Changes to This Privacy Policy
+            </h3>
             <p className="text-[12px] md:text-[15px]">
               We may update our privacy policy from time to time. We will notify you of any changes
               by posting the new privacy policy on this page and updating the &quot;Last

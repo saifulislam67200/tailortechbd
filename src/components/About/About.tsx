@@ -1,14 +1,13 @@
 import React from "react";
 import Breadcrumb from "../ui/BreadCrumbs";
+import Heading from "../ui/Heading";
 
 const About = () => {
   return (
     <div className="main_container flex min-h-[100dvh] w-full flex-col gap-[20px] py-[20px]">
       <Breadcrumb />
       <div className="bg-white p-[16px]">
-        <h2 className="bg-[#198754] py-[6px] text-center text-[18px] font-bold text-white md:py-[8px] md:text-[26px]">
-          About Us
-        </h2>
+        <Heading>About Us</Heading>
 
         <div className="mt-[32px] space-y-[24px]">
           <section>
@@ -78,7 +77,9 @@ const About = () => {
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">What Sets Us Apart</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              What Sets Us Apart
+            </h3>
             <p className="mb-[16px]">
               TailorTech stands at the intersection of tradition and technology. While we respect
               and practice the time-honored techniques of tailoring, we enhance them with modern
@@ -139,7 +140,9 @@ const About = () => {
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Our Commitment to You</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
+              Our Commitment to You
+            </h3>
             <p className="text-[12px] md:text-[15px]">
               When you choose TailorTech, you&apos;re not just buying clothing—you&apos;re investing
               in a garment that&apos;s been thoughtfully designed and crafted to serve you well. We
