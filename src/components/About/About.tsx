@@ -10,10 +10,10 @@ const About = () => {
           About Us
         </h2>
 
-        <div className="mt-8 space-y-6">
+        <div className="mt-[32px] space-y-[24px]">
           <section>
-            <h3 className="mb-3 text-[15px] font-semibold md:text-[21px]">Our Story</h3>
-            <p className="mb-4 text-[12px] md:text-[15px]">
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Our Story</h3>
+            <p className="mb-[16px] text-[12px] md:text-[15px]">
               Founded in 2020, TailorTech emerged from a simple yet powerful idea: to revolutionize
               the fashion industry by combining the timeless art of tailoring with cutting-edge
               technology. Our founders, experienced tailors and tech enthusiasts, recognized a gap
@@ -29,7 +29,7 @@ const About = () => {
           </section>
 
           <section>
-            <h3 className="mb-3 text-[15px] font-semibold md:text-[21px]">Our Mission</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Our Mission</h3>
             <p className="text-[12px] md:text-[15px]">
               At TailorTech, our mission is to empower individuals to express their unique identity
               through fashion that fits perfectly—both in size and personality. We strive to make
@@ -40,7 +40,7 @@ const About = () => {
           </section>
 
           <section>
-            <h3 className="mb-3 text-[15px] font-semibold md:text-[21px]">Our Vision</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Our Vision</h3>
             <p className="text-[12px] md:text-[15px]">
               We envision a future where fashion is smarter, more sustainable, and truly personal.
               TailorTech aims to lead the transformation of the apparel industry by pioneering
@@ -51,8 +51,8 @@ const About = () => {
           </section>
 
           <section>
-            <h3 className="mb-3 text-[15px] font-semibold md:text-[21px]">Our Values</h3>
-            <ul className="list-disc space-y-2 pl-6">
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Our Values</h3>
+            <ul className="list-disc space-y-[8px] pl-[24px]">
               <li className="text-[12px] marker:text-primary md:text-[15px]">
                 <span className="font-medium">Craftsmanship:</span> We honor the art of tailoring by
                 maintaining the highest standards of quality in every stitch and seam.
@@ -78,13 +78,13 @@ const About = () => {
           </section>
 
           <section>
-            <h3 className="mb-3 text-[15px] font-semibold md:text-[21px]">What Sets Us Apart</h3>
-            <p className="mb-4">
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">What Sets Us Apart</h3>
+            <p className="mb-[16px]">
               TailorTech stands at the intersection of tradition and technology. While we respect
               and practice the time-honored techniques of tailoring, we enhance them with modern
               innovations:
             </p>
-            <ul className="list-disc space-y-2 pl-6">
+            <ul className="list-disc space-y-[8px] pl-[24px]">
               <li className="text-[12px] marker:text-primary md:text-[15px]">
                 <span className="font-medium">Advanced Measurement Technology:</span> Our
                 proprietary digital measuring system ensures precision fit for every customer.
@@ -110,12 +110,12 @@ const About = () => {
           </section>
 
           <section>
-            <h3 className="mb-3 text-[15px] font-semibold md:text-[21px]">Our Team</h3>
-            <p className="mb-4">
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Our Team</h3>
+            <p className="mb-[16px]">
               Behind TailorTech is a diverse team of passionate professionals united by a shared
               vision. Our team includes:
             </p>
-            <ul className="list-disc space-y-2 pl-6">
+            <ul className="list-disc space-y-[8px] pl-[24px]">
               <li className="text-[12px] marker:text-primary md:text-[15px]">
                 Master tailors with decades of experience in traditional craftsmanship
               </li>
@@ -139,7 +139,7 @@ const About = () => {
           </section>
 
           <section>
-            <h3 className="mb-3 text-[15px] font-semibold md:text-[21px]">Our Commitment to You</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Our Commitment to You</h3>
             <p className="text-[12px] md:text-[15px]">
               When you choose TailorTech, you&apos;re not just buying clothing—you&apos;re investing
               in a garment that&apos;s been thoughtfully designed and crafted to serve you well. We
@@ -150,7 +150,7 @@ const About = () => {
           </section>
 
           <section>
-            <h3 className="mb-3 text-[15px] font-semibold md:text-[21px]">Join Our Journey</h3>
+            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Join Our Journey</h3>
             <p className="text-[12px] md:text-[15px]">
               TailorTech is more than a brand—it&apos;s a movement towards smarter, more
               personalized fashion. We invite you to be part of our story as we continue to innovate
