@@ -7,9 +7,15 @@ import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { toast } from "sonner";
 
 const DetailsInfoActions = ({ product }: { product: IProduct }) => {
-  const [activeColor, setActiveColor] = useState("red");
-  const [activeSize, setActiveSize] = useState("M");
+  const [activeColor, setActiveColor] = useState(product?.colors[0]?.color || "red");
+  const [activeSize, setActiveSize] = useState(product?.colors[0]?.sizes[0]?.size || "M");
   const [activeQuantity, setActiveQuantity] = useState(1);
+
+  // Reset quantity when size changes
+  const handleSizeChange = (size: string) => {
+    setActiveSize(size);
+    setActiveQuantity(1);
+  };
   const dispatch = useAppDispatch();
   // Find the current selected color and size stock
   const getCurrentStock = () => {
@@ -95,8 +101,8 @@ const DetailsInfoActions = ({ product }: { product: IProduct }) => {
                 activeSize === size
                   ? "bg-primary text-white shadow-none"
                   : "bg-white text-black shadow"
-              } border border-gray-200 hover:bg-primary`}
-              onClick={() => setActiveSize(size)}
+              } border border-gray-200 hover:bg-primary hover:text-white`}
+              onClick={() => handleSizeChange(size)}
             >
               {size}
             </button>
