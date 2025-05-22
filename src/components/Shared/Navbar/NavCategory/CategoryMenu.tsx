@@ -1,6 +1,6 @@
 "use client";
 // import { categories } from "@/mock/category";
-import { useGetAllCategoriesQuery } from "@/redux/category/category.api";
+import { useGetAllCategoriesQuery } from "@/redux/features/category/category.api";
 import Link from "next/link";
 const CategoryMenu = () => {
   const { data } = useGetAllCategoriesQuery({

@@ -14,7 +14,7 @@ const ProductDetailsSlider = ({ product }: { product: IProduct }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const images = ["/macbook.jpeg", "/macbook.jpeg", "/macbook.jpeg"];
+  const images = [...product?.images];
 
   console.log(product, "from product details slider");
 
@@ -69,7 +69,7 @@ const ProductDetailsSlider = ({ product }: { product: IProduct }) => {
           onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
           initialSlide={activeIndex}
         >
-          {images.map((img, index) => (
+          {images?.map((img, index) => (
             <SwiperSlide key={index}>
               <div className="h-full w-full border border-info-light p-[5px] lg:p-[0px] 2xl:min-h-[655px] 2xl:max-w-[730px]">
                 <Image
