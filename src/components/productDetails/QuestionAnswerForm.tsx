@@ -1,24 +1,51 @@
+"use client";
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useAppSelector } from "@/hooks/redux";
+import { useCreateQuestionMutation } from "@/redux/features/Q&A/questionAndAnswer.api";
+import { toast } from "sonner";
+import { IQueruMutationErrorResponse } from "@/types";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
   question: Yup.string().required("Question is required"),
 });
 
-//! temporary => no-unused-vars, i will fix this when i implement the api
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const QuestionAnswerForm = ({ productId }: { productId: string }) => {
-  const handleSubmit = async (values: { name: string; question: string }) => {
-    console.log(values);
+  const { user } = useAppSelector((state) => state.user);
+  const [createQuestion, { isLoading }] = useCreateQuestionMutation();
+
+  const handleSubmit = async (
+    values: { name: string; question: string },
+    { resetForm }: { resetForm: () => void }
+  ) => {
+    const payload = {
+      name: values.name,
+      question: values.question,
+      productId,
+    };
+    const data = await createQuestion(payload);
+    const error = data?.error as IQueruMutationErrorResponse;
+
+    if (error) {
+      if (error?.data?.message) {
+        toast.error(error.data.message, { id: "error" });
+      } else {
+        toast("Something went wrong");
+      }
+
+      return;
+    }
+    resetForm();
+    toast("Question submitted successfully!");
   };
 
   return (
     <>
       <h1 className="mt-[12px] text-[16px] font-bold text-black">Your Question</h1>
       <Formik
-        initialValues={{ name: "", question: "" }}
+        initialValues={{ name: user?.fullName as string, question: "" }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
@@ -46,11 +73,16 @@ const QuestionAnswerForm = ({ productId }: { productId: string }) => {
             </div>
             <button
               type="submit"
-              className="flex h-[35px] w-full cursor-pointer items-center justify-center rounded-[5px] bg-primary text-[14px] font-semibold text-white hover:text-black sm:w-[127px]"
-              disabled={isSubmitting}
+              className={`flex h-[35px] w-full cursor-pointer items-center justify-center rounded-[5px] ${user && user.role === "user" ? "bg-primary" : "pointer-events-none bg-info"} text-[14px] font-semibold text-white hover:text-black sm:w-[127px]`}
+              disabled={isSubmitting || isLoading || !user || user?.role !== "user"}
             >
-              Submit Question
+              {isLoading ? "Submitting..." : "Submit Question"}
             </button>
+            {(!user || user?.role !== "user") && (
+              <p className="mt-[10px] text-[12px] text-red-500">
+                You need to be logged in as a user to ask a question.
+              </p>
+            )}
           </Form>
         )}
       </Formik>
