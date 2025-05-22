@@ -45,7 +45,7 @@ const QuestionAnswerForm = ({ productId }: { productId: string }) => {
     <>
       <h1 className="mt-[12px] text-[16px] font-bold text-black">Your Question</h1>
       <Formik
-        initialValues={{ name: user?.fullName as string, question: "" }}
+        initialValues={{ name: (user?.fullName as string) || "", question: "" }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
