@@ -52,7 +52,7 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
                   {category.subcategories.map((subcategory) => (
                     <Link
                       key={subcategory._id}
-                      href={`/category/${category.slug}/${subcategory.slug}`}
+                      href={`/shop/${subcategory.slug}`}
                       className="flex items-center space-x-3 rounded-lg transition-all hover:bg-white hover:shadow-sm"
                     >
                       <div>

@@ -6,3 +6,5 @@ export interface IQueruMutationErrorResponse {
     success: boolean;
   };
 }
+
+export type TSearchParams = { searchParams: Promise<{ [key: string]: string | undefined }> };

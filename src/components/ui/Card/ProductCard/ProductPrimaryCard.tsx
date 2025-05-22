@@ -14,7 +14,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
     >
       {/* Image */}
       <Link
-        href={`products/${product?._id}`}
+        href={`products/${product?.slug}`}
         className="flex aspect-square w-full items-center justify-start bg-white"
       >
         <Image
@@ -31,7 +31,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
 
       {/* Content section */}
       <div className="flex h-full flex-col justify-between p-[8px]">
-        <Link href={`products/${product?._id}`} className="line-clamp-2">
+        <Link href={`products/${product?.slug}`} className="line-clamp-2">
           <span className="text-[14px] font-bold">{product.name}</span>
         </Link>
 
