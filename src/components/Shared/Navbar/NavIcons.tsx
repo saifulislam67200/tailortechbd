@@ -12,6 +12,7 @@ interface NavIconsProps {
 
 export default function NavIcons({ setIsSearchOpen, setIsCartOpen }: NavIconsProps) {
   const cartItems = useAppSelector((state) => state?.cart?.items);
+  const wishlistItems = useAppSelector((state) => state?.wishlist?.items);
 
   return (
     <>
@@ -37,7 +38,7 @@ export default function NavIcons({ setIsSearchOpen, setIsCartOpen }: NavIconsPro
       <Link href="/wishlist" className="relative text-primary" aria-label="wishlist">
         <FaHeart size={22} />
         <span className="absolute -top-[12px] -right-[12px] flex h-[20px] w-[20px] items-center justify-center rounded-full bg-secondary text-[12px] text-white">
-          0
+          {wishlistItems?.length || 0}
         </span>
       </Link>
 

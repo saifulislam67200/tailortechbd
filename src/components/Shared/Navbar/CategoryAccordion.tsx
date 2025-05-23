@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import PlusIcon from "@/components/icons/PlusIcon";
 import { IoHome } from "react-icons/io5";
-import { useGetAllCategoriesQuery } from "@/redux/category/category.api";
+import { useGetAllCategoriesQuery } from "@/redux/features/category/category.api";
 
 interface CategoryAccordionProps {
   setIsOpen: (open: boolean) => void;
@@ -21,8 +21,8 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
   };
 
   const { data } = useGetAllCategoriesQuery({
-  mode: "tree",
-});
+    mode: "tree",
+  });
   const categories = data?.data;
 
   return (

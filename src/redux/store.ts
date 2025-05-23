@@ -15,6 +15,7 @@ import { api } from "./api/api";
 import cartReducer from "./features/cart/cartSlice";
 import checkoutReducer from "./features/checkout/checkout.slice";
 import userReducer from "./features/user/user.slice";
+import wishlistReducer from "./features/wishlist/wishlistSlice";
 const persistConfig = {
   key: "root",
   storage,
@@ -25,6 +26,10 @@ const persistCheckoutReducer = persistReducer(
   checkoutReducer
 );
 const persistCartReducer = persistReducer({ ...persistConfig, key: "cart" }, cartReducer);
+const persistWishlistReducer = persistReducer(
+  { ...persistConfig, key: "wishlist" },
+  wishlistReducer
+);
 
 export const store = configureStore({
   reducer: {
@@ -32,6 +37,7 @@ export const store = configureStore({
     user: persistAuthReducer,
     checkout: persistCheckoutReducer,
     cart: persistCartReducer,
+    wishlist: persistWishlistReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

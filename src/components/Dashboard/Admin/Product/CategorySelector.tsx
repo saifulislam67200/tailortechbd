@@ -1,6 +1,6 @@
 import SelectionBox from "@/components/ui/SelectionBox";
 import useDebounce from "@/hooks/useDebounce";
-import { useGetAllCategoriesQuery } from "@/redux/category/category.api";
+import { useGetAllCategoriesQuery } from "@/redux/features/category/category.api";
 
 interface IProps {
   onSelect: (item: { label: string; value: string }) => void;

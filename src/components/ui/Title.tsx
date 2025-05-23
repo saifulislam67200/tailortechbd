@@ -11,10 +11,10 @@ interface SectionTitleProps {
 
 const Title: React.FC<SectionTitleProps> = ({ title, href, linkText, className }) => {
   return (
-    <div className="flex w-full justify-between border-b-[2px]">
+    <div className="flex w-full justify-between border-b-[2px] border-primary">
       <h2
         className={twMerge(
-          "clip-path relative -mb-[2px] inline-block bg-black py-[2px] pr-[40px] pl-[8px] text-[14px] font-bold text-white md:text-[14px]",
+          "clip-path relative -mb-[2px] inline-block bg-primary py-[2px] pr-[40px] pl-[8px] text-[14px] font-bold text-white md:text-[14px]",
           className
         )}
       >

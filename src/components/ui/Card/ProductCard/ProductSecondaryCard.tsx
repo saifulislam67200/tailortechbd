@@ -4,16 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FaCartArrowDown } from "react-icons/fa";
+import { twMerge } from "tailwind-merge";
 import ProductHoverIcons from "./ProductHoverIcons";
 
 interface ProductCardProps {
   product: IProduct;
+  className?: string;
 }
 
-const ProductSecondaryCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductSecondaryCard: React.FC<ProductCardProps> = ({ product, className }) => {
   return (
-    <div className="group relative">
-      <div className="group relative overflow-hidden bg-white transition-all duration-300 hover:shadow-[0_0_6px_2px_rgba(33,33,33,0.2)]">
+    <div className={twMerge("group relative", className)}>
+      <div className="group relative h-full overflow-hidden bg-white transition-all duration-300 hover:shadow-[0_0_6px_2px_rgba(33,33,33,0.2)]">
         {/* Image */}
         <Link href={`/product/${product?.slug}`}>
           <div className="relative aspect-square overflow-hidden">
@@ -41,7 +43,7 @@ const ProductSecondaryCard: React.FC<ProductCardProps> = ({ product }) => {
         </Link>
       </div>
 
-      <ProductHoverIcons className="top-[30%]">
+      <ProductHoverIcons product={product} className="top-[30%]">
         <ProductAddToCartModal product={product}>
           <button className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white">
             <FaCartArrowDown className="text-[15px]" />
