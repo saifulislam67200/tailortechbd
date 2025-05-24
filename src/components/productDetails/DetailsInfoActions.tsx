@@ -1,4 +1,5 @@
 "use client";
+import { useSelectedColor } from "@/contexts/SelectColor.context";
 import { useAppDispatch } from "@/hooks/redux";
 import { addToCart } from "@/redux/features/cart/cartSlice";
 import { IProduct } from "@/types/product";
@@ -10,6 +11,7 @@ const DetailsInfoActions = ({ product }: { product: IProduct }) => {
   const [activeColor, setActiveColor] = useState(product?.colors[0]?.color || "red");
   const [activeSize, setActiveSize] = useState(product?.colors[0]?.sizes[0]?.size || "M");
   const [activeQuantity, setActiveQuantity] = useState(1);
+  const { setSelectedColor } = useSelectedColor();
 
   // Reset quantity when size changes
   const handleSizeChange = (size: string) => {
@@ -66,6 +68,11 @@ const DetailsInfoActions = ({ product }: { product: IProduct }) => {
     toast.success("Added to cart!");
   };
 
+  const handleColorChange = (color: string) => {
+    setActiveColor(color);
+    setSelectedColor(color);
+  };
+
   return (
     <div>
       {/* colors  */}
@@ -77,12 +84,13 @@ const DetailsInfoActions = ({ product }: { product: IProduct }) => {
               key={_id}
               type="button"
               aria-label={`Select color ${color}`}
-              className={`h-[20px] w-[20px] cursor-pointer rounded-full border-2 transition-all duration-200 ${
-                activeColor === color ? "border-info" : "border-gray-200"
+              className={`flex h-[20px] w-fit cursor-pointer items-center rounded-full border-2 px-[8px] text-[12px] transition-all duration-200 ${
+                activeColor === color ? "border-primary" : "border-gray-200"
               }`}
-              style={{ backgroundColor: color }}
-              onClick={() => setActiveColor(color)}
-            />
+              onClick={() => handleColorChange(color)}
+            >
+              {color}
+            </button>
           );
         })}
       </div>

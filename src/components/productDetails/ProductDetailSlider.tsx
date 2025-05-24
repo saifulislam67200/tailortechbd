@@ -1,4 +1,5 @@
 "use client";
+import { useSelectedColor } from "@/contexts/SelectColor.context";
 import { IProduct } from "@/types/product";
 import Image from "next/image";
 import { useState } from "react";
@@ -13,8 +14,10 @@ import type { Swiper as SwiperType } from "swiper/types";
 const ProductDetailsSlider = ({ product }: { product: IProduct }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const { selectedColor } = useSelectedColor();
 
-  const images = [...product?.images];
+  const colorObj = product?.colors.find((c) => c.color === selectedColor);
+  const images = colorObj?.images?.length ? colorObj.images : product.images;
 
   return (
     <section className="bg-white px-[10px] py-[14px] md:px-[20px]">
