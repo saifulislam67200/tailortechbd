@@ -14,6 +14,14 @@ const orderApi = api.injectEndpoints({
       }),
       invalidatesTags: ["order"],
     }),
+
+    getMyOrders: builder.query<{ data: IOrder[] }, void>({
+      query: () => ({
+        url: `/order/my`,
+        method: "GET",
+      }),
+      providesTags: ["order"],
+    }),
   }),
 });
-export const { useCreateOrderMutation } = orderApi;
+export const { useCreateOrderMutation, useGetMyOrdersQuery } = orderApi;
