@@ -14,9 +14,10 @@ import {
 import type { IOrder, IShippingAddress } from "@/types/order";
 import { useGetMyOrdersQuery } from "@/redux/features/order/order.api";
 import Image from "next/image";
+import Loader from "@/components/ui/Loader";
 
 export default function OrderHistory() {
-  const { data } = useGetMyOrdersQuery();
+  const { data, isLoading } = useGetMyOrdersQuery();
   const orders = data?.data || [];
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
 
@@ -54,8 +55,12 @@ export default function OrderHistory() {
 
       {/* Orders List */}
       <div className="space-y-[16px]">
-        {orders.length === 0 ? (
-          <div className="py-[4px]2 text-center">
+        {isLoading ? (
+          <div className="itemscenter flex justify-center py-8">
+            <Loader />
+          </div>
+        ) : orders.length === 0 ? (
+          <div className="py-[4px] text-center">
             <IoCube className="mx-auto mb-[16px] h-[64px] w-[64px] text-gray-300" />
             <h3 className="mb-[8px] text-[18px] font-medium text-primary">No orders found</h3>
             <p className="text-info">You haven&apos;t placed any orders yet.</p>
