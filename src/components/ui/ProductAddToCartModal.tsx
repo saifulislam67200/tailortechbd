@@ -20,7 +20,7 @@ const ProductAddToCartModal = ({ children, product }: Props) => {
   const dispatch = useDispatch();
 
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>(
-    product.colors[0] || undefined
+    product?.colors[0] || undefined
   );
 
   const [selectedSize, setSelectedSize] = useState<ISize | undefined>(
@@ -33,15 +33,15 @@ const ProductAddToCartModal = ({ children, product }: Props) => {
 
   const handleAddToCart = () => {
     const payload = {
-      discount: product.discount,
-      id: product._id,
-      name: product.name,
-      price: product.price,
+      discount: product?.discount,
+      id: product?._id,
+      name: product?.name,
+      price: product?.price,
       quantity: 1,
       size: selectedSize?.size || "",
       stock: selectedSize?.stock || 0,
       color: selectedColor?.color || "",
-      image: product.images[0],
+      image: product?.images?.[0],
     };
     dispatch(addToCart(payload));
     setIsOpen(false);

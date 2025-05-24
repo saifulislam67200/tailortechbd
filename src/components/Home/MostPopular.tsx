@@ -6,7 +6,7 @@ const MostPopular = async () => {
   const res = await fetch(
     `${baseUrl}/product/top-ordered?limit=20&fields=name,slug,images,price,discount,colors,description`,
     {
-      next: { revalidate: 60 * 60 },
+      next: { revalidate: 60 * 5 },
     }
   );
 

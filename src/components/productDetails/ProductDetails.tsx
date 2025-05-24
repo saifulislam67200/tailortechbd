@@ -5,6 +5,7 @@ import DetailedInfo from "./DetailedInfo";
 import DetailsAndInformation from "./DetailsAndInformation";
 import ProductDetailsSlider from "./ProductDetailSlider";
 import RelatedProducts from "./RelatedProducts";
+import { notFound } from "next/navigation";
 
 interface IProps {
   params: Promise<{ slug: string }>;
@@ -20,6 +21,10 @@ const ProductDetails: React.FC<IProps> = async ({ params }) => {
 
   const data = (await res.json()) as { data: IProduct };
   const product = data?.data;
+
+  if (!product || Object.keys(product).length === 0) {
+    return notFound();
+  }
 
   return (
     <div className="mx-auto max-w-[1756px] px-[16px] py-[10px] transition-all sm:px-[36px] md:px-[50px] lg:px-[95px] 2xl:px-[0px]">

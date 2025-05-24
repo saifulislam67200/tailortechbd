@@ -6,7 +6,7 @@ const Collections = async () => {
   const res = await fetch(
     `${baseUrl}/product/get?limit=15&fields=name,slug,images,price,discount,colors,description`,
     {
-      next: { revalidate: 60 * 60 },
+      next: { revalidate: 60 * 5 },
     }
   );
 
