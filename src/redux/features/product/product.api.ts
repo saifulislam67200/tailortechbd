@@ -1,4 +1,5 @@
 import { api } from "@/redux/api/api";
+import { IMeta } from "@/types/meta";
 import { IProduct } from "@/types/product";
 import { generateQueryParams } from "@/utils";
 
@@ -19,7 +20,7 @@ const productApi = api.injectEndpoints({
       }),
       providesTags: ["product"],
     }),
-    getAllProducts: builder.query<{ data: IProduct[] }, Record<string, string | number>>({
+    getAllProducts: builder.query<{ data: IProduct[], meta: IMeta }, Record<string, string | number>>({
       query: (query) => {
         const queryString = generateQueryParams(query);
         return {

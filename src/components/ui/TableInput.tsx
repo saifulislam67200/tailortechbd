@@ -19,6 +19,12 @@ const TableInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
         ]
   );
 
+  const [mouseOn, setMouseOn] = useState<{
+    type: "add" | "delete";
+    position: "row" | "column";
+    index: number;
+  } | null>();
+
   const handleCellChange = (row: number, col: number, value: string) => {
     const updated = tableData.map((inner) => [...inner]);
     updated[row][col] = value;
@@ -35,6 +41,7 @@ const TableInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
   const addColumn = () => {
     const newData = tableData.map((row) => [...row, ""]);
     setTableData(newData);
+    setMouseOn(null);
     onChange?.(newData);
   };
 
@@ -61,6 +68,10 @@ const TableInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
           {tableData[0]?.map((_, colIndex) => (
             <div key={colIndex} className={`flex w-full justify-center`}>
               <button
+                onMouseEnter={() =>
+                  setMouseOn({ type: "delete", position: "column", index: colIndex })
+                }
+                onMouseLeave={() => setMouseOn(null)}
                 type="button"
                 onClick={() => deleteColumn(colIndex)}
                 className="center mb-1 aspect-square w-[30px] cursor-pointer rounded-full border border-border-muted bg-transparent text-[16px] text-danger"
@@ -76,8 +87,8 @@ const TableInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
             {/* Row Cells */}
             {row?.map((cell, colIndex) => (
               <div
-                key={colIndex}
-                className="flex h-[48px] w-full items-center justify-center border border-border-muted"
+                key={colIndex + "-" + rowIndex}
+                className={`flex h-[48px] w-full items-center justify-center border border-border-muted ${mouseOn?.type === "delete" && mouseOn?.position === "row" && mouseOn?.index === rowIndex ? "bg-danger/40" : ""} ${mouseOn?.type === "delete" && mouseOn?.position === "column" && mouseOn?.index === colIndex ? "bg-danger/40" : ""} `}
               >
                 <input
                   className={`h-full w-full px-2 text-center outline-none ${
@@ -89,10 +100,30 @@ const TableInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
               </div>
             ))}
 
+            {/* display new column comming */}
+            {mouseOn?.type == "add" && mouseOn.position == "column"
+              ? Array.from({ length: 1 })?.map((cell, colIndex) => (
+                  <div
+                    key={colIndex + "-" + rowIndex + "new"}
+                    className={`flex h-[48px] w-full items-center justify-center border border-border-muted bg-success/40`}
+                  >
+                    <input
+                      className={`h-full w-full px-2 text-center outline-none ${
+                        rowIndex === 0 ? "font-bold" : ""
+                      }`}
+                    />
+                  </div>
+                ))
+              : ""}
+
             {/* Delete Row Button */}
             <div className="flex h-[40px] w-[40px] shrink-0 items-center justify-center">
               {rowIndex !== 0 ? (
                 <button
+                  onMouseEnter={() =>
+                    setMouseOn({ type: "delete", position: "row", index: rowIndex })
+                  }
+                  onMouseLeave={() => setMouseOn(null)}
                   type="button"
                   onClick={() => deleteRow(rowIndex)}
                   className="center aspect-square w-[30px] cursor-pointer rounded-full border border-border-muted bg-transparent text-[16px] text-danger"
@@ -103,6 +134,11 @@ const TableInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
               ) : (
                 <button
                   type="button"
+                  title="Add Column"
+                  onMouseEnter={() =>
+                    setMouseOn({ type: "add", position: "column", index: rowIndex })
+                  }
+                  onMouseLeave={() => setMouseOn(null)}
                   onClick={addColumn}
                   className="center center h-[30px] w-[30px] cursor-pointer rounded-full border border-border-muted text-muted"
                 >

@@ -26,7 +26,7 @@ function PaginationText({ currentPage, limit, totalDocs, className }: Pagination
   const end = Math.min(currentPage * limit, totalDocs);
 
   return (
-    <p className={twMerge("text-sm text-gray-700", className)}>
+    <p className={twMerge("text-sm text-primary", className)}>
       Showing <span className="font-medium">{start}</span> to{" "}
       <span className="font-medium">{end}</span> of <span className="font-medium">{totalDocs}</span>{" "}
       items

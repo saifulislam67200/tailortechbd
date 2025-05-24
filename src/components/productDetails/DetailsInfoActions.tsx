@@ -1,26 +1,31 @@
 "use client";
 import { useAppDispatch } from "@/hooks/redux";
 import { addToCart } from "@/redux/features/cart/cartSlice";
-import { IProduct } from "@/types/product";
-import { useState } from "react";
+import { IColor, IProduct, ISize } from "@/types/product";
+import React, { useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { toast } from "sonner";
 
-const DetailsInfoActions = ({ product }: { product: IProduct }) => {
-  const [activeColor, setActiveColor] = useState(product?.colors[0]?.color || "red");
-  const [activeSize, setActiveSize] = useState(product?.colors[0]?.sizes[0]?.size || "M");
+interface IProps {
+  product: IProduct;
+  onColorChange: (color: IColor | undefined) => void;
+}
+
+const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
+  const [activeColor, setActiveColor] = useState<IColor | undefined>(product?.colors?.[0]);
+  const [activeSize, setActiveSize] = useState<ISize | undefined>(activeColor?.sizes?.[0]);
   const [activeQuantity, setActiveQuantity] = useState(1);
 
   // Reset quantity when size changes
-  const handleSizeChange = (size: string) => {
+  const handleSizeChange = (size: ISize) => {
     setActiveSize(size);
     setActiveQuantity(1);
   };
   const dispatch = useAppDispatch();
   // Find the current selected color and size stock
   const getCurrentStock = () => {
-    const colorObj = product.colors.find((c) => c.color === activeColor);
-    const sizeObj = colorObj?.sizes.find((s) => s.size === activeSize);
+    const colorObj = product.colors.find((c) => c.color === activeColor?.color);
+    const sizeObj = colorObj?.sizes.find((s) => s.size === activeSize?.size);
     return sizeObj?.stock ?? 1;
   };
 
@@ -56,9 +61,9 @@ const DetailsInfoActions = ({ product }: { product: IProduct }) => {
       name: product.name,
       price: product.price,
       quantity: activeQuantity,
-      size: activeSize,
+      size: activeSize.size,
       stock: getCurrentStock(),
-      color: activeColor,
+      color: activeColor.color,
       image: product?.images[0],
     };
 
@@ -66,23 +71,32 @@ const DetailsInfoActions = ({ product }: { product: IProduct }) => {
     toast.success("Added to cart!");
   };
 
+  const handleColorChange = (color: IColor) => {
+    setActiveColor(color);
+    onColorChange(color);
+    setActiveSize(color.sizes?.[0]);
+  };
+
   return (
     <div>
       {/* colors  */}
       <h1 className="mt-[10px] text-[16px]">Colors:</h1>
       <div className="mt-[5px] flex items-center gap-[10px]">
-        {product?.colors?.map(({ color, _id }) => {
+        {product?.colors?.map((color) => {
           return (
             <button
-              key={_id}
+              key={color._id}
               type="button"
-              aria-label={`Select color ${color}`}
-              className={`h-[20px] w-[20px] cursor-pointer rounded-full border-2 transition-all duration-200 ${
-                activeColor === color ? "border-info" : "border-gray-200"
+              aria-label={`Select color ${color.color}`}
+              className={`flex h-[20px] w-fit cursor-pointer items-center rounded-full border-[1px] border-primary px-[8px] text-[12px] transition-all duration-200 ${
+                activeColor?.color === color.color
+                  ? "bg-primary text-white"
+                  : "bg-white text-primary"
               }`}
-              style={{ backgroundColor: color }}
-              onClick={() => setActiveColor(color)}
-            />
+              onClick={() => handleColorChange(color)}
+            >
+              {color.color}
+            </button>
           );
         })}
       </div>
@@ -90,23 +104,21 @@ const DetailsInfoActions = ({ product }: { product: IProduct }) => {
       {/* // sizes  */}
       <h1 className="mt-[15px] text-[16px]">Sizes:</h1>
       <div className="mt-[5px] flex items-center gap-[10px]">
-        {product?.colors
-          ?.find((c) => c.color === activeColor)
-          ?.sizes?.map(({ size, _id }) => (
-            <button
-              key={_id}
-              type="button"
-              aria-label={`Select size ${size}`}
-              className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
-                activeSize === size
-                  ? "bg-primary text-white shadow-none"
-                  : "bg-white text-black shadow"
-              } border border-gray-200 hover:bg-primary hover:text-white`}
-              onClick={() => handleSizeChange(size)}
-            >
-              {size}
-            </button>
-          ))}
+        {activeColor?.sizes?.map((size) => (
+          <button
+            key={size._id}
+            type="button"
+            aria-label={`Select size ${size.size}`}
+            className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+              activeSize?.size === size.size
+                ? "bg-primary text-white shadow-none"
+                : "bg-white text-black shadow"
+            } border border-gray-200 hover:bg-primary hover:text-white`}
+            onClick={() => handleSizeChange(size)}
+          >
+            {size.size}
+          </button>
+        ))}
       </div>
 
       {/* // quantity update  */}

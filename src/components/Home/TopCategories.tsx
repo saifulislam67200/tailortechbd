@@ -15,7 +15,7 @@ interface Category {
 const TopCategories: FC = async () => {
   const res = await fetch(`${baseUrl}/category/get?display=true`, {
     next: {
-      revalidate: 60 * 60, // 1 hour
+      revalidate: 60 * 5,
     },
   });
 
@@ -23,18 +23,13 @@ const TopCategories: FC = async () => {
 
   return (
     <section className="bg-white py-[10px]">
-      <Title
-        title="Top Categories"
-        linkText="See all categories"
-        href="/categories"
-        className="text-[14px]"
-      />
+      <Title title="Top Categories" className="text-[14px]" />
 
       {/* Mobile/Tablet */}
       <div className="mt-[16px] flex gap-[10px] overflow-x-auto pb-[16px] lg:hidden">
         {data.data?.map((category) => (
           <Link
-            href={`/category/${category.slug}`}
+            href={`/shop/${category.slug}`}
             key={category._id}
             className="group flex w-[100px] flex-shrink-0 flex-col items-center md:w-[110px]"
           >
@@ -57,7 +52,7 @@ const TopCategories: FC = async () => {
       <div className="mt-[16px] hidden grid-cols-8 gap-[24px] lg:grid">
         {data?.data?.map((category) => (
           <Link
-            href={`/category/${category.slug}`}
+            href={`/shop/${category.slug}`}
             key={category._id}
             className="group block overflow-hidden rounded-lg transition-all duration-300"
           >

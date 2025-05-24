@@ -1,10 +1,9 @@
+"use server";
+
 import { baseUrl } from "@/redux/api/api";
 import { IProduct } from "@/types/product";
-import Breadcrumb from "../ui/BreadCrumbs";
-import DetailedInfo from "./DetailedInfo";
-import DetailsAndInformation from "./DetailsAndInformation";
-import ProductDetailsSlider from "./ProductDetailSlider";
-import RelatedProducts from "./RelatedProducts";
+import { notFound } from "next/navigation";
+import ProductClientProvier from "./ProductClientProvier";
 
 interface IProps {
   params: Promise<{ slug: string }>;
@@ -21,16 +20,31 @@ const ProductDetails: React.FC<IProps> = async ({ params }) => {
   const data = (await res.json()) as { data: IProduct };
   const product = data?.data;
 
+  if (!product || Object.keys(product).length === 0) {
+    return notFound();
+  }
+
   return (
-    <div className="mx-auto max-w-[1756px] px-[16px] py-[10px] transition-all sm:px-[36px] md:px-[50px] lg:px-[95px] 2xl:px-[0px]">
-      <Breadcrumb />
-      <div className="mt-[10px] grid grid-cols-1 gap-[10px] lg:grid-cols-2">
-        <ProductDetailsSlider product={product} />
-        <DetailedInfo product={product} />
-      </div>
-      <DetailsAndInformation product={product} />
-      <RelatedProducts slug={slug} />
-    </div>
+    <>
+      <ProductClientProvier product={product} slug={slug}>
+        <h1 className="line-clamp-1 text-[14px] font-semibold text-strong sm:text-[25px]">
+          {product?.name}
+        </h1>
+        {product.discount ? (
+          <div className="flex items-center gap-[10px]">
+            <span className="text-[18px] font-semibold">TK {product?.price}</span>
+            <span className="mt-[8px] text-[15px] font-bold text-info line-through">
+              {(product?.price + (product?.price * (product?.discount || 0)) / 100)?.toFixed(2)}
+            </span>
+            <span className="mt-[6px] rounded-full bg-primary px-2 text-[12px] font-bold text-white">
+              {product?.discount}% Off
+            </span>
+          </div>
+        ) : (
+          <span className="text-[18px] font-semibold">TK {product?.price}</span>
+        )}
+      </ProductClientProvier>
+    </>
   );
 };
 

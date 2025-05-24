@@ -17,10 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-const ProductPage = async (props: {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<{ [key: string]: string | undefined }>;
-}) => {
+const ProductPage = async (props: { params: Promise<{ slug: string }> }) => {
   return <ProductDetails {...props} />;
 };
 

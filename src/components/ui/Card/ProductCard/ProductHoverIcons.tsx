@@ -3,8 +3,8 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { addToWishlist, removeFromWishlist } from "@/redux/features/wishlist/wishlistSlice";
 import { IProduct } from "@/types/product";
+import Link from "next/link";
 import { FaEye, FaHeart } from "react-icons/fa";
-import { FiRefreshCw } from "react-icons/fi";
 import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
@@ -39,9 +39,7 @@ const ProductHoverIcons = ({
       )}
     >
       {children}
-      <button className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white">
-        <FiRefreshCw className="text-[15px]" />
-      </button>
+
       <button
         onClick={handleToggleWishlist}
         className={`cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md ${
@@ -50,9 +48,12 @@ const ProductHoverIcons = ({
       >
         <FaHeart className="text-[15px]" />
       </button>
-      <button className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white">
+      <Link
+        href={`/product/${product?.slug}`}
+        className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white"
+      >
         <FaEye className="text-[15px]" />
-      </button>
+      </Link>
     </div>
   );
 };

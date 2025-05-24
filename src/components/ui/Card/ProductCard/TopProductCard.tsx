@@ -1,7 +1,8 @@
 import { IProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
-import TopProductCardActions from "./TopProductCardActions";
+import { BsEye } from "react-icons/bs";
+import ProductAddToCartModal from "../../ProductAddToCartModal";
 
 const TopProductCard = ({ product }: { product: IProduct }) => {
   return (
@@ -23,7 +24,20 @@ const TopProductCard = ({ product }: { product: IProduct }) => {
           <h1 className="line-clamp-1 text-[13px] font-bold">{product?.name}</h1>
           <p className="text-14px font-semibold text-strong">TK: {product?.price}</p>
         </Link>
-        <TopProductCardActions product={product} />
+        <div className="mt-[10px] flex items-center gap-[8px]">
+          <ProductAddToCartModal product={product}>
+            <button className="flex h-[26px] w-[75px] cursor-pointer items-center justify-center rounded-[5px] bg-primary text-[12px] font-semibold text-white">
+              Add to Cart
+            </button>
+          </ProductAddToCartModal>
+
+          <Link
+            href={`/product/${product?.slug}`}
+            className="flex h-[26px] w-[26px] items-center justify-center rounded-[5px] bg-tertiary text-info"
+          >
+            <BsEye />
+          </Link>
+        </div>
       </div>
     </div>
   );

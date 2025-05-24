@@ -8,11 +8,15 @@ import TableInput from "@/components/ui/TableInput";
 import { IProduct } from "@/types/product";
 import { ErrorMessage, Field, FieldArray, Form, Formik, FormikHelpers } from "formik";
 import { BsTrash2 } from "react-icons/bs";
+import { twMerge } from "tailwind-merge";
 import * as Yup from "yup";
 import CategorySelector from "./CategorySelector";
 import ProductImageUploader from "./ProductImageUploader";
 
-const initialValues: Omit<IProduct, "avgRating" | "brand" | "slug" | "_id" | "specifications"> = {
+const initialValues: Omit<
+  IProduct,
+  "avgRating" | "brand" | "slug" | "_id" | "specifications" | "createdAt"
+> = {
   name: "",
   description: "",
   chart: [],
@@ -60,9 +64,15 @@ const validationSchema = Yup.object().shape({
 
 const labelClass = "text-[14px] font-[600] text-black";
 
-const SectionTitle = ({ children }: { children: React.ReactNode }) => {
+const SectionTitle = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
   return (
-    <div className="w-full bg-dashboard/10 px-[16px] py-[8px]">
+    <div className={twMerge("w-full bg-dashboard/10 px-[16px] py-[8px]", className)}>
       <span className="text-[16px] font-[700] text-dashboard">{children}</span>
     </div>
   );
@@ -71,10 +81,8 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => {
 export default function ProductForm({
   onSubmit,
   defaultValue,
-  formLabel,
   isLoading = false,
 }: {
-  formLabel?: string;
   isLoading?: boolean;
   defaultValue?: typeof initialValues;
   onSubmit: (data: typeof initialValues, helper: FormikHelpers<typeof initialValues>) => void;
@@ -87,15 +95,64 @@ export default function ProductForm({
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
         <Form className="flex flex-col gap-[16px]">
-          <h4 className="line-clamp-1 text-[26px] font-[700]">{formLabel || "Product Form"}</h4>
-          <SectionTitle>Basic Information</SectionTitle>
-          <div className="w-full">
-            <label className={labelClass}>Product Name</label>
-            <Field as={Input} name="name" placeholder="Product name" />
-            {touched.name && errors.name && <span className="text-danger">{errors.name}</span>}
+          <div className="grid grid-cols-2 gap-[16px]">
+            <div className="flex w-full flex-col gap-[16px] bg-white p-[16px]">
+              <SectionTitle>Basic Information</SectionTitle>
+              <div className="w-full">
+                <label className={labelClass}>Product Name</label>
+                <Field as={Input} name="name" placeholder="Product name" />
+                {touched.name && errors.name && <span className="text-danger">{errors.name}</span>}
+              </div>
+
+              <div className="flex w-full items-start justify-start gap-[16px]">
+                <div className="flex w-full flex-col gap-[5px]">
+                  <label className={labelClass}>Price</label>
+                  <Field as={Input} name="price" type="number" placeholder="Price" />
+                  {touched.price && errors.price && (
+                    <span className="text-danger">{errors.price}</span>
+                  )}
+                </div>
+
+                <div className="flex w-full flex-col gap-[5px]">
+                  <label className={labelClass}>Discount</label>
+                  <Field as={Input} name="discount" type="number" placeholder="Discount %" />
+                  {touched.discount && errors.discount && (
+                    <span className="text-danger">{errors.discount}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-start justify-start gap-[16px]">
+                <div className="flex w-full flex-col gap-[5px]">
+                  <label className={labelClass}>Tag</label>
+                  <Field as={Input} name="tag" placeholder="Tag" />
+                </div>
+                <div className="flex w-full flex-col gap-[5px]">
+                  <label className={labelClass}>Category</label>
+                  <CategorySelector onSelect={({ value }) => setFieldValue("category", value)} />
+
+                  <ErrorMessage name="category" component="span" className="text-sm text-danger" />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex w-full flex-col gap-[16px] bg-white p-[16px]">
+              <SectionTitle>Product Image Gallery</SectionTitle>
+              <ProductImageUploader
+                defaultImages={defaultValue?.images}
+                onChange={(urls) => {
+                  setFieldValue("images", urls || []);
+                }}
+              />
+            </div>
           </div>
 
-          <div className="w-full">
+          <ErrorMessage name="images" component="span" className="text-sm text-danger" />
+          <HorizontalLine className="my-[16px]" />
+
+          <div className="w-full bg-white p-[16px]">
+            <SectionTitle className="mb-[15px]">Product Description</SectionTitle>
+
             <label className={labelClass}>Description</label>
             {/* <Field as={TextArea} name="description" placeholder="Description" /> */}
 
@@ -111,49 +168,10 @@ export default function ProductForm({
               <span className="text-danger">{errors.description}</span>
             )}
           </div>
-
-          <div className="flex w-full items-start justify-start gap-[16px]">
-            <div className="flex w-full flex-col gap-[5px]">
-              <label className={labelClass}>Price</label>
-              <Field as={Input} name="price" type="number" placeholder="Price" />
-              {touched.price && errors.price && <span className="text-danger">{errors.price}</span>}
-            </div>
-
-            <div className="flex w-full flex-col gap-[5px]">
-              <label className={labelClass}>Discount</label>
-              <Field as={Input} name="discount" type="number" placeholder="Discount %" />
-              {touched.discount && errors.discount && (
-                <span className="text-danger">{errors.discount}</span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex items-start justify-start gap-[16px]">
-            <div className="flex w-full flex-col gap-[5px]">
-              <label className={labelClass}>Tag</label>
-              <Field as={Input} name="tag" placeholder="Tag" />
-            </div>
-            <div className="flex w-full flex-col gap-[5px]">
-              <label className={labelClass}>Category</label>
-              <CategorySelector onSelect={({ value }) => setFieldValue("category", value)} />
-
-              <ErrorMessage name="category" component="span" className="text-sm text-danger" />
-            </div>
-          </div>
-
-          <HorizontalLine className="my-[16px]" />
-          <SectionTitle>Product Image Gallery</SectionTitle>
-          <ProductImageUploader
-            defaultImages={defaultValue?.images}
-            onChange={(urls) => {
-              setFieldValue("images", urls || []);
-            }}
-          />
-
           <ErrorMessage name="images" component="span" className="text-sm text-danger" />
           <HorizontalLine className="my-[16px]" />
 
-          <div className="flex w-full flex-col gap-[5px]">
+          <div className="flex w-full flex-col gap-[5px] bg-white p-[16px]">
             <SectionTitle>Product Chart (Size)</SectionTitle>
             <TableInput
               defaultValue={defaultValue?.chart}
@@ -161,7 +179,7 @@ export default function ProductForm({
             />
           </div>
           <HorizontalLine className="my-[16px]" />
-          <div className="flex flex-col gap-[5px]">
+          <div className="flex flex-col gap-[5px] bg-white p-[16px]">
             <SectionTitle>Product Color & Sizes</SectionTitle>
             <FieldArray name="colors">
               {({ push, remove }) => (

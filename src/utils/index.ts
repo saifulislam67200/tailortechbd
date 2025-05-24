@@ -23,3 +23,10 @@ export const generateQueryParams = (params: Record<string, unknown>) => {
 
   return queryString;
 };
+
+export const pageScroll = (id: string) => {
+  const element = document.getElementById(id);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" });
+  }
+};
