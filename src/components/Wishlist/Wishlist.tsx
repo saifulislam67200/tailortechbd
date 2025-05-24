@@ -3,7 +3,7 @@
 import React from "react";
 import Breadcrumb from "../ui/BreadCrumbs";
 import ProductPrimaryCard from "../ui/Card/ProductCard/ProductPrimaryCard";
-import CategoryProductPagination from "../Category/CategoryProductPagination";
+// import CategoryProductPagination from "../Category/CategoryProductPagination";
 import DataNotFound from "../ui/DataNotFound";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { toast } from "sonner";
@@ -45,7 +45,7 @@ const Wishlist = () => {
           <div className="mt-4 grid w-full grid-cols-1 justify-center gap-[16px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
             {wishlistItems?.map((data) => <ProductPrimaryCard key={data._id} product={data} />)}
           </div>
-          <CategoryProductPagination totalDoc={wishlistItems?.length} />
+          {/* <CategoryProductPagination totalDoc={wishlistItems?.length} /> */}
         </>
       ) : (
         <DataNotFound title="No Product Found" className="h-[200px]" />
