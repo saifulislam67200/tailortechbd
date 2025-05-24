@@ -1,6 +1,6 @@
 "use client";
 
-import ProductForm from "@/components/Dashboard/Admin/Product/ProductForm";
+import ProductForm from "@/components/Dashboard/Product/ProductForm";
 import Breadcrumb from "@/components/ui/BreadCrumbs";
 import DataNotFound from "@/components/ui/DataNotFound";
 import Loader from "@/components/ui/Loader";
@@ -51,18 +51,15 @@ const EditProductView = ({ slug }: { slug: string }) => {
   return (
     <div className="flex flex-col gap-[20px]">
       <Breadcrumb />
-      <div className="bg-white p-[16px]">
-        <ProductForm
-          formLabel={`Edit product - ${data.data.name}`}
-          onSubmit={handleSubmit}
-          isLoading={isUpdating}
-          defaultValue={{
-            ...data.data,
-            category:
-              typeof data.data.category === "string" ? data.data.category : data.data.category?._id,
-          }}
-        />
-      </div>
+      <ProductForm
+        onSubmit={handleSubmit}
+        isLoading={isUpdating}
+        defaultValue={{
+          ...data.data,
+          category:
+            typeof data.data.category === "string" ? data.data.category : data.data.category?._id,
+        }}
+      />
     </div>
   );
 };

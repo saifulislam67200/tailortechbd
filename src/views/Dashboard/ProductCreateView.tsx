@@ -1,6 +1,6 @@
 "use client";
-import ProductForm from "@/components/Dashboard/Admin/Product/ProductForm";
-import Breadcrumb from "@/components/ui/BreadCrumbs";
+import DashboardPageHeadingTitle from "@/components/Dashboard/DashboardPageHeadingTitle";
+import ProductForm from "@/components/Dashboard/Product/ProductForm";
 import { useCreateProductMutation } from "@/redux/features/product/product.api";
 import { IQueruMutationErrorResponse } from "@/types";
 import { IProduct } from "@/types/product";
@@ -30,15 +30,8 @@ const ProductCreateView = () => {
   };
   return (
     <div className="flex flex-col gap-[20px]">
-      <Breadcrumb />
-      <div className="bg-white p-[16px]">
-        <ProductForm
-          isLoading={isLoading}
-          formLabel="Create a new product"
-          onSubmit={(value) => handleSubmit(value)}
-        />
-        ;
-      </div>
+      <DashboardPageHeadingTitle title="Create Product" />
+      <ProductForm isLoading={isLoading} onSubmit={(value) => handleSubmit(value)} />;
     </div>
   );
 };

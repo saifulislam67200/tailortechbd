@@ -50,7 +50,7 @@ const ImageDisplay = ({
   }, []);
 
   return (
-    <div className="center relative h-[150px] w-[150px] shrink-0 rounded-[8px] border-[1px] border-border-muted">
+    <div className="center relative h-[80px] w-[80px] shrink-0 rounded-[8px] border-[1px] border-border-muted">
       <Image
         width={150}
         height={150}
@@ -121,16 +121,18 @@ const ProductImageUploader: React.FC<IProps> = ({
   };
 
   return (
-    <div className="min-h-[100px] w-full border-[1px] border-border-main p-[16px]">
+    <div className="min-h-[100px] w-full">
       {children || <h3 className="text-[20px] font-[600] text-strong">Upload Product Image</h3>}
 
       <div onDrop={handleDrop} onDragOver={handleDragOver}>
         <label
           htmlFor={inputId || "image-uploader"}
-          className="center mt-[20px] h-[170px] cursor-pointer flex-col border-[2px] border-dashed border-border-main bg-solid-slab"
+          className="center mt-[20px] h-[270px] cursor-pointer flex-col border-[2px] border-dashed border-dashboard/50 bg-dashboard/10"
         >
           <MdOutlineFileUpload className="text-[50px] text-muted" />
-          <span className="text-[18px] font-[600]">Click to upload or drag and drop</span>
+          <span className="text-[18px] font-[600] text-dashboard">
+            Click to upload or drag and drop
+          </span>
           <span className="text-[14px] font-[400] text-muted">PNG/JPG/JPEG/GIF/WEBP</span>
         </label>
       </div>
@@ -143,7 +145,7 @@ const ProductImageUploader: React.FC<IProps> = ({
         onChange={handleImageChange}
       />
 
-      <div className="mt-4 flex items-center justify-start gap-4">
+      <div className="mt-4 flex flex-wrap items-center justify-start gap-4">
         {files.map((file, index) => (
           <ImageDisplay
             key={index}

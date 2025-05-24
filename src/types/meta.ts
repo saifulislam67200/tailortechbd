@@ -1,4 +1,4 @@
 export interface IMeta {
-  totalDocs: number;
+  totalDoc: number;
   page?: number;
 }

@@ -3,7 +3,7 @@ import { useAppSelector } from "@/hooks/redux";
 import Link from "next/link";
 import { FaCartArrowDown } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa6";
-import { FiRefreshCw, FiSearch } from "react-icons/fi";
+import { FiSearch } from "react-icons/fi";
 
 interface NavIconsProps {
   setIsSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -39,13 +39,6 @@ export default function NavIcons({ setIsSearchOpen, setIsCartOpen }: NavIconsPro
         <FaHeart size={22} />
         <span className="absolute -top-[12px] -right-[12px] flex h-[20px] w-[20px] items-center justify-center rounded-full bg-secondary text-[12px] text-white">
           {wishlistItems?.length || 0}
-        </span>
-      </Link>
-
-      <Link href="/compare" className="relative hidden text-primary lg:block" aria-label="compare">
-        <FiRefreshCw size={22} />
-        <span className="absolute -top-[12px] -right-[12px] flex h-[20px] w-[20px] items-center justify-center rounded-full bg-secondary text-[12px] text-white">
-          0
         </span>
       </Link>
     </>

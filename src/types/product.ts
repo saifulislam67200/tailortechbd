@@ -27,5 +27,6 @@ export interface IProduct {
   discount: number;
   tag?: string;
   images: string[];
+  createdAt: string;
   chart: string[][];
 }

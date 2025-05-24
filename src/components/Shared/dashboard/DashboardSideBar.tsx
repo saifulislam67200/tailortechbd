@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { GoChevronDown } from "react-icons/go";
-import LogoutButton from "../../ui/LogoutButton";
 
 const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: number }) => {
   const path = usePathname();
@@ -42,7 +41,7 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
       {hasChildren ? (
         <div
           className={`flex cursor-pointer items-center justify-between gap-[8px] px-[16px] py-[10px] text-sm font-medium hover:text-primary ${
-            isMainParent && isDescendantActive ? "bg-dashboard/5 text-dashboard" : "text-strong"
+            isMainParent && isDescendantActive ? "bg-dashboard/5 text-dashboard" : "text-primary"
           }`}
           onClick={handleToggle}
         >
@@ -60,7 +59,7 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
               ? isMainParent
                 ? "bg-dashboard/5 text-dashboard"
                 : "text-dashboard"
-              : "text-strong"
+              : "text-primary"
           }`}
         >
           {depth !== 0 ? (
@@ -97,14 +96,11 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
 const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
   return (
     <div className="flex h-full w-[300px] shrink-0 flex-col justify-between border-r-[1px] border-border-muted bg-white p-[20px]">
-      <div className="flex flex-col">
-        <div className="flex flex-col gap-[0]">
-          {navlinks?.map((link, index) => (
-            <NavBox navlink={link} key={index + (link.path || "parent")} />
-          ))}
-        </div>
+      <div className="flex flex-col gap-[0]">
+        {navlinks?.map((link, index) => (
+          <NavBox navlink={link} key={index + (link.path || "parent")} />
+        ))}
       </div>
-      <LogoutButton className="w-full bg-danger" />
     </div>
   );
 };

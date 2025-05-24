@@ -12,7 +12,7 @@ export const admin: IDashboardNavLinks[] = [
   {
     icon: VscGraphLine,
     label: "Dashboard Statistics",
-    path: "/dashboard/admin",
+    path: "/dashboard/",
   },
   {
     label: "Product Inventory",
@@ -20,11 +20,11 @@ export const admin: IDashboardNavLinks[] = [
     children: [
       {
         label: "All Products",
-        path: "/dashboard/admin/products",
+        path: "/dashboard/products",
       },
       {
         label: "Create New Product",
-        path: "/dashboard/admin/product-create",
+        path: "/dashboard/product-create",
       },
     ],
   },

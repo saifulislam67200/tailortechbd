@@ -1,5 +1,5 @@
 import { getPageMetaData } from "@/utils/meta";
-import EditProductView from "@/views/Dashboard/Admin/EditProductView";
+import EditProductView from "@/views/Dashboard/EditProductView";
 
 export const metadata = getPageMetaData("Edit Product");
 

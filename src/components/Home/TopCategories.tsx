@@ -23,12 +23,7 @@ const TopCategories: FC = async () => {
 
   return (
     <section className="bg-white py-[10px]">
-      <Title
-        title="Top Categories"
-        linkText="See all categories"
-        href="/categories"
-        className="text-[14px]"
-      />
+      <Title title="Top Categories" className="text-[14px]" />
 
       {/* Mobile/Tablet */}
       <div className="mt-[16px] flex gap-[10px] overflow-x-auto pb-[16px] lg:hidden">
