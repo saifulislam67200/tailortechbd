@@ -56,7 +56,7 @@ export default function OrderHistory() {
       {/* Orders List */}
       <div className="space-y-[16px]">
         {isLoading ? (
-          <div className="itemscenter flex justify-center py-8">
+          <div className="items-center flex justify-center py-8">
             <Loader />
           </div>
         ) : orders.length === 0 ? (
