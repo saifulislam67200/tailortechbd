@@ -10,7 +10,7 @@ import "swiper/css";
 const Hero = () => {
   const [activeSlide, setActiveSlide] = useState(0);
 
-  const leftImages = ["/images/home/banner1.webp", "/images/home/banner11.webp"];
+  const leftImages = ["/images/home/banner/banner1.png", "/images/home/banner/banner2.png", "/images/home/banner/banner3.png",];
 
   return (
     <div className="mt-[16px]">

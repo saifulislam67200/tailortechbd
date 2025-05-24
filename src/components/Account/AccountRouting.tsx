@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-const routes = [
+export const routes = [
   {
     name: "Orders",
     path: "/account/orders",

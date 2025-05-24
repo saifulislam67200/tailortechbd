@@ -179,7 +179,7 @@ export default function OrderHistory() {
                             {order.orderItems.map((item, index) => (
                               <div
                                 key={index}
-                                className="flex items-center gap-[12px] rounded-lg border border-border-muted bg-white p-[16px]"
+                                className="flex flex-col items-center gap-[12px] rounded-lg border border-border-muted bg-white p-[16px] sm:flex-row"
                               >
                                 <Image
                                   src={item.product.image || "/avatar.png"}
@@ -190,7 +190,7 @@ export default function OrderHistory() {
                                 />
                                 <div className="min-w-0 flex-1">
                                   <h5 className="mb-[4px] font-medium">{item.product.name}</h5>
-                                  <div className="mb-[8px] flex items-center gap-[12px] text-[14px] text-muted">
+                                  <div className="sm:text-[14px]text-[12px] mb-[8px] flex items-center gap-[12px] text-[12px] text-muted md:text-[14px]">
                                     {item.size && (
                                       <span className="rounded bg-gray-100 px-[8px] py-[4px]">
                                         Size: {item.size}
@@ -223,46 +223,46 @@ export default function OrderHistory() {
                             Order Information
                           </h4>
                           <div className="rounded-lg border border-border-muted bg-white p-[16px]">
-                            <div className="flex items-center justify-between border-b border-border-muted pb-[12px] text-[14px]">
+                            <div className="sm:text-[14px]text-[12px] flex items-center justify-between border-b border-border-muted pb-[12px] text-[12px] md:text-[14px]">
                               <span className="font-medium text-info">Order Number:</span>
                               <span className="font-semibold text-primary">
                                 {getOrderNumber(order)}
                               </span>
                             </div>
-                            <div className="flex items-start justify-between border-b border-border-muted py-[12px] text-[14px]">
+                            <div className="sm:text-[14px]text-[12px] flex items-start justify-between border-b border-border-muted py-[12px] text-[12px] md:text-[14px]">
                               <span className="font-medium text-info">Customer:</span>
                               <div className="text-right">
                                 <div className="font-semibold text-primary">
                                   {order.shippingAddress.name}
                                 </div>
-                                <div className="text-[14px] text-info">
+                                <div className="sm:text-[14px]text-[12px] text-[12px] text-info md:text-[14px]">
                                   {order.shippingAddress.phoneNumber}
                                 </div>
                               </div>
                             </div>
-                            <div className="flex items-start justify-between border-b border-border-muted py-[12px] text-[14px]">
+                            <div className="sm:text-[14px]text-[12px] flex items-start justify-between border-b border-border-muted py-[12px] text-[12px] md:text-[14px]">
                               <span className="font-medium text-info">Delivery Address:</span>
                               <span className="max-w-[320px] text-right font-semibold text-primary">
                                 {formatAddress(order.shippingAddress)}
                               </span>
                             </div>
                             {order.billingAddress && (
-                              <div className="flex items-start justify-between border-b border-border-muted py-[4px] text-[14px]">
+                              <div className="sm:text-[14px]text-[12px] flex items-start justify-between border-b border-border-muted py-[4px] text-[12px] md:text-[14px]">
                                 <span className="font-medium text-info">Billing Address:</span>
                                 <div className="text-right">
                                   <div className="font-semibold text-primary">
                                     {order.billingAddress.name}
                                   </div>
-                                  <div className="text-[14px] text-info">
+                                  <div className="sm:text-[14px]text-[12px] text-[12px] text-info md:text-[14px]">
                                     {order.billingAddress.address}
                                   </div>
-                                  <div className="text-[14px] text-info">
+                                  <div className="sm:text-[14px]text-[12px] text-[12px] text-info md:text-[14px]">
                                     {order.billingAddress.phoneNumber}
                                   </div>
                                 </div>
                               </div>
                             )}
-                            <div className="space-y-[8px] pt-[8px] text-[14px]">
+                            <div className="sm:text-[14px]text-[12px] space-y-[8px] pt-[8px] text-[12px] md:text-[14px]">
                               <div className="flex justify-between">
                                 <span className="text-info">Product Amount:</span>
                                 <span className="font-semibold text-primary">
@@ -278,10 +278,10 @@ export default function OrderHistory() {
                                 </div>
                               )}
                               <div className="flex items-center justify-between rounded-lg bg-blue-50 p-[12px]">
-                                <span className="primary text-[16px] font-semibold">
+                                <span className="primary text-[14px] font-semibold sm:text-[16px]">
                                   Total Amount:
                                 </span>
-                                <span className="text-[16px] font-bold">
+                                <span className="text-[14px]sm:text-[16px] font-bold">
                                   Tk. {getTotalAmount(order)}
                                 </span>
                               </div>

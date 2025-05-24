@@ -1,21 +1,22 @@
 import AccountDisplayBox from "@/components/Account/AccountDisplayBox";
 import AccountRouting from "@/components/Account/AccountRouting";
+import MobileAccountRouting from "@/components/Account/MobileAccountRouting";
 import Breadcrumb from "@/components/ui/BreadCrumbs";
 import { ReactNode } from "react";
 
-const layout = ({ children }: { children: ReactNode }) => {
+export default function layout({ children }: { children: ReactNode }) {
   return (
     <div className="main_container flex min-h-[100dvh] flex-col gap-[8px] py-[20px]">
       <Breadcrumb />
-      <div className="flex w-full items-start justify-start gap-[8px]">
-        <div className="flex w-[25%] shrink-0 flex-col gap-[8px]">
+      <div className="w-full items-start justify-start gap-[8px] lg:flex">
+        <div className="hidden w-[25%] shrink-0 flex-col gap-[8px] lg:flex">
           <AccountDisplayBox />
           <AccountRouting />
         </div>
-        {children}
+        <MobileAccountRouting />
+
+        <div className="w-full">{children}</div>
       </div>
     </div>
   );
-};
-
-export default layout;
+}
