@@ -18,7 +18,6 @@ import Image from "next/image";
 export default function OrderHistory() {
   const { data } = useGetMyOrdersQuery();
   const orders = data?.data || [];
-  console.log(orders);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
 
   const toggleOrderExpansion = (orderId: string) => {
@@ -44,22 +43,22 @@ export default function OrderHistory() {
   return (
     <div className="flex w-full flex-col gap-[16px] border-[1px] border-border-muted bg-white p-[16px]">
       {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-[16px] sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Orders</h1>
-          <p className="mt-1 text-gray-600">
+          <h1 className="text-[24px] font-bold">My Orders</h1>
+          <p className="mt-[4px] text-[14px] text-muted">
             View all your order information here ({orders.length || 0} orders)
           </p>
         </div>
       </div>
 
       {/* Orders List */}
-      <div className="space-y-4">
+      <div className="space-y-[16px]">
         {orders.length === 0 ? (
-          <div className="py-12 text-center">
-            <IoCube className="mx-auto mb-4 h-16 w-16 text-gray-300" />
-            <h3 className="mb-2 text-lg font-medium text-gray-900">No orders found</h3>
-            <p className="text-gray-500">You haven&apos;t placed any orders yet.</p>
+          <div className="py-[4px]2 text-center">
+            <IoCube className="mx-auto mb-[16px] h-[64px] w-[64px] text-gray-300" />
+            <h3 className="mb-[8px] text-[18px] font-medium text-primary">No orders found</h3>
+            <p className="text-info">You haven&apos;t placed any orders yet.</p>
           </div>
         ) : (
           orders?.map((order) => {
@@ -67,19 +66,16 @@ export default function OrderHistory() {
             const isExpanded = expandedOrder === order._id;
 
             return (
-              <div
-                key={order._id}
-                className="rounded-lg border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md"
-              >
+              <div key={order._id} className="rounded-lg border border-border-main bg-white">
                 {/* Order Header */}
-                <div className="p-6">
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div className="p-[16px]">
+                  <div className="flex flex-col gap-[16px] lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex-1">
-                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-                        <h3 className="font-semibold text-gray-900">{getOrderNumber(order)}</h3>
-                        <div className="flex items-center gap-2">
+                      <div className="flex flex-col gap-[8px] sm:flex-row sm:items-center sm:gap-[16px]">
+                        <h3 className="font-semibold text-primary">{getOrderNumber(order)}</h3>
+                        <div className="flex items-center gap-[8px]">
                           <div
-                            className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium ${
+                            className={`inline-flex items-center gap-1 rounded-full px-[8px] py-[4px] text-[12px] font-medium ${
                               currentStatus === "pending"
                                 ? "bg-yellow-100 text-yellow-800"
                                 : currentStatus === "on-delivery"
@@ -112,7 +108,7 @@ export default function OrderHistory() {
                           </div>
                         </div>
                       </div>
-                      <div className="mt-2 flex flex-col gap-1 text-sm text-gray-600 sm:flex-row sm:items-center sm:gap-4">
+                      <div className="mt-[8px] flex flex-col gap-1 text-[14px] text-muted sm:flex-row sm:items-center sm:gap-[16px]">
                         <span>Customer: {order.shippingAddress.name}</span>
                         <span className="hidden sm:inline">•</span>
                         <span>Total: Tk. {getTotalAmount(order)}</span>
@@ -121,18 +117,18 @@ export default function OrderHistory() {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <button className="inline-flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200">
-                        <IoDownload className="h-4 w-4" />
+                    <div className="flex items-center gap-[8px]">
+                      <button className="inline-flex cursor-pointer items-center gap-[8px] rounded-lg bg-gray-100 px-[12px] py-[8px] text-[14px] font-medium text-primary transition-colors hover:bg-gray-200">
+                        <IoDownload className="h-[16px] w-[16px]" />
                         Invoice
                       </button>
                       <button
                         onClick={() => toggleOrderExpansion(order._id)}
-                        className="inline-flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 text-sm font-medium text-blue-600 transition-colors hover:bg-blue-100"
+                        className="inline-flex cursor-pointer items-center gap-[8px] rounded-lg bg-primary px-[12px] py-[8px] text-[14px] font-medium text-white transition-colors"
                       >
                         Details
                         <IoChevronDown
-                          className={`h-4 w-4 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                          className={`h-[16px] w-[16px] transition-transform ${isExpanded ? "rotate-180" : ""}`}
                         />
                       </button>
                     </div>
@@ -140,30 +136,28 @@ export default function OrderHistory() {
                 </div>
 
                 {/* Order Items Preview */}
-                <div className="px-6 pb-4">
-                  <div className="flex items-center gap-3 overflow-x-auto">
+                <div className="px-[24px] pb-[16px]">
+                  <div className="flex items-center gap-[12px] overflow-x-auto">
                     {order.orderItems.slice(0, 3).map((item, index) => (
                       <div
                         key={index}
-                        className="flex flex-shrink-0 items-center gap-3 rounded-lg bg-gray-50 p-3"
+                        className="flex flex-shrink-0 items-center gap-[12px] rounded-lg bg-gray-50 p-[12px]"
                       >
                         <Image
-                          src={item.product.image || "/placeholder.svg"}
+                          src={item.product.image || "/avatar.png"}
                           alt={item.product.name}
                           width={48}
                           height={48}
-                          className="h-12 w-12 rounded-md object-cover"
+                          className="h-[48px] w-[48px] rounded-md object-cover"
                         />
                         <div className="min-w-0">
-                          <p className="truncate text-sm font-medium text-gray-900">
-                            {item.product.name}
-                          </p>
-                          <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                          <p className="truncate text-[14px] font-medium">{item.product.name}</p>
+                          <p className="text-[12px] text-muted">Qty: {item.quantity}</p>
                         </div>
                       </div>
                     ))}
                     {order.orderItems.length > 3 && (
-                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-md bg-gray-100 text-xs font-medium text-gray-500">
+                      <div className="flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-md bg-gray-100 text-[12px] font-medium text-muted">
                         +{order.orderItems.length - 3}
                       </div>
                     )}
@@ -172,49 +166,47 @@ export default function OrderHistory() {
 
                 {/* Expanded Order Details */}
                 {isExpanded && (
-                  <div className="border-t border-gray-200 bg-gray-50">
-                    <div className="p-6">
-                      <div className="grid gap-6 md:grid-cols-2">
+                  <div className="border-t border-border-main bg-gray-50">
+                    <div className="p-[24px]">
+                      <div className="grid gap-[24px] md:grid-cols-2">
                         {/* Order Items */}
                         <div>
-                          <h4 className="mb-3 flex items-center gap-2 font-medium text-gray-900">
-                            <IoCube className="h-4 w-4" />
+                          <h4 className="mb-[12px] flex items-center gap-[8px] font-medium">
+                            <IoCube className="h-[16px] w-[16px]" />
                             Order Items
                           </h4>
-                          <div className="space-y-3">
+                          <div className="space-y-[12px]">
                             {order.orderItems.map((item, index) => (
                               <div
                                 key={index}
-                                className="flex items-center gap-3 rounded-lg bg-white p-4 shadow-sm"
+                                className="flex items-center gap-[12px] rounded-lg border border-border-muted bg-white p-[16px]"
                               >
                                 <Image
-                                  src={item.product.image || "/placeholder.svg"}
+                                  src={item.product.image || "/avatar.png"}
                                   alt={item.product.name}
                                   width={64}
                                   height={64}
-                                  className="h-16 w-16 rounded-md border object-cover"
+                                  className="h-[64px] w-[64px] rounded-md border object-cover"
                                 />
                                 <div className="min-w-0 flex-1">
-                                  <h5 className="mb-1 font-medium text-gray-900">
-                                    {item.product.name}
-                                  </h5>
-                                  <div className="mb-2 flex items-center gap-3 text-sm text-gray-500">
+                                  <h5 className="mb-[4px] font-medium">{item.product.name}</h5>
+                                  <div className="mb-[8px] flex items-center gap-[12px] text-[14px] text-muted">
                                     {item.size && (
-                                      <span className="rounded bg-gray-100 px-2 py-1">
+                                      <span className="rounded bg-gray-100 px-[8px] py-[4px]">
                                         Size: {item.size}
                                       </span>
                                     )}
                                     {item.color && (
-                                      <span className="rounded bg-gray-100 px-2 py-1">
+                                      <span className="rounded bg-gray-100 px-[8px] py-[4px]">
                                         Color: {item.color}
                                       </span>
                                     )}
                                   </div>
                                   <div className="flex items-center justify-between">
-                                    <span className="text-sm text-gray-600">
+                                    <span className="text-[14px] text-info">
                                       Qty: {item.quantity}
                                     </span>
-                                    <span className="text-lg font-semibold text-gray-900">
+                                    <span className="text-[18px] font-semibold">
                                       Tk. {Math.floor(item.product.price * item.quantity)}
                                     </span>
                                   </div>
@@ -226,70 +218,70 @@ export default function OrderHistory() {
 
                         {/* Order Info */}
                         <div>
-                          <h4 className="mb-3 flex items-center gap-2 font-medium text-gray-900">
-                            <IoEye className="h-4 w-4" />
+                          <h4 className="mb-[12px] flex items-center gap-[8px] font-medium text-primary">
+                            <IoEye className="h-[16px] w-[16px]" />
                             Order Information
                           </h4>
-                          <div className="space-y-4 rounded-lg bg-white p-4 shadow-sm">
-                            <div className="flex items-center justify-between border-b border-gray-100 py-2">
-                              <span className="font-medium text-gray-600">Order Number:</span>
-                              <span className="font-semibold text-gray-900">
+                          <div className="rounded-lg border border-border-muted bg-white p-[16px]">
+                            <div className="flex items-center justify-between border-b border-border-muted pb-[12px] text-[14px]">
+                              <span className="font-medium text-info">Order Number:</span>
+                              <span className="font-semibold text-primary">
                                 {getOrderNumber(order)}
                               </span>
                             </div>
-                            <div className="flex items-start justify-between border-b border-gray-100 py-2">
-                              <span className="font-medium text-gray-600">Customer:</span>
+                            <div className="flex items-start justify-between border-b border-border-muted py-[12px] text-[14px]">
+                              <span className="font-medium text-info">Customer:</span>
                               <div className="text-right">
-                                <div className="font-semibold text-gray-900">
+                                <div className="font-semibold text-primary">
                                   {order.shippingAddress.name}
                                 </div>
-                                <div className="text-sm text-gray-600">
+                                <div className="text-[14px] text-info">
                                   {order.shippingAddress.phoneNumber}
                                 </div>
                               </div>
                             </div>
-                            <div className="flex items-start justify-between border-b border-gray-100 py-2">
-                              <span className="font-medium text-gray-600">Delivery Address:</span>
-                              <span className="max-w-xs text-right font-semibold text-gray-900">
+                            <div className="flex items-start justify-between border-b border-border-muted py-[12px] text-[14px]">
+                              <span className="font-medium text-info">Delivery Address:</span>
+                              <span className="max-w-[320px] text-right font-semibold text-primary">
                                 {formatAddress(order.shippingAddress)}
                               </span>
                             </div>
                             {order.billingAddress && (
-                              <div className="flex items-start justify-between border-b border-gray-100 py-2">
-                                <span className="font-medium text-gray-600">Billing Address:</span>
+                              <div className="flex items-start justify-between border-b border-border-muted py-[4px] text-[14px]">
+                                <span className="font-medium text-info">Billing Address:</span>
                                 <div className="text-right">
-                                  <div className="font-semibold text-gray-900">
+                                  <div className="font-semibold text-primary">
                                     {order.billingAddress.name}
                                   </div>
-                                  <div className="text-sm text-gray-600">
+                                  <div className="text-[14px] text-info">
                                     {order.billingAddress.address}
                                   </div>
-                                  <div className="text-sm text-gray-600">
+                                  <div className="text-[14px] text-info">
                                     {order.billingAddress.phoneNumber}
                                   </div>
                                 </div>
                               </div>
                             )}
-                            <div className="space-y-2 pt-2">
+                            <div className="space-y-[8px] pt-[8px] text-[14px]">
                               <div className="flex justify-between">
-                                <span className="text-gray-600">Product Amount:</span>
-                                <span className="font-medium">
+                                <span className="text-info">Product Amount:</span>
+                                <span className="font-semibold text-primary">
                                   Tk. {Math.floor(order.totalProductAmount)}
                                 </span>
                               </div>
                               {order.deliveryFee && (
                                 <div className="flex justify-between">
-                                  <span className="text-gray-600">Delivery Fee:</span>
-                                  <span className="font-medium">
+                                  <span className="text-info">Delivery Fee:</span>
+                                  <span className="font-semibold text-primary">
                                     Tk. {Math.floor(order.deliveryFee)}
                                   </span>
                                 </div>
                               )}
-                              <div className="flex items-center justify-between rounded-lg bg-blue-50 px-3 py-3">
-                                <span className="text-lg font-semibold text-blue-800">
+                              <div className="flex items-center justify-between rounded-lg bg-blue-50 p-[12px]">
+                                <span className="primary text-[16px] font-semibold">
                                   Total Amount:
                                 </span>
-                                <span className="text-xl font-bold text-blue-900">
+                                <span className="text-[16px] font-bold">
                                   Tk. {getTotalAmount(order)}
                                 </span>
                               </div>
