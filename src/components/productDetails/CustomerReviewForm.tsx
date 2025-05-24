@@ -120,7 +120,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
             </button>
             {(!user || user?.role !== "user") && (
               <p className="mt-[10px] text-[12px] text-red-500">
-                You need to be logged in as a user to ask a question.
+                You need to be logged in as a user to review a product.
               </p>
             )}
           </Form>
