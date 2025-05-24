@@ -27,7 +27,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
       </Link>
 
       {/* Icons */}
-      <ProductHoverIcons />
+      <ProductHoverIcons product={product} />
 
       {/* Content section */}
       <div className="flex h-full flex-col justify-between p-[8px]">

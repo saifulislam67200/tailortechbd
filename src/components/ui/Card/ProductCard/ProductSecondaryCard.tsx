@@ -43,7 +43,7 @@ const ProductSecondaryCard: React.FC<ProductCardProps> = ({ product, className }
         </Link>
       </div>
 
-      <ProductHoverIcons className="top-[30%]">
+      <ProductHoverIcons product={product} className="top-[30%]">
         <ProductAddToCartModal product={product}>
           <button className="cursor-pointer rounded-full border border-quaternary bg-white p-[8px] shadow-md hover:bg-[#404040] hover:text-white">
             <FaCartArrowDown className="text-[15px]" />
