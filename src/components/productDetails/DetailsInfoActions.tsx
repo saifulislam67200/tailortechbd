@@ -97,7 +97,7 @@ const DetailsInfoActions = ({ product }: { product: IProduct }) => {
               key={_id}
               type="button"
               aria-label={`Select size ${size}`}
-              className={`h-[30px] w-[30px] cursor-pointer text-[12px] font-medium transition-all duration-200 ${
+              className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
                 activeSize === size
                   ? "bg-primary text-white shadow-none"
                   : "bg-white text-black shadow"

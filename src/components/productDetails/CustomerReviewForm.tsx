@@ -113,14 +113,14 @@ const ReviewForm = ({ productId }: { productId: string }) => {
             {/* Submit Button */}
             <button
               type="submit"
-              className={`flex h-[35px] w-full cursor-pointer items-center justify-center rounded-[5px] ${user && user.role === "user" ? "bg-primary" : "pointer-events-none bg-info"} text-[14px] font-semibold text-white hover:text-black sm:w-[127px]`}
+              className={`flex h-[35px] w-full cursor-pointer items-center justify-center rounded-[5px] ${user && user.role === "user" ? "bg-primary" : "pointer-events-none bg-info"} text-[14px] font-semibold text-white opacity-85 hover:text-black hover:opacity-100 sm:w-[127px]`}
               disabled={isSubmitting || isLoading || !user || user?.role !== "user"}
             >
               {isLoading ? "Submitting..." : "Submit Question"}
             </button>
             {(!user || user?.role !== "user") && (
               <p className="mt-[10px] text-[12px] text-red-500">
-                You need to be logged in as a user to ask a question.
+                You need to be logged in as a user to review a product.
               </p>
             )}
           </Form>

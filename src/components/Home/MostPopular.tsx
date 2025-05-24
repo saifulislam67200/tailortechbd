@@ -25,7 +25,6 @@ const MostPopular = async () => {
   }
 
   const data = await res.json();
-  console.log(data);
   const collections: IProduct[] = data?.data || [];
 
   return (

@@ -45,7 +45,7 @@ const QuestionAnswerForm = ({ productId }: { productId: string }) => {
     <>
       <h1 className="mt-[12px] text-[16px] font-bold text-black">Your Question</h1>
       <Formik
-        initialValues={{ name: user?.fullName as string, question: "" }}
+        initialValues={{ name: (user?.fullName as string) || "", question: "" }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
@@ -61,7 +61,7 @@ const QuestionAnswerForm = ({ productId }: { productId: string }) => {
               />
               <ErrorMessage name="name" component="div" className="text-[12px] text-red-500" />
             </div>
-            <div className="mt-[10px]">
+            <div className="mt-[10px] mb-4">
               <label htmlFor="question">Question</label>
               <Field
                 id="question"
@@ -73,16 +73,11 @@ const QuestionAnswerForm = ({ productId }: { productId: string }) => {
             </div>
             <button
               type="submit"
-              className={`flex h-[35px] w-full cursor-pointer items-center justify-center rounded-[5px] ${user && user.role === "user" ? "bg-primary" : "pointer-events-none bg-info"} text-[14px] font-semibold text-white hover:text-black sm:w-[127px]`}
-              disabled={isSubmitting || isLoading || !user || user?.role !== "user"}
+              className={`flex h-[35px] w-full cursor-pointer items-center justify-center rounded-[5px] bg-primary text-[14px] font-semibold text-white opacity-85 hover:opacity-100 sm:w-[127px]`}
+              disabled={isSubmitting || isLoading}
             >
               {isLoading ? "Submitting..." : "Submit Question"}
             </button>
-            {(!user || user?.role !== "user") && (
-              <p className="mt-[10px] text-[12px] text-red-500">
-                You need to be logged in as a user to ask a question.
-              </p>
-            )}
           </Form>
         )}
       </Formik>

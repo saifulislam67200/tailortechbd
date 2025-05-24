@@ -16,7 +16,6 @@ const ProductDetailsSlider = ({ product }: { product: IProduct }) => {
 
   const images = [...product?.images];
 
-
   return (
     <section className="bg-white px-[10px] py-[14px] md:px-[20px]">
       <div className="flex flex-col-reverse items-center lg:flex-row lg:items-start lg:gap-[20px] xl:gap-[30px]">
