@@ -48,7 +48,10 @@ const ReviewForm = ({ productId }: { productId: string }) => {
   };
 
   return (
-    <div className="mt-[15px] w-full rounded-[5px] border border-quaternary bg-white p-[20px]">
+    <div
+      id="customer-review-form"
+      className="mt-[15px] w-full rounded-[5px] border border-quaternary bg-white p-[20px]"
+    >
       <Formik
         initialValues={{ name: user?.fullName as string, reviewText: "", starRating: 0 }}
         validationSchema={validationSchema}

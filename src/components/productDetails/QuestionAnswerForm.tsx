@@ -42,7 +42,7 @@ const QuestionAnswerForm = ({ productId }: { productId: string }) => {
   };
 
   return (
-    <>
+    <div id="question-answer-form" className="w-full">
       <h1 className="mt-[12px] text-[16px] font-bold text-black">Your Question</h1>
       <Formik
         initialValues={{ name: (user?.fullName as string) || "", question: "" }}
@@ -81,7 +81,7 @@ const QuestionAnswerForm = ({ productId }: { productId: string }) => {
           </Form>
         )}
       </Formik>
-    </>
+    </div>
   );
 };
 
