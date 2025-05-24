@@ -7,7 +7,7 @@ import { GoChevronDown } from "react-icons/go";
 
 const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: number }) => {
   const path = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState(0);
 

@@ -9,8 +9,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const { data, isSuccess, isError, isFetching } = useGetAuthorQuery(undefined);
 
-  console.log("AuthProvider", data, isSuccess, isError, isFetching);
-
   useEffect(() => {
     dispatch(setLoading(isFetching));
 
