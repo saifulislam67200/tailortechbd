@@ -51,7 +51,7 @@ const ChangePassword = () => {
         onSubmit={handleSubmit}
       >
         <Form>
-          <div className="grid grid-cols-3 gap-[8px]">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-[8px]">
             <div className="flex w-full flex-col gap-[6px]">
               <label className="text-[12px] text-strong">Old Password</label>
               <Field

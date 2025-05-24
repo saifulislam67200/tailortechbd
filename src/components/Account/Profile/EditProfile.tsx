@@ -120,7 +120,7 @@ const EditProfile = () => {
         enableReinitialize
       >
         <Form>
-          <div className="grid grid-cols-2 gap-[8px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-[8px]">
             {/* Full Name */}
             <div className="flex w-full flex-col gap-[6px]">
               <label className="text-[12px] text-strong">Full Name</label>
