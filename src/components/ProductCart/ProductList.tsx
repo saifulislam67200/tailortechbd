@@ -28,19 +28,36 @@ const ProductList = () => {
           Need Help?
         </p>
       </div>
-      <div className="mt-[27px] flex items-center justify-between pr-[12px] pl-[20px] md:pl-[35px]">
-        <div className="flex items-center gap-[35px]">
-          <input onChange={() => { }} checked={cartItems?.length === checkedItems?.length} onClick={() => handleSelectAll()} type="checkbox" name="" id="select-all" className="cursor-pointer" />
-          <label htmlFor="select-all" className="cursor-pointer text-[16px]"> Check All </label>
+      {cartItems?.length > 0 && (
+        <div className="mt-[27px] flex items-center justify-between pr-[12px] pl-[20px] md:pl-[35px]">
+          <div className="flex items-center gap-[35px]">
+            <input
+              onChange={() => {}}
+              checked={cartItems?.length > 0 && cartItems?.length === checkedItems?.length}
+              onClick={() => handleSelectAll()}
+              type="checkbox"
+              name=""
+              id="select-all"
+              className="cursor-pointer"
+            />
+            <label htmlFor="select-all" className="cursor-pointer text-[16px]">
+              {" "}
+              Check All{" "}
+            </label>
+          </div>
+          <button
+            title="Delete Checked Products"
+            onClick={handleDeleteCheckedProducts}
+            className={`cursor-pointer rounded-full ${checkedItems?.length > 0 ? "bg-primary text-white" : "bg-quaternary"} px-[10px] font-bold text-info`}
+          >
+            Delete
+          </button>
         </div>
-        <button onClick={handleDeleteCheckedProducts} className="rounded-full bg-quaternary px-[10px] font-bold text-info">
-          Delete
-        </button>
-      </div>
+      )}
       {cartItems?.length > 0 ? (
         cartItems?.map((item) => <CartCard key={item?.id} item={item} />)
       ) : (
-        <h3 className="mt-[30px] text-center text-[16px] text-info">
+        <h3 className="mt-[50px] text-center text-[16px] text-info">
           Cart Empty, No Product Added
         </h3>
       )}

@@ -2,6 +2,7 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { addItemsOnCheckout } from "@/redux/features/checkout/checkout.slice";
 import { IOrderItem } from "@/types/order";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const DetailsAndPrice = () => {
@@ -69,9 +70,12 @@ const DetailsAndPrice = () => {
         </ul>
       </div>
 
-      <button className="mb-[8px] flex h-[26px] w-full items-center justify-center bg-black text-[12px] font-bold text-white">
+      <Link
+        href="/"
+        className="mb-[8px] flex h-[26px] w-full cursor-pointer items-center justify-center bg-black text-[12px] font-bold text-white"
+      >
         Continue Shopping
-      </button>
+      </Link>
       <button
         disabled={cartItems?.length === 0}
         onClick={handleCheckout}

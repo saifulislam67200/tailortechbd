@@ -22,7 +22,7 @@ const ProductDetails: React.FC<IProps> = async ({ params }) => {
   const data = (await res.json()) as { data: IProduct };
   const product = data?.data;
 
-  if (!product) {
+  if (!product || Object.keys(product).length === 0) {
     return notFound();
   }
 

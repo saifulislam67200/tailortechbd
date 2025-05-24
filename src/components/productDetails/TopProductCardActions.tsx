@@ -5,6 +5,7 @@ import { IProduct } from "@/types/product";
 import { BsEye } from "react-icons/bs";
 import { FiRefreshCw } from "react-icons/fi";
 import { toast } from "sonner";
+// import ProductAddToCartModal from "../ui/ProductAddToCartModal";
 
 const TopProductCardActions = ({ product }: { product: IProduct }) => {
   const dispatch = useAppDispatch();
@@ -25,6 +26,8 @@ const TopProductCardActions = ({ product }: { product: IProduct }) => {
     dispatch(addToCart(payload));
     toast.success("Added to cart!", { id: "addToCartToastId" });
   };
+
+  console.log(product, "product in TopProductCardActions");
 
   return (
     <div className="mt-[10px] flex items-center gap-[8px]">
