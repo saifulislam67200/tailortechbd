@@ -1,11 +1,10 @@
 "use client";
-import React from "react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import { useAppSelector } from "@/hooks/redux";
 import { useCreateQuestionMutation } from "@/redux/features/Q&A/questionAndAnswer.api";
-import { toast } from "sonner";
 import { IQueruMutationErrorResponse } from "@/types";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { toast } from "sonner";
+import * as Yup from "yup";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
@@ -42,7 +41,7 @@ const QuestionAnswerForm = ({ productId }: { productId: string }) => {
   };
 
   return (
-    <div id="question-answer-form" className="w-full">
+    <div className="w-full">
       <h1 className="mt-[12px] text-[16px] font-bold text-black">Your Question</h1>
       <Formik
         initialValues={{ name: (user?.fullName as string) || "", question: "" }}

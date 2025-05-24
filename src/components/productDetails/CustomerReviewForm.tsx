@@ -1,10 +1,10 @@
 "use client";
-import { useCreateReviewMutation } from "@/redux/features/review/review.api";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { toast } from "sonner";
 import { useAppSelector } from "@/hooks/redux";
+import { useCreateReviewMutation } from "@/redux/features/review/review.api";
 import { IQueruMutationErrorResponse } from "@/types";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { toast } from "sonner";
+import * as Yup from "yup";
 
 interface ReviewFormValues {
   name: string;
@@ -48,10 +48,7 @@ const ReviewForm = ({ productId }: { productId: string }) => {
   };
 
   return (
-    <div
-      id="customer-review-form"
-      className="mt-[15px] w-full rounded-[5px] border border-quaternary bg-white p-[20px]"
-    >
+    <div className="mt-[15px] w-full rounded-[5px] border border-quaternary bg-white p-[20px]">
       <Formik
         initialValues={{ name: user?.fullName as string, reviewText: "", starRating: 0 }}
         validationSchema={validationSchema}

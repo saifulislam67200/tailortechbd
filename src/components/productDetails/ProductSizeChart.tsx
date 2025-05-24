@@ -9,7 +9,12 @@ const ProductSizeChart = ({ chart }: { chart: string[][] }) => {
 
   return (
     <div className="mt-[30px]">
-      <h3 className="mb-3 text-[16px] font-semibold">Size Chart</h3>
+      <div className="mb-[15px] flex flex-col gap-[3px]">
+        <p className="text-[16px] font-semibold">Size chart - In inches</p>
+        <span className="text-[12px] text-muted">
+          * The size chart is approximate and may not be exact (±3%).
+        </span>
+      </div>
       <div className="overflow-x-auto">
         <table className="min-w-full border border-quaternary">
           <thead>
@@ -17,7 +22,7 @@ const ProductSizeChart = ({ chart }: { chart: string[][] }) => {
               {headers?.map((header, index) => (
                 <th
                   key={index}
-                  className="border border-quaternary px-4 py-2 text-left font-medium"
+                  className="border border-quaternary bg-primary/80 px-4 py-2 text-left font-medium text-white"
                 >
                   {header}
                 </th>

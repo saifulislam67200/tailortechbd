@@ -45,7 +45,7 @@ const EditProductView = ({ slug }: { slug: string }) => {
     }
 
     toast.success("Product updated successfully");
-    router.push("/dashboard/admin/products");
+    router.push("/dashboard/products");
   };
 
   return (

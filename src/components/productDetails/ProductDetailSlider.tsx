@@ -1,8 +1,7 @@
 "use client";
-import { useSelectedColor } from "@/contexts/SelectColor.context";
-import { IProduct } from "@/types/product";
+import { IColor, IProduct } from "@/types/product";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
@@ -11,18 +10,34 @@ import { FreeMode, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
 
-const ProductDetailsSlider = ({ product }: { product: IProduct }) => {
+const ProductDetailsSlider = ({
+  product,
+  selectedColor,
+}: {
+  product: Pick<IProduct, "images" | "colors">;
+  selectedColor: IColor | undefined;
+}) => {
+  console.log("selectedColor", selectedColor);
+
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const { selectedColor } = useSelectedColor();
 
-  const colorObj = product?.colors.find((c) => c.color === selectedColor);
-  const images = colorObj?.images?.length ? colorObj.images : product.images;
+  const colorImages: string[] = product.colors?.flatMap((c) => c?.images || []) || [];
+  const images = [...product.images, ...colorImages];
+
+  // 🔁 Update active index on color change
+  useEffect(() => {
+    if (selectedColor?.images?.length) {
+      const firstColorImage = selectedColor.images[0];
+      const newIndex = images.findIndex((img) => img === firstColorImage);
+      if (newIndex !== -1) setActiveIndex(newIndex);
+    }
+  }, [selectedColor, images]);
 
   return (
     <section className="bg-white px-[10px] py-[14px] md:px-[20px]">
       <div className="flex flex-col-reverse items-center lg:flex-row lg:items-start lg:gap-[20px] xl:gap-[30px]">
-        {/* thumbnail images ,vertical on desktop, horizontal on mobile */}
+        {/* Thumbnails */}
         <div className="mt-[5px] h-fit w-full overflow-hidden md:max-h-[350px] lg:w-fit 2xl:max-h-[655px]">
           <div className="overflow-x-auto lg:w-[80px] lg:overflow-x-hidden lg:overflow-y-auto">
             <Swiper
@@ -43,13 +58,13 @@ const ProductDetailsSlider = ({ product }: { product: IProduct }) => {
               }}
               onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
             >
-              {images?.map((img, index) => (
+              {images.map((img, index) => (
                 <SwiperSlide key={index} className="!h-[80px] !w-[80px]">
                   <div
                     className={`relative h-[60px] w-[60px] cursor-pointer overflow-hidden border p-[5px] transition-all duration-300 md:h-[80px] md:w-[80px] ${activeIndex === index ? "border-info-light" : "border-transparent"}`}
                   >
                     <Image
-                      src={img}
+                      src={img || "/"}
                       width={80}
                       height={200}
                       className="h-full w-full object-cover"
@@ -63,7 +78,7 @@ const ProductDetailsSlider = ({ product }: { product: IProduct }) => {
           </div>
         </div>
 
-        {/* main Image */}
+        {/* Main Image */}
         <Swiper
           spaceBetween={10}
           thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
@@ -72,7 +87,7 @@ const ProductDetailsSlider = ({ product }: { product: IProduct }) => {
           onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
           initialSlide={activeIndex}
         >
-          {images?.map((img, index) => (
+          {images.map((img, index) => (
             <SwiperSlide key={index}>
               <div className="h-full w-full border border-info-light p-[5px] lg:p-[0px] 2xl:min-h-[655px] 2xl:max-w-[730px]">
                 <Image

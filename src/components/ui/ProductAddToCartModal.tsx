@@ -20,11 +20,11 @@ const ProductAddToCartModal = ({ children, product }: Props) => {
   const dispatch = useDispatch();
 
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>(
-    product?.colors[0] || undefined
+    product?.colors?.[0] || undefined
   );
 
   const [selectedSize, setSelectedSize] = useState<ISize | undefined>(
-    selectedColor?.sizes[0] || undefined
+    selectedColor?.sizes?.[0] || undefined
   );
 
   const handleClick = () => {

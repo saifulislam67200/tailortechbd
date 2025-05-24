@@ -21,9 +21,14 @@ const Title: React.FC<SectionTitleProps> = ({ title, href, linkText, className }
         {title}
       </h2>
 
-      <Link href={`${href}`} className="text-[14px] font-bold text-primary">
-        {linkText}
-      </Link>
+      {href && linkText && (
+        <Link
+          href={href}
+          className="clip-path relative -mb-[2px] inline-block bg-primary py-[2px] pr-[8px] pl-[40px] text-[14px] font-bold text-white md:text-[14px]"
+        >
+          {linkText}
+        </Link>
+      )}
     </div>
   );
 };

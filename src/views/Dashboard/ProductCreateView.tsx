@@ -24,7 +24,7 @@ const ProductCreateView = () => {
     }
 
     toast.success("Product created successfully");
-    router.push("/dashboard/admin/products");
+    router.push("/dashboard/products");
 
     return;
   };

@@ -92,7 +92,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
               </>
             ) : (
               <Link
-                href="/dashboard/admin"
+                href="/dashboard"
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
               >
                 Dashboard
