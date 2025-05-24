@@ -1,33 +1,37 @@
-import { footerLinks, socialLinks } from "@/utils/site";
+import { socialLinks } from "@/utils/site";
 import Image from "next/image";
 import Link from "next/link";
+import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="relative w-full overflow-hidden bg-white">
-      {/* <SubcribeForm/> */}
-      <div className="relative w-full bg-primary py-[40px]">
-        <div className="main_container relative z-[2] flex w-full items-center justify-between">
-          <div className="flex flex-col gap-[10px]">
-            <Image
-              src={"/images/logos/logo-foreground.png"}
-              width={150}
-              height={150}
-              alt="TailerTech"
-            />
-            <p className="max-w-[400px] text-start text-[12px] text-white">
-              we believe fashion is more than just clothing — it&apos;s a statement of identity. Our
-              brand blends modern design with timeless comfort, offering high-quality apparel for
-              individuals who value style, authenticity, and confidence.
+    <footer className="relative w-full overflow-hidden text-white">
+      {/* Main Footer Content */}
+      <div className="main_container relative mx-auto w-full bg-primary px-4 py-[40px]">
+        <div className="flex flex-col gap-[48px] lg:flex-row">
+          {/* Company Info - Left Side */}
+          <div className="space-y-[16px] lg:w-[30%]">
+            <div className="flex items-center space-x-2">
+              <Image
+                src={"/images/logos/logo-foreground.png"}
+                width={100}
+                height={100}
+                alt="TailerTech"
+              />
+            </div>
+            <p className="w-full max-w-[300px] text-[14px] leading-relaxed">
+              Where Tradition Meets Innovation. We blend the timeless art of tailoring with
+              cutting-edge fashion technology to bring you modern, perfectly fitted, and stylish
+              apparel.
             </p>
-            <div className="mt-[20px] flex items-center justify-start gap-[8px]">
+            <div className="flex space-x-4">
               {socialLinks.map(({ icon: Icon, url, name }, i) => (
                 <Link
                   key={i + name}
                   href={url}
                   target="_blank"
-                  rel="noopener noreferrer"
-                  className="center relative top-0 aspect-square w-[30px] rounded-full bg-white text-primary duration-[0.1s] hover:top-[-5px]"
+                  rel="noopener-noreferrer"
+                  className="center relative top-0 aspect-square w-[30px] rounded-full bg-white text-primary"
                 >
                   <Icon className="text-[20px]" />
                 </Link>
@@ -35,28 +39,111 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-[20px]">
-            {footerLinks.map(({ contents, label }, i) => (
-              <div key={label + i} className="flex w-[300px] flex-col gap-[20px]">
-                <span className="relative text-[16px] font-[500] text-white uppercase before:absolute before:bottom-[-8px] before:left-0 before:h-[2px] before:w-[40px] before:bg-white/20">
-                  {label}
-                </span>
-                <ul className="flex flex-col gap-[8px]">
-                  {contents.map(({ label, url }, i) => (
-                    <li
-                      key={i + label + url}
-                      className="relative left-0 duration-[0.3s] hover:left-[5px]"
-                    >
-                      <Link href={url} className="text-[14px] text-white hover:text-secondary">
-                        {label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+          {/* Right Side*/}
+          <div className="grid grid-cols-1 gap-[32px] md:grid-cols-3 lg:w-[70%]">
+            {/* Quick Links */}
+            <div className="space-y-[16px]">
+              <h4 className="text-lg font-semibold">Quick Links</h4>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/about" className="text-[14px] transition-colors hover:text-white">
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/products" className="text-[14px] transition-colors hover:text-white">
+                    Our Products
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className="text-[14px] transition-colors hover:text-white">
+                    Contact Us
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Customer Service */}
+            <div className="space-y-[16px]">
+              <h4 className="text-lg font-semibold">Customer Service</h4>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/faq" className="text-[14px] transition-colors hover:text-white">
+                    FAQ
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/return-refund-cancellation"
+                    className="text-[14px] transition-colors hover:text-white"
+                  >
+                    Return & Refund
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/terms-conditions"
+                    className="text-[14px] transition-colors hover:text-white"
+                  >
+                    Terms & Conditions
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/privacy-policy"
+                    className="text-[14px] transition-colors hover:text-white"
+                  >
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/cookie-policy"
+                    className="text-[14px] transition-colors hover:text-white"
+                  >
+                    Cookie Policy
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Contact Info */}
+            <div className="space-y-[16px]">
+              <h4 className="text-lg font-semibold">Get In Touch</h4>
+              <div className="space-y-3">
+                <div className="flex items-start space-x-3">
+                  <FaMapMarkerAlt size={16} className="mt-1 flex-shrink-0 text-white" />
+                  <div>
+                    <p className="text-[14px]">
+                      123 Fashion Street, Gulshan-1
+                      <br />
+                      Dhaka-1212, Bangladesh
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <FaPhone size={16} className="flex-shrink-0 text-white" />
+                  <p className="text-[14px]">+880 1XXX-XXXXXX</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <FaEnvelope size={16} className="flex-shrink-0 text-white" />
+                  <p className="text-[14px]">info@tailortech.com</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <FaClock size={16} className="mt-1 flex-shrink-0 text-white" />
+                  <div>
+                    <p className="text-[14px]">
+                      Mon - Sat: 9:00 AM - 8:00 PM
+                      <br />
+                      Sunday: 10:00 AM - 6:00 PM
+                    </p>
+                  </div>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
+
         <Image
           src={"/images/logos/logo-symbol-foreground.png"}
           width={400}
@@ -65,8 +152,14 @@ const Footer = () => {
           className="absolute top-0 right-[-5%] z-[1] opacity-[5%] select-none"
         />
       </div>
-      <div className="w-full bg-black/90 py-[10px] text-center text-[14px] text-white">
-        Copyright © {new Date().getFullYear()} TechTailor All Right Reserved
+
+      {/* Bottom Footer */}
+      <div className="border-t border-border-main bg-primary">
+        <div className="main_container mx-auto px-[16px] py-[16px]">
+          <p className="text-center text-[14px] text-white">
+            © {new Date().getFullYear()} TailorTech Limited. All rights reserved.
+          </p>
+        </div>
       </div>
     </footer>
   );

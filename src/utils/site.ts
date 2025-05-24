@@ -4,17 +4,17 @@ import { MdEmail } from "react-icons/md";
 export const socialLinks = [
   {
     name: "facebook",
-    url: "https://www.facebook.com/yourusername",
+    url: "https://www.facebook.com",
     icon: FaFacebookF,
   },
   {
     name: "youtube",
-    url: "https://www.youtube.com/yourusername",
+    url: "https://www.youtube.com",
     icon: FaYoutube,
   },
   {
     name: "instagram",
-    url: "https://www.instagram.com/yourusername",
+    url: "https://www.instagram.com",
     icon: FaInstagram,
   },
   {
