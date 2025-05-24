@@ -148,7 +148,7 @@ const CookiePolicy = () => {
               visit):
             </p>
 
-            <div className="mt-[16px] rounded-md border p-[16px]">
+            <div className="mt-[16px] rounded-md border border-border-main p-[16px]">
               <h4 className="font-medium">Essential website cookies:</h4>
               <p className="mt-2">Name: session</p>
               <p>Purpose: Used to maintain an anonymous user session by the server.</p>
@@ -498,7 +498,7 @@ const CookiePolicy = () => {
               করে পরিবর্তিত হতে পারে):
             </p>
 
-            <div className="mt-[16px] rounded-md border p-[16px]">
+            <div className="mt-[16px] rounded-md border border-border-main p-[16px]">
               <h4 className="font-medium">অপরিহার্য ওয়েবসাইট কুকিজ:</h4>
               <p className="mt-2">নাম: সেশন</p>
               <p>উদ্দেশ্য: সার্ভার দ্বারা একটি বেনামী ব্যবহারকারী সেশন বজায় রাখতে ব্যবহৃত হয়।</p>
