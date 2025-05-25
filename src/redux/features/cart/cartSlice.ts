@@ -90,7 +90,7 @@ const cartSlice = createSlice({
     },
 
     deleteCheckedItems(state) {
-      state.items = state.items.filter((item) => item.isChecked);
+      state.items = state.items.filter((item) => !item.isChecked);
     },
     toggleSelectAll(state) {
       const isAllChecked = state.items.every((item) => item.isChecked);

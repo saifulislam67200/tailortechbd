@@ -9,6 +9,7 @@ import "swiper/css/thumbs";
 import { FreeMode, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
+import MagnifierPortal from "../ui/MagnifierPortal";
 
 const ProductDetailsSlider = ({
   product,
@@ -17,7 +18,7 @@ const ProductDetailsSlider = ({
   product: Pick<IProduct, "images" | "colors">;
   selectedColor: IColor | undefined;
 }) => {
-  console.log("selectedColor", selectedColor);
+  const ZOOM_LEVEL = 2.5;
 
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
   const swiperRef = useRef<SwiperType>(null);
@@ -25,18 +26,60 @@ const ProductDetailsSlider = ({
   const colorImages: string[] = product.colors?.flatMap((c) => c?.images || []) || [];
   const images = [...product.images, ...colorImages];
 
-  // 🔁 Update active index on color change
+  const [zoomable, setZoomable] = useState(false);
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [imageRect, setImageRect] = useState<DOMRect | null>(null);
+  const [currentZoomImg, setCurrentZoomImg] = useState("");
+
   useEffect(() => {
     if (selectedColor?.images?.length) {
       const firstColorImage = selectedColor.images[0];
       const newIndex = images.findIndex((img) => img === firstColorImage);
-      console.log(newIndex, "fasdf");
-
       if (newIndex !== -1) {
         swiperRef.current?.slideTo(newIndex);
       }
     }
   }, [selectedColor, images]);
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    const imgEl = e.currentTarget.querySelector("img");
+    if (imgEl) {
+      const rect = imgEl.getBoundingClientRect();
+      setImageSize({ width: rect.width, height: rect.height });
+      setImageRect(rect);
+      setCurrentZoomImg((imgEl as HTMLImageElement).src);
+      setZoomable(true);
+      updatePosition(e);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setZoomable(false);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    updatePosition(e);
+  };
+
+  const updatePosition = (e: React.MouseEvent<HTMLDivElement>) => {
+    const imgEl = e.currentTarget.querySelector("img");
+    if (!imgEl) return;
+    const rect = imgEl.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const zoomedWidth = rect.width * ZOOM_LEVEL;
+    const zoomedHeight = rect.height * ZOOM_LEVEL;
+
+    let bgX = -x * ZOOM_LEVEL + rect.width / 2;
+    let bgY = -y * ZOOM_LEVEL + rect.height / 2;
+
+    // Clamp background position
+    bgX = Math.max(Math.min(bgX, 0), rect.width - zoomedWidth);
+    bgY = Math.max(Math.min(bgY, 0), rect.height - zoomedHeight);
+
+    setPosition({ x: bgX, y: bgY });
+  };
 
   return (
     <section className="bg-white px-[10px] py-[14px] md:px-[20px]">
@@ -48,19 +91,26 @@ const ProductDetailsSlider = ({
           thumbs={{ swiper: thumbsSwiper }}
           modules={[Thumbs]}
           spaceBetween={10}
-          className="main-slider h-full w-full overflow-hidden"
+          className="main-slider h-full w-full"
         >
           {images.map((img, index) => (
             <SwiperSlide key={index}>
-              <div className="aspect-square h-full max-h-[600px] w-full border border-info-light p-[5px] lg:p-[0px]">
-                <Image
-                  src={img}
-                  width={1000}
-                  height={1000}
-                  className="mx-auto h-full w-auto max-w-full object-contain"
-                  alt={`Product image ${index + 1}`}
-                  priority={index < 2}
-                />
+              <div
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onMouseMove={handleMouseMove}
+                className="group flex w-full flex-col items-center justify-center gap-4 lg:flex-row"
+              >
+                <div className="aspect-square h-full max-h-[600px] w-full border border-info-light p-[5px] lg:p-[0px]">
+                  <Image
+                    src={img}
+                    width={1000}
+                    height={1000}
+                    className="mx-auto h-full w-auto max-w-full object-contain"
+                    alt={`Product image ${index + 1}`}
+                    priority={index < 2}
+                  />
+                </div>
               </div>
             </SwiperSlide>
           ))}
@@ -95,6 +145,18 @@ const ProductDetailsSlider = ({
           ))}
         </Swiper>
       </div>
+
+      {/* Magnifier rendered through portal */}
+      <MagnifierPortal
+        className="hidden lg:block"
+        show={zoomable}
+        imageUrl={currentZoomImg}
+        width={imageSize.width}
+        height={imageSize.height}
+        position={position}
+        targetRect={imageRect}
+        zoom={ZOOM_LEVEL}
+      />
     </section>
   );
 };

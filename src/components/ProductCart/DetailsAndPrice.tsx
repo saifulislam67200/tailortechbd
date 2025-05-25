@@ -4,6 +4,8 @@ import { addItemsOnCheckout } from "@/redux/features/checkout/checkout.slice";
 import { IOrderItem } from "@/types/order";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { MdShoppingCartCheckout } from "react-icons/md";
+import Tooltip from "../ui/ToolTip";
 
 const DetailsAndPrice = () => {
   const cartItems = useAppSelector((state) => state?.cart?.items) ?? [];
@@ -74,17 +76,28 @@ const DetailsAndPrice = () => {
 
       <Link
         href="/"
-        className="mb-[8px] flex h-[26px] w-full cursor-pointer items-center justify-center bg-black text-[12px] font-bold text-white"
+        className="mb-[8px] flex w-full cursor-pointer items-center justify-center bg-black py-[8px] text-[14px] font-bold text-white"
       >
         Continue Shopping
       </Link>
-      <button
-        disabled={cartItems?.length === 0}
-        onClick={handleCheckout}
-        className="flex h-[26px] w-full cursor-pointer items-center justify-center bg-primary text-[12px] font-bold text-white disabled:opacity-50"
-      >
-        Checkout
-      </button>
+      {checkedItems.length ? (
+        <button
+          disabled={checkedItems?.length === 0}
+          onClick={handleCheckout}
+          className="center group/checkout flex w-full cursor-pointer items-center justify-center gap-[10px] overflow-hidden bg-primary py-[8px] text-[14px] font-bold text-white disabled:cursor-not-allowed disabled:opacity-[0.4]"
+        >
+          Checkout
+          <MdShoppingCartCheckout
+            className={`relative left-0 text-[18px] duration-[0.3s] group-hover/checkout:left-[40%]`}
+          />
+        </button>
+      ) : (
+        <Tooltip content="Please select at least one item">
+          <button className="center flex w-full cursor-not-allowed items-center justify-center gap-[10px] overflow-hidden bg-primary/50 py-[8px] text-[14px] font-bold text-primary">
+            Checkout
+          </button>
+        </Tooltip>
+      )}
     </div>
   );
 };

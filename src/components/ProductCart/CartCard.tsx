@@ -6,6 +6,7 @@ import {
   toggleCheckItem,
   updateQuantity,
 } from "@/redux/features/cart/cartSlice";
+import { getProductDiscountPrice } from "@/utils";
 import Image from "next/image";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
@@ -34,7 +35,7 @@ const CartCard = ({ item }: { item: TCartItem }) => {
 
   return (
     <div className="mx-[10px] border-b-[1px] border-quaternary pt-[20px] pb-[14px]">
-      <div className="flex items-center pl-[10px] md:pl-[25px]">
+      <div className="flex items-center gap-[10px] pl-[10px] md:pl-[25px]">
         <input
           checked={item?.isChecked || false}
           type="checkbox"
@@ -44,20 +45,20 @@ const CartCard = ({ item }: { item: TCartItem }) => {
           onChange={() => toggleCheckUncheckHandler(item)}
         />
 
-        <div className="mr-[16px] ml-[22px] h-[70px] max-w-[70px] min-w-[70px] md:mr-[35px] md:ml-[53px]">
+        <div className="h-[70px] w-[70px] shrink-0">
           <Image
             src={item?.image || ""}
             width={300}
             height={300}
             alt="product-image"
-            className="h-full w-full object-cover object-center"
+            className="h-full w-full object-contain object-center"
           />
         </div>
         <div>
           <h1 className="text-[12px] font-bold text-black sm:text-[14px]">{item?.name}</h1>
           <p className="text-sm">Size: {item?.size}</p>
           <p className="text-sm">Color: {item?.color}</p>
-          <p className="text-sm">Discount: {item?.discount}%</p>
+          {item.discount ? <p className="text-sm">Discount: {item?.discount}%</p> : ""}
         </div>
       </div>
 
@@ -90,8 +91,14 @@ const CartCard = ({ item }: { item: TCartItem }) => {
         </div>
 
         <p className="mr-[50px] ml-[20px] text-[13px]">
-          Tk <span className="font-semibold">{item?.price} </span> X{" "}
-          <span className="inline-flex w-[30px] items-center text-black">{item?.quantity}</span>
+          <span className="font-semibold">
+            {item.discount ? (
+              <>Tk {getProductDiscountPrice(item?.price, item?.discount)}</>
+            ) : (
+              <>Tk {item?.price}</>
+            )}{" "}
+          </span>
+          X <span className="inline-flex w-[30px] items-center text-black">{item?.quantity}</span>
         </p>
 
         <button

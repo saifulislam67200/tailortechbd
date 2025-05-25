@@ -21,7 +21,7 @@ const ProductClientProvier = ({
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
 
   return (
-    <div className="mx-auto max-w-[1756px] px-[16px] py-[10px] transition-all sm:px-[36px] md:px-[50px] lg:px-[95px] 2xl:px-[0px]">
+    <div className="main_container w-full px-[16px] py-[10px]">
       <Breadcrumb />
       <div className="mt-[10px] grid grid-cols-1 gap-[10px] lg:grid-cols-2">
         <ProductDetailsSlider product={product} selectedColor={selectedColor} />
