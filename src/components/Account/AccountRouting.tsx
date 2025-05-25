@@ -11,8 +11,8 @@ export const routes = [
     path: "/account/profile",
   },
   {
-    name: "Favourite",
-    path: "/account/favourite",
+    name: "Favorite",
+    path: "/account/favorite",
   },
 ];
 const AccountRouting = () => {
