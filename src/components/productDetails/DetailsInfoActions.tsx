@@ -57,7 +57,7 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
 
     const payload = {
       discount: product.discount,
-      id: product._id,
+      id: `${product._id}-${activeColor.color}-${activeSize.size}`,
       name: product.name,
       price: product.price,
       quantity: activeQuantity,

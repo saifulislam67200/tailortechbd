@@ -54,13 +54,15 @@ const ProductList = () => {
           </button>
         </div>
       )}
-      {cartItems?.length > 0 ? (
-        cartItems?.map((item) => <CartCard key={item?.id} item={item} />)
-      ) : (
-        <h3 className="mt-[50px] text-center text-[16px] text-info">
-          Cart Empty, No Product Added
-        </h3>
-      )}
+      <div className="max-h-[600px] overflow-y-auto">
+        {cartItems?.length > 0 ? (
+          cartItems?.map((item) => <CartCard key={item?.id} item={item} />)
+        ) : (
+          <h3 className="mt-[50px] text-center text-[16px] text-info">
+            Cart Empty, No Product Added
+          </h3>
+        )}
+      </div>
     </div>
   );
 };

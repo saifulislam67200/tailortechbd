@@ -17,6 +17,8 @@ interface CartItem {
   discount: number;
   quantity: number;
   image?: string;
+  size: string;
+  color?: string | undefined;
 }
 
 interface CartDrawerProps {
@@ -29,12 +31,14 @@ export default function CartDrawer({ isOpen, setIsOpen }: CartDrawerProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
   const cartItems = useAppSelector((state) => state?.cart?.items);
 
+  console.log("Cart items in drawer:", cartItems);
 
   return (
     <>
       <div
-        className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${isOpen ? "opacity-50" : "pointer-events-none opacity-0"
-          }`}
+        className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${
+          isOpen ? "opacity-50" : "pointer-events-none opacity-0"
+        }`}
         onClick={() => setIsOpen(false)}
         aria-hidden={!isOpen}
       />
@@ -42,20 +46,22 @@ export default function CartDrawer({ isOpen, setIsOpen }: CartDrawerProps) {
       {/* Drawer - fully opaque */}
       <div
         ref={drawerRef}
-        className={`fixed top-0 right-0 z-50 h-full transform bg-white transition-transform duration-300 ease-in-out w-full sm:w-[75vw] lg:w-[384px] ${isOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+        className={`fixed top-0 right-0 z-50 h-full w-full transform bg-white transition-transform duration-300 ease-in-out sm:w-[75vw] lg:w-[384px] ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b p-[16px] bg-quaternary">
-          <h2 className="text-[16px] font-bold flex items-center gap-[3px]"><FaCartPlus size={18} />
-            Cart({cartItems?.length})</h2>
+        <div className="flex items-center justify-between border-b bg-quaternary p-[16px]">
+          <h2 className="flex items-center gap-[3px] text-[16px] font-bold">
+            <FaCartPlus size={18} />
+            Cart({cartItems?.length})
+          </h2>
           <button
             onClick={() => setIsOpen(false)}
             className="cursor-pointer font-bold"
             aria-label="Close cart"
           >
             <IoCloseSharp size={20} />
-
           </button>
         </div>
 
@@ -79,13 +85,13 @@ export default function CartDrawer({ isOpen, setIsOpen }: CartDrawerProps) {
 function CartItem({ item }: { item: CartItem }) {
   const dispatch = useAppDispatch();
 
-  const handleRemoveItem = (id: string) => {
-    dispatch(removeFromCart(id))
-  }
+  const handleRemoveItem = (id: string, color: string, size: string) => {
+    dispatch(removeFromCart({ id, color, size }));
+  };
 
   return (
     <div className="flex items-center border-b border-quaternary py-4">
-      <div className="relative w-[76px] h-[76px] flex-shrink-0">
+      <div className="relative h-[76px] w-[76px] flex-shrink-0">
         <Image
           src={item.image || "/placeholder.svg"}
           alt={item.name}
@@ -95,13 +101,19 @@ function CartItem({ item }: { item: CartItem }) {
       </div>
       <div className="ml-4 flex-grow">
         <h3 className="text-sm font-medium">{item.name}</h3>
-        <p className="text-sm ">
+        <p className="text-sm">
           ${item.price.toFixed(2)} x {item.quantity}
         </p>
+        <p className="text-sm">Size: {item.size}</p>
+        <p className="text-sm">Color: {item.color}</p>
       </div>
 
-      <button onClick={() => handleRemoveItem(item?.id)} className="w-[30px] h-[30px] cursor-pointer flex justify-end items-center">
-        <RiDeleteBin6Line className="text-blue-500 " />
+      <button
+        onClick={() => handleRemoveItem(item.id, item.color!, item.size)}
+        aria-label="Remove item from cart"
+        className="flex h-[30px] w-[30px] cursor-pointer items-center justify-end"
+      >
+        <RiDeleteBin6Line className="text-blue-500" />
       </button>
     </div>
   );
@@ -135,11 +147,17 @@ function CartFooter({
   return (
     <div className="absolute right-0 bottom-0 left-0 bg-white p-[8px]">
       <hr className="border-t border-quaternary" />
-      <div className=" flex justify-between py-[8px]">
+      <div className="flex justify-between py-[8px]">
         <span className="font-medium">Subtotal:</span>
         <span className="font-semibold">${subtotal.toFixed(2)}</span>
       </div>
-      <Link href="/cart" onClick={() => setIsOpen(false)} className="w-full h-[26px] bg-black mb-[8px] flex justify-center items-center text-[12px] font-bold text-white">View Cart</Link>
+      <Link
+        href="/cart"
+        onClick={() => setIsOpen(false)}
+        className="mb-[8px] flex h-[26px] w-full items-center justify-center bg-black text-[12px] font-bold text-white"
+      >
+        View Cart
+      </Link>
     </div>
   );
 }

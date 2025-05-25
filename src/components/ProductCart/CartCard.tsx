@@ -15,14 +15,18 @@ const CartCard = ({ item }: { item: TCartItem }) => {
 
   const handleQuantity = (type: "inc" | "dec", id: string) => {
     if (type === "inc") {
-      dispatch(updateQuantity({ id, quantity: item?.quantity + 1 }));
+      dispatch(
+        updateQuantity({ id, color: item.color, size: item.size, quantity: item?.quantity + 1 })
+      );
     } else {
-      dispatch(updateQuantity({ id, quantity: item?.quantity - 1 }));
+      dispatch(
+        updateQuantity({ id, color: item.color, size: item.size, quantity: item?.quantity - 1 })
+      );
     }
   };
 
-  const handleRemoveProduct = (id: string) => {
-    dispatch(removeFromCart(id));
+  const handleRemoveProduct = (id: string, color: string, size: string) => {
+    dispatch(removeFromCart({ id, color, size }));
   };
 
   const toggleCheckUncheckHandler = (item: TCartItem) => {
@@ -53,7 +57,11 @@ const CartCard = ({ item }: { item: TCartItem }) => {
             className="h-full w-full object-cover object-center"
           />
         </div>
-        <h1 className="text-[12px] font-bold text-black sm:text-[14px]">{item?.name}</h1>
+        <div>
+          <h1 className="text-[12px] font-bold text-black sm:text-[14px]">{item?.name}</h1>
+          <p className="text-sm">Size: {item?.size}</p>
+          <p className="text-sm">Color: {item?.color}</p>
+        </div>
       </div>
 
       <div className="mt-[10px] flex justify-end pr-[10px] md:mt-[0px]">
@@ -90,7 +98,7 @@ const CartCard = ({ item }: { item: TCartItem }) => {
         </p>
 
         <button
-          onClick={() => handleRemoveProduct(item?.id)}
+          onClick={() => handleRemoveProduct(item.id, item.color!, item.size)}
           className="flex h-[25px] w-[25px] cursor-pointer items-center justify-center bg-quaternary"
         >
           <RiDeleteBin6Line />

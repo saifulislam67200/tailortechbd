@@ -9,6 +9,7 @@ import Button from "./Button";
 import DialogProvider from "./DialogProvider";
 import HorizontalLine from "./HorizontalLine";
 import SelectionBox from "./SelectionBox";
+import { toast } from "sonner";
 
 interface Props {
   children?: ReactNode;
@@ -32,9 +33,14 @@ const ProductAddToCartModal = ({ children, product }: Props) => {
   };
 
   const handleAddToCart = () => {
+    if (!selectedColor || !selectedSize) {
+      return toast.error("Please select a color and size.", {
+        id: "productSelectionToastId",
+      });
+    }
     const payload = {
       discount: product?.discount,
-      id: product?._id,
+      id: `${product._id}-${selectedColor!.color}-${selectedSize!.size}`,
       name: product?.name,
       price: product?.price,
       quantity: 1,
