@@ -7,6 +7,7 @@ import DetailsAndInformation from "./DetailsAndInformation";
 import DetailsInfoActions from "./DetailsInfoActions";
 import ProductDetailsSlider from "./ProductDetailSlider";
 import ProductSizeChart from "./ProductSizeChart";
+import RelatedProducts from "./RelatedProducts";
 
 const ProductClientProvier = ({
   product,
@@ -18,7 +19,6 @@ const ProductClientProvier = ({
   slug: string;
 }) => {
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
-  console.log("", slug);
 
   return (
     <div className="mx-auto max-w-[1756px] px-[16px] py-[10px] transition-all sm:px-[36px] md:px-[50px] lg:px-[95px] 2xl:px-[0px]">
@@ -33,7 +33,7 @@ const ProductClientProvier = ({
       </div>
       <DetailsAndInformation product={product} />
 
-      {/* <RelatedProducts slug={slug} /> */}
+      <RelatedProducts slug={slug} />
     </div>
   );
 };

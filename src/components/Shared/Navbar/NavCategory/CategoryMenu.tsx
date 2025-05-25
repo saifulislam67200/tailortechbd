@@ -9,7 +9,7 @@ const CategoryMenu = () => {
   const categories = data?.data;
 
   return (
-    <div className="hidden items-center justify-center bg-white py-[12px] lg:flex">
+    <div className="hidden items-center justify-center bg-white py-[12px] shadow-md lg:flex">
       <div className="flex gap-[16px] sm:ml-[24px] sm:space-x-[20px]">
         {!categories ||
           (categories.length === 0 && (

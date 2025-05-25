@@ -19,19 +19,15 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
   // Reset quantity when size changes
   const handleSizeChange = (size: ISize) => {
     setActiveSize(size);
-    setActiveQuantity(1);
+    const quantity = size.stock >= activeQuantity ? activeQuantity : size.stock;
+    setActiveQuantity(quantity);
   };
   const dispatch = useAppDispatch();
-  // Find the current selected color and size stock
-  const getCurrentStock = () => {
-    const colorObj = product.colors.find((c) => c.color === activeColor?.color);
-    const sizeObj = colorObj?.sizes.find((s) => s.size === activeSize?.size);
-    return sizeObj?.stock ?? 1;
-  };
 
   const handleQuantityChange = (type: "inc" | "dec") => {
     setActiveQuantity((prev) => {
-      const stock = getCurrentStock();
+      const stock = activeSize?.stock;
+      if (!stock) return prev;
       if (type === "inc") {
         if (prev < stock) {
           return prev + 1;
@@ -62,7 +58,7 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
       price: product.price,
       quantity: activeQuantity,
       size: activeSize.size,
-      stock: getCurrentStock(),
+      stock: activeSize.stock,
       color: activeColor.color,
       image: product?.images[0],
     };
@@ -100,7 +96,6 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
           );
         })}
       </div>
-
       {/* // sizes  */}
       <h1 className="mt-[15px] text-[16px]">Sizes:</h1>
       <div className="mt-[5px] flex items-center gap-[10px]">
@@ -120,7 +115,6 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
           </button>
         ))}
       </div>
-
       {/* // quantity update  */}
       <div className="mt-[15px] flex h-[30px] w-[80px] items-center border border-quaternary px-[7px]">
         <button
@@ -140,11 +134,19 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
         </button>
       </div>
 
+      {activeSize && !activeSize.stock ? (
+        <p className="mt-[30px] text-[15px] font-[600] text-danger">
+          Sorry this size is currently out of stock
+        </p>
+      ) : (
+        ""
+      )}
       {/* // add to cart button  */}
-      <div className="mt-[30px] flex flex-col items-center gap-[10px] sm:max-w-[350px] sm:flex-row">
+      <div className="mt-[10px] flex flex-col items-center gap-[10px] sm:max-w-[350px] sm:flex-row">
         <button
+          disabled={!activeColor || !activeSize || !activeSize.stock}
           onClick={handleAddToCart}
-          className="h-[40px] w-full cursor-pointer bg-primary text-white transition-all duration-300 hover:bg-info"
+          className="h-[40px] w-full cursor-pointer bg-primary text-white transition-all duration-300 hover:bg-info disabled:cursor-not-allowed disabled:opacity-[50]"
         >
           Add to cart
         </button>

@@ -15,7 +15,7 @@ const MostPopular = async () => {
       <section className="w-full py-[16px]">
         <Title title="Collections" className="text-[14px]" />
         <div className="mt-4 flex h-[200px] items-center justify-center text-center">
-          <div className="rounded-md bg-red-100 px-6 py-4 text-red-700">
+          <div className="rounded-md bg-red-100 px-6 py-4 text-danger">
             <p className="text-[14px] font-semibold">Failed to load Data</p>
             <p className="text-[13px]">Please try again later.</p>
           </div>
