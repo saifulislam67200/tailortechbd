@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch } from "@/hooks/redux";
 import {
   removeFromCart,
   TCartItem,
@@ -10,7 +10,6 @@ import Image from "next/image";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 const CartCard = ({ item }: { item: TCartItem }) => {
-  const { items: cartItems, checkedItems } = useAppSelector((state) => state?.cart) ?? [];
   const dispatch = useAppDispatch();
 
   const handleQuantity = (type: "inc" | "dec", id: string) => {
@@ -37,10 +36,7 @@ const CartCard = ({ item }: { item: TCartItem }) => {
     <div className="mx-[10px] border-b-[1px] border-quaternary pt-[20px] pb-[14px]">
       <div className="flex items-center pl-[10px] md:pl-[25px]">
         <input
-          checked={
-            cartItems?.length === checkedItems?.length ||
-            checkedItems.some((checkedItem) => checkedItem.id === item.id)
-          }
+          checked={item?.isChecked || false}
           type="checkbox"
           name=""
           id=""

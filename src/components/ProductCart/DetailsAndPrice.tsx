@@ -6,33 +6,30 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const DetailsAndPrice = () => {
-  const cartItems = useAppSelector((state) => state?.cart?.checkedItems) ?? [];
+  const cartItems = useAppSelector((state) => state?.cart?.items) ?? [];
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const initial = { subtotal: 0, totalDiscount: 0 };
+  const checkedItems = cartItems?.filter((item) => item?.isChecked);
 
-  const { subtotal, totalDiscount } = Array.isArray(cartItems)
-    ? cartItems.reduce((acc, item) => {
-        const price = Number(item?.price) || 0;
-        const quantity = Number(item?.quantity) || 0;
-        const discount = Number(item?.discount) || 0;
+  const { subtotal, totalDiscount } = checkedItems?.reduce(
+    (acc, item) => {
+      const itemSubtotal = item?.price * item?.quantity;
+      const itemDiscountAmount = (item?.price * item?.discount * item?.quantity) / 100;
 
-        const itemSubtotal = price * quantity;
-        const itemDiscount = (itemSubtotal * discount) / 100;
-
-        acc.subtotal += itemSubtotal;
-        acc.totalDiscount += itemDiscount;
-        return acc;
-      }, initial)
-    : initial;
+      acc.subtotal += itemSubtotal;
+      acc.totalDiscount += itemDiscountAmount;
+      return acc;
+    },
+    { subtotal: 0, totalDiscount: 0 }
+  );
 
   const total = subtotal - totalDiscount;
 
   const handleCheckout = () => {
     const payload: (IOrderItem & { discount?: number })[] = [];
 
-    cartItems.forEach((item) => {
+    checkedItems.forEach((item) => {
       payload.push({
         product_id: item?.id,
         product: {
