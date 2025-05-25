@@ -26,7 +26,7 @@ const NotFound = () => {
         <p className="mt-[10px] text-center text-[20px] font-[600]">
           Sorry we couldn&apos;t find this item <br /> you were looking for
         </p>
-        <p className="mt-[15px] text-[14px]">
+        <p className="mt-[15px] text-center text-[14px]">
           But dont worry, you can find plenty of other things on our homepage.
         </p>
         <Link

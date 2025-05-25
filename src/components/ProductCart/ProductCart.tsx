@@ -1,14 +1,18 @@
+import MostPopular from "../Home/MostPopular";
 import Breadcrumb from "../ui/BreadCrumbs";
 import DetailsAndPrice from "./DetailsAndPrice";
 import ProductList from "./ProductList";
 
 const ProductCart = () => {
   return (
-    <section className="mx-auto max-w-[1756px] px-[16px] py-[10px] transition-all sm:px-[36px] md:px-[50px] lg:px-[95px] 2xl:px-[0px]">
+    <section className="main_container w-full py-[10px]">
       <Breadcrumb />
-      <div className="mt-[18px] flex min-h-[60vh] flex-col gap-[10px] lg:flex-row">
+      <div className="mt-[18px] flex min-h-[40vh] flex-col gap-[10px] lg:flex-row">
         <ProductList />
         <DetailsAndPrice />
+      </div>
+      <div className="mt-[20px]">
+        <MostPopular title="People also buy" />
       </div>
     </section>
   );
