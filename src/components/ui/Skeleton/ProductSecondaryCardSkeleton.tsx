@@ -1,6 +1,6 @@
 import React from "react";
 
-const CardSkeleton: React.FC = () => {
+const ProductSecondaryCardSkeleton: React.FC = () => {
   return (
     <div className="animate-pulse overflow-hidden rounded-md border border-gray-100 bg-white">
       {/* Image */}
@@ -24,4 +24,4 @@ const CardSkeleton: React.FC = () => {
   );
 };
 
-export default CardSkeleton;
+export default ProductSecondaryCardSkeleton;

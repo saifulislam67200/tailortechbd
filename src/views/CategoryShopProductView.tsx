@@ -1,8 +1,8 @@
 "use server";
 
-import CategoryProductFiltering from "@/components/Category/CategoryProductFiltering";
-import CategoryProductPagination from "@/components/Category/CategoryProductPagination";
-import FilterCountDisplay from "@/components/Category/FilterCountDisplay";
+import FilterCountDisplay from "@/components/Shop/FilterCountDisplay";
+import ShopProductFiltering from "@/components/Shop/ShopProductFiltering";
+import ShopProductPagination from "@/components/Shop/ShopProductPagination";
 import Breadcrumb from "@/components/ui/BreadCrumbs";
 import ProductPrimaryCard from "@/components/ui/Card/ProductCard/ProductPrimaryCard";
 import DataNotFound from "@/components/ui/DataNotFound";
@@ -14,7 +14,7 @@ interface IProps {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }
 
-const CategoryProductView: React.FC<IProps> = async ({ searchParams, params }) => {
+const CategoryShopProductView: React.FC<IProps> = async ({ searchParams, params }) => {
   const search = await searchParams;
   const resolvedParams = await params;
   const slug = resolvedParams.slug || "";
@@ -43,7 +43,7 @@ const CategoryProductView: React.FC<IProps> = async ({ searchParams, params }) =
           Total <span className="font-[700] text-primary">{data.meta.totalDoc}</span> Products Found
         </p>
 
-        <CategoryProductFiltering />
+        <ShopProductFiltering />
       </div>
       <FilterCountDisplay />
       {data.data.length ? (
@@ -51,7 +51,7 @@ const CategoryProductView: React.FC<IProps> = async ({ searchParams, params }) =
           <div className="mt-4 grid w-full grid-cols-1 justify-center gap-[16px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
             {data.data?.map((data) => <ProductPrimaryCard key={data._id} product={data} />)}
           </div>
-          <CategoryProductPagination totalDoc={data.meta.totalDoc} />
+          <ShopProductPagination totalDoc={data.meta.totalDoc} />
         </>
       ) : (
         <DataNotFound title="No Product Found" className="h-[200px]" />
@@ -60,4 +60,4 @@ const CategoryProductView: React.FC<IProps> = async ({ searchParams, params }) =
   );
 };
 
-export default CategoryProductView;
+export default CategoryShopProductView;

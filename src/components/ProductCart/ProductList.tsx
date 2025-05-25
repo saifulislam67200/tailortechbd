@@ -6,8 +6,10 @@ import { useDispatch } from "react-redux";
 import CartCard from "./CartCard";
 
 const ProductList = () => {
-  const { items: cartItems, checkedItems } = useAppSelector((state) => state?.cart) ?? [];
+  const { items: cartItems } = useAppSelector((state) => state?.cart) ?? [];
   const dispatch = useDispatch();
+
+  const checkedItems = cartItems?.filter((item) => item?.isChecked);
 
   const handleDeleteCheckedProducts = () => {
     dispatch(deleteCheckedItems());
@@ -54,13 +56,15 @@ const ProductList = () => {
           </button>
         </div>
       )}
-      {cartItems?.length > 0 ? (
-        cartItems?.map((item) => <CartCard key={item?.id} item={item} />)
-      ) : (
-        <h3 className="mt-[50px] text-center text-[16px] text-info">
-          Cart Empty, No Product Added
-        </h3>
-      )}
+      <div className="max-h-[600px] overflow-y-auto">
+        {cartItems?.length > 0 ? (
+          cartItems?.map((item) => <CartCard key={item?.id} item={item} />)
+        ) : (
+          <h3 className="mt-[50px] text-center text-[16px] text-info">
+            Cart Empty, No Product Added
+          </h3>
+        )}
+      </div>
     </div>
   );
 };

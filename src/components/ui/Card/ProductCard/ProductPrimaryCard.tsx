@@ -40,7 +40,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
             Color: {product.colors?.map((color) => color.color).join(", ")}
           </p>
           <p className="text-[12px] font-semibold text-black">
-            Size: {product.colors?.[0]?.sizes?.[0]?.size}
+            Size: {product.colors?.[0]?.sizes?.map((color) => color.size?.toUpperCase()).join(", ")}
           </p>
         </div>
         <div className="mt-auto pt-2 text-start">

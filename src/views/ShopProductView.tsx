@@ -1,6 +1,6 @@
-import CategoryProductFiltering from "@/components/Category/CategoryProductFiltering";
-import CategoryProductPagination from "@/components/Category/CategoryProductPagination";
-import FilterCountDisplay from "@/components/Category/FilterCountDisplay";
+import FilterCountDisplay from "@/components/Shop/FilterCountDisplay";
+import ShopProductFiltering from "@/components/Shop/ShopProductFiltering";
+import ShopProductPagination from "@/components/Shop/ShopProductPagination";
 import Breadcrumb from "@/components/ui/BreadCrumbs";
 import ProductPrimaryCard from "@/components/ui/Card/ProductCard/ProductPrimaryCard";
 import DataNotFound from "@/components/ui/DataNotFound";
@@ -35,7 +35,7 @@ const ShopProductView = async ({ searchParams }: TSearchParams) => {
           Total <span className="font-[700] text-primary">{data.meta.totalDoc}</span> Products Found
         </p>
 
-        <CategoryProductFiltering />
+        <ShopProductFiltering />
       </div>
       <FilterCountDisplay />
       {data.data.length ? (
@@ -43,7 +43,7 @@ const ShopProductView = async ({ searchParams }: TSearchParams) => {
           <div className="mt-4 grid w-full grid-cols-1 justify-center gap-[16px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
             {data.data?.map((data) => <ProductPrimaryCard key={data._id} product={data} />)}
           </div>
-          <CategoryProductPagination totalDoc={data.meta.totalDoc} />
+          <ShopProductPagination totalDoc={data.meta.totalDoc} />
         </>
       ) : (
         <DataNotFound title="No Product Found" className="h-[200px]" />

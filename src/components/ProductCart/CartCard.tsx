@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch } from "@/hooks/redux";
 import {
   removeFromCart,
   TCartItem,
@@ -10,19 +10,22 @@ import Image from "next/image";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 const CartCard = ({ item }: { item: TCartItem }) => {
-  const { items: cartItems, checkedItems } = useAppSelector((state) => state?.cart) ?? [];
   const dispatch = useAppDispatch();
 
   const handleQuantity = (type: "inc" | "dec", id: string) => {
     if (type === "inc") {
-      dispatch(updateQuantity({ id, quantity: item?.quantity + 1 }));
+      dispatch(
+        updateQuantity({ id, color: item.color, size: item.size, quantity: item?.quantity + 1 })
+      );
     } else {
-      dispatch(updateQuantity({ id, quantity: item?.quantity - 1 }));
+      dispatch(
+        updateQuantity({ id, color: item.color, size: item.size, quantity: item?.quantity - 1 })
+      );
     }
   };
 
-  const handleRemoveProduct = (id: string) => {
-    dispatch(removeFromCart(id));
+  const handleRemoveProduct = (id: string, color: string, size: string) => {
+    dispatch(removeFromCart({ id, color, size }));
   };
 
   const toggleCheckUncheckHandler = (item: TCartItem) => {
@@ -33,10 +36,7 @@ const CartCard = ({ item }: { item: TCartItem }) => {
     <div className="mx-[10px] border-b-[1px] border-quaternary pt-[20px] pb-[14px]">
       <div className="flex items-center pl-[10px] md:pl-[25px]">
         <input
-          checked={
-            cartItems?.length === checkedItems?.length ||
-            checkedItems.some((checkedItem) => checkedItem.id === item.id)
-          }
+          checked={item?.isChecked || false}
           type="checkbox"
           name=""
           id=""
@@ -53,7 +53,12 @@ const CartCard = ({ item }: { item: TCartItem }) => {
             className="h-full w-full object-cover object-center"
           />
         </div>
-        <h1 className="text-[12px] font-bold text-black sm:text-[14px]">{item?.name}</h1>
+        <div>
+          <h1 className="text-[12px] font-bold text-black sm:text-[14px]">{item?.name}</h1>
+          <p className="text-sm">Size: {item?.size}</p>
+          <p className="text-sm">Color: {item?.color}</p>
+          <p className="text-sm">Discount: {item?.discount}%</p>
+        </div>
       </div>
 
       <div className="mt-[10px] flex justify-end pr-[10px] md:mt-[0px]">
@@ -77,9 +82,9 @@ const CartCard = ({ item }: { item: TCartItem }) => {
           >
             +
           </button>
-          <div className="absolute -top-[20px] right-0">
+          <div className="absolute -top-[20px] -left-[16px]">
             {item?.stock === item?.quantity && (
-              <p className="ml-4 text-[8px] text-red-500">You {`can't`} add more</p>
+              <p className="ml-4 text-[12px] text-primary">Max stock reached</p>
             )}
           </div>
         </div>
@@ -90,7 +95,7 @@ const CartCard = ({ item }: { item: TCartItem }) => {
         </p>
 
         <button
-          onClick={() => handleRemoveProduct(item?.id)}
+          onClick={() => handleRemoveProduct(item.id, item.color!, item.size)}
           className="flex h-[25px] w-[25px] cursor-pointer items-center justify-center bg-quaternary"
         >
           <RiDeleteBin6Line />

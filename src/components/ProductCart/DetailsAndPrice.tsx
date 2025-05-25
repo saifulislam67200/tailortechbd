@@ -6,11 +6,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 const DetailsAndPrice = () => {
-  const cartItems = useAppSelector((state) => state?.cart?.checkedItems) ?? [];
+  const cartItems = useAppSelector((state) => state?.cart?.items) ?? [];
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { subtotal, totalDiscount } = cartItems?.reduce(
+  const checkedItems = cartItems?.filter((item) => item?.isChecked);
+
+  const { subtotal, totalDiscount } = checkedItems?.reduce(
     (acc, item) => {
       const itemSubtotal = item?.price * item?.quantity;
       const itemDiscountAmount = (item?.price * item?.discount * item?.quantity) / 100;
@@ -27,7 +29,7 @@ const DetailsAndPrice = () => {
   const handleCheckout = () => {
     const payload: (IOrderItem & { discount?: number })[] = [];
 
-    cartItems.forEach((item) => {
+    checkedItems.forEach((item) => {
       payload.push({
         product_id: item?.id,
         product: {
