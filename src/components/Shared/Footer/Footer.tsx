@@ -5,8 +5,8 @@ import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="relative w-full overflow-hidden text-white mt-[20px] md:mt-[40px]">
-      <div className="main_container relative mx-auto w-full bg-primary px-4 py-[40px]">
+    <footer className="relative w-full overflow-hidden text-white mt-[20px] md:mt-[40px] bg-primary">
+      <div className="main_container relative mx-auto w-full px-4 py-[40px]">
         <div className="flex flex-col gap-[48px] lg:flex-row">
           {/* Company Info */}
           <div className="space-y-[16px] lg:w-[30%]">
@@ -153,7 +153,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Footer */}
-      <div className="border-t border-border-main bg-primary">
+      <div className="border-t border-border-main">
         <div className="main_container mx-auto px-[16px] py-[16px]">
           <p className="text-center text-[14px] text-white">
             © {new Date().getFullYear()} TailorTech Limited. All rights reserved.
