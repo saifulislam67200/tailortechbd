@@ -1,18 +1,24 @@
 "use client";
 
-import { useAppSelector } from "@/hooks/redux";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import {
+  FiUser,
+  FiSettings,
+  FiHelpCircle,
+  FiLogOut,
+  FiChevronDown,
+  FiShoppingBag,
+  FiGrid,
+} from "react-icons/fi";
+import { useAppSelector } from "@/hooks/redux";
 import { FaCircleUser } from "react-icons/fa6";
-import { FiChevronDown } from "react-icons/fi";
+import Link from "next/link";
 
 export default function UserDropdown({ displayName = false }: { displayName?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { user } = useAppSelector((state) => state.user);
-
-  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -24,7 +30,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [setIsOpen]);
+  }, []);
 
   return (
     <div className="relative hidden lg:block" ref={dropdownRef}>
@@ -57,50 +63,68 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
         )}
       </button>
 
-      {/* User Dropdown Menu */}
+      {/* Dropdown Menu */}
       {isOpen && (
-        <div className="flex flex-col gap-[10px]">
-          <div className="flex items-center justify-start gap-[8px]"></div>
+        <div className="absolute right-0 z-50 mt-2 w-64 rounded-lg border border-gray-200 bg-white pt-2 shadow-lg">
+          {/* User Info Header */}
+          <div className="flex flex-col items-center border-b border-gray-200 px-4 py-3">
+            <p className="text-[16px] font-medium capitalize">{user?.fullName}</p>
+            <p className="text-[14px] text-info capitalize">{user?.role}</p>
+          </div>
 
-          <div className="absolute right-0 z-20 mt-2 w-48 rounded-md border border-solid-slab bg-white py-1 shadow-lg">
+          {/* Menu Items */}
+          <div>
             <Link
               href="/account/profile"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-solid-slab"
+              onClick={() => setIsOpen(false)}
+              className="flex w-full items-center space-x-[12px] border-b border-gray-200 px-[16px] py-[12px] text-[14px] text-primary transition-colors duration-150 hover:bg-gray-50"
             >
-              Profile
+              <FiUser className="h-[16px] w-[16px]" />
+              <span>Profile</span>
             </Link>
             {user?.role === "user" ? (
               <>
                 <Link
                   href="/account/orders"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setIsOpen(false)}
+                  className="flex w-full items-center space-x-[12px] border-b border-gray-200 px-[16px] py-[12px] text-[14px] text-primary transition-colors duration-150 hover:bg-gray-50"
                 >
-                  My Orders
+                  <FiShoppingBag className="h-[16px] w-[16px]" />
+                  <span>My Orders</span>
                 </Link>
                 <Link
-                  href="/account/wishlist"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  href="/contact"
+                  onClick={() => setIsOpen(false)}
+                  className="flex w-full items-center space-x-[12px] border-b border-gray-200 px-[16px] py-[12px] text-[14px] text-primary transition-colors duration-150 hover:bg-gray-50"
                 >
-                  Wishlist
+                  <FiHelpCircle className="h-[16px] w-[16px]" />
+                  <span>Need Help?</span>
                 </Link>
                 <Link
                   href="/account/settings"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setIsOpen(false)}
+                  className="flex w-full items-center space-x-[12px] border-b border-gray-200 px-[16px] py-[12px] text-[14px] text-primary transition-colors duration-150 hover:bg-gray-50"
                 >
-                  Settings
+                  <FiSettings className="h-[16px] w-[16px]" />
+                  <span>Account Settings</span>
                 </Link>
               </>
             ) : (
               <Link
                 href="/dashboard"
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => setIsOpen(false)}
+                className="flex w-full items-center space-x-[12px] border-b border-gray-200 px-[16px] py-[12px] text-[14px] text-primary transition-colors duration-150 hover:bg-gray-50"
               >
-                Dashboard
+                <FiGrid className="h-[16px] w-[16px]" />
+                <span>Dashboard </span>
               </Link>
             )}
-            <div className="my-1 border-t border-gray-100"></div>
-            <button className="block w-full px-4 py-2 text-left text-sm text-danger hover:bg-gray-100">
-              Logout
+            <button
+              onClick={() => setIsOpen(false)}
+              className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[12px] text-[14px] text-primary transition-colors duration-150 hover:bg-gray-50"
+            >
+              <FiLogOut className="h-[16px] w-[16px]" />
+              <span>Logout</span>
             </button>
           </div>
         </div>
