@@ -32,9 +32,11 @@ const ProductDetails: React.FC<IProps> = async ({ params }) => {
         </h1>
         {product.discount ? (
           <div className="flex items-center gap-[10px]">
-            <span className="text-[18px] font-semibold">TK {product?.price}</span>
+            <span className="text-[18px] font-semibold">
+              {(product?.price - product.price * (product.discount / 100))?.toFixed(2)}
+            </span>
             <span className="mt-[8px] text-[15px] font-bold text-info line-through">
-              {(product?.price + (product?.price * (product?.discount || 0)) / 100)?.toFixed(2)}
+              TK {product?.price}
             </span>
             <span className="mt-[6px] rounded-full bg-primary px-2 text-[12px] font-bold text-white">
               {product?.discount}% Off

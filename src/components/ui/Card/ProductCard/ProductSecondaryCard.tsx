@@ -31,7 +31,7 @@ const ProductSecondaryCard: React.FC<ProductCardProps> = ({ product, className }
         {/* Content section */}
         <Link href={`/product/${product?.slug}`}>
           <div className="p-[8px]">
-            <h3 className="line-clamp-1 text-center text-[14px] font-bold hover:text-[#0d6efd]">
+            <h3 className="line-clamp-1 text-center text-[14px] font-bold hover:text-primary">
               {product.name}
             </h3>
             <p
