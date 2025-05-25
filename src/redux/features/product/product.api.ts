@@ -20,7 +20,30 @@ const productApi = api.injectEndpoints({
       }),
       providesTags: ["product"],
     }),
-    getAllProducts: builder.query<{ data: IProduct[], meta: IMeta }, Record<string, string | number>>({
+    getRelatedProuctsByProductSlug: builder.query<
+      { data: IProduct[] },
+      { slug: string; limit: number }
+    >({
+      query: ({ slug, limit }) => ({
+        url: `/product/get/related/${slug}?limit=${limit}`,
+        method: "GET",
+      }),
+      providesTags: ["product"],
+    }),
+    getTopProucts: builder.query<{ data: IProduct[] }, Record<string, string | number>>({
+      query: (query) => {
+        const queryString = generateQueryParams(query);
+        return {
+          url: `/product/top-ordered?${queryString}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["product"],
+    }),
+    getAllProducts: builder.query<
+      { data: IProduct[]; meta: IMeta },
+      Record<string, string | number>
+    >({
       query: (query) => {
         const queryString = generateQueryParams(query);
         return {
@@ -51,4 +74,6 @@ export const {
   useGetProductByProductSlugQuery,
   useUpdateProductByProductIdMutation,
   useGetAllProductsQuery,
+  useGetRelatedProuctsByProductSlugQuery,
+  useGetTopProuctsQuery
 } = productApi;

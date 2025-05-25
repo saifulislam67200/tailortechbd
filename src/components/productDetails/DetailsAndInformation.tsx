@@ -1,6 +1,7 @@
 import { IProduct } from "@/types/product";
 import CustomerReview from "./CustomerReview";
 // import DetailsPageTOPProduct from "./DetailsPageTopProduct";
+import DetailsPageTOPProduct from "./DetailsPageTopProduct";
 import QuestionAnswer from "./QuestionAnswer";
 import ScrollDetailsSection from "./ScrollDetailsSection";
 const DetailsAndInformation = ({ product }: { product: IProduct }) => {
@@ -13,12 +14,11 @@ const DetailsAndInformation = ({ product }: { product: IProduct }) => {
           className="border border-quaternary bg-white p-[20px] text-black"
           dangerouslySetInnerHTML={{ __html: product?.description || "" }}
         ></div>
-
         <QuestionAnswer productId={product?._id} />
         <CustomerReview productId={product?._id} />
       </div>
 
-      {/* <DetailsPageTOPProduct /> */}
+      <DetailsPageTOPProduct />
     </section>
   );
 };
