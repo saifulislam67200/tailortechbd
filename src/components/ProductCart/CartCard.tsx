@@ -85,9 +85,9 @@ const CartCard = ({ item }: { item: TCartItem }) => {
           >
             +
           </button>
-          <div className="absolute -top-[20px] right-0">
+          <div className="absolute -top-[20px] -left-[16px]">
             {item?.stock === item?.quantity && (
-              <p className="ml-4 text-[8px] text-red-500">You {`can't`} add more</p>
+              <p className="ml-4 text-[12px] text-primary">Riced max stock</p>
             )}
           </div>
         </div>
