@@ -31,7 +31,8 @@ const cartSlice = createSlice({
         addToCart(state, action: PayloadAction<TCartItem>) {
             const item = state.items.find(i => i.color === action.payload.color && i.size === action.payload.size && i.id === action.payload.id);
             if (item) {
-                item.quantity += action.payload.quantity;
+                const newQuantity = item.quantity + action.payload.quantity;
+                item.quantity = newQuantity > item.stock ? item.stock : newQuantity;
             } else {
                 state.items.push(action.payload);
             }
