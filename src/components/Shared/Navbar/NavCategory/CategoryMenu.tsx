@@ -23,7 +23,7 @@ const CategoryMenu = () => {
             <div key={category._id} className="group">
               <Link
                 href={`/shop/${category.slug}`}
-                className="group/category flex items-center gap-[5px] px-1 pt-1 text-sm text-[16px] font-bold text-black"
+                className="group/category flex items-center gap-[5px] px-1 pt-1 text-sm text-[16px] font-bold text-black transition-colors duration-200 hover:bg-primary hover:text-white"
               >
                 {category.label}
               </Link>

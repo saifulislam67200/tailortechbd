@@ -1,6 +1,5 @@
 "use client";
 
-import { deepEqual } from "assert";
 import { useEffect, useRef, useState } from "react";
 import { FaCaretDown } from "react-icons/fa6";
 import { twMerge } from "tailwind-merge";
@@ -58,7 +57,7 @@ const SelectionBox = ({
     if (defaultValue) {
       onSelect(defaultValue);
     }
-  }, [deepEqual]);
+  }, []);
 
   return (
     <div className={twMerge("relative h-fit w-full", className)} ref={dropdownRef}>

@@ -113,7 +113,7 @@ function CartItem({ item }: { item: CartItem }) {
         aria-label="Remove item from cart"
         className="flex h-[30px] w-[30px] cursor-pointer items-center justify-end"
       >
-        <RiDeleteBin6Line className="text-blue-500" />
+        <RiDeleteBin6Line size={18} className="text-primary" />
       </button>
     </div>
   );
@@ -154,7 +154,7 @@ function CartFooter({
       <Link
         href="/cart"
         onClick={() => setIsOpen(false)}
-        className="mb-[8px] flex h-[26px] w-full items-center justify-center bg-black text-[12px] font-bold text-white"
+        className="mb-[8px] flex h-[36px] w-full items-center justify-center bg-black text-[12px] font-bold text-white transition-colors duration-200 hover:bg-primary"
       >
         View Cart
       </Link>
