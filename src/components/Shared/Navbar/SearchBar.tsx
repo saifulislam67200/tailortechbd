@@ -8,7 +8,7 @@ import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
-export default function SearchBar() {
+export default function SearchBar({ onSearch }: { onSearch?: (value: string) => void }) {
   const query = useSearchParams();
   const searchValue = query.get("searchTerm");
   const [debounceValue, setDebounceValue] = useState(searchValue);
@@ -29,6 +29,7 @@ export default function SearchBar() {
     const form = e.target as HTMLFormElement;
     const search = form.search?.value || "";
     if (search) {
+      onSearch?.(search);
       router.push(`/shop?searchTerm=${search}`);
     }
     // Implement search functionality here

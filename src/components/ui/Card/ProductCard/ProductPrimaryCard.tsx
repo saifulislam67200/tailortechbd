@@ -1,4 +1,5 @@
 import { IProduct } from "@/types/product";
+import { getProductDiscountPrice } from "@/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
@@ -12,6 +13,21 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
         className
       )}
     >
+      {product.discount ? (
+        <span className="absolute top-0 right-0 z-[3] line-clamp-1 bg-secondary px-[4px] py-[2px] text-[12px] text-white">
+          Save {Math.ceil(getProductDiscountPrice(product.price, product.discount))} TK.
+        </span>
+      ) : (
+        ""
+      )}
+
+      {product.tag ? (
+        <span className="absolute top-0 left-0 z-[3] line-clamp-1 hidden max-w-[48%] bg-primary px-[4px] py-[2px] text-[12px] text-white sm:flex">
+          {product.tag}
+        </span>
+      ) : (
+        ""
+      )}
       {/* Image */}
       <Link
         href={`/product/${product?.slug}`}
@@ -31,7 +47,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
 
       {/* Content section */}
       <div className="flex h-full flex-col justify-between p-[8px]">
-        <Link href={`/product/${product?.slug}`} className="line-clamp-2">
+        <Link href={`/product/${product?.slug}`} className="line-clamp-2 hover:text-secondary">
           <span className="text-[14px] font-bold">{product.name}</span>
         </Link>
 
@@ -43,8 +59,19 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
             Size: {product.colors?.[0]?.sizes?.map((color) => color.size?.toUpperCase()).join(", ")}
           </p>
         </div>
-        <div className="mt-auto pt-2 text-start">
-          <p className="text-[15px] font-[700] text-black">Tk {product.price}</p>
+        <div className="mt-auto flex flex-col gap-[20px] pt-2 text-start">
+          {product.discount ? (
+            <span className="flex flex-col justify-start gap-[5px] sm:flex-row sm:items-center">
+              <p className="text-[15px] font-[700] text-primary/50 line-through">
+                Tk {product.price}
+              </p>
+              <p className="text-[15px] font-[700] text-primary">
+                Tk {getProductDiscountPrice(product.price, product.discount)}
+              </p>
+            </span>
+          ) : (
+            <p className="text-[15px] font-[700] text-black">Tk {product.price}</p>
+          )}
           <ProductAddToCartModal product={product} />
         </div>
       </div>

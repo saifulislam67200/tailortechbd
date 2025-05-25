@@ -1,11 +1,11 @@
-import { socialLinks } from "@/utils/site";
+import { footerLinks, socialLinks } from "@/utils/site";
 import Image from "next/image";
 import Link from "next/link";
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock } from "react-icons/fa";
+import { FaClock, FaEnvelope, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="relative w-full overflow-hidden text-white mt-[20px] md:mt-[40px] bg-primary">
+    <footer className="relative mt-[20px] w-full overflow-hidden bg-primary text-white md:mt-[40px]">
       <div className="main_container relative mx-auto w-full px-4 py-[40px]">
         <div className="flex flex-col gap-[48px] lg:flex-row">
           {/* Company Info */}
@@ -40,71 +40,28 @@ const Footer = () => {
 
           {/* Right Side*/}
           <div className="grid grid-cols-1 gap-[32px] md:grid-cols-3 lg:w-[70%]">
-            {/* Quick Links */}
-            <div className="space-y-[16px]">
-              <h4 className="text-lg font-semibold">Quick Links</h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/about" className="text-[14px] transition-colors hover:text-white">
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/products" className="text-[14px] transition-colors hover:text-white">
-                    Our Products
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/contact" className="text-[14px] transition-colors hover:text-white">
-                    Contact Us
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            {/* Customer Service */}
-            <div className="space-y-[16px]">
-              <h4 className="text-lg font-semibold">Customer Service</h4>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/faq" className="text-[14px] transition-colors hover:text-white">
-                    FAQ
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/return-refund-cancellation"
-                    className="text-[14px] transition-colors hover:text-white"
-                  >
-                    Return & Refund
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/terms-conditions"
-                    className="text-[14px] transition-colors hover:text-white"
-                  >
-                    Terms & Conditions
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/privacy-policy"
-                    className="text-[14px] transition-colors hover:text-white"
-                  >
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/cookie-policy"
-                    className="text-[14px] transition-colors hover:text-white"
-                  >
-                    Cookie Policy
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            {footerLinks.map(({ label, contents }, i) => (
+              <div className="space-y-[30px]" key={i + label + "footers"}>
+                <h4 className="relative text-lg font-semibold before:absolute before:bottom-[-8px] before:left-0 before:h-[2px] before:w-[40px] before:bg-white/20">
+                  {label}
+                </h4>
+                <ul className="space-y-2">
+                  {contents.map((content, i) => (
+                    <li
+                      key={i + content.label + "footers_child" + label}
+                      className="relative left-0 duration-[0.3s] hover:left-[5px]"
+                    >
+                      <Link
+                        href={content.url}
+                        className="text-[14px] transition-colors hover:text-white"
+                      >
+                        {content.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
 
             {/* Contact Info */}
             <div className="space-y-[16px]">
@@ -122,11 +79,15 @@ const Footer = () => {
                 </div>
                 <div className="flex items-center space-x-3">
                   <FaPhone size={16} className="flex-shrink-0 text-white" />
-                  <p className="text-[14px]">+880 1XXX-XXXXXX</p>
+                  <Link href={"tel:+880 1XXX-XXXXXX"} className="text-[14px] hover:underline">
+                    +880 1XXX-XXXXXX
+                  </Link>
                 </div>
                 <div className="flex items-center space-x-3">
                   <FaEnvelope size={16} className="flex-shrink-0 text-white" />
-                  <p className="text-[14px]">info@tailortech.com</p>
+                  <Link href={"mailto:info@tailortech.com"} className="text-[14px] hover:underline">
+                    info@tailortech.com
+                  </Link>
                 </div>
                 <div className="flex items-start space-x-3">
                   <FaClock size={16} className="mt-1 flex-shrink-0 text-white" />

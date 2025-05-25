@@ -61,10 +61,10 @@ const SelectionBox = ({
   }, [deepEqual]);
 
   return (
-    <div className={twMerge("relative w-full", className)} ref={dropdownRef}>
+    <div className={twMerge("relative h-fit w-full", className)} ref={dropdownRef}>
       <button
         type="button"
-        className="relative w-full cursor-pointer rounded border border-border-main bg-white px-[12px] py-[6px] text-start text-[12px] font-normal"
+        className="relative h-full w-full cursor-pointer rounded border border-border-main bg-white px-[12px] py-[6px] text-start text-[12px] font-normal"
         onClick={() => setIsOpen(!isOpen)}
       >
         {(typeof displayValue == "string" ? displayValue : selected?.label) || "Select an option"}

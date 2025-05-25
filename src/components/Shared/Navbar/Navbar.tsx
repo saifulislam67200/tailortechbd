@@ -1,7 +1,5 @@
 "use client";
 
-import type React from "react";
-
 import { MenuIcon } from "@/components/icons/MenuIcon";
 import { useAppSelector } from "@/hooks/redux";
 import Link from "next/link";
@@ -18,18 +16,11 @@ import TopBar from "./TopBar";
 import UserDropdown from "./UserDropdown";
 
 export default function Navbar() {
-  const [searchQuery, setSearchQuery] = useState("");
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { user } = useAppSelector((state) => state.user);
   const cartItems = useAppSelector((state) => state?.cart?.items);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Implement search functionality here
-    setIsSearchOpen(false);
-  };
 
   useEffect(() => {
     if (isCartOpen || isMenuOpen) {
@@ -78,14 +69,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile Search Bar - Toggled by search icon */}
-        {isSearchOpen && (
-          <MobileSearchBar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            handleSearch={handleSearch}
-            setIsSearchOpen={setIsSearchOpen}
-          />
-        )}
+        {isSearchOpen && <MobileSearchBar setIsSearchOpen={setIsSearchOpen} />}
       </nav>
 
       <CategoryMenu />

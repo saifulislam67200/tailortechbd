@@ -33,26 +33,22 @@ export const footerLinks = [
         url: "/about",
       },
       {
-        label: "Privacy Policy",
-        url: "/privacy-policy",
+        label: "Our Products",
+        url: "/shop",
       },
       {
-        label: "Terms & Conditions",
-        url: "/terms-and-conditions",
-      },
-      {
-        label: "Cancelation & Return Policy",
-        url: "/crp",
+        label: "Contact Us",
+        url: "/contact",
       },
     ],
   },
 
   {
-    label: "TailorTech",
+    label: "Customer Service",
     contents: [
       {
-        label: "About Us",
-        url: "/about",
+        label: "Return & Refund",
+        url: "/return-refund-cancellation",
       },
       {
         label: "Privacy Policy",
@@ -64,28 +60,7 @@ export const footerLinks = [
       },
       {
         label: "Cancelation & Return Policy",
-        url: "/crp",
-      },
-    ],
-  },
-  {
-    label: "TailorTech",
-    contents: [
-      {
-        label: "About Us",
-        url: "/about",
-      },
-      {
-        label: "Privacy Policy",
         url: "/privacy-policy",
-      },
-      {
-        label: "Terms & Conditions",
-        url: "/terms-and-conditions",
-      },
-      {
-        label: "Cancelation & Return Policy",
-        url: "/crp",
       },
     ],
   },

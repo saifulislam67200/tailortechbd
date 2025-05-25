@@ -55,28 +55,30 @@ const CartCard = ({ item }: { item: TCartItem }) => {
           />
         </div>
         <div>
-          <h1 className="text-[12px] font-bold text-black sm:text-[14px]">{item?.name}</h1>
-          <p className="text-sm">Size: {item?.size}</p>
-          <p className="text-sm">Color: {item?.color}</p>
-          {item.discount ? <p className="text-sm">Discount: {item?.discount}%</p> : ""}
+          <h1 className="line-clamp-1 text-[14px] font-bold text-black sm:text-[14px]">
+            {item?.name}
+          </h1>
+          <p className="text-[12px]">Size: {item?.size}</p>
+          <p className="text-[12px]">Color: {item?.color}</p>
+          {item.discount ? <p className="text-[12px]">Discount: {item?.discount}%</p> : ""}
         </div>
       </div>
 
-      <div className="mt-[10px] flex justify-end pr-[10px] md:mt-[0px]">
+      <div className="mt-[10px] flex items-center justify-end pr-[10px] md:mt-[0px]">
         <div className="relative flex h-[18px] items-center">
           <button
-            className="flex cursor-pointer items-center border px-[5px]"
+            className="flex cursor-pointer items-center border-[1px] border-primary px-[5px] hover:bg-primary hover:text-white"
             onClick={() => handleQuantity("dec", item?.id)}
             disabled={item?.quantity <= 1}
             onChange={() => {}}
           >
             -
           </button>
-          <div className="flex w-[64px] items-start justify-center border-t border-b border-quaternary px-[12px]">
+          <span className="flex w-[64px] items-start justify-center border-t border-b border-quaternary px-[12px]">
             {item?.quantity}
-          </div>
+          </span>
           <button
-            className="flex cursor-pointer items-center border px-[5px]"
+            className="flex cursor-pointer items-center border-[1px] border-primary px-[5px] hover:bg-primary hover:text-white"
             onClick={() => handleQuantity("inc", item?.id)}
             disabled={item?.stock === item?.quantity}
             onChange={() => {}}
@@ -90,7 +92,7 @@ const CartCard = ({ item }: { item: TCartItem }) => {
           </div>
         </div>
 
-        <p className="mr-[50px] ml-[20px] text-[13px]">
+        <p className="center mr-[50px] ml-[20px] text-[13px]">
           <span className="font-semibold">
             {item.discount ? (
               <>Tk {getProductDiscountPrice(item?.price, item?.discount)}</>
@@ -103,7 +105,7 @@ const CartCard = ({ item }: { item: TCartItem }) => {
 
         <button
           onClick={() => handleRemoveProduct(item.id, item.color!, item.size)}
-          className="flex h-[25px] w-[25px] cursor-pointer items-center justify-center bg-quaternary"
+          className="flex aspect-square w-[30px] cursor-pointer items-center justify-center bg-danger/10 text-danger"
         >
           <RiDeleteBin6Line />
         </button>
