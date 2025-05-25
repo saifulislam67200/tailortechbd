@@ -1,14 +1,15 @@
 "use client";
 
-import { useRef } from "react";
-import Image from "next/image";
-import { FiShoppingCart } from "react-icons/fi";
-import { IoCloseSharp } from "react-icons/io5";
-import Link from "next/link";
-import { FaCartPlus } from "react-icons/fa";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { removeFromCart } from "@/redux/features/cart/cartSlice";
+import { getProductDiscountPrice } from "@/utils";
+import Image from "next/image";
+import Link from "next/link";
+import { useRef } from "react";
+import { FaCartPlus } from "react-icons/fa";
+import { FiShoppingCart } from "react-icons/fi";
+import { IoCloseSharp } from "react-icons/io5";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface CartItem {
   id: string;
@@ -101,9 +102,15 @@ function CartItem({ item }: { item: CartItem }) {
       </div>
       <div className="ml-4 flex-grow">
         <h3 className="text-sm font-medium">{item.name}</h3>
-        <p className="text-sm">
-          ${item.price.toFixed(2)} x {item.quantity}
-        </p>
+        {item.discount ? (
+          <p className="text-sm">
+            ${getProductDiscountPrice(item.price, item.discount).toFixed(2)}
+          </p>
+        ) : (
+          <p className="text-sm">
+            ${item.price.toFixed(2)} x {item.quantity}
+          </p>
+        )}
         <p className="text-sm">Size: {item.size}</p>
         <p className="text-sm">Color: {item.color}</p>
       </div>
@@ -142,7 +149,10 @@ function CartFooter({
   cartItems: CartItem[];
   setIsOpen: (isOpen: boolean) => void;
 }) {
-  const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const subtotal = cartItems.reduce((total, item) => {
+    const price = item.discount ? getProductDiscountPrice(item.price, item.discount) : item.price;
+    return total + price * item.quantity;
+  }, 0);
 
   return (
     <div className="absolute right-0 bottom-0 left-0 bg-white p-[8px]">

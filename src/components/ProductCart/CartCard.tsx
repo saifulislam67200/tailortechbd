@@ -8,6 +8,7 @@ import {
 } from "@/redux/features/cart/cartSlice";
 import { getProductDiscountPrice } from "@/utils";
 import Image from "next/image";
+import Link from "next/link";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 const CartCard = ({ item }: { item: TCartItem }) => {
@@ -55,9 +56,12 @@ const CartCard = ({ item }: { item: TCartItem }) => {
           />
         </div>
         <div>
-          <h1 className="line-clamp-1 text-[14px] font-bold text-black sm:text-[14px]">
+          <Link
+            href={`/product/${item?.slug}`}
+            className="line-clamp-1 text-[14px] font-bold text-black hover:text-secondary sm:text-[14px]"
+          >
             {item?.name}
-          </h1>
+          </Link>
           <p className="text-[12px]">Size: {item?.size}</p>
           <p className="text-[12px]">Color: {item?.color}</p>
           {item.discount ? <p className="text-[12px]">Discount: {item?.discount}%</p> : ""}

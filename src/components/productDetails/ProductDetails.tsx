@@ -33,7 +33,7 @@ const ProductDetails: React.FC<IProps> = async ({ params }) => {
         {product.discount ? (
           <div className="flex items-center gap-[10px]">
             <span className="text-[18px] font-semibold">
-              {(product?.price - product.price * (product.discount / 100))?.toFixed(2)}
+              TK. {(product?.price - product.price * (product.discount / 100))?.toFixed(2)}
             </span>
             <span className="mt-[8px] text-[15px] font-bold text-info line-through">
               TK {product?.price}

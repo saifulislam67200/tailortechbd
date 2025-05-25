@@ -99,7 +99,7 @@ const ProductDetailsSlider = ({
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
                 onMouseMove={handleMouseMove}
-                className="group flex w-full flex-col items-center justify-center gap-4 lg:flex-row"
+                className="group flex w-full cursor-crosshair flex-col items-center justify-center gap-4 lg:flex-row"
               >
                 <div className="aspect-square h-full max-h-[600px] w-full border border-info-light p-[5px] lg:p-[0px]">
                   <Image

@@ -5,15 +5,15 @@ import Image from "next/image";
 import { cloneElement, isValidElement, ReactElement, ReactNode, useState } from "react";
 import { LuX } from "react-icons/lu";
 import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 import Button from "./Button";
 import DialogProvider from "./DialogProvider";
 import HorizontalLine from "./HorizontalLine";
 import SelectionBox from "./SelectionBox";
-import { toast } from "sonner";
 
 interface Props {
   children?: ReactNode;
-  product: Pick<IProduct, "_id" | "colors" | "images" | "name" | "price" | "discount">;
+  product: Pick<IProduct, "_id" | "colors" | "images" | "name" | "price" | "discount" | "slug">;
 }
 
 const ProductAddToCartModal = ({ children, product }: Props) => {
@@ -48,6 +48,7 @@ const ProductAddToCartModal = ({ children, product }: Props) => {
       stock: selectedSize?.stock || 0,
       color: selectedColor?.color || "",
       image: product?.images?.[0],
+      slug: product?.slug,
     };
     dispatch(addToCart(payload));
     setIsOpen(false);

@@ -61,6 +61,7 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
       stock: activeSize.stock,
       color: activeColor.color,
       image: product?.images[0],
+      slug: product.slug,
     };
 
     dispatch(addToCart(payload));
