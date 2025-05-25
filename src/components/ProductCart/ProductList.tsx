@@ -6,8 +6,10 @@ import { useDispatch } from "react-redux";
 import CartCard from "./CartCard";
 
 const ProductList = () => {
-  const { items: cartItems, checkedItems } = useAppSelector((state) => state?.cart) ?? [];
+  const { items: cartItems } = useAppSelector((state) => state?.cart) ?? [];
   const dispatch = useDispatch();
+
+  const checkedItems = cartItems?.filter((item) => item?.isChecked);
 
   const handleDeleteCheckedProducts = () => {
     dispatch(deleteCheckedItems());
