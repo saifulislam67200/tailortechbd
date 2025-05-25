@@ -64,7 +64,7 @@ const SelectionBox = ({
     <div className={twMerge("relative w-full", className)} ref={dropdownRef}>
       <button
         type="button"
-        className="relative w-full cursor-pointer rounded border border-border-main bg-white px-[12px] py-[6px] text-start text-[12px] font-normal"
+        className="relative w-full cursor-pointer border border-border-main bg-white px-[12px] py-[8.5px] text-start text-[14px] font-normal hover:text-primary"
         onClick={() => setIsOpen(!isOpen)}
       >
         {(typeof displayValue == "string" ? displayValue : selected?.label) || "Select an option"}
