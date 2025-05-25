@@ -1,6 +1,8 @@
+import ShopViewFallBack from "@/components/Shop/ShopViewFallBack";
 import { baseUrl } from "@/redux/api/api";
 import { ICategory } from "@/types/category";
-import CategoryProductView from "@/views/CategoryProductView";
+import CategoryShopProductView from "@/views/CategoryShopProductView";
+import { Suspense } from "react";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -19,7 +21,11 @@ const page = async (props: {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ [key: string]: string | undefined }>;
 }) => {
-  return <CategoryProductView {...props} />;
+  return (
+    <Suspense fallback={<ShopViewFallBack />}>
+      <CategoryShopProductView {...props} />;
+    </Suspense>
+  );
 };
 
 export default page;

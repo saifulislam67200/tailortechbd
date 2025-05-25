@@ -28,7 +28,7 @@ const sortingOptions = [
   },
 ];
 
-const CategoryProductFiltering = () => {
+const ShopProductFiltering = () => {
   const { updateSearchParams, searchParams } = useSetSearchParams();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -75,4 +75,4 @@ const CategoryProductFiltering = () => {
   );
 };
 
-export default CategoryProductFiltering;
+export default ShopProductFiltering;

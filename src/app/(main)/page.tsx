@@ -1,8 +1,8 @@
 import Collections from "@/components/Home/Collections";
 import Hero from "@/components/Home/Hero";
 import MostPopular from "@/components/Home/MostPopular";
+import ProductsFallback from "@/components/Home/ProductsFallback";
 import TopCategories from "@/components/Home/TopCategories";
-import CardSkeleton from "@/components/ui/Card/CardSkeleton";
 import DataNotFound from "@/components/ui/DataNotFound";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { Suspense } from "react";
@@ -20,7 +20,7 @@ export default function Home() {
           />
         }
       >
-        <Suspense fallback={<CardSkeleton />}>
+        <Suspense fallback={<ProductsFallback title="Collections" />}>
           <Collections />
         </Suspense>
       </ErrorBoundary>
@@ -33,7 +33,7 @@ export default function Home() {
           />
         }
       >
-        <Suspense fallback={<CardSkeleton />}>
+        <Suspense fallback={<ProductsFallback title="Most Popular" />}>
           <MostPopular />
         </Suspense>
       </ErrorBoundary>
