@@ -1,62 +1,32 @@
-"use client";
+import { baseUrl } from "@/redux/api/api";
+import Banner from "./Banner";
+import { IBanner } from "@/types/banner";
 
-import Image from "next/image";
-import { useState } from "react";
-import { Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
+const Hero = async () => {
+  const res = await fetch(`${baseUrl}/banner?active=true`, {
+    next: { revalidate: 600 },
+  });
 
-import "swiper/css";
+  if (!res.ok) {
+    return (
+      <section className="w-full py-[16px]">
+        <div className="mt-4 flex h-[200px] items-center justify-center text-center">
+          <div className="rounded-md bg-red-100 px-6 py-4 text-danger">
+            <p className="text-[14px] font-semibold">Failed to load Data</p>
+            <p className="text-[13px]">Please try again later.</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
-const Hero = () => {
-  const [activeSlide, setActiveSlide] = useState(0);
-
-  const leftImages = ["/images/home/banner/banner1.png", "/images/home/banner/banner2.png", "/images/home/banner/banner3.png",];
-
+  const data = await res.json();
+  const banners: IBanner[] = data?.data || [];
+  // console.log(banners);
   return (
     <div className="mt-[16px]">
       <div className="flex flex-col gap-[8px] lg:flex-row">
-        {/* Left Side - Main Banner */}
-        <div className="w-full">
-          <div className="relative mb-[4px] aspect-[834.66/250] w-full">
-            <Swiper
-              style={{ width: "100%", height: "100%" }}
-              spaceBetween={20}
-              centeredSlides={true}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}
-              modules={[Autoplay]}
-              onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
-            >
-              {leftImages.map((image, index) => (
-                <SwiperSlide key={index}>
-                  <div className="relative h-full w-full">
-                    <Image
-                      src={image}
-                      alt={`main-banner-${index + 1}`}
-                      fill
-                      className="object-cover"
-                      priority={index === 0}
-                    />
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-
-          {/* Indicators */}
-          <div className="flex justify-center gap-[8px] bg-white">
-            {leftImages.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveSlide(index)}
-                className={`h-[3px] w-[30px] lg:h-[3px] lg:w-[40px] ${activeSlide === index ? "bg-black" : "bg-[#878787]"}`}
-                aria-label={`slide-${index + 1}`}
-              />
-            ))}
-          </div>
-        </div>
+        <Banner banners={banners} />
       </div>
     </div>
   );

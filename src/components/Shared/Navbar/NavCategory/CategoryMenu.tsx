@@ -1,5 +1,4 @@
 "use client";
-// import { categories } from "@/mock/category";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/category.api";
 import Link from "next/link";
 const CategoryMenu = () => {
@@ -23,14 +22,14 @@ const CategoryMenu = () => {
             <div key={category._id} className="group">
               <Link
                 href={`/shop/${category.slug}`}
-                className="group/category flex items-center gap-[5px] px-1 pt-1 text-sm text-[16px] font-bold text-black transition-colors duration-200 hover:bg-primary hover:text-white"
+                className="group/category flex items-center gap-[5px] px-[8px] pt-1 text-sm text-[16px] font-bold text-black hover:bg-gray-100"
               >
                 {category.label}
               </Link>
 
               {/* Dropdown for subcategories */}
               {hasSubCategories ? (
-                <div className="invisible absolute left-0 z-50 mt-[12px] grid w-full grid-cols-1 bg-quaternary px-[20px] opacity-0 shadow-lg transition-all duration-300 group-hover:visible group-hover:opacity-100 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <div className="invisible absolute left-0 z-50 mt-[1px] grid w-full grid-cols-1 bg-quaternary px-[20px] opacity-0 shadow-lg transition-all duration-300 group-hover:visible group-hover:opacity-100 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   {category.subcategories?.map((subCategory, i) => (
                     <Link
                       key={subCategory._id + i}

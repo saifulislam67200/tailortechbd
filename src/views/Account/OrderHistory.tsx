@@ -8,7 +8,7 @@ import {
   IoCheckmarkCircle,
   IoCloseCircle,
   IoEye,
-  IoDownload,
+  // IoDownload,
   IoTime,
 } from "react-icons/io5";
 import type { IOrder, IShippingAddress } from "@/types/order";
@@ -123,10 +123,10 @@ export default function OrderHistory() {
                     </div>
 
                     <div className="flex items-center gap-[8px]">
-                      <button className="inline-flex cursor-pointer items-center gap-[8px] rounded-lg bg-gray-100 px-[12px] py-[8px] text-[14px] font-medium text-primary transition-colors hover:bg-gray-200">
+                      {/* <button className="inline-flex cursor-pointer items-center gap-[8px] rounded-lg bg-gray-100 px-[12px] py-[8px] text-[14px] font-medium text-primary transition-colors hover:bg-gray-200">
                         <IoDownload className="h-[16px] w-[16px]" />
                         Invoice
-                      </button>
+                      </button> */}
                       <button
                         onClick={() => toggleOrderExpansion(order._id)}
                         className="inline-flex cursor-pointer items-center gap-[8px] rounded-lg bg-primary px-[12px] py-[8px] text-[14px] font-medium text-white transition-colors"
