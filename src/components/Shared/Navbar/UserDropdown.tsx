@@ -67,9 +67,20 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
       {isOpen && (
         <div className="absolute right-0 z-50 mt-2 w-64 rounded-lg border border-gray-200 bg-white pt-2 shadow-lg">
           {/* User Info Header */}
-          <div className="flex flex-col items-center border-b border-gray-200 px-4 py-3">
-            <p className="text-[16px] font-medium capitalize">{user?.fullName}</p>
-            <p className="text-[14px] text-info capitalize">{user?.role}</p>
+          <div className="border-b border-gray-100 px-4 py-3">
+            <div className="flex items-center space-x-3">
+              <Image
+                src={user?.avatar || "/images/avatar.jpg"}
+                alt="user-icon"
+                width={40}
+                height={40}
+                className="rounded-full border border-border-muted object-cover"
+              />
+              <div>
+                <p className="text-[14px] font-medium capitalize">{user?.fullName}</p>
+                <p className="text-[12px] text-info capitalize">{user?.role}</p>
+              </div>
+            </div>
           </div>
 
           {/* Menu Items */}
