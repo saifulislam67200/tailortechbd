@@ -1,31 +1,39 @@
 "use client";
 
 import Breadcrumb from "@/components/ui/BreadCrumbs";
+import Button from "@/components/ui/Button";
+import CountrySelector from "@/components/ui/CountrySelector";
 import FormCard from "@/components/ui/FormCard";
 import Input from "@/components/ui/Input";
-import { IQueruMutationErrorResponse } from "@/types";
-import { toast } from "sonner";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import { ICountry } from "@/hooks/useCountries";
 import { useForgotPasswordMutation } from "@/redux/features/user/user.api";
+import { IQueruMutationErrorResponse } from "@/types";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import Image from "next/image";
+import { useState } from "react";
+import { toast } from "sonner";
+import * as Yup from "yup";
 
 const ForgotPasswordSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Email is required"),
+  email: Yup.string().email("Invalid email").optional(),
+  phoneNumber: Yup.string().optional(),
 });
 
 const ForgotPasswordView = () => {
-  const [forgotPassword] = useForgotPasswordMutation();
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+  const [country, setCountry] = useState<ICountry>();
+  const [mode, setMode] = useState<"email" | "phoneNumber">("email");
+  const [isSent, setIsSent] = useState(true);
 
   const handleSubmit = async (
-    values: { email: string },
+    values: { email: string; phoneNumber: string },
     { resetForm }: { resetForm: () => void }
   ) => {
     try {
       const res = await forgotPassword({
         email: values.email,
+        mode,
       });
-
-      console.log("Forgot Password Response:", res?.data?.data);
 
       const error = res.error as IQueruMutationErrorResponse;
 
@@ -38,6 +46,7 @@ const ForgotPasswordView = () => {
         return;
       }
 
+      setIsSent(true);
       toast.success("Password reset link sent to your email!");
       resetForm();
     } catch {
@@ -48,33 +57,75 @@ const ForgotPasswordView = () => {
   return (
     <div className="main_container min-h-[100dvh] py-[20px]">
       <Breadcrumb />
-      <FormCard headerButtons={[{ title: "Forgot Password" }]} className="mt-[20px]">
-        <Formik
-          initialValues={{ email: "" }}
-          validationSchema={ForgotPasswordSchema}
-          onSubmit={handleSubmit}
+      {!isSent ? (
+        <FormCard
+          headerButtons={[
+            { title: "Forgot Password (email)", onClick: () => setMode("email") },
+            { title: "Forgot Password (phone)", onClick: () => setMode("phoneNumber") },
+          ]}
+          className="mt-[20px]"
         >
-          {({ isSubmitting }) => (
-            <Form>
-              <label className="text-[14px] font-[600] text-primary">Email</label>
-              <Field name="email" as={Input} type="email" placeholder="Email" />
-              <ErrorMessage
-                name="email"
-                component="div"
-                className="mt-1 text-[12px] text-red-500"
-              />
+          <Formik
+            initialValues={{ email: "", phoneNumber: "" }}
+            validationSchema={ForgotPasswordSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ touched, errors }) => (
+              <Form>
+                {mode == "email" ? (
+                  <>
+                    <label className="text-[14px] font-[600] text-primary">Email</label>
+                    <Field name="email" as={Input} type="email" placeholder="Email" />
+                    <ErrorMessage
+                      name="email"
+                      component="span"
+                      className="mt-1 text-[12px] text-red-500"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <CountrySelector onCountrySelect={setCountry} />
+                    <div className="mt-[16px] flex flex-col gap-[5px]">
+                      <div className="flex items-center justify-start gap-0">
+                        <span className="border-y-[1px] border-l-[1px] border-border-main bg-solid-slab px-[12px] py-[6px] text-[12px] text-strong">
+                          {country?.dial_code || "+880"}
+                        </span>
+                        <Field
+                          type="number"
+                          name="phoneNumber"
+                          placeholder="Enter Your Mobile Number"
+                          as={Input}
+                        />
+                      </div>
+                      {touched.phoneNumber && errors.phoneNumber && (
+                        <span className="text-[12px] text-danger">{errors.phoneNumber}</span>
+                      )}
+                    </div>
+                  </>
+                )}
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className={`center hover:bg-primary-hover mt-[20px] w-full cursor-pointer rounded-[5px] border-[1px] border-border-main bg-primary px-[20px] py-[5px] text-[16px] text-white transition-all disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-500`}
-              >
-                Submit
-              </button>
-            </Form>
-          )}
-        </Formik>
-      </FormCard>
+                <Button isLoading={isLoading} className="mt-[20px] w-full">
+                  Submit
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </FormCard>
+      ) : (
+        <div className="mx-auto mt-[50px] flex w-full max-w-[500px] flex-col gap-[10px] border-[1px] border-border-muted bg-white p-[16px] shadow-md">
+          <Image src="/images/logos/logo.png" width={100} height={100} alt="success" />
+          <h6 className="fot-[700] text-start text-[25px] text-primary">
+            Password reset link sent
+          </h6>
+          <span className="text-start text-[14px] text-muted">
+            We have sent a password reset link to your provided information. Check your inbox or
+            spam section for the link. if you did not receive the link, please try again.
+          </span>
+          <Button className="w-full" onClick={() => setIsSent(false)}>
+            Try Again
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

@@ -40,7 +40,7 @@ const ShopProductView = async ({ searchParams }: TSearchParams) => {
       <FilterCountDisplay />
       {data.data.length ? (
         <>
-          <div className="mt-4 grid w-full grid-cols-1 justify-center gap-[16px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+          <div className="mt-4 grid w-full grid-cols-2 justify-center gap-[16px] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {data.data?.map((data) => <ProductPrimaryCard key={data._id} product={data} />)}
           </div>
           <ShopProductPagination totalDoc={data.meta.totalDoc} />

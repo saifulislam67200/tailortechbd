@@ -1,6 +1,6 @@
 import { baseUrl } from "@/redux/api/api";
 import { IProduct } from "@/types/product";
-import ProductSecondaryCard from "../ui/Card/ProductCard/ProductSecondaryCard";
+import ProductPrimaryCard from "../ui/Card/ProductCard/ProductPrimaryCard";
 import Title from "../ui/Title";
 const Collections = async () => {
   const res = await fetch(
@@ -33,7 +33,7 @@ const Collections = async () => {
 
       <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
         {collections?.map((item) => (
-          <ProductSecondaryCard className="h-full" key={item._id} product={item} />
+          <ProductPrimaryCard className="h-full" key={item._id} product={item} />
         ))}
       </div>
     </section>

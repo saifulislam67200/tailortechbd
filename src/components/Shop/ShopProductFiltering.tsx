@@ -63,7 +63,7 @@ const ShopProductFiltering = () => {
       <div className="flex flex-col items-start justify-start gap-[5px] sm:flex-row sm:items-center">
         <span className="text-[14px] font-[600] text-strong">Sort By:</span>
         <SelectionBox
-          className="w-[200px]"
+          className="h-[38px] w-[200px]"
           showSearch={false}
           data={sortingOptions}
           onSelect={(data) => {

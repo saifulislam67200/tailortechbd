@@ -1,6 +1,5 @@
 "use client";
 
-import { deepEqual } from "assert";
 import { useEffect, useRef, useState } from "react";
 import { FaCaretDown } from "react-icons/fa6";
 import { twMerge } from "tailwind-merge";
@@ -58,13 +57,13 @@ const SelectionBox = ({
     if (defaultValue) {
       onSelect(defaultValue);
     }
-  }, [deepEqual]);
+  }, []);
 
   return (
-    <div className={twMerge("relative w-full", className)} ref={dropdownRef}>
+    <div className={twMerge("relative h-fit w-full", className)} ref={dropdownRef}>
       <button
         type="button"
-        className="relative w-full cursor-pointer border border-border-main bg-white px-[12px] py-[8.5px] text-start text-[14px] font-normal hover:text-primary"
+        className="relative h-full w-full cursor-pointer rounded border border-border-main bg-white px-[12px] py-[6px] text-start text-[12px] font-normal"
         onClick={() => setIsOpen(!isOpen)}
       >
         {(typeof displayValue == "string" ? displayValue : selected?.label) || "Select an option"}
