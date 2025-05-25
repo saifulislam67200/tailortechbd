@@ -11,13 +11,19 @@ import {
   FiShoppingBag,
   FiGrid,
 } from "react-icons/fi";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { FaCircleUser } from "react-icons/fa6";
 import Link from "next/link";
+import { useLogoutUserMutation } from "@/redux/features/user/user.api";
+import { logout as logoutAction } from "@/redux/features/user/user.slice";
+import { toast } from "sonner";
 
 export default function UserDropdown({ displayName = false }: { displayName?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [logoutUser] = useLogoutUserMutation();
+  const dispatch = useAppDispatch();
+
   const { user } = useAppSelector((state) => state.user);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -31,6 +37,13 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleLogout = async () => {
+    dispatch(logoutAction(undefined));
+    setIsOpen(false);
+    await logoutUser(undefined);
+    toast.success("Logout successfully");
+  };
 
   return (
     <div className="relative hidden lg:block" ref={dropdownRef}>
@@ -120,7 +133,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
               </Link>
             )}
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={() => handleLogout()}
               className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[12px] text-[14px] text-primary transition-colors duration-150 hover:bg-gray-50"
             >
               <FiLogOut className="h-[16px] w-[16px]" />

@@ -2,11 +2,15 @@
 
 import { useLogoutUserMutation } from "@/redux/features/user/user.api";
 import Button from "./Button";
+import { useAppDispatch } from "@/hooks/redux";
+import { logout as logoutAction } from "@/redux/features/user/user.slice";
 
 const LogoutButton = ({ className }: { className?: string }) => {
-  const [logout] = useLogoutUserMutation();
+  const [logoutUser] = useLogoutUserMutation();
+  const dispatch = useAppDispatch();
   const handleLogout = async () => {
-    await logout(undefined);
+    dispatch(logoutAction(undefined));
+    await logoutUser(undefined);
   };
   return (
     <Button onClick={handleLogout} className={className}>
