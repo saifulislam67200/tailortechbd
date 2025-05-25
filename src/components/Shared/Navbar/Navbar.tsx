@@ -70,7 +70,7 @@ export default function Navbar() {
             {user ? (
               <UserDropdown />
             ) : (
-              <Link href={"/login"} className="text-primary">
+              <Link href={"/login"} className="hidden text-primary lg:block">
                 <FaCircleUser size={22} />
               </Link>
             )}

@@ -35,7 +35,7 @@ export default function NavIcons({ setIsSearchOpen, setIsCartOpen }: NavIconsPro
         </span>
       </button>
 
-      <Link href="/wishlist" className="relative text-primary" aria-label="wishlist">
+      <Link href="/wishlist" className="relative hidden text-primary lg:flex" aria-label="wishlist">
         <FaHeart size={22} />
         <span className="absolute -top-[12px] -right-[12px] flex h-[20px] w-[20px] items-center justify-center rounded-full bg-secondary text-[12px] text-white">
           {wishlistItems?.length || 0}

@@ -36,7 +36,7 @@ export default function CartDrawer({ isOpen, setIsOpen }: CartDrawerProps) {
   return (
     <>
       <div
-        className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${
+        className={`fixed inset-0 z-[50] bg-black transition-opacity duration-300 ${
           isOpen ? "opacity-50" : "pointer-events-none opacity-0"
         }`}
         onClick={() => setIsOpen(false)}
@@ -52,13 +52,13 @@ export default function CartDrawer({ isOpen, setIsOpen }: CartDrawerProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b bg-quaternary p-[16px]">
-          <h2 className="flex items-center gap-[3px] text-[16px] font-bold">
+          <h2 className="flex items-center gap-[3px] text-[16px] font-bold text-black">
             <FaCartPlus size={18} />
             Cart({cartItems?.length})
           </h2>
           <button
             onClick={() => setIsOpen(false)}
-            className="cursor-pointer font-bold"
+            className="cursor-pointer font-bold text-black"
             aria-label="Close cart"
           >
             <IoCloseSharp size={20} />
@@ -90,7 +90,7 @@ function CartItem({ item }: { item: CartItem }) {
   };
 
   return (
-    <div className="flex items-center border-b border-quaternary py-4">
+    <div className="flex items-center border-b border-quaternary py-4 text-strong">
       <div className="relative h-[76px] w-[76px] flex-shrink-0">
         <Image
           src={item.image || "/placeholder.svg"}
