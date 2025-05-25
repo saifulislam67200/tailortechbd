@@ -30,12 +30,12 @@ const CategoryMenu = () => {
 
               {/* Dropdown for subcategories */}
               {hasSubCategories ? (
-                <div className="invisible absolute left-0 z-50 mt-[12px] grid w-full grid-cols-1 bg-quaternary px-[20px] opacity-0 shadow-lg transition-all duration-300 group-hover:visible group-hover:opacity-100 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <div className="invisible absolute left-0 z-50 mt-[12px] grid min-h-[100px] w-full grid-cols-1 border-t border-quaternary bg-white px-[20px] py-[20px] opacity-0 shadow-lg transition-all duration-300 group-hover:visible group-hover:opacity-100 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   {category.subcategories?.map((subCategory, i) => (
                     <Link
                       key={subCategory._id + i}
                       href={`/shop/${subCategory.slug}`}
-                      className="block px-[16px] py-[4px] text-sm hover:bg-info hover:font-bold"
+                      className="block px-[16px] py-[4px] text-sm hover:bg-primary hover:font-bold hover:text-white"
                       role="menuitem"
                     >
                       {subCategory.label}
