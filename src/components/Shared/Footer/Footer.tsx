@@ -1,16 +1,16 @@
 import { socialLinks } from "@/utils/site";
 import Image from "next/image";
 import Link from "next/link";
-import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock } from "react-icons/fa";
+import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="relative w-full overflow-hidden text-white mt-[20px] md:mt-[40px] bg-primary">
+    <footer className="relative mt-[20px] w-full overflow-hidden bg-primary text-white md:mt-[40px]">
       <div className="main_container relative mx-auto w-full px-4 py-[40px]">
-        <div className="flex flex-col gap-[48px] lg:flex-row">
+        <div className="flex flex-col gap-[28px] sm:gap-[48px] sm:px-[40px] lg:flex-row lg:px-0">
           {/* Company Info */}
-          <div className="space-y-[16px] lg:w-[30%]">
-            <div className="flex items-center space-x-2">
+          <div className="mx-auto space-y-[16px] lg:ms-0 lg:w-[30%]">
+            <div className="flex items-center justify-center space-x-2 lg:justify-start">
               <Image
                 src={"/images/logos/logo-foreground.png"}
                 width={100}
@@ -18,12 +18,12 @@ const Footer = () => {
                 alt="TailerTech"
               />
             </div>
-            <p className="w-full max-w-[300px] text-[14px] leading-relaxed">
+            <p className="w-full max-w-[300px] text-center text-[14px] leading-relaxed lg:text-start">
               Where Tradition Meets Innovation. We blend the timeless art of tailoring with
               cutting-edge fashion technology to bring you modern, perfectly fitted, and stylish
               apparel.
             </p>
-            <div className="flex space-x-4">
+            <div className="hidden justify-center space-x-4 lg:flex lg:justify-start">
               {socialLinks.map(({ icon: Icon, url, name }, i) => (
                 <Link
                   key={i + name}
@@ -39,9 +39,10 @@ const Footer = () => {
           </div>
 
           {/* Right Side*/}
-          <div className="grid grid-cols-1 gap-[32px] md:grid-cols-3 lg:w-[70%]">
+
+          <div className="grid grid-cols-1 place-items-center gap-[32px] sm:grid-cols-2 sm:place-items-start sm:gap-[130px] lg:w-[70%] lg:grid-cols-3 lg:gap-[32px]">
             {/* Quick Links */}
-            <div className="space-y-[16px]">
+            <div className="space-y-[16px] text-center sm:text-left">
               <h4 className="text-lg font-semibold">Quick Links</h4>
               <ul className="space-y-2">
                 <li>
@@ -63,14 +64,9 @@ const Footer = () => {
             </div>
 
             {/* Customer Service */}
-            <div className="space-y-[16px]">
+            <div className="space-y-[16px] text-center sm:text-left">
               <h4 className="text-lg font-semibold">Customer Service</h4>
               <ul className="space-y-2">
-                <li>
-                  <Link href="/faq" className="text-[14px] transition-colors hover:text-white">
-                    FAQ
-                  </Link>
-                </li>
                 <li>
                   <Link
                     href="/return-refund-cancellation"
@@ -107,7 +103,7 @@ const Footer = () => {
             </div>
 
             {/* Contact Info */}
-            <div className="space-y-[16px]">
+            <div className="hidden space-y-[16px] text-center lg:block lg:text-left">
               <h4 className="text-lg font-semibold">Get In Touch</h4>
               <div className="space-y-3">
                 <div className="flex items-start space-x-3">
@@ -128,16 +124,38 @@ const Footer = () => {
                   <FaEnvelope size={16} className="flex-shrink-0 text-white" />
                   <p className="text-[14px]">info@tailortech.com</p>
                 </div>
-                <div className="flex items-start space-x-3">
-                  <FaClock size={16} className="mt-1 flex-shrink-0 text-white" />
-                  <div>
-                    <p className="text-[14px]">
-                      Mon - Sat: 9:00 AM - 8:00 PM
-                      <br />
-                      Sunday: 10:00 AM - 6:00 PM
-                    </p>
-                  </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Info */}
+          <div className="block space-y-[16px] lg:hidden">
+            <h4 className="text-center text-lg font-semibold">Get In Touch</h4>
+            <div className="space-y-3">
+              <p className="text-center text-[14px]"> Head office</p>
+              <div className="flex items-center justify-center space-x-3">
+                <div>
+                  <p className="text-[14px] text-center">
+                    123 Fashion Street, Gulshan-1, Dhaka-1212, Bangladesh
+                  </p>
                 </div>
+              </div>
+
+              {/* <div className="flex items-start justify-center space-x-3">
+                <FaClock size={16} className="mt-1 flex-shrink-0 text-white" />
+                <div>
+                  <p className="text-center text-[14px]">
+                    Mon - Sat: 9:00 AM - 8:00 PM to Sunday: 10:00 AM - 6:00 PM
+                  </p>
+                </div>
+              </div> */}
+              <div className="flex items-center justify-center space-x-3">
+                <FaPhone size={16} className="flex-shrink-0 text-white" />
+                <p className="text-[14px]">+880 1XXX-XXXXXX</p>
+              </div>
+              <div className="flex items-center justify-center space-x-3">
+                <FaEnvelope size={16} className="flex-shrink-0 text-white" />
+                <p className="text-[14px]">info@tailortech.com</p>
               </div>
             </div>
           </div>
