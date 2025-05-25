@@ -2,7 +2,7 @@
 import useSetSearchParams from "@/hooks/useSetSearchParams";
 import Pagination from "../ui/Pagination";
 
-const CategoryProductPagination = ({ totalDoc }: { totalDoc: number }) => {
+const ShopProductPagination = ({ totalDoc }: { totalDoc: number }) => {
   const { updateSearchParams } = useSetSearchParams();
   return (
     <div className="mt-[20px] pb-[20px]">
@@ -14,4 +14,4 @@ const CategoryProductPagination = ({ totalDoc }: { totalDoc: number }) => {
   );
 };
 
-export default CategoryProductPagination;
+export default ShopProductPagination;
