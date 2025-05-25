@@ -61,6 +61,7 @@ const CartCard = ({ item }: { item: TCartItem }) => {
           <h1 className="text-[12px] font-bold text-black sm:text-[14px]">{item?.name}</h1>
           <p className="text-sm">Size: {item?.size}</p>
           <p className="text-sm">Color: {item?.color}</p>
+          <p className="text-sm">Discount: {item?.discount}%</p>
         </div>
       </div>
 

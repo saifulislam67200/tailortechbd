@@ -10,17 +10,22 @@ const DetailsAndPrice = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { subtotal, totalDiscount } = cartItems?.reduce(
-    (acc, item) => {
-      const itemSubtotal = item?.price * item?.quantity;
-      const itemDiscountAmount = (item?.price * item?.discount * item?.quantity) / 100;
+  const initial = { subtotal: 0, totalDiscount: 0 };
 
-      acc.subtotal += itemSubtotal;
-      acc.totalDiscount += itemDiscountAmount;
-      return acc;
-    },
-    { subtotal: 0, totalDiscount: 0 }
-  );
+  const { subtotal, totalDiscount } = Array.isArray(cartItems)
+    ? cartItems.reduce((acc, item) => {
+        const price = Number(item?.price) || 0;
+        const quantity = Number(item?.quantity) || 0;
+        const discount = Number(item?.discount) || 0;
+
+        const itemSubtotal = price * quantity;
+        const itemDiscount = (itemSubtotal * discount) / 100;
+
+        acc.subtotal += itemSubtotal;
+        acc.totalDiscount += itemDiscount;
+        return acc;
+      }, initial)
+    : initial;
 
   const total = subtotal - totalDiscount;
 
