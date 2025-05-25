@@ -5,7 +5,7 @@ import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="relative w-full overflow-hidden text-white mt-[20px] md:mt-[40px]">
+    <footer className="relative mt-[20px] w-full overflow-hidden text-white md:mt-[40px]">
       <div className="main_container relative mx-auto w-full bg-primary px-4 py-[40px]">
         <div className="flex flex-col gap-[48px] lg:flex-row">
           {/* Company Info */}

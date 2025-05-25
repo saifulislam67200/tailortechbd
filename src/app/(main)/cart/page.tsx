@@ -1,7 +1,7 @@
-import ProductCart from "@/components/ProductCart/ProductCart"
+import ProductCart from "@/components/ProductCart/ProductCart";
 
 const page = () => {
-  return <ProductCart />
-}
+  return <ProductCart />;
+};
 
-export default page
+export default page;

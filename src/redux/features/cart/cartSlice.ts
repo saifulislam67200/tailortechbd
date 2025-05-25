@@ -29,22 +29,44 @@ const cartSlice = createSlice({
     initialState,
     reducers: {
         addToCart(state, action: PayloadAction<TCartItem>) {
-            const item = state.items.find(i => i.id === action.payload.id);
+            const item = state.items.find(i => i.color === action.payload.color && i.size === action.payload.size && i.id === action.payload.id);
             if (item) {
-                item.quantity += action.payload.quantity;
+                const newQuantity = item.quantity + action.payload.quantity;
+                item.quantity = newQuantity > item.stock ? item.stock : newQuantity;
             } else {
                 state.items.push(action.payload);
             }
         },
-        removeFromCart(state, action: PayloadAction<string>) {
-            state.items = state.items.filter(item => item.id !== action.payload);
-            state.checkedItems = state.checkedItems.filter(item => item.id !== action.payload);
+        removeFromCart(state, action: PayloadAction<Partial<TCartItem>>) {
+
+            const targetId = action.payload.id?.trim().toLowerCase();
+            const targetColor = action.payload.color?.trim().toLowerCase();
+            const targetSize = action.payload.size?.trim().toLowerCase();
+
+            state.items = state.items.filter(item => {
+                const match = item.id.toLowerCase() === targetId && item.size.trim().toLowerCase() === targetSize && item.color?.trim().toLowerCase() === targetColor;
+                return !match;
+            });
+
+            state.checkedItems = state.checkedItems.filter(item => {
+                const match = item.id.toLowerCase() === targetId && item.size.trim().toLowerCase() === targetSize && item.color?.trim().toLowerCase() === targetColor;
+                return !match;
+            });
         },
-        updateQuantity(state, action: PayloadAction<{ id: string; quantity: number }>) {
-            const item = state.items.find(i => i.id === action.payload.id);
-            if (item) {
-                item.quantity = action.payload.quantity;
-            }
+        updateQuantity(
+            state,
+            action: PayloadAction<{ id: string; color?: string; size: string; quantity: number }>
+        ) {
+            const { id, color, size, quantity } = action.payload;
+
+            const updateItemQuantity = (items: TCartItem[]) => {
+                const item = items.find(i => i.id === id && i.size === size && (color ? i.color === color : true));
+                if (item) {
+                    item.quantity = quantity;
+                }
+            };
+            updateItemQuantity(state.items);
+            updateItemQuantity(state.checkedItems);
         },
         clearCart(state) {
             state.items = [];
@@ -57,9 +79,11 @@ const cartSlice = createSlice({
             return action.payload;
         },
         toggleCheckItem(state, action: PayloadAction<TCartItem>) {
-            const exists = state.checkedItems.find(item => item.id === action.payload.id);
+            const { id, color, size } = action.payload;
+            const exists = state.checkedItems.find(item => item.id === id && item.size === size && (item.color) === (color)
+            );
             if (exists) {
-                state.checkedItems = state.checkedItems.filter(item => item.id !== action.payload.id);
+                state.checkedItems = state.checkedItems.filter(item => !(item.id === id && item.size === size && (item.color) === (color)));
             } else {
                 state.checkedItems.push(action.payload);
             }
