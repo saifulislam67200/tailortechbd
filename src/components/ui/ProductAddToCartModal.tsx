@@ -28,6 +28,18 @@ const ProductAddToCartModal = ({ children, product }: Props) => {
     selectedColor?.sizes?.[0] || undefined
   );
 
+  const getColorVariantImage = (colorName: string): string => {
+    if (!product?.colors || !Array.isArray(product.colors)) {
+      return product?.images?.[0] || "";
+    }
+
+    const colorVariant = product.colors.find(
+      (color) => color?.color?.toLowerCase() === colorName.toLowerCase().trim()
+    );
+
+    return colorVariant?.images?.[0] || product?.images?.[0] || "";
+  };
+
   const handleClick = () => {
     setIsOpen(true);
   };
@@ -40,14 +52,14 @@ const ProductAddToCartModal = ({ children, product }: Props) => {
     }
     const payload = {
       discount: product?.discount,
-      id: `${product._id}-${selectedColor!.color}-${selectedSize!.size}`,
+      id: `${product._id}-${selectedColor!.color.trim()}-${selectedSize!.size.trim()}`,
       name: product?.name,
       price: product?.price,
       quantity: 1,
       size: selectedSize?.size || "",
       stock: selectedSize?.stock || 0,
       color: selectedColor?.color || "",
-      image: product?.images?.[0],
+      image: getColorVariantImage(selectedColor?.color || ""),
       slug: product?.slug,
     };
     dispatch(addToCart(payload));

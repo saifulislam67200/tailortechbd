@@ -43,7 +43,6 @@ const CheckoutView = () => {
   const [creaeOrder, { isLoading }] = useCreateOrderMutation();
   const { items } = useAppSelector((state) => state.checkout);
   const { user } = useAppSelector((state) => state.user);
-
   const dispatch = useDispatch();
 
   const [formMessage, setFormMessage] = useState<IFormMessage | null>(null);
@@ -60,6 +59,11 @@ const CheckoutView = () => {
   const { data: upazila } = useGetUpozilasQuery(locationId.district_id, {
     skip: !locationId.district_id,
   });
+
+  const myOrderItems = items?.map((item) => ({
+    ...item,
+    product_id: item?.product_id.split("-")[0],
+  }));
 
   const initialValues: IShippingAddress & {
     billing_address: string;
@@ -111,7 +115,7 @@ const CheckoutView = () => {
         upazila: values.upazila,
       },
 
-      orderItems: items,
+      orderItems: myOrderItems,
       deliveryFee: 60,
     };
 

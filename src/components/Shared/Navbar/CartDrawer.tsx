@@ -90,6 +90,8 @@ function CartItem({ item }: { item: CartItem }) {
     dispatch(removeFromCart({ id, color, size }));
   };
 
+  console.log(item, "from cart drawer");
+
   return (
     <div className="flex items-center border-b border-quaternary py-4 text-strong">
       <div className="relative h-[76px] w-[76px] flex-shrink-0">
@@ -101,14 +103,14 @@ function CartItem({ item }: { item: CartItem }) {
         />
       </div>
       <div className="ml-4 flex-grow">
-        <h3 className="text-sm font-medium">{item.name}</h3>
+        <h3 className="line-clamp-1 text-sm font-medium">{item.name}</h3>
         {item.discount ? (
           <p className="text-sm">
-            ${getProductDiscountPrice(item.price, item.discount).toFixed(2)}
+            ${Math.floor(getProductDiscountPrice(item.price, item.discount))} X {item.quantity}
           </p>
         ) : (
           <p className="text-sm">
-            ${item.price.toFixed(2)} x {item.quantity}
+            ${Math.floor(item.price)} x {item.quantity}
           </p>
         )}
         <p className="text-sm">Size: {item.size}</p>
@@ -159,7 +161,7 @@ function CartFooter({
       <hr className="border-t border-quaternary" />
       <div className="flex justify-between py-[8px]">
         <span className="font-medium">Subtotal:</span>
-        <span className="font-semibold">${subtotal.toFixed(2)}</span>
+        <span className="font-semibold">${Math.floor(subtotal)}</span>
       </div>
       <Link
         href="/cart"
