@@ -35,6 +35,7 @@ export interface IOrder {
   billingAddress?: IBillingAddress;
   orderItems: IOrderItem[];
   totalProductAmount: number;
+  createdAt?: string;
   deliveryFee?: number;
   status: IOrderStatus[];
   paymentStatus: "COD" | "pending" | "paid" | "canceled";

@@ -1,5 +1,7 @@
 import { api } from "@/redux/api/api";
+import { IMeta } from "@/types/meta";
 import { IOrder } from "@/types/order";
+import { generateQueryParams } from "@/utils";
 
 const orderApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -22,6 +24,21 @@ const orderApi = api.injectEndpoints({
       }),
       providesTags: ["order"],
     }),
+
+    getAllOrders: builder.query<
+  { data: IOrder[]; meta?: IMeta },
+  Record<string, string | number>
+>({
+  query: (query) => {
+    const queryString = generateQueryParams(query);
+    return {
+      url: `/order/all?${queryString}`,
+      method: "GET",
+    };
+  },
+  providesTags: ["order"],
+}),
+
   }),
 });
-export const { useCreateOrderMutation, useGetMyOrdersQuery } = orderApi;
+export const { useCreateOrderMutation, useGetMyOrdersQuery, useGetAllOrdersQuery } = orderApi;
