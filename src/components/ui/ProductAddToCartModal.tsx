@@ -40,7 +40,7 @@ const ProductAddToCartModal = ({ children, product }: Props) => {
     }
     const payload = {
       discount: product?.discount,
-      id: `${product._id}-${selectedColor!.color}-${selectedSize!.size}`,
+      id: `${product._id}-${selectedColor!.color.trim()}-${selectedSize!.size.trim()}`,
       name: product?.name,
       price: product?.price,
       quantity: 1,
