@@ -7,7 +7,8 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { toast } from "sonner";
 import { clearWishlist } from "@/redux/features/wishlist/wishlistSlice";
 import { LuX } from "react-icons/lu";
-const Favorite = () => {
+import { twMerge } from "tailwind-merge";
+const Favorite = ({containerClassName} : {containerClassName?: string}) => {
   const dispatch = useAppDispatch();
   const wishlistItems = useAppSelector((state) => state?.wishlist?.items ?? []);
 
@@ -38,7 +39,7 @@ const Favorite = () => {
 
       {wishlistItems.length ? (
         <>
-          <div className="mt-4 grid w-full grid-cols-1 justify-center gap-[16px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+          <div className={twMerge("mt-4 grid w-full grid-cols-1 justify-center gap-[16px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6", containerClassName)}>
             {wishlistItems?.map((data) => <ProductPrimaryCard key={data._id} product={data} />)}
           </div>
           {/* <CategoryProductPagination totalDoc={wishlistItems?.length} /> */}
