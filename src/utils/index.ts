@@ -26,7 +26,7 @@ export const generateQueryParams = (params: Record<string, unknown>) => {
 
 export const getProductDiscountPrice = (originalPrice: number, discount: number = 0): number => {
   const discountPrice = originalPrice - (originalPrice * discount) / 100;
-  return discountPrice;
+  return Math.round(discountPrice);
 };
 
 export const pageScroll = (id: string) => {

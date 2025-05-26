@@ -34,7 +34,7 @@ export default function OrderHistory() {
   };
 
   const getTotalAmount = (order: IOrder) => {
-    return Math.floor(order.totalProductAmount + (order.deliveryFee || 0));
+    return Math.round(order.totalProductAmount + (order.deliveryFee || 0));
   };
 
   const formatAddress = (address: IShippingAddress) => {
@@ -56,7 +56,7 @@ export default function OrderHistory() {
       {/* Orders List */}
       <div className="space-y-[16px]">
         {isLoading ? (
-          <div className="items-center flex justify-center py-8">
+          <div className="flex items-center justify-center py-8">
             <Loader />
           </div>
         ) : orders.length === 0 ? (
@@ -212,7 +212,7 @@ export default function OrderHistory() {
                                       Qty: {item.quantity}
                                     </span>
                                     <span className="text-[18px] font-semibold">
-                                      Tk. {Math.floor(item.product.price * item.quantity)}
+                                      Tk. {Math.round(item.product.price * item.quantity)}
                                     </span>
                                   </div>
                                 </div>
@@ -271,14 +271,14 @@ export default function OrderHistory() {
                               <div className="flex justify-between">
                                 <span className="text-info">Product Amount:</span>
                                 <span className="font-semibold text-primary">
-                                  Tk. {Math.floor(order.totalProductAmount)}
+                                  Tk. {Math.round(order.totalProductAmount)}
                                 </span>
                               </div>
                               {order.deliveryFee && (
                                 <div className="flex justify-between">
                                   <span className="text-info">Delivery Fee:</span>
                                   <span className="font-semibold text-primary">
-                                    Tk. {Math.floor(order.deliveryFee)}
+                                    Tk. {Math.round(order.deliveryFee)}
                                   </span>
                                 </div>
                               )}
