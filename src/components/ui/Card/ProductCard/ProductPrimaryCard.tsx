@@ -22,13 +22,6 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
         ""
       )}
 
-      {product.tag ? (
-        <span className="absolute top-0 left-0 z-[3] line-clamp-1 hidden max-w-[48%] bg-primary px-[4px] py-[2px] text-[12px] text-white sm:flex">
-          {product.tag}
-        </span>
-      ) : (
-        ""
-      )}
       {/* Image */}
       <Link
         href={`/product/${product?.slug}`}

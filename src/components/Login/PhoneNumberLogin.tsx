@@ -60,7 +60,7 @@ const PhoneNumberLogin = () => {
     }
 
     setFormMessage(null);
-    router.push(redirect);
+    router.replace(redirect);
   };
   return (
     <Formik onSubmit={onSubmit} validationSchema={validationSchema} initialValues={initialValues}>

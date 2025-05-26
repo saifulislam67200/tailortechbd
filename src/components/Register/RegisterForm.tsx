@@ -13,6 +13,7 @@ import CountrySelector from "../ui/CountrySelector";
 import FormCard from "../ui/FormCard";
 import FormMessage, { IFormMessage } from "../ui/FormMessage";
 import Input from "../ui/Input";
+
 const generateVerificationCode = () => {
   return Math.floor(100000 + Math.random() * 900000);
 };

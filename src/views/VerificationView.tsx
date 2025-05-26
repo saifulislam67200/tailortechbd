@@ -7,11 +7,14 @@ import {
   useSendVerificationOtpMutation,
   useVerifyOtpMutation,
 } from "@/redux/features/user/user.api";
+import { updateUser } from "@/redux/features/user/user.slice";
 import { IQueruMutationErrorResponse } from "@/types";
 import dateUtils from "@/utils/date";
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BsFillPhoneFill } from "react-icons/bs";
+import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 
 const VerificationView = () => {
@@ -21,6 +24,8 @@ const VerificationView = () => {
   const [verifyOtp, { isLoading }] = useVerifyOtpMutation();
   const [errorMessage, setErrorMessage] = useState<string>("");
   const router = useRouter();
+
+  const dispatch = useDispatch();
 
   // send OTP on mount
   useEffect(() => {
@@ -95,7 +100,10 @@ const VerificationView = () => {
     }
 
     toast.success("OTP verified successfully");
-    router.replace("/");
+    dispatch(updateUser({ isVerified: true }));
+    const redirect = Cookies.get("redirect") || "/";
+    Cookies.remove("redirect");
+    router.replace(redirect);
 
     setErrorMessage("");
   };
