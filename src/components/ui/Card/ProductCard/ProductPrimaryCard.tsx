@@ -15,7 +15,8 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
     >
       {product.discount ? (
         <span className="absolute top-0 right-0 z-[3] line-clamp-1 bg-secondary px-[4px] py-[2px] text-[12px] text-white">
-          Save {Math.ceil(getProductDiscountPrice(product.price, product.discount))} TK.
+          {/* Save {Math.ceil(getProductDiscountPrice(product.price, product.discount))} TK. */}
+          Save {product?.discount}% Off
         </span>
       ) : (
         ""
@@ -31,14 +32,14 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
       {/* Image */}
       <Link
         href={`/product/${product?.slug}`}
-        className="flex h-[279px] w-full shrink-0 items-center justify-start bg-white"
+        className="flex h-[227px] w-full shrink-0 items-center justify-start overflow-hidden bg-white"
       >
         <Image
           src={product.images?.[0] || "/"}
           alt={product.name}
           width={200}
           height={200}
-          className="mx-auto h-full w-auto max-w-full object-contain"
+          className="mx-auto h-full w-auto max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
         />
       </Link>
 
@@ -59,18 +60,16 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
             Size: {product.colors?.[0]?.sizes?.map((color) => color.size?.toUpperCase()).join(", ")}
           </p>
         </div>
-        <div className="mt-auto flex flex-col gap-[20px] pt-2 text-start">
+        <div className="flex flex-col gap-[20px] pt-2 text-start">
           {product.discount ? (
-            <span className="lineca flex flex-col justify-start gap-[5px] sm:flex-row sm:items-center">
-              <p className="text-[15px] font-[700] text-primary/50 line-through">
-                Tk {product.price}
+            <span className="flex flex-col justify-start gap-[5px] sm:flex-row sm:items-center">
+              <p className="text-[15px] font-[700]">
+                ৳ {getProductDiscountPrice(product.price, product.discount)}
               </p>
-              <p className="lineca text-[15px] font-[700] text-primary">
-                Tk {getProductDiscountPrice(product.price, product.discount)}
-              </p>
+              <p className="text-[13px] font-[700] text-info line-through">৳ {product.price}</p>
             </span>
           ) : (
-            <p className="text-[15px] font-[700] text-black">Tk {product.price}</p>
+            <p className="text-[15px] font-[700] text-black">৳ {product.price}</p>
           )}
           <ProductAddToCartModal product={product} />
         </div>

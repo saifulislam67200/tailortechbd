@@ -5,7 +5,7 @@ import Image from "next/image";
 import {
   FiUser,
   FiSettings,
-  FiHelpCircle,
+  // FiHelpCircle,
   FiLogOut,
   FiChevronDown,
   FiShoppingBag,
@@ -116,14 +116,14 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
                   <FiShoppingBag className="h-[16px] w-[16px]" />
                   <span>My Orders</span>
                 </Link>
-                <Link
+                {/* <Link
                   href="/contact"
                   onClick={() => setIsOpen(false)}
                   className="flex w-full items-center space-x-[12px] border-b border-gray-200 px-[16px] py-[12px] text-[14px] text-primary transition-colors duration-150 hover:bg-gray-50"
                 >
                   <FiHelpCircle className="h-[16px] w-[16px]" />
                   <span>Need Help?</span>
-                </Link>
+                </Link> */}
                 <Link
                   href="/account/settings"
                   onClick={() => setIsOpen(false)}
