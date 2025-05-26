@@ -1,22 +1,22 @@
 "use client";
 
+import ReviewForm from "@/components/Account/review/ReviewForm";
+import Loader from "@/components/ui/Loader";
+import { useGetMyOrdersQuery } from "@/redux/features/order/order.api";
+import type { IOrder, IShippingAddress } from "@/types/order";
+import { IProduct } from "@/types/product";
+import Image from "next/image";
 import { useState } from "react";
 import {
-  IoChevronDown,
-  IoCube,
   IoCarSport,
   IoCheckmarkCircle,
+  IoChevronDown,
   IoCloseCircle,
+  IoCube,
   IoEye,
   // IoDownload,
   IoTime,
 } from "react-icons/io5";
-import type { IOrder, IShippingAddress } from "@/types/order";
-import { useGetMyOrdersQuery } from "@/redux/features/order/order.api";
-import Image from "next/image";
-import Loader from "@/components/ui/Loader";
-import ReviewForm from "@/components/Account/review/ReviewForm";
-import { IProduct } from "@/types/product";
 
 export default function OrderHistory() {
   const { data, isLoading } = useGetMyOrdersQuery();

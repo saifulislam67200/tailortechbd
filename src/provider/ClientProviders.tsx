@@ -8,7 +8,7 @@ import AuthProvider from "./AuthProvider";
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
-      <Toaster position="top-center" />
+      <Toaster position="top-center" richColors />
       <PersistGate loading={null} persistor={persistor}>
         <AuthProvider>{children}</AuthProvider>
       </PersistGate>

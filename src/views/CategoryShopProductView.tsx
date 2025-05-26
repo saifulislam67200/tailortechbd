@@ -48,13 +48,13 @@ const CategoryShopProductView: React.FC<IProps> = async ({ searchParams, params 
       <FilterCountDisplay />
       {data.data.length ? (
         <>
-          <div className="mt-4 grid w-full grid-cols-2 justify-center gap-[16px] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          <div className="mt-4 grid w-full grid-cols-2 justify-center gap-[16px] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
             {data.data?.map((data) => <ProductPrimaryCard key={data._id} product={data} />)}
           </div>
           <ShopProductPagination totalDoc={data.meta.totalDoc} />
         </>
       ) : (
-        <DataNotFound title="No Product Found" className="h-[200px]" />
+        <DataNotFound title="No Product Found" className="h-[60vh]" />
       )}
     </div>
   );

@@ -1,6 +1,5 @@
 "use client";
 import Button from "@/components/ui/Button";
-import FormMessage, { IFormMessage } from "@/components/ui/FormMessage";
 import Input from "@/components/ui/Input";
 import { useAppSelector } from "@/hooks/redux";
 import { useUploadSingleFileMutation } from "@/redux/features/upload/upload.api";
@@ -12,6 +11,7 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import { FaUser } from "react-icons/fa6";
 import { MdOutlineFileUpload } from "react-icons/md";
+import { toast } from "sonner";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object({
@@ -23,8 +23,6 @@ const EditProfile = () => {
   const { user } = useAppSelector((state) => state.user);
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
   const [uploadFile, { isLoading: isUploading }] = useUploadSingleFileMutation();
-
-  const [formMessage, setFormMessage] = useState<IFormMessage | null>(null);
 
   const [file, setFile] = useState<File | null>(null);
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
@@ -44,7 +42,6 @@ const EditProfile = () => {
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
-    setFormMessage(null);
     const payload: Partial<IUser> = {
       fullName: values.fullName,
       email: values.email || undefined,
@@ -65,13 +62,14 @@ const EditProfile = () => {
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
       if (error.data.message) {
-        setFormMessage({ message: error.data.message, type: "error" });
+        toast.error(error.data.message);
       } else {
-        setFormMessage({ message: "Something went wrong", type: "error" });
+        toast.error("Something went wrong");
       }
       return;
     }
-    setFormMessage({ message: "Profile updated successfully", type: "success" });
+
+    toast.success("Profile updated successfully");
   };
 
   return (
@@ -120,7 +118,7 @@ const EditProfile = () => {
         enableReinitialize
       >
         <Form>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-[8px]">
+          <div className="grid grid-cols-1 gap-[8px] sm:grid-cols-2">
             {/* Full Name */}
             <div className="flex w-full flex-col gap-[6px]">
               <label className="text-[12px] text-strong">Full Name</label>
@@ -177,7 +175,7 @@ const EditProfile = () => {
             </div>
           </div>
 
-          <FormMessage formMessage={formMessage} />
+          {/* <FormMessage formMessage={formMessage} /> */}
           <Button
             isLoading={isLoading || isUploading}
             type="submit"

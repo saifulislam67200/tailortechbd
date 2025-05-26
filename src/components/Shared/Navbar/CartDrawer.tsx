@@ -10,6 +10,7 @@ import { FaCartPlus } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { IoCloseSharp } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { TbCurrencyTaka } from "react-icons/tb";
 
 interface CartItem {
   id: string;
@@ -31,8 +32,6 @@ interface CartDrawerProps {
 export default function CartDrawer({ isOpen, setIsOpen }: CartDrawerProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
   const cartItems = useAppSelector((state) => state?.cart?.items);
-
-  console.log("Cart items in drawer:", cartItems);
 
   return (
     <>
@@ -90,8 +89,6 @@ function CartItem({ item }: { item: CartItem }) {
     dispatch(removeFromCart({ id, color, size }));
   };
 
-  console.log(item, "from cart drawer");
-
   return (
     <div className="flex items-center border-b border-quaternary py-4 text-strong">
       <div className="relative h-[76px] w-[76px] flex-shrink-0">
@@ -105,12 +102,14 @@ function CartItem({ item }: { item: CartItem }) {
       <div className="ml-4 flex-grow">
         <h3 className="line-clamp-1 text-sm font-medium">{item.name}</h3>
         {item.discount ? (
-          <p className="text-sm">
-            ${Math.floor(getProductDiscountPrice(item.price, item.discount))} X {item.quantity}
+          <p className="flex items-center text-sm">
+            <TbCurrencyTaka size={16} />
+            {Math.floor(getProductDiscountPrice(item.price, item.discount))} X {item.quantity}
           </p>
         ) : (
-          <p className="text-sm">
-            ${Math.floor(item.price)} x {item.quantity}
+          <p className="flex items-center text-sm">
+            <TbCurrencyTaka size={16} />
+            {Math.floor(item.price)} x {item.quantity}
           </p>
         )}
         <p className="text-sm">Size: {item.size}</p>
@@ -160,8 +159,11 @@ function CartFooter({
     <div className="absolute right-0 bottom-0 left-0 bg-white p-[8px]">
       <hr className="border-t border-quaternary" />
       <div className="flex justify-between py-[8px]">
-        <span className="font-medium">Subtotal:</span>
-        <span className="font-semibold">${Math.floor(subtotal)}</span>
+        <span className="font-medium text-black">Subtotal:</span>
+        <span className="flex items-center font-semibold text-black">
+          <TbCurrencyTaka size={16} />
+          {Math.floor(subtotal)}
+        </span>
       </div>
       <Link
         href="/cart"

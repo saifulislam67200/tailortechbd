@@ -1,11 +1,10 @@
 "use client";
 import Button from "@/components/ui/Button";
-import FormMessage, { IFormMessage } from "@/components/ui/FormMessage";
 import Input from "@/components/ui/Input";
 import { useChangePasswordMutation } from "@/redux/features/user/user.api";
 import { IQueruMutationErrorResponse } from "@/types";
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { useState } from "react";
+import { toast } from "sonner";
 import * as Yup from "yup";
 const initialValues = {
   oldPassword: "",
@@ -25,20 +24,18 @@ const validationSchema = Yup.object({
 
 const ChangePassword = () => {
   const [changePassword, { isLoading }] = useChangePasswordMutation();
-  const [formMessage, setFormMessage] = useState<IFormMessage | null>(null);
   const handleSubmit = async (values: typeof initialValues) => {
-    setFormMessage(null);
     const res = await changePassword(values);
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
       if (error.data.message) {
-        setFormMessage({ message: error.data.message, type: "error" });
+        toast.error(error.data.message);
       } else {
-        setFormMessage({ message: "Something went wrong", type: "error" });
+        toast.error("Something went wrong");
       }
       return;
     }
-    setFormMessage({ message: "Password updated successfully", type: "success" });
+    toast.success("Password updated successfully");
   };
 
   return (
@@ -51,7 +48,7 @@ const ChangePassword = () => {
         onSubmit={handleSubmit}
       >
         <Form>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-[8px]">
+          <div className="grid grid-cols-1 gap-[8px] sm:grid-cols-3">
             <div className="flex w-full flex-col gap-[6px]">
               <label className="text-[12px] text-strong">Old Password</label>
               <Field
@@ -93,7 +90,6 @@ const ChangePassword = () => {
               />
             </div>
           </div>
-          <FormMessage formMessage={formMessage} />
           <Button isLoading={isLoading} type="submit" className="mt-[16px] bg-primary-foreground">
             Update Password
           </Button>

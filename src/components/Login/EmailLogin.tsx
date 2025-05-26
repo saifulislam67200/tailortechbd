@@ -1,8 +1,8 @@
 import { useLoginUserMutation } from "@/redux/features/user/user.api";
 import { setUser } from "@/redux/features/user/user.slice";
 import { IQueruMutationErrorResponse } from "@/types";
-import { IUser } from "@/types/user";
 import { Field, Form, Formik } from "formik";
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -29,6 +29,7 @@ const EmailLogin = () => {
       mode: "email",
     });
     const error = res.error as IQueruMutationErrorResponse;
+
     if (error) {
       if (error.data.message) {
         setFormMessage({ message: error.data.message, type: "error" });
@@ -38,10 +39,16 @@ const EmailLogin = () => {
       return;
     }
 
-    dispatch(setUser(res.data?.data.result as IUser));
-
+    const user = res.data?.data.result;
+    if (user) {
+      dispatch(setUser(user));
+    }
+    const redirect = Cookies.get("redirect") || "/";
+    Cookies.remove("redirect");
     setFormMessage(null);
-    router.push("/");
+    console.log(redirect);
+
+    router.replace(redirect);
   };
   return (
     <Formik onSubmit={onSubmit} validationSchema={validationSchema} initialValues={initialValues}>

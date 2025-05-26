@@ -1,6 +1,6 @@
 // import { useAppSelector } from "@/redux/hooks";
 import { useGetAuthorQuery } from "@/redux/features/user/user.api";
-import { setLoading, setUser } from "@/redux/features/user/user.slice";
+import { logout, setLoading, setUser } from "@/redux/features/user/user.slice";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -19,6 +19,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     if (isError) {
       dispatch(setLoading(false));
+      dispatch(logout(undefined));
       dispatch(setUser(null));
     }
   }, [isFetching, isSuccess, dispatch, data?.data, isError]);

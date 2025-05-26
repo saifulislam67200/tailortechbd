@@ -82,14 +82,25 @@ export default function ProductForm({
   onSubmit,
   defaultValue,
   isLoading = false,
+  buttonLabel,
 }: {
   isLoading?: boolean;
   defaultValue?: typeof initialValues;
   onSubmit: (data: typeof initialValues, helper: FormikHelpers<typeof initialValues>) => void;
+  buttonLabel?: string;
 }) {
+  const initValue = defaultValue
+    ? {
+        ...defaultValue,
+        category:
+          typeof defaultValue.category == "string"
+            ? defaultValue.category
+            : defaultValue.category?._id,
+      }
+    : undefined;
   return (
     <Formik
-      initialValues={defaultValue || initialValues}
+      initialValues={initValue || initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
@@ -129,7 +140,16 @@ export default function ProductForm({
                 </div>
                 <div className="flex w-full flex-col gap-[5px]">
                   <label className={labelClass}>Category</label>
-                  <CategorySelector onSelect={({ value }) => setFieldValue("category", value)} />
+                  <CategorySelector
+                    category={
+                      defaultValue?.category
+                        ? typeof defaultValue?.category == "string"
+                          ? defaultValue.category
+                          : defaultValue.category?.label
+                        : undefined
+                    }
+                    onSelect={({ value }) => setFieldValue("category", value)}
+                  />
 
                   <ErrorMessage name="category" component="span" className="text-sm text-danger" />
                 </div>
@@ -287,7 +307,7 @@ export default function ProductForm({
           </div>
 
           <Button type="submit" isLoading={isLoading} className="mt-[26px]">
-            Add Product
+            {buttonLabel || "Create Product"}
           </Button>
         </Form>
       )}
