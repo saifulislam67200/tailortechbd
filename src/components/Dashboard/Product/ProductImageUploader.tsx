@@ -13,6 +13,7 @@ interface IProps {
   defaultImages?: string[];
   children?: React.ReactNode;
   inputId?: string;
+  labelStyle?: string;
 }
 
 const ImageDisplay = ({
@@ -84,6 +85,7 @@ const ProductImageUploader: React.FC<IProps> = ({
   onChange,
   defaultImages = [],
   inputId,
+  labelStyle,
 }) => {
   const [files, setFiles] = useState<{ file: File; id: string }[]>([]);
   const [savedImages, setSavedImages] = useState<string[]>(defaultImages || []);
@@ -127,7 +129,7 @@ const ProductImageUploader: React.FC<IProps> = ({
       <div onDrop={handleDrop} onDragOver={handleDragOver}>
         <label
           htmlFor={inputId || "image-uploader"}
-          className="center mt-[20px] h-[270px] cursor-pointer flex-col border-[2px] border-dashed border-dashboard/50 bg-dashboard/10"
+          className={`center mt-[20px] h-[150px] cursor-pointer flex-col border-[2px] border-dashed border-dashboard/50 bg-dashboard/10 md:h-[200px] lg:h-[270px] ${labelStyle}`}
         >
           <MdOutlineFileUpload className="text-[50px] text-muted" />
           <span className="text-[18px] font-[600] text-dashboard">
