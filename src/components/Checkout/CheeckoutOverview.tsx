@@ -47,15 +47,15 @@ const CheeckoutOverview = () => {
                   {item.discount ? (
                     <span className="flex items-center justify-start gap-[10px]">
                       <span className="lin text-[12.8px] font-[600] text-muted line-through">
-                        TK. {item.product.price.toFixed(2)}
+                        ৳ {item.product.price.toFixed(2)}
                       </span>
                       <span className="lin text-[12.8px] font-[600] text-primary">
-                        TK. {getDiscountedPrice(item.product.price, item.discount).toFixed(2)}
+                        ৳ {getDiscountedPrice(item.product.price, item.discount).toFixed(2)}
                       </span>
                     </span>
                   ) : (
                     <span className="lin text-[12.8px] font-[600] text-primary">
-                      TK. {item.product.price.toFixed(2)}
+                      ৳ {item.product.price.toFixed(2)}
                     </span>
                   )}
                   <span className="lin text-[12.8px] font-[600] text-muted">

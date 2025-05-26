@@ -2,6 +2,7 @@ import { ICountry } from "@/hooks/useCountries";
 import { useLoginUserMutation } from "@/redux/features/user/user.api";
 import { IQueruMutationErrorResponse } from "@/types";
 import { Field, Form, Formik, FormikHelpers } from "formik";
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { isPossiblePhoneNumber, isValidPhoneNumber } from "react-phone-number-input";
@@ -45,6 +46,9 @@ const PhoneNumberLogin = () => {
       phoneNumber: phone,
       mode: "phoneNumber",
     });
+    const redirect = Cookies.get("redirect") || "/";
+    Cookies.remove("redirect");
+    router.push(redirect);
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
       if (error.data.message) {

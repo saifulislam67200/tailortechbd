@@ -66,14 +66,14 @@ const OrderSuccess = () => {
                       {item.discount ? (
                         <>
                           <span className="mr-2 text-muted line-through">
-                            TK. {item.product.price}
+                            ৳ {item.product.price}
                           </span>
                           <span className="font-semibold text-success">
-                            TK. {discountedPrice.toFixed(2)}
+                            ৳ {discountedPrice.toFixed(2)}
                           </span>
                         </>
                       ) : (
-                        <span className="mr-2 text-success">TK. {item.product.price}</span>
+                        <span className="mr-2 text-success">৳ {item.product.price}</span>
                       )}
                     </p>
                     <p>
@@ -82,7 +82,7 @@ const OrderSuccess = () => {
                   </div>
                 </div>
               </div>
-              <div className="font-semibold whitespace-nowrap">TK. {totalPrice.toFixed(2)}</div>
+              <div className="font-semibold whitespace-nowrap">৳ {totalPrice.toFixed(2)}</div>
             </div>
           );
         })}
@@ -90,19 +90,19 @@ const OrderSuccess = () => {
         <div className="mt-4 space-y-1 border-t pt-4 text-sm text-gray-700">
           <div className="flex justify-between">
             <span>Sub Total</span>
-            <span>TK. {subtotal.toFixed(2)}</span>
+            <span>৳ {subtotal.toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
             <span>Discount</span>
-            <span className="text-danger">- TK. {totalDiscount.toFixed(2)}</span>
+            <span className="text-danger">- ৳ {totalDiscount.toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
             <span>Delivery Fee</span>
-            <span>TK. {deliveryFee}</span>
+            <span>৳ {deliveryFee}</span>
           </div>
           <div className="mt-2 flex justify-between border-t pt-2 font-semibold text-black">
             <span>Grand Total</span>
-            <span>TK. {grandTotal.toFixed(2)}</span>
+            <span>৳ {grandTotal.toFixed(2)}</span>
           </div>
         </div>
         <Button className="mx-auto mt-4" onClick={() => router.push("/")}>

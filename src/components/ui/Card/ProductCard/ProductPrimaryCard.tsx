@@ -15,7 +15,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
     >
       {product.discount ? (
         <span className="absolute top-0 right-0 z-[3] line-clamp-1 bg-secondary px-[4px] py-[2px] text-[12px] text-white">
-          {/* Save {Math.ceil(getProductDiscountPrice(product.price, product.discount))} TK. */}
+          {/* Save {Math.ceil(getProductDiscountPrice(product.price, product.discount))} ৳ */}
           Save {product?.discount}% Off
         </span>
       ) : (

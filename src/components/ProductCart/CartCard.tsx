@@ -99,9 +99,9 @@ const CartCard = ({ item }: { item: TCartItem }) => {
         <p className="center mr-[50px] ml-[20px] text-[13px]">
           <span className="font-semibold">
             {item.discount ? (
-              <>Tk {getProductDiscountPrice(item?.price, item?.discount)}</>
+              <>৳ {getProductDiscountPrice(item?.price, item?.discount)}</>
             ) : (
-              <>Tk {item?.price}</>
+              <>৳ {item?.price}</>
             )}{" "}
           </span>
           X <span className="inline-flex w-[30px] items-center text-black">{item?.quantity}</span>

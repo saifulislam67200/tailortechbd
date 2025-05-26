@@ -133,7 +133,7 @@ export default function OrderHistory() {
                       <div className="mt-[8px] flex flex-col gap-1 text-[14px] text-muted sm:flex-row sm:items-center sm:gap-[16px]">
                         <span>Customer: {order.shippingAddress.name}</span>
                         <span className="hidden sm:inline">•</span>
-                        <span>Total: Tk. {getTotalAmount(order)}</span>
+                        <span>Total: ৳ {getTotalAmount(order)}</span>
                         <span className="hidden sm:inline">•</span>
                         <span>{order.orderItems.length} items</span>
                       </div>
@@ -235,7 +235,7 @@ export default function OrderHistory() {
                                         Qty: {item.quantity}
                                       </span>
                                       <span className="text-[18px] font-semibold">
-                                        Tk. {Math.round(item.product.price * item.quantity)}
+                                        ৳ {Math.round(item.product.price * item.quantity)}
                                       </span>
                                     </div>
                                   </div>
@@ -305,14 +305,14 @@ export default function OrderHistory() {
                               <div className="flex justify-between">
                                 <span className="text-info">Product Amount:</span>
                                 <span className="font-semibold text-primary">
-                                  Tk. {Math.round(order.totalProductAmount)}
+                                  ৳ {Math.round(order.totalProductAmount)}
                                 </span>
                               </div>
                               {order.deliveryFee && (
                                 <div className="flex justify-between">
                                   <span className="text-info">Delivery Fee:</span>
                                   <span className="font-semibold text-primary">
-                                    Tk. {Math.round(order.deliveryFee)}
+                                    ৳ {Math.round(order.deliveryFee)}
                                   </span>
                                 </div>
                               )}
@@ -321,7 +321,7 @@ export default function OrderHistory() {
                                   Total Amount:
                                 </span>
                                 <span className="text-[14px]sm:text-[16px] font-bold">
-                                  Tk. {getTotalAmount(order)}
+                                  ৳ {getTotalAmount(order)}
                                 </span>
                               </div>
                             </div>
