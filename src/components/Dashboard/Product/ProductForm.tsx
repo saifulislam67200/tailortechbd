@@ -87,9 +87,18 @@ export default function ProductForm({
   defaultValue?: typeof initialValues;
   onSubmit: (data: typeof initialValues, helper: FormikHelpers<typeof initialValues>) => void;
 }) {
+  const initValue = defaultValue
+    ? {
+        ...defaultValue,
+        category:
+          typeof defaultValue.category == "string"
+            ? defaultValue.category
+            : defaultValue.category?._id,
+      }
+    : undefined;
   return (
     <Formik
-      initialValues={defaultValue || initialValues}
+      initialValues={initValue || initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
     >
@@ -129,7 +138,10 @@ export default function ProductForm({
                 </div>
                 <div className="flex w-full flex-col gap-[5px]">
                   <label className={labelClass}>Category</label>
-                  <CategorySelector onSelect={({ value }) => setFieldValue("category", value)} />
+                  <CategorySelector
+                    categoryId={typeof values.category === "string" ? values.category : ""}
+                    onSelect={({ value }) => setFieldValue("category", value)}
+                  />
 
                   <ErrorMessage name="category" component="span" className="text-sm text-danger" />
                 </div>

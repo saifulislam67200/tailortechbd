@@ -16,7 +16,7 @@ const ShopViewFallBack = () => {
       </div>
       <FilterCountDisplay />
 
-      <div className="mt-4 grid w-full grid-cols-1 justify-center gap-[16px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+      <div className="mt-4 grid w-full grid-cols-1 justify-center gap-[16px] sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         {Array.from({ length: 12 }).map((_, index) => (
           <ProductPrimaryCardSkeleton key={index + "product_fallback_skeleton"} />
         ))}

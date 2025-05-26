@@ -56,8 +56,6 @@ const EditProductView = ({ slug }: { slug: string }) => {
         isLoading={isUpdating}
         defaultValue={{
           ...data.data,
-          category:
-            typeof data.data.category === "string" ? data.data.category : data.data.category?._id,
         }}
       />
     </div>

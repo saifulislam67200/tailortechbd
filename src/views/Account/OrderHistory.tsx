@@ -1,22 +1,22 @@
 "use client";
 
+import ReviewForm from "@/components/Account/review/ReviewForm";
+import Loader from "@/components/ui/Loader";
+import { useGetMyOrdersQuery } from "@/redux/features/order/order.api";
+import type { IOrder, IShippingAddress } from "@/types/order";
+import { IProduct } from "@/types/product";
+import Image from "next/image";
 import { useState } from "react";
 import {
-  IoChevronDown,
-  IoCube,
   IoCarSport,
   IoCheckmarkCircle,
+  IoChevronDown,
   IoCloseCircle,
+  IoCube,
   IoEye,
   // IoDownload,
   IoTime,
 } from "react-icons/io5";
-import type { IOrder, IShippingAddress } from "@/types/order";
-import { useGetMyOrdersQuery } from "@/redux/features/order/order.api";
-import Image from "next/image";
-import Loader from "@/components/ui/Loader";
-import ReviewForm from "@/components/Account/review/ReviewForm";
-import { IProduct } from "@/types/product";
 
 export default function OrderHistory() {
   const { data, isLoading } = useGetMyOrdersQuery();
@@ -45,7 +45,7 @@ export default function OrderHistory() {
   };
 
   const getTotalAmount = (order: IOrder) => {
-    return Math.floor(order.totalProductAmount + (order.deliveryFee || 0));
+    return Math.round(order.totalProductAmount + (order.deliveryFee || 0));
   };
 
   const formatAddress = (address: IShippingAddress) => {
@@ -133,7 +133,7 @@ export default function OrderHistory() {
                       <div className="mt-[8px] flex flex-col gap-1 text-[14px] text-muted sm:flex-row sm:items-center sm:gap-[16px]">
                         <span>Customer: {order.shippingAddress.name}</span>
                         <span className="hidden sm:inline">•</span>
-                        <span>Total: Tk. {getTotalAmount(order)}</span>
+                        <span>Total: ৳ {getTotalAmount(order)}</span>
                         <span className="hidden sm:inline">•</span>
                         <span>{order.orderItems.length} items</span>
                       </div>
@@ -235,7 +235,7 @@ export default function OrderHistory() {
                                         Qty: {item.quantity}
                                       </span>
                                       <span className="text-[18px] font-semibold">
-                                        Tk. {Math.floor(item.product.price * item.quantity)}
+                                        ৳ {Math.round(item.product.price * item.quantity)}
                                       </span>
                                     </div>
                                   </div>
@@ -305,14 +305,14 @@ export default function OrderHistory() {
                               <div className="flex justify-between">
                                 <span className="text-info">Product Amount:</span>
                                 <span className="font-semibold text-primary">
-                                  Tk. {Math.floor(order.totalProductAmount)}
+                                  ৳ {Math.round(order.totalProductAmount)}
                                 </span>
                               </div>
                               {order.deliveryFee && (
                                 <div className="flex justify-between">
                                   <span className="text-info">Delivery Fee:</span>
                                   <span className="font-semibold text-primary">
-                                    Tk. {Math.floor(order.deliveryFee)}
+                                    ৳ {Math.round(order.deliveryFee)}
                                   </span>
                                 </div>
                               )}
@@ -321,7 +321,7 @@ export default function OrderHistory() {
                                   Total Amount:
                                 </span>
                                 <span className="text-[14px]sm:text-[16px] font-bold">
-                                  Tk. {getTotalAmount(order)}
+                                  ৳ {getTotalAmount(order)}
                                 </span>
                               </div>
                             </div>

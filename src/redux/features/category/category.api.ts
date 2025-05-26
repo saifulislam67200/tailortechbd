@@ -5,7 +5,10 @@ import { generateQueryParams } from "@/utils";
 
 const categoryApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllCategories: builder.query<{ data: ICategory[]; meta: IMeta }, Record<string, string | number>>({
+    getAllCategories: builder.query<
+      { data: ICategory[]; meta: IMeta },
+      Record<string, string | number | undefined>
+    >({
       query: (queryParams) => {
         const queryString = generateQueryParams(queryParams);
         return {

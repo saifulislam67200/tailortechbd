@@ -38,7 +38,7 @@ const ProductSecondaryCard: React.FC<ProductCardProps> = ({ product, className }
               className="mt-1 line-clamp-2 text-center text-[13px]"
               dangerouslySetInnerHTML={{ __html: product.description || "" }}
             ></p>
-            <p className="mt-2 text-center text-[14px] font-bold text-strong">Tk {product.price}</p>
+            <p className="mt-2 text-center text-[14px] font-bold text-strong">৳ {product.price}</p>
           </div>
         </Link>
       </div>
