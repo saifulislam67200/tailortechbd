@@ -15,7 +15,8 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
     >
       {product.discount ? (
         <span className="absolute top-0 right-0 z-[3] line-clamp-1 bg-secondary px-[4px] py-[2px] text-[12px] text-white">
-          Save {Math.ceil(getProductDiscountPrice(product.price, product.discount))} TK.
+          {/* Save {Math.ceil(getProductDiscountPrice(product.price, product.discount))} TK. */}
+          Save {product?.discount}% Off
         </span>
       ) : (
         ""
@@ -47,7 +48,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
 
       {/* Content section */}
       <div className="flex h-full flex-col justify-between p-[8px]">
-        <Link href={`/product/${product?.slug}`} className="line-clamp-2 hover:text-secondary">
+        <Link href={`/product/${product?.slug}`} className="line-clamp-2 hover:text-primary">
           <span className="text-[14px] font-bold">{product.name}</span>
         </Link>
 
@@ -62,15 +63,15 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
         <div className="mt-auto flex flex-col gap-[20px] pt-2 text-start">
           {product.discount ? (
             <span className="flex flex-col justify-start gap-[5px] sm:flex-row sm:items-center">
-              <p className="text-[15px] font-[700] text-primary/50 line-through">
-                Tk {product.price}
+              <p className="text-[15px] font-[700] ">
+                ৳ {getProductDiscountPrice(product.price, product.discount)}
               </p>
-              <p className="text-[15px] font-[700] text-primary">
-                Tk {getProductDiscountPrice(product.price, product.discount)}
+              <p className="text-[13px] font-[700] text-info line-through">
+                ৳ {product.price}
               </p>
             </span>
           ) : (
-            <p className="text-[15px] font-[700] text-black">Tk {product.price}</p>
+            <p className="text-[15px] font-[700] text-black">৳ {product.price}</p>
           )}
           <ProductAddToCartModal product={product} />
         </div>
