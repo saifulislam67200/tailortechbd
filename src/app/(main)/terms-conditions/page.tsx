@@ -3,11 +3,7 @@ import { getPageMetaData } from "@/utils/meta";
 
 export const metadata = getPageMetaData("Terms and Conditions");
 const page = () => {
-  return (
-    <div>
-      <TermsAndConditions />
-    </div>
-  );
+  return <TermsAndConditions />;
 };
 
 export default page;

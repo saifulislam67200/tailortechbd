@@ -3,11 +3,7 @@ import { getPageMetaData } from "@/utils/meta";
 
 export const metadata = getPageMetaData("About");
 const page = () => {
-  return (
-    <div>
-      <CookiePolicy />
-    </div>
-  );
+  return <CookiePolicy />;
 };
 
 export default page;

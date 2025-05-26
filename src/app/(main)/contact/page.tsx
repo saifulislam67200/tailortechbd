@@ -3,11 +3,7 @@ import { getPageMetaData } from "@/utils/meta";
 
 export const metadata = getPageMetaData("Contact");
 const page = () => {
-  return (
-    <div>
-      <Contact />
-    </div>
-  );
+  return <Contact />;
 };
 
 export default page;
