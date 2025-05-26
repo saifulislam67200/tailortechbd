@@ -81,12 +81,13 @@ const ReviewForm = ({ productToReview, setIsReviewOpen }: ReviewFormProps) => {
       onSubmit={handleSubmit}
     >
       {({ values, setFieldValue, isSubmitting }) => (
-        <Form className="relative my-[30px] w-full p-[10px]">
+        <Form className="relative my-[30px] w-full sm:p-[10px]">
           <button
             onClick={() => setIsReviewOpen(false)}
-            className="absolute -top-3 right-3 flex cursor-pointer items-center gap-1 text-info hover:text-black"
+            className="absolute -top-13 right-0 flex cursor-pointer items-center gap-1 text-info transition-colors duration-200 hover:text-black sm:-top-3 sm:right-3"
           >
-            <MdOutlineKeyboardBackspace size={20} /> back to product
+            <MdOutlineKeyboardBackspace size={20} /> <span className="sm:hidden">back</span>{" "}
+            <span className="hidden sm:block"> back to product</span>
           </button>
 
           <div className="mb-[20px]">

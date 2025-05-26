@@ -124,18 +124,24 @@ const ProductImageUploader: React.FC<IProps> = ({
 
   return (
     <div className="min-h-[100px] w-full">
-      {children || <h3 className="text-[20px] font-[600] text-strong">Upload Product Image</h3>}
+      {children || (
+        <h3 className="text-[14px] font-[600] text-strong md:text-[16px] lg:text-[20px]">
+          Upload Product Image
+        </h3>
+      )}
 
       <div onDrop={handleDrop} onDragOver={handleDragOver}>
         <label
           htmlFor={inputId || "image-uploader"}
           className={`center mt-[20px] h-[150px] cursor-pointer flex-col border-[2px] border-dashed border-dashboard/50 bg-dashboard/10 md:h-[200px] lg:h-[270px] ${labelStyle}`}
         >
-          <MdOutlineFileUpload className="text-[50px] text-muted" />
-          <span className="text-[18px] font-[600] text-dashboard">
+          <MdOutlineFileUpload className="size-7 text-[50px] text-muted md:size-10" />
+          <span className="text-[12px] text-dashboard md:text-[18px] md:font-[600]">
             Click to upload or drag and drop
           </span>
-          <span className="text-[14px] font-[400] text-muted">PNG/JPG/JPEG/GIF/WEBP</span>
+          <span className="text-[12px] font-[400] text-muted sm:text-[14px]">
+            PNG/JPG/JPEG/GIF/WEBP
+          </span>
         </label>
       </div>
       <input
