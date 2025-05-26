@@ -1,12 +1,12 @@
 import { api } from "@/redux/api/api";
-import { ICategory } from "@/types/category";
+import { TCategoryWithSubcategories } from "@/types/category";
 import { IMeta } from "@/types/meta";
 import { generateQueryParams } from "@/utils";
 
 const categoryApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAllCategories: builder.query<
-      { data: ICategory[]; meta: IMeta },
+      { data: TCategoryWithSubcategories[]; meta: IMeta },
       Record<string, string | number | undefined>
     >({
       query: (queryParams) => {

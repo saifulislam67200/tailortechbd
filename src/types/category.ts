@@ -8,3 +8,7 @@ export interface ICategory {
   display?: boolean;
   subcategories?: ICategory[];
 }
+
+export type TCategoryWithSubcategories = ICategory & {
+  subcategories?: TCategoryWithSubcategories[];
+};
