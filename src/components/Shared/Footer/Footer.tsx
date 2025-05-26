@@ -1,13 +1,14 @@
-import { footerLinks, socialLinks } from "@/utils/site";
+import { socialLinks } from "@/utils/site";
 import Image from "next/image";
 import Link from "next/link";
-import { FaEnvelope, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
+import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="relative mt-[20px] w-full overflow-hidden bg-primary text-white md:mt-[40px]">
-      <div className="main_container relative mx-auto w-full px-4 py-[40px]">
-        <div className="flex flex-col gap-[28px] sm:gap-[48px] sm:px-[40px] lg:flex-row lg:px-0">
+    <footer className="relative mb-[45px] w-full overflow-hidden text-white lg:mb-0">
+      {/* Main Footer Content */}
+      <div className="main_container relative mx-auto w-full bg-primary px-4 py-[40px]">
+        <div className="flex flex-col gap-[18px] md:gap-[28px] lg:flex-row lg:gap-[48px]">
           {/* Company Info */}
           <div className="mx-auto space-y-[16px] lg:ms-0 lg:w-[30%]">
             <div className="flex items-center justify-center space-x-2 lg:justify-start">
@@ -18,7 +19,7 @@ const Footer = () => {
                 alt="TailerTech"
               />
             </div>
-            <p className="w-full max-w-[300px] text-center text-[14px] leading-relaxed lg:text-start">
+            <p className="w-full text-center text-[14px] leading-relaxed md:max-w-[550px] lg:max-w-[300px] lg:text-start">
               Where Tradition Meets Innovation. We blend the timeless art of tailoring with
               cutting-edge fashion technology to bring you modern, perfectly fitted, and stylish
               apparel.
@@ -39,38 +40,75 @@ const Footer = () => {
           </div>
 
           {/* Right Side*/}
+          <div className="grid grid-cols-1 gap-[28px] text-center md:grid-cols-3 md:gap-[4px] md:px-[16px] md:text-left lg:w-[70%] lg:gap-[32px] lg:px-0">
+            {/* Quick Links */}
+            <div className="space-y-[16px]">
+              <h4 className="text-lg font-semibold">Quick Links</h4>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/about" className="text-[14px] transition-colors hover:text-white">
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/products" className="text-[14px] transition-colors hover:text-white">
+                    Our Products
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/contact" className="text-[14px] transition-colors hover:text-white">
+                    Contact Us
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
-          <div className="grid grid-cols-1 place-items-center gap-[32px] sm:grid-cols-2 sm:place-items-start sm:gap-[130px] lg:w-[70%] lg:grid-cols-3 lg:gap-[32px]">
-            {footerLinks.map(({ label, contents }, i) => (
-              <div className="space-y-[16px] text-center sm:text-left" key={i + label + "footers"}>
-                <h4 className="relative text-lg font-semibold before:absolute before:bottom-[-8px] before:left-0 before:h-[2px] before:w-[40px] before:bg-white/20">
-                  {label}
-                </h4>
-                <ul className="space-y-2">
-                  {contents.map((content, i) => (
-                    <li
-                      key={i + content.label + "footers_child" + label}
-                      className="relative left-0 duration-[0.3s] hover:left-[5px]"
-                    >
-                      <Link
-                        href={content.url}
-                        className="text-[14px] transition-colors hover:text-white"
-                      >
-                        {content.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            {/* Customer Service */}
+            <div className="space-y-[16px]">
+              <h4 className="text-lg font-semibold">Customer Service</h4>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    href="/return-refund-cancellation"
+                    className="text-[14px] transition-colors hover:text-white"
+                  >
+                    Return & Refund
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/terms-conditions"
+                    className="text-[14px] transition-colors hover:text-white"
+                  >
+                    Terms & Conditions
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/privacy-policy"
+                    className="text-[14px] transition-colors hover:text-white"
+                  >
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/cookie-policy"
+                    className="text-[14px] transition-colors hover:text-white"
+                  >
+                    Cookie Policy
+                  </Link>
+                </li>
+              </ul>
+            </div>
 
             {/* Contact Info */}
-            <div className="hidden space-y-[16px] text-center lg:block lg:text-left">
+            <div className="hidden space-y-[16px] md:block">
               <h4 className="text-lg font-semibold">Get In Touch</h4>
-              <div className="space-y-3">
-                <div className="flex items-start space-x-3">
-                  <FaMapMarkerAlt size={16} className="mt-1 flex-shrink-0 text-white" />
-                  <div>
+              <div className="space-y-3 md:space-y-3">
+                <div className="flex flex-col items-center md:flex-row md:items-start">
+                  <FaMapMarkerAlt size={16} className="flex-shrink-0 text-white md:mt-1" />
+                  <div className="mt-1 md:ml-3">
                     <p className="text-[14px]">
                       123 Fashion Street, Gulshan-1
                       <br />
@@ -78,50 +116,37 @@ const Footer = () => {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
+                <div className="flex flex-col items-center md:flex-row">
                   <FaPhone size={16} className="flex-shrink-0 text-white" />
-                  <Link href={"tel:+880 1XXX-XXXXXX"} className="text-[14px] hover:underline">
-                    +880 1XXX-XXXXXX
-                  </Link>
+                  <p className="mt-1 text-[14px] md:ml-3">+880 1XXX-XXXXXX</p>
                 </div>
-                <div className="flex items-center space-x-3">
+                <div className="flex flex-col items-center md:flex-row">
                   <FaEnvelope size={16} className="flex-shrink-0 text-white" />
-                  <Link href={"mailto:info@tailortech.com"} className="text-[14px] hover:underline">
-                    info@tailortech.com
-                  </Link>
+                  <p className="mt-1 text-[14px] md:ml-3">info@tailortech.com</p>
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Contact Info */}
-          <div className="block space-y-[16px] lg:hidden">
-            <h4 className="text-center text-lg font-semibold">Get In Touch</h4>
-            <div className="space-y-3">
-              <p className="text-center text-[14px]"> Head office</p>
-              <div className="flex items-center justify-center space-x-3">
-                <div>
-                  <p className="text-center text-[14px]">
-                    123 Fashion Street, Gulshan-1, Dhaka-1212, Bangladesh
-                  </p>
+            {/* Contact Info */}
+            <div className="block space-y-[16px] md:hidden">
+              <h4 className="text-center text-lg font-semibold">Get In Touch</h4>
+              <div className="space-y-3">
+                <p className="text-center text-[14px]"> Head office</p>
+                <div className="flex items-center justify-center space-x-3">
+                  <div>
+                    <p className="text-center text-[14px]">
+                      123 Fashion Street, Gulshan-1, Dhaka-1212, Bangladesh
+                    </p>
+                  </div>
                 </div>
-              </div>
-
-              {/* <div className="flex items-start justify-center space-x-3">
-                <FaClock size={16} className="mt-1 flex-shrink-0 text-white" />
-                <div>
-                  <p className="text-center text-[14px]">
-                    Mon - Sat: 9:00 AM - 8:00 PM to Sunday: 10:00 AM - 6:00 PM
-                  </p>
+                <div className="flex items-center justify-center space-x-3">
+                  <FaPhone size={16} className="flex-shrink-0 text-white" />
+                  <p className="text-[14px]">+880 1XXX-XXXXXX</p>
                 </div>
-              </div> */}
-              <div className="flex items-center justify-center space-x-3">
-                <FaPhone size={16} className="flex-shrink-0 text-white" />
-                <p className="text-[14px]">+880 1XXX-XXXXXX</p>
-              </div>
-              <div className="flex items-center justify-center space-x-3">
-                <FaEnvelope size={16} className="flex-shrink-0 text-white" />
-                <p className="text-[14px]">info@tailortech.com</p>
+                <div className="flex items-center justify-center space-x-3">
+                  <FaEnvelope size={16} className="flex-shrink-0 text-white" />
+                  <p className="text-[14px]">info@tailortech.com</p>
+                </div>
               </div>
             </div>
           </div>
@@ -137,7 +162,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Footer */}
-      <div className="border-t border-border-main">
+      <div className="border-t border-border-main bg-primary">
         <div className="main_container mx-auto px-[16px] py-[16px]">
           <p className="text-center text-[14px] text-white">
             © {new Date().getFullYear()} TailorTech Limited. All rights reserved.
