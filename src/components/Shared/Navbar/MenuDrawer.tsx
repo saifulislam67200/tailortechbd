@@ -1,8 +1,6 @@
 "use client";
 import { useRef } from "react";
-import {
-  FiX,
-} from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 import CategoryAccordion from "./CategoryAccordion";
 
 interface MenuDrawerProps {
@@ -13,13 +11,13 @@ interface MenuDrawerProps {
 export default function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
 
-
   return (
     <>
       {/* Overlay  */}
       <div
-        className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${isOpen ? "opacity-50" : "pointer-events-none opacity-0"
-          }`}
+        className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${
+          isOpen ? "opacity-50" : "pointer-events-none opacity-0"
+        }`}
         onClick={() => setIsOpen(false)}
         aria-hidden={!isOpen}
       />
@@ -27,22 +25,19 @@ export default function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
       {/* Drawer */}
       <div
         ref={drawerRef}
-        className={`fixed top-0 left-0 z-50 h-full transform bg-primary-foreground shadow-lg transition-transform duration-300 ease-in-out w-[75vw] ${isOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed top-0 left-0 z-50 h-full w-full max-w-[334px] transform bg-primary-foreground shadow-lg transition-transform duration-300 ease-in-out ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b px-[16px] mt-[16px]">
+        <div className="mt-[16px] flex items-center justify-between border-b px-[16px]">
           <h2 className="text-xl font-semibold">Menu</h2>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="text-white"
-            aria-label="Close menu"
-          >
+          <button onClick={() => setIsOpen(false)} className="text-white" aria-label="Close menu">
             <FiX size={24} />
           </button>
         </div>
 
-        <div className="px-[16px] h-screen overflow-y-auto">
+        <div className="h-screen overflow-y-auto px-[16px]">
           {/* Menu Items */}
           <CategoryAccordion setIsOpen={setIsOpen} />
         </div>

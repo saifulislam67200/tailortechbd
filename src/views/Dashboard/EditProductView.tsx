@@ -30,6 +30,8 @@ const EditProductView = ({ slug }: { slug: string }) => {
     if (isUpdating) {
       return;
     }
+    console.log(payload);
+
     const res = await updateProduct({
       productId: data.data._id,
       payload,

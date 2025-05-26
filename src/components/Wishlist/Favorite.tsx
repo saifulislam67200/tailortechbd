@@ -1,14 +1,13 @@
 "use client";
 
-import React from "react";
-import ProductPrimaryCard from "../ui/Card/ProductCard/ProductPrimaryCard";
-import DataNotFound from "../ui/DataNotFound";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { toast } from "sonner";
 import { clearWishlist } from "@/redux/features/wishlist/wishlistSlice";
 import { LuX } from "react-icons/lu";
+import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
-const Favorite = ({containerClassName} : {containerClassName?: string}) => {
+import ProductPrimaryCard from "../ui/Card/ProductCard/ProductPrimaryCard";
+import DataNotFound from "../ui/DataNotFound";
+const Favorite = ({ containerClassName }: { containerClassName?: string }) => {
   const dispatch = useAppDispatch();
   const wishlistItems = useAppSelector((state) => state?.wishlist?.items ?? []);
 
@@ -39,13 +38,18 @@ const Favorite = ({containerClassName} : {containerClassName?: string}) => {
 
       {wishlistItems.length ? (
         <>
-          <div className={twMerge("mt-4 grid w-full grid-cols-1 justify-center gap-[16px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6", containerClassName)}>
+          <div
+            className={twMerge(
+              "mt-4 grid w-full grid-cols-1 justify-center gap-[16px] sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6",
+              containerClassName
+            )}
+          >
             {wishlistItems?.map((data) => <ProductPrimaryCard key={data._id} product={data} />)}
           </div>
           {/* <CategoryProductPagination totalDoc={wishlistItems?.length} /> */}
         </>
       ) : (
-        <DataNotFound title="No Product Found" className="h-[200px]" />
+        <DataNotFound title="No Product Found" className="h-[60vh]" />
       )}
     </>
   );
