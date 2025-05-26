@@ -4,16 +4,21 @@ import { useGetAllCategoriesQuery } from "@/redux/features/category/category.api
 import { ICategory } from "@/types/category";
 import { useState } from "react";
 
+type TOnSelect = (item: { label: string; value: string }) => void;
 interface IProps {
-  onSelect: (item: { label: string; value: string }) => void;
-  categoryId?: string;
+  onSelect: TOnSelect;
+  category?: string;
 }
 
 const SubCategorySelector = ({
   parentId,
   parentLabel,
   onSelect,
-}: IProps & { parentId: string; parentLabel?: string }) => {
+}: {
+  parentId: string;
+  parentLabel?: string;
+  onSelect: TOnSelect;
+}) => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(null);
   const { data } = useGetAllCategoriesQuery({ mode: "normal", searchTerm, parent: parentId });
@@ -52,10 +57,13 @@ const SubCategorySelector = ({
   );
 };
 
-const CategorySelector: React.FC<IProps> = ({ onSelect, categoryId }) => {
+const CategorySelector: React.FC<IProps> = ({ onSelect, category }) => {
   const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(null);
   const [searchTerm, setSearchTerm] = useDebounce("");
-  const { data } = useGetAllCategoriesQuery({ mode: "normal", searchTerm, _id: categoryId||undefined });
+  const { data } = useGetAllCategoriesQuery({
+    mode: "normal",
+    searchTerm,
+  });
   const formatedData = data?.data.map((category) => ({
     label: category.label,
     value: category._id,
@@ -66,6 +74,7 @@ const CategorySelector: React.FC<IProps> = ({ onSelect, categoryId }) => {
       <SelectionBox
         defaultSearch={false}
         onSeachInputChange={setSearchTerm}
+        displayValue={selectedCategory?.label || category}
         data={formatedData || []}
         onSelect={(item) => {
           const category = data?.data.find((category) => category._id === item.value);
