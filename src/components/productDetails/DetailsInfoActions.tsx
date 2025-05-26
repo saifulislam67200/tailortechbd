@@ -45,6 +45,18 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
     });
   };
 
+  const getColorVariantImage = (colorName: string): string => {
+    if (!product?.colors || !Array.isArray(product.colors)) {
+      return product?.images?.[0] || "";
+    }
+
+    const colorVariant = product.colors.find(
+      (color) => color?.color?.toLowerCase() === colorName.toLowerCase().trim()
+    );
+
+    return colorVariant?.images?.[0] || product?.images?.[0] || "";
+  };
+
   const handleAddToCart = () => {
     if (!activeColor || !activeSize) {
       toast.error("Please select a color and size.");
@@ -60,7 +72,7 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
       size: activeSize.size,
       stock: activeSize.stock,
       color: activeColor.color,
-      image: product?.images[0],
+      image: getColorVariantImage(activeColor.color),
       slug: product.slug,
     };
 
