@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="relative mb-[45px] w-full overflow-hidden text-white lg:mb-0">
       {/* Main Footer Content */}
-      <div className="main_container relative mx-auto w-full bg-primary px-4 py-[40px]">
+      <div className="main_container relative mx-auto w-full bg-primary px-4 py-[30px] sm:py-[40px]">
         <div className="flex flex-col gap-[18px] md:gap-[28px] lg:flex-row lg:gap-[48px]">
           {/* Company Info */}
           <div className="mx-auto space-y-[16px] lg:ms-0 lg:w-[30%]">
@@ -43,19 +43,21 @@ const Footer = () => {
           <div className="grid grid-cols-1 gap-[28px] text-center md:grid-cols-3 md:gap-[4px] md:px-[16px] md:text-left lg:w-[70%] lg:gap-[32px] lg:px-0">
             {/* Quick Links */}
             <div className="space-y-[16px]">
-              <h4 className="text-lg font-semibold">Quick Links</h4>
+              <h4 className="relative text-center text-lg font-semibold before:absolute before:bottom-[-8px] before:left-[50%] before:h-[2px] before:w-[40px] before:translate-x-[-50%] before:bg-white/20 md:text-left md:before:left-0 md:before:translate-x-0">
+                Quick Links
+              </h4>
               <ul className="space-y-2">
-                <li>
+                <li className="relative left-0 duration-[0.3s] hover:left-[5px]">
                   <Link href="/about" className="text-[14px] transition-colors hover:text-white">
                     About Us
                   </Link>
                 </li>
-                <li>
+                <li className="relative left-0 duration-[0.3s] hover:left-[5px]">
                   <Link href="/products" className="text-[14px] transition-colors hover:text-white">
                     Our Products
                   </Link>
                 </li>
-                <li>
+                <li className="relative left-0 duration-[0.3s] hover:left-[5px]">
                   <Link href="/contact" className="text-[14px] transition-colors hover:text-white">
                     Contact Us
                   </Link>
@@ -65,9 +67,11 @@ const Footer = () => {
 
             {/* Customer Service */}
             <div className="space-y-[16px]">
-              <h4 className="text-lg font-semibold">Customer Service</h4>
+              <h4 className="relative text-center text-lg font-semibold before:absolute before:bottom-[-8px] before:left-[50%] before:h-[2px] before:w-[40px] before:translate-x-[-50%] before:bg-white/20 md:text-left md:before:left-0 md:before:translate-x-0">
+                Customer Service
+              </h4>
               <ul className="space-y-2">
-                <li>
+                <li className="relative left-0 duration-[0.3s] hover:left-[5px]">
                   <Link
                     href="/return-refund-cancellation"
                     className="text-[14px] transition-colors hover:text-white"
@@ -75,7 +79,7 @@ const Footer = () => {
                     Return & Refund
                   </Link>
                 </li>
-                <li>
+                <li className="relative left-0 duration-[0.3s] hover:left-[5px]">
                   <Link
                     href="/terms-conditions"
                     className="text-[14px] transition-colors hover:text-white"
@@ -83,7 +87,7 @@ const Footer = () => {
                     Terms & Conditions
                   </Link>
                 </li>
-                <li>
+                <li className="relative left-0 duration-[0.3s] hover:left-[5px]">
                   <Link
                     href="/privacy-policy"
                     className="text-[14px] transition-colors hover:text-white"
@@ -91,7 +95,7 @@ const Footer = () => {
                     Privacy Policy
                   </Link>
                 </li>
-                <li>
+                <li className="relative left-0 duration-[0.3s] hover:left-[5px]">
                   <Link
                     href="/cookie-policy"
                     className="text-[14px] transition-colors hover:text-white"
@@ -104,7 +108,9 @@ const Footer = () => {
 
             {/* Contact Info */}
             <div className="hidden space-y-[16px] md:block">
-              <h4 className="text-lg font-semibold">Get In Touch</h4>
+              <h4 className="relative text-center text-lg font-semibold before:absolute before:bottom-[-8px] before:left-[50%] before:h-[2px] before:w-[40px] before:translate-x-[-50%] before:bg-white/20 md:text-left md:before:left-0 md:before:translate-x-0">
+                Get In Touch
+              </h4>
               <div className="space-y-3 md:space-y-3">
                 <div className="flex flex-col items-center md:flex-row md:items-start">
                   <FaMapMarkerAlt size={16} className="flex-shrink-0 text-white md:mt-1" />
@@ -129,7 +135,9 @@ const Footer = () => {
 
             {/* Contact Info */}
             <div className="block space-y-[16px] md:hidden">
-              <h4 className="text-center text-lg font-semibold">Get In Touch</h4>
+              <h4 className="relative text-center text-lg font-semibold before:absolute before:bottom-[-8px] before:left-[50%] before:h-[2px] before:w-[40px] before:translate-x-[-50%] before:bg-white/20 md:text-left md:before:left-0 md:before:translate-x-0">
+                Get In Touch
+              </h4>
               <div className="space-y-3">
                 <p className="text-center text-[14px]"> Head office</p>
                 <div className="flex items-center justify-center space-x-3">
