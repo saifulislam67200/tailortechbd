@@ -17,12 +17,14 @@ import Link from "next/link";
 import { useLogoutUserMutation } from "@/redux/features/user/user.api";
 import { logout as logoutAction } from "@/redux/features/user/user.slice";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function UserDropdown({ displayName = false }: { displayName?: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [logoutUser] = useLogoutUserMutation();
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const { user } = useAppSelector((state) => state.user);
   useEffect(() => {
@@ -43,6 +45,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
     setIsOpen(false);
     await logoutUser(undefined);
     toast.success("Logout successfully");
+    router.push("/");
   };
 
   return (

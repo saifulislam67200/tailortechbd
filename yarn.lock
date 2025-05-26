@@ -3201,6 +3201,11 @@ react-required-if@1.0.1:
   resolved "https://registry.yarnpkg.com/react-required-if/-/react-required-if-1.0.1.tgz#f41d06bebb75346c206cd1de8dc0ef5b7c8f9abd"
   integrity sha512-n0HDT1G/1GoWvX7HcGzBOVwgfrbaymtEoYBkKOOhca3ThXQYFMjI3uKWcc5DSBHpPbSEJPPWEAV6Zu9BrSG+rg==
 
+react-simple-star-rating@^5.1.7:
+  version "5.1.7"
+  resolved "https://registry.yarnpkg.com/react-simple-star-rating/-/react-simple-star-rating-5.1.7.tgz#5406ade8d0e117a654e979ebd702d89389876c29"
+  integrity sha512-NTFkW8W3uwvI82Fv7JW5i7gmDjEZKxJmj+Z9vn+BjYIXT6ILdnU9qnSUP2cWrWN/WAUlue81f9SgM4CQcenltQ==
+
 react@^19.0.0:
   version "19.1.0"
   resolved "https://registry.yarnpkg.com/react/-/react-19.1.0.tgz#926864b6c48da7627f004795d6cce50e90793b75"
