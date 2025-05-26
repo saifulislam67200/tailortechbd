@@ -23,7 +23,7 @@ const tableHead = [
 const AllOrderTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("")
   const [page, setPage] = useState<number>(1)
-  const [statusFilter, setStatusFilter] = useState<string>("all")
+  // const [statusFilter, setStatusFilter] = useState<string>("all")
   const { data } = useGetAllOrdersQuery({ searchTerm, page, limit: 10 })
   const orders = data?.data || []
   const metaData = data?.meta || { totalDoc: 0, page: 1 }
@@ -89,7 +89,7 @@ const AllOrderTable = () => {
           </div>
 
           {/* Filters */}
-          <div className="flex flex-col gap-4 sm:flex-row">
+          {/* <div className="flex flex-col gap-4 sm:flex-row">
             <select
               className="rounded-[5px] border-[1px] border-dashboard/20 p-[5px] focus:border-dashboard/20"
               value={statusFilter}
@@ -101,7 +101,7 @@ const AllOrderTable = () => {
               <option value="delivered">Delivered</option>
               <option value="cancelled">Cancelled</option>
             </select>
-          </div>
+          </div> */}
         </div>
 
         {/* Orders Table */}
