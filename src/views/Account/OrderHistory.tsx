@@ -1,8 +1,10 @@
 "use client";
 
+import ReviewForm from "@/components/Account/review/ReviewForm";
 import Loader from "@/components/ui/Loader";
 import { useGetMyOrdersQuery } from "@/redux/features/order/order.api";
 import type { IOrder, IShippingAddress } from "@/types/order";
+import { IProduct } from "@/types/product";
 import Image from "next/image";
 import { useState } from "react";
 import {
@@ -20,6 +22,15 @@ export default function OrderHistory() {
   const { data, isLoading } = useGetMyOrdersQuery();
   const orders = data?.data || [];
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
+
+  const [productToReview, setProductToReview] = useState<{
+    item: Partial<IProduct> & { product_id: string };
+    orderId: string;
+  }>({
+    item: { product_id: "" },
+    orderId: "",
+  });
 
   const toggleOrderExpansion = (orderId: string) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
@@ -39,6 +50,12 @@ export default function OrderHistory() {
 
   const formatAddress = (address: IShippingAddress) => {
     return `${address.address}, ${address.upazila}, ${address.district}, ${address.division}`;
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleReviewClick = (item: any, orderId: string) => {
+    setProductToReview({ item: item, orderId: orderId });
+    setIsReviewOpen(true);
   };
 
   return (
@@ -116,7 +133,7 @@ export default function OrderHistory() {
                       <div className="mt-[8px] flex flex-col gap-1 text-[14px] text-muted sm:flex-row sm:items-center sm:gap-[16px]">
                         <span>Customer: {order.shippingAddress.name}</span>
                         <span className="hidden sm:inline">•</span>
-                        <span>Total: Tk. {getTotalAmount(order)}</span>
+                        <span>Total: ৳ {getTotalAmount(order)}</span>
                         <span className="hidden sm:inline">•</span>
                         <span>{order.orderItems.length} items</span>
                       </div>
@@ -180,45 +197,62 @@ export default function OrderHistory() {
                             <IoCube className="h-[16px] w-[16px]" />
                             Order Items
                           </h4>
-                          <div className="space-y-[12px]">
-                            {order.orderItems.map((item, index) => (
-                              <div
-                                key={index}
-                                className="flex flex-col items-center gap-[12px] rounded-lg border border-border-muted bg-white p-[16px] sm:flex-row"
-                              >
-                                <Image
-                                  src={item.product.image || "/avatar.png"}
-                                  alt={item.product.name}
-                                  width={64}
-                                  height={64}
-                                  className="h-[64px] w-[64px] rounded-md border object-cover"
-                                />
-                                <div className="min-w-0 flex-1">
-                                  <h5 className="mb-[4px] font-medium">{item.product.name}</h5>
-                                  <div className="sm:text-[14px]text-[12px] mb-[8px] flex items-center gap-[12px] text-[12px] text-muted md:text-[14px]">
-                                    {item.size && (
-                                      <span className="rounded bg-gray-100 px-[8px] py-[4px]">
-                                        Size: {item.size}
+                          {isReviewOpen ? (
+                            <ReviewForm
+                              productToReview={productToReview}
+                              setIsReviewOpen={setIsReviewOpen}
+                            />
+                          ) : (
+                            <div className="space-y-[12px]">
+                              {order.orderItems.map((item, index) => (
+                                <div
+                                  key={index}
+                                  className="relative flex flex-col items-center gap-[12px] rounded-lg border border-border-muted bg-white p-[16px] sm:flex-row"
+                                >
+                                  <Image
+                                    src={item.product.image || "/avatar.png"}
+                                    alt={item.product.name}
+                                    width={64}
+                                    height={64}
+                                    className="h-[64px] w-[64px] rounded-md border object-cover"
+                                  />
+                                  <div className="min-w-0 flex-1">
+                                    <h5 className="mb-[4px] font-medium">{item.product.name}</h5>
+                                    <div className="sm:text-[14px]text-[12px] mb-[8px] flex items-center gap-[12px] text-[12px] text-muted md:text-[14px]">
+                                      {item.size && (
+                                        <span className="rounded bg-gray-100 px-[8px] py-[4px]">
+                                          Size: {item.size}
+                                        </span>
+                                      )}
+                                      {item.color && (
+                                        <span className="rounded bg-gray-100 px-[8px] py-[4px]">
+                                          Color: {item.color}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-[14px] text-info">
+                                        Qty: {item.quantity}
                                       </span>
-                                    )}
-                                    {item.color && (
-                                      <span className="rounded bg-gray-100 px-[8px] py-[4px]">
-                                        Color: {item.color}
+                                      <span className="text-[18px] font-semibold">
+                                        ৳ {Math.round(item.product.price * item.quantity)}
                                       </span>
-                                    )}
+                                    </div>
                                   </div>
-                                  <div className="flex items-center justify-between">
-                                    <span className="text-[14px] text-info">
-                                      Qty: {item.quantity}
-                                    </span>
-                                    <span className="text-[18px] font-semibold">
-                                      Tk. {Math.round(item.product.price * item.quantity)}
-                                    </span>
-                                  </div>
+                                  {/* // review button */}
+                                  {currentStatus !== "delivered" && (
+                                    <button
+                                      onClick={() => handleReviewClick(item, order?._id)}
+                                      className="absolute top-2 right-2 flex h-[30px] w-[70px] cursor-pointer items-center justify-center rounded-[5px] border border-quaternary px-2 text-info transition-colors duration-200 hover:border-primary hover:text-primary"
+                                      aria-label="Give Review"
+                                    >
+                                      Review
+                                    </button>
+                                  )}
                                 </div>
-                              </div>
-                            ))}
-                          </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
 
                         {/* Order Info */}
@@ -271,14 +305,14 @@ export default function OrderHistory() {
                               <div className="flex justify-between">
                                 <span className="text-info">Product Amount:</span>
                                 <span className="font-semibold text-primary">
-                                  Tk. {Math.round(order.totalProductAmount)}
+                                  ৳ {Math.round(order.totalProductAmount)}
                                 </span>
                               </div>
                               {order.deliveryFee && (
                                 <div className="flex justify-between">
                                   <span className="text-info">Delivery Fee:</span>
                                   <span className="font-semibold text-primary">
-                                    Tk. {Math.round(order.deliveryFee)}
+                                    ৳ {Math.round(order.deliveryFee)}
                                   </span>
                                 </div>
                               )}
@@ -287,7 +321,7 @@ export default function OrderHistory() {
                                   Total Amount:
                                 </span>
                                 <span className="text-[14px]sm:text-[16px] font-bold">
-                                  Tk. {getTotalAmount(order)}
+                                  ৳ {getTotalAmount(order)}
                                 </span>
                               </div>
                             </div>

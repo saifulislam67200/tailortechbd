@@ -127,7 +127,7 @@ const AllProductsTable = () => {
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="text-[14px]">Tk. {product.price}</span>
+                  <span className="text-[14px]">৳ {product.price}</span>
                 </td>
                 <td className="px-6 py-4">
                   <span className="text-[14px]">{product.discount || "N/A"}</span>
