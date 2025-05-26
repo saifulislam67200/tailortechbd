@@ -1,61 +1,66 @@
-"use client";
-import React from "react";
-import { useState } from "react";
-import Link from "next/link";
-import { FiEdit } from "react-icons/fi";
-import { IOrderStatus } from "@/types/order";
-import { useGetAllOrdersQuery } from "@/redux/features/order/order.api";
-import Pagination from "@/components/ui/Pagination";
-import useDebounce from "@/hooks/useDebounce";
-import { RxMagnifyingGlass } from "react-icons/rx";
-import HorizontalLine from "@/components/ui/HorizontalLine";
-import Image from "next/image";
+"use client"
+import { useState } from "react"
+import Link from "next/link"
+import { FiEdit } from "react-icons/fi"
+import type { IOrderItem, IOrderStatus } from "@/types/order"
+import { useGetAllOrdersQuery } from "@/redux/features/order/order.api"
+import Pagination from "@/components/ui/Pagination"
+import useDebounce from "@/hooks/useDebounce"
+import { RxMagnifyingGlass } from "react-icons/rx"
+import HorizontalLine from "@/components/ui/HorizontalLine"
+import Image from "next/image"
 
 const tableHead = [
-  { label: "Name", field: "name" },
+  { label: "Customer Info", field: "name" },
   { label: "Product", field: "product" },
   { label: "Total Items", field: "price" },
   { label: "Total Amount", field: "discount" },
   { label: "Status", field: "" },
   { label: "Date", field: "createdAt" },
   { label: "View Details", field: "" },
-];
+]
+
 const AllOrderTable = () => {
-  const [searchTerm, setSearchTerm] = useDebounce("");
-  const [page, setPage] = useState<number>(1);
-  const { data } = useGetAllOrdersQuery({ searchTerm, page, limit: 10 });
-  const orders = data?.data || [];
-  const metaData = data?.meta || { totalDoc: 0, page: 1 };
+  const [searchTerm, setSearchTerm] = useDebounce("")
+  const [page, setPage] = useState<number>(1)
+  const [statusFilter, setStatusFilter] = useState<string>("all")
+  const { data } = useGetAllOrdersQuery({ searchTerm, page, limit: 10 })
+  const orders = data?.data || []
+  const metaData = data?.meta || { totalDoc: 0, page: 1 }
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case "pending":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-100 text-yellow-800"
       case "on-delivery":
       case "delivered":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800"
       case "cancelled":
-        return "bg-red-100 text-red-800";
+        return "bg-red-100 text-red-800"
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 text-gray-800"
     }
-  };
+  }
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
-    });
-  };
+    })
+  }
 
   const formatPrice = (price: number) => {
-    return `৳${Math.round(price)}`;
-  };
+    return `৳${Math.round(price)}`
+  }
 
   const getCurrentStatus = (statusArray: IOrderStatus[]) => {
-    return statusArray[statusArray.length - 1]?.status || "pending";
-  };
+    return statusArray[statusArray.length - 1]?.status || "pending"
+  }
+
+  const getTotalItems = (orderItems: IOrderItem[]) => {
+    return orderItems.reduce((total, item) => total + (item.quantity || 0), 0)
+  }
 
   return (
     <div className="flex flex-col gap-[10px]">
@@ -64,13 +69,9 @@ const AllOrderTable = () => {
           <h1 className="text-[16px] font-[600]">Order List</h1>
           <p className="text-[14px] text-muted">
             Displaying All the available orders in your store. There is total{" "}
-            <span className="font-bold text-dashboard">{metaData.totalDoc}</span> orders. Data is
-            Devided into{" "}
-            <span className="font-bold text-dashboard">
-              {Math.ceil(metaData.totalDoc / 10)} pages
-            </span>{" "}
-            & currently showing page{" "}
-            <span className="font-bold text-dashboard">{metaData.page}.</span>
+            <span className="font-bold text-dashboard">{metaData.totalDoc}</span> orders. Data is Devided into{" "}
+            <span className="font-bold text-dashboard">{Math.ceil(metaData.totalDoc / 10)} pages</span> & currently
+            showing page <span className="font-bold text-dashboard">{metaData.page}.</span>
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
@@ -88,7 +89,7 @@ const AllOrderTable = () => {
           </div>
 
           {/* Filters */}
-          {/* <div className="flex flex-col gap-4 sm:flex-row">
+          <div className="flex flex-col gap-4 sm:flex-row">
             <select
               className="rounded-[5px] border-[1px] border-dashboard/20 p-[5px] focus:border-dashboard/20"
               value={statusFilter}
@@ -100,7 +101,7 @@ const AllOrderTable = () => {
               <option value="delivered">Delivered</option>
               <option value="cancelled">Cancelled</option>
             </select>
-          </div> */}
+          </div>
         </div>
 
         {/* Orders Table */}
@@ -111,7 +112,7 @@ const AllOrderTable = () => {
                 {tableHead.map((heading) => (
                   <th
                     key={heading.field || heading.label}
-                    className="px-[24px] py-[12px] text-left text-[14px] font-semibold tracking-wider text-dashboard capitalize"
+                    className="px-[24px] py-[12px] text-left text-[12px] lg:text-[14px] font-semibold tracking-wider text-dashboard capitalize"
                   >
                     {heading?.label}
                   </th>
@@ -121,39 +122,62 @@ const AllOrderTable = () => {
             <tbody className="divide-y divide-gray-200 bg-white">
               {orders?.map((order) => (
                 <tr key={order._id} className="hover:bg-gray-50">
-                  {/* <td className="px-[24px] py-[16px] whitespace-nowrap">
-                    <span className="text-[14px] capitalize">{order.shippingAddress.name}</span>
-                  </td> */}
-                  <td className="px-[24px] py-[16px] whitespace-nowrap w-[150px]">
-                    <span
-                      className="text-[14px] capitalize block truncate max-w-[120px]"
-                      title={order.shippingAddress.name}
-                    >
-                      {order.shippingAddress.name}
-                    </span>
-                  </td>
-                  <td className="px-[24px] py-[16px]">
-                    <div className="h-12 w-12 flex-shrink-0">
-                      <Image
-                        className="h-12 w-12 rounded-lg object-cover"
-                        src={
-                          order.orderItems[0]?.product?.image ||"avatar.png"
-                        }
-                        alt={order.orderItems[0]?.product?.name || "Product"}
-                        width={48}
-                        height={48}
-                      />
+                  {/* Customer Info */}
+                  <td className="px-[24px] py-[16px] w-[180px]">
+                    <div className="max-w-[150px]">
+                      <div
+                        className="text-[14px] capitalize truncate"
+                        title={order.shippingAddress.name}
+                      >
+                        {order.shippingAddress.name}
+                      </div>
+                      <div className="text-[12px] text-gray-500 truncate" title={order.shippingAddress.phoneNumber}>
+                        {order.shippingAddress.phoneNumber}
+                      </div>
                     </div>
                   </td>
 
-                  <td className="px-[24px] py-[16px] whitespace-nowrap">
-                    <span className="text-[14px]">{order?.orderItems.length || 0} items</span>
+                  {/* Product */}
+                  <td className="px-[24px] py-[16px]">
+                    <div className="flex items-center max-w-[200px] space-x-3">
+                      <div className="h-12 w-12 flex-shrink-0">
+                        <Image
+                          className="h-12 w-12 rounded-lg object-cover"
+                          src={order.orderItems[0]?.product?.image || "/images/avatar.png"}
+                          alt={order.orderItems[0]?.product?.name || "Product"}
+                          width={48}
+                          height={48}
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div
+                          className="text-[14px] truncate"
+                          title={order.orderItems[0]?.product?.name || "Product"}
+                        >
+                          {order.orderItems[0]?.product?.name || "Product"}
+                        </div>
+                        <div className="text-[12px] text-gray-500">
+                          {order.orderItems[0]?.color && order.orderItems[0]?.size
+                            ? `${order.orderItems[0].color} - ${order.orderItems[0].size}`
+                            : "N/A"}
+                        </div>
+                      </div>
+                    </div>
                   </td>
+
+                  {/* Total Items */}
+                  <td className="px-[24px] py-[16px] whitespace-nowrap">
+                    <span className="text-[14px]">{getTotalItems(order?.orderItems)} items</span>
+                  </td>
+
+                  {/* Total Amount */}
                   <td className="px-[24px] py-[16px] whitespace-nowrap">
                     <span className="text-[14px]">
                       {formatPrice(order.totalProductAmount + (order?.deliveryFee || 0))}
                     </span>
                   </td>
+
+                  {/* Status */}
                   <td className="px-[24px] py-[16px] whitespace-nowrap">
                     <span
                       className={`inline-flex rounded-full px-2 py-1 text-[13px] capitalize ${getStatusBadgeColor(getCurrentStatus(order.status))}`}
@@ -161,17 +185,23 @@ const AllOrderTable = () => {
                       {getCurrentStatus(order.status)}
                     </span>
                   </td>
+
+                  {/* Date */}
                   <td className="px-[24px] py-[16px] text-[14px] whitespace-nowrap">
                     {formatDate(order?.createdAt || "")}
                   </td>
+
+                  {/* Actions */}
                   <td className="px-[24px] py-[16px] text-[14px] font-medium whitespace-nowrap">
-                    <Link
-                      href={`/dashboard/all-orders/${order._id}/edit`}
-                      className="rounded-full text-dashboard"
-                      title="Update Order"
-                    >
-                      <FiEdit className="h-4 w-4" />
-                    </Link>
+                    <div className="flex justify-center">
+                      <Link
+                        href={`/dashboard/all-orders/${order._id}/edit`}
+                        className="flex items-center justify-center w-8 h-8 rounded-full text-dashboard hover:text-dashboard/80 border border-dashboard/20 hover:border-dashboard/40 hover:bg-dashboard/10 transition-all duration-200"
+                        title="Update Order"
+                      >
+                        <FiEdit className="h-4 w-4" />
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -188,7 +218,7 @@ const AllOrderTable = () => {
       </div>
       <Pagination totalDocs={metaData.totalDoc || 0} onPageChange={(page) => setPage(page)} />
     </div>
-  );
-};
+  )
+}
 
-export default AllOrderTable;
+export default AllOrderTable
