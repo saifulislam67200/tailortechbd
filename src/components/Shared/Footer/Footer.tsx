@@ -133,7 +133,7 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Contact Info */}
+            {/* Contact Info for mobile */}
             <div className="block space-y-[16px] md:hidden">
               <h4 className="relative text-center text-lg font-semibold before:absolute before:bottom-[-8px] before:left-[50%] before:h-[2px] before:w-[40px] before:translate-x-[-50%] before:bg-white/20 md:text-left md:before:left-0 md:before:translate-x-0">
                 Get In Touch
