@@ -49,7 +49,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
     <div className="relative hidden lg:block" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex cursor-pointer items-center gap-[10px] text-primary "
+        className="flex cursor-pointer items-center gap-[10px] text-primary"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
@@ -82,7 +82,6 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
           {/* User Info Header */}
           <div className="border-b border-gray-100 px-4 py-3">
             <div className="flex items-center space-x-3">
-              
               {user?.avatar ? (
                 <div className="aspect-square w-[40px] overflow-hidden rounded-full">
                   <Image
@@ -93,12 +92,14 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
                     className="h-full w-full"
                   />
                 </div>
-              ) : ( <Image
-                src= "/images/avatar.jpg"
-                alt="user-icon"
-                width={40}
-                height={40}
-                className="rounded-full border border-border-muted object-cover" />
+              ) : (
+                <Image
+                  src="/images/avatar.jpg"
+                  alt="user-icon"
+                  width={40}
+                  height={40}
+                  className="rounded-full border border-border-muted object-cover"
+                />
               )}
               <div>
                 <p className="text-[14px] font-medium capitalize">{user?.fullName}</p>
