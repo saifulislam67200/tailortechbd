@@ -90,7 +90,8 @@ const OverviewChart = () => {
 
   return (
     <div className="w-full">
-      <div className="mb-4 flex w-full items-center justify-end">
+      <div className="mb-4 flex w-full items-center justify-between bg-white p-[16px]">
+        <h1>Hi john, Welcome to the dashboard</h1>
         <AnalyticsOverviewFilter
           options={options}
           selected={selectedFilter}
