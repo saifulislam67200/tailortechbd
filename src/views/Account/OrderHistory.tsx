@@ -1,36 +1,25 @@
 "use client";
 
+import Loader from "@/components/ui/Loader";
+import { useGetMyOrdersQuery } from "@/redux/features/order/order.api";
+import type { IOrder, IShippingAddress } from "@/types/order";
+import Image from "next/image";
 import { useState } from "react";
 import {
-  IoChevronDown,
-  IoCube,
   IoCarSport,
   IoCheckmarkCircle,
+  IoChevronDown,
   IoCloseCircle,
+  IoCube,
   IoEye,
   // IoDownload,
   IoTime,
 } from "react-icons/io5";
-import type { IOrder, IShippingAddress } from "@/types/order";
-import { useGetMyOrdersQuery } from "@/redux/features/order/order.api";
-import Image from "next/image";
-import Loader from "@/components/ui/Loader";
-import ReviewForm from "@/components/Account/review/ReviewForm";
-import { IProduct } from "@/types/product";
 
 export default function OrderHistory() {
   const { data, isLoading } = useGetMyOrdersQuery();
   const orders = data?.data || [];
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
-  const [isReviewOpen, setIsReviewOpen] = useState(false);
-
-  const [productToReview, setProductToReview] = useState<{
-    item: Partial<IProduct> & { product_id: string };
-    orderId: string;
-  }>({
-    item: { product_id: "" },
-    orderId: "",
-  });
 
   const toggleOrderExpansion = (orderId: string) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
@@ -45,17 +34,11 @@ export default function OrderHistory() {
   };
 
   const getTotalAmount = (order: IOrder) => {
-    return Math.floor(order.totalProductAmount + (order.deliveryFee || 0));
+    return Math.round(order.totalProductAmount + (order.deliveryFee || 0));
   };
 
   const formatAddress = (address: IShippingAddress) => {
     return `${address.address}, ${address.upazila}, ${address.district}, ${address.division}`;
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleReviewClick = (item: any, orderId: string) => {
-    setProductToReview({ item: item, orderId: orderId });
-    setIsReviewOpen(true);
   };
 
   return (
@@ -197,62 +180,45 @@ export default function OrderHistory() {
                             <IoCube className="h-[16px] w-[16px]" />
                             Order Items
                           </h4>
-                          {isReviewOpen ? (
-                            <ReviewForm
-                              productToReview={productToReview}
-                              setIsReviewOpen={setIsReviewOpen}
-                            />
-                          ) : (
-                            <div className="space-y-[12px]">
-                              {order.orderItems.map((item, index) => (
-                                <div
-                                  key={index}
-                                  className="relative flex flex-col items-center gap-[12px] rounded-lg border border-border-muted bg-white p-[16px] sm:flex-row"
-                                >
-                                  <Image
-                                    src={item.product.image || "/avatar.png"}
-                                    alt={item.product.name}
-                                    width={64}
-                                    height={64}
-                                    className="h-[64px] w-[64px] rounded-md border object-cover"
-                                  />
-                                  <div className="min-w-0 flex-1">
-                                    <h5 className="mb-[4px] font-medium">{item.product.name}</h5>
-                                    <div className="sm:text-[14px]text-[12px] mb-[8px] flex items-center gap-[12px] text-[12px] text-muted md:text-[14px]">
-                                      {item.size && (
-                                        <span className="rounded bg-gray-100 px-[8px] py-[4px]">
-                                          Size: {item.size}
-                                        </span>
-                                      )}
-                                      {item.color && (
-                                        <span className="rounded bg-gray-100 px-[8px] py-[4px]">
-                                          Color: {item.color}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                      <span className="text-[14px] text-info">
-                                        Qty: {item.quantity}
+                          <div className="space-y-[12px]">
+                            {order.orderItems.map((item, index) => (
+                              <div
+                                key={index}
+                                className="flex flex-col items-center gap-[12px] rounded-lg border border-border-muted bg-white p-[16px] sm:flex-row"
+                              >
+                                <Image
+                                  src={item.product.image || "/avatar.png"}
+                                  alt={item.product.name}
+                                  width={64}
+                                  height={64}
+                                  className="h-[64px] w-[64px] rounded-md border object-cover"
+                                />
+                                <div className="min-w-0 flex-1">
+                                  <h5 className="mb-[4px] font-medium">{item.product.name}</h5>
+                                  <div className="sm:text-[14px]text-[12px] mb-[8px] flex items-center gap-[12px] text-[12px] text-muted md:text-[14px]">
+                                    {item.size && (
+                                      <span className="rounded bg-gray-100 px-[8px] py-[4px]">
+                                        Size: {item.size}
                                       </span>
-                                      <span className="text-[18px] font-semibold">
-                                        Tk. {Math.floor(item.product.price * item.quantity)}
+                                    )}
+                                    {item.color && (
+                                      <span className="rounded bg-gray-100 px-[8px] py-[4px]">
+                                        Color: {item.color}
                                       </span>
-                                    </div>
+                                    )}
                                   </div>
-                                  {/* // review button */}
-                                  {currentStatus !== "delivered" && (
-                                    <button
-                                      onClick={() => handleReviewClick(item, order?._id)}
-                                      className="absolute top-2 right-2 flex h-[30px] w-[70px] cursor-pointer items-center justify-center rounded-[5px] border border-quaternary px-2 text-info transition-colors duration-200 hover:border-primary hover:text-primary"
-                                      aria-label="Give Review"
-                                    >
-                                      Review
-                                    </button>
-                                  )}
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-[14px] text-info">
+                                      Qty: {item.quantity}
+                                    </span>
+                                    <span className="text-[18px] font-semibold">
+                                      Tk. {Math.round(item.product.price * item.quantity)}
+                                    </span>
+                                  </div>
                                 </div>
-                              ))}
-                            </div>
-                          )}
+                              </div>
+                            ))}
+                          </div>
                         </div>
 
                         {/* Order Info */}
@@ -305,14 +271,14 @@ export default function OrderHistory() {
                               <div className="flex justify-between">
                                 <span className="text-info">Product Amount:</span>
                                 <span className="font-semibold text-primary">
-                                  Tk. {Math.floor(order.totalProductAmount)}
+                                  Tk. {Math.round(order.totalProductAmount)}
                                 </span>
                               </div>
                               {order.deliveryFee && (
                                 <div className="flex justify-between">
                                   <span className="text-info">Delivery Fee:</span>
                                   <span className="font-semibold text-primary">
-                                    Tk. {Math.floor(order.deliveryFee)}
+                                    Tk. {Math.round(order.deliveryFee)}
                                   </span>
                                 </div>
                               )}
