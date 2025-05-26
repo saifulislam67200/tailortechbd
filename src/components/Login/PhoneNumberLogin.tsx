@@ -1,5 +1,7 @@
+import { useAppDispatch } from "@/hooks/redux";
 import { ICountry } from "@/hooks/useCountries";
 import { useLoginUserMutation } from "@/redux/features/user/user.api";
+import { setUser } from "@/redux/features/user/user.slice";
 import { IQueruMutationErrorResponse } from "@/types";
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import Cookies from "js-cookie";
@@ -21,6 +23,7 @@ const PhoneNumberLogin = () => {
 
   const [login, { isLoading }] = useLoginUserMutation(undefined);
   const [formMessage, setFormMessage] = useState<IFormMessage | null>(null);
+  const dispatch = useAppDispatch();
 
   const router = useRouter();
 
@@ -57,6 +60,11 @@ const PhoneNumberLogin = () => {
         setFormMessage({ message: "Something went wrong", type: "error" });
       }
       return;
+    }
+
+    const user = res.data?.data.result;
+    if (user) {
+      dispatch(setUser(user));
     }
 
     setFormMessage(null);

@@ -33,8 +33,6 @@ export default function CartDrawer({ isOpen, setIsOpen }: CartDrawerProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
   const cartItems = useAppSelector((state) => state?.cart?.items);
 
-  console.log("Cart items in drawer:", cartItems);
-
   return (
     <>
       <div
@@ -90,8 +88,6 @@ function CartItem({ item }: { item: CartItem }) {
   const handleRemoveItem = (id: string, color: string, size: string) => {
     dispatch(removeFromCart({ id, color, size }));
   };
-
-  console.log(item, "from cart drawer");
 
   return (
     <div className="flex items-center border-b border-quaternary py-4 text-strong">
