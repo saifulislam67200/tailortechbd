@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import {
   FiUser,
-  FiSettings,
+  // FiSettings,
   // FiHelpCircle,
   FiLogOut,
   FiChevronDown,
@@ -49,7 +49,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
     <div className="relative hidden lg:block" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex cursor-pointer items-center gap-[10px] text-primary"
+        className="flex cursor-pointer items-center gap-[10px] text-primary "
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
@@ -59,7 +59,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
             width={30}
             height={30}
             alt="User Avatar"
-            className="rounded-full"
+            className="aspect-square w-[30px] overflow-hidden rounded-full"
           />
         ) : (
           <FaCircleUser size={22} />
@@ -82,13 +82,24 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
           {/* User Info Header */}
           <div className="border-b border-gray-100 px-4 py-3">
             <div className="flex items-center space-x-3">
-              <Image
-                src={user?.avatar || "/images/avatar.jpg"}
+              
+              {user?.avatar ? (
+                <div className="aspect-square w-[40px] overflow-hidden rounded-full">
+                  <Image
+                    src={user?.avatar}
+                    width={40}
+                    height={40}
+                    alt="Avatar"
+                    className="h-full w-full"
+                  />
+                </div>
+              ) : ( <Image
+                src= "/images/avatar.jpg"
                 alt="user-icon"
                 width={40}
                 height={40}
-                className="rounded-full border border-border-muted object-cover"
-              />
+                className="rounded-full border border-border-muted object-cover" />
+              )}
               <div>
                 <p className="text-[14px] font-medium capitalize">{user?.fullName}</p>
                 <p className="text-[12px] text-info capitalize">{user?.role}</p>
@@ -115,22 +126,6 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
                 >
                   <FiShoppingBag className="h-[16px] w-[16px]" />
                   <span>My Orders</span>
-                </Link>
-                {/* <Link
-                  href="/contact"
-                  onClick={() => setIsOpen(false)}
-                  className="flex w-full items-center space-x-[12px] border-b border-gray-200 px-[16px] py-[12px] text-[14px] text-primary transition-colors duration-150 hover:bg-gray-50"
-                >
-                  <FiHelpCircle className="h-[16px] w-[16px]" />
-                  <span>Need Help?</span>
-                </Link> */}
-                <Link
-                  href="/account/settings"
-                  onClick={() => setIsOpen(false)}
-                  className="flex w-full items-center space-x-[12px] border-b border-gray-200 px-[16px] py-[12px] text-[14px] text-primary transition-colors duration-150 hover:bg-gray-50"
-                >
-                  <FiSettings className="h-[16px] w-[16px]" />
-                  <span>Account Settings</span>
                 </Link>
               </>
             ) : (
