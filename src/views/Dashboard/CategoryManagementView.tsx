@@ -1,20 +1,11 @@
 "use client";
 
 import { CategoryTree } from "@/components/Dashboard/CategoryManagement/CategoryTree";
+import CreateCategory from "@/components/Dashboard/CategoryManagement/CreateCategory";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/category.api";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { IoIosMenu } from "react-icons/io";
-
-export interface ICategory {
-  _id: string;
-  label: string;
-  slug: string;
-  thumbnail?: string;
-  subCount: number;
-  parent?: string;
-  display: boolean;
-}
 
 function CategoryManagementView() {
   const [searchQuery] = useState({ mode: "tree", searchTerm: "" });
@@ -50,10 +41,12 @@ function CategoryManagementView() {
             Manage your product categories and their hierarchical structure
           </p>
         </div>
-        <button className="flex cursor-pointer items-center gap-2 rounded-lg bg-primary px-4 py-2 text-white">
-          <FaPlus />
-          Add Category
-        </button>
+        <CreateCategory>
+          <button className="flex cursor-pointer items-center gap-2 rounded-lg bg-primary px-4 py-2 text-white">
+            <FaPlus />
+            Add Category
+          </button>
+        </CreateCategory>
       </div>
 
       {/* Stats */}

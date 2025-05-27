@@ -1,14 +1,14 @@
 "use client";
 import FormCard from "@/components/ui/FormCard";
 import Input from "@/components/ui/Input";
-import { toast } from "sonner";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import { IQueruMutationErrorResponse } from "@/types";
 import { useResetPasswordMutation } from "@/redux/features/user/user.api";
+import { IQueruMutationErrorResponse } from "@/types";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import * as Yup from "yup";
 
 const resetPasswordSchema = Yup.object().shape({
   password: Yup.string()
@@ -34,8 +34,8 @@ const ResetPasswordView = ({ slug }: { slug: string }) => {
       const error = res.error as IQueruMutationErrorResponse;
 
       if (error) {
-        if (error.data.message) {
-          toast.error(error.data.message);
+        if (error.data?.message) {
+          toast.error(error.data?.message);
         } else {
           toast.error("Something went wrong");
         }

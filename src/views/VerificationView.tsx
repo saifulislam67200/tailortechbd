@@ -91,7 +91,7 @@ const VerificationView = () => {
     const error = response?.error as IQueruMutationErrorResponse;
     if (error) {
       if (error?.data?.message) {
-        setErrorMessage(error.data.message);
+        setErrorMessage(error.data?.message);
       } else {
         setErrorMessage("Something went wrong");
       }

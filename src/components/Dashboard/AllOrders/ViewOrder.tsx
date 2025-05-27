@@ -1,12 +1,13 @@
 "use client";
+import Button from "@/components/ui/Button";
+import DialogProvider from "@/components/ui/DialogProvider";
 import { useChangeOrderStatusMutation } from "@/redux/features/order/order.api";
+import { IOrder, IOrderStatus } from "@/types/order";
 import Image from "next/image";
 import { useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
+import { MdCancel, MdCheckCircle, MdLocalShipping, MdPending } from "react-icons/md";
 import { toast } from "sonner";
-import Modal from "@/components/ui/Modal";
-import { IOrder, IOrderStatus } from "@/types/order";
-import { MdPending, MdLocalShipping, MdCheckCircle, MdCancel } from "react-icons/md";
 
 type ViewOrderProps = {
   setIsViewOrder: React.Dispatch<React.SetStateAction<boolean>>;
@@ -122,7 +123,6 @@ export default function ViewOrder({
 
     setCurrentStatus(selectedStatus);
     setIsModalOpen(false);
-    console.log("done");
     toast.success("Order status changed successfully!");
   };
 
@@ -148,7 +148,7 @@ export default function ViewOrder({
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="lg:col-span-1">
           <div className="mb-6">
-            <h2 className="text-lg text-primary sm:text-[24px] font-semibold">Orders List</h2>
+            <h2 className="text-lg font-semibold text-primary sm:text-[24px]">Orders List</h2>
             <p className="text-info">ORD-${orderItemView?._id.slice(-8).toUpperCase()}</p>
           </div>
 
@@ -340,37 +340,33 @@ export default function ViewOrder({
           </div>
         </div>
       </div>
-      <Modal
-        isOpen={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        btnText=""
-        btnStyle="bg-white hidden"
-        modalStyle="bg-white max-w-sm w-full min-h-[200px] px-10 py-8 rounded-md shadow-lg"
-        content={
-          <>
-            <h1 className="mb-1 text-xl">Are you sure?</h1>
-            <p>
-              Want to change status to <span className="font-bold">{selectedStatus}</span>?
-            </p>
-            <div className="mt-10 flex items-center justify-between gap-10">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="w-full cursor-pointer rounded bg-gray-300 px-4 py-2 text-gray-700"
-              >
-                No
-              </button>
-              <button
-                disabled={isLoading}
-                onClick={handleStatusChange}
-                className="w-full rounded bg-dashboard/80 px-4 py-2 text-white"
-              >
-                {isLoading ? "Loading..." : "Confirm"}
-              </button>
-            </div>
-          </>
-        }
-      />
+      <DialogProvider
+        setState={setIsModalOpen}
+        state={isModalOpen}
+        className="w-full max-w-[500px]"
+      >
+        <div className="flex w-full flex-col gap-[12px] rounded-[8px] bg-white p-[16px]">
+          <h1 className="mb-1 text-xl">Are you sure?</h1>
+          <p>
+            Want to change status to <span className="font-bold">{selectedStatus}</span>?
+          </p>
+          <div className="mt-10 flex items-center justify-between gap-10">
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="w-full cursor-pointer rounded bg-gray-300 px-4 py-2 text-gray-700"
+            >
+              No
+            </button>
+            <Button
+              isLoading={isLoading}
+              onClick={handleStatusChange}
+              className="w-full rounded bg-dashboard/80 px-4 py-2 text-white"
+            >
+              Confrim
+            </Button>
+          </div>
+        </div>
+      </DialogProvider>
     </div>
   );
 }

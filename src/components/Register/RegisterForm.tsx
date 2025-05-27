@@ -59,7 +59,7 @@ const RegisterForm = () => {
     const error = res.error as IQueruMutationErrorResponse;
 
     if (error) {
-      if (error.data.message) {
+      if (error.data?.message) {
         setFormMessage({ message: error.data.message, type: "error" });
       } else {
         setFormMessage({ message: "Something went wrong", type: "error" });
