@@ -14,7 +14,9 @@ const openSans = Open_Sans({
 const layout = ({ children }: { children: ReactNode }) => {
   return (
     <Protectedroute role="admin">
-      <div className={`w-ful flex h-[100dvh] flex-col items-start justify-start gap-0 ${openSans.className}`}>
+      <div
+        className={`w-ful flex h-[100dvh] flex-col items-start justify-start gap-0 ${openSans.className}`}
+      >
         <DashboardHeader />
         <div className="flex h-[calc(100%-60px)] w-full gap-[0px]">
           <DashboardSideBar navlinks={dashboardNavLinks.admin} />

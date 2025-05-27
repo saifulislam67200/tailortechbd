@@ -36,6 +36,36 @@ const categoryApi = api.injectEndpoints({
       }),
       invalidatesTags: ["categories"],
     }),
+    updateCategory: builder.mutation<
+      { data: ICategory },
+      { _id: string; payload: Partial<ICategory> }
+    >({
+      query: ({ payload, _id }) => ({
+        url: `/category/update/${_id}`,
+        method: "PUT",
+        body: payload,
+      }),
+      invalidatesTags: ["categories"],
+    }),
+
+    getCategoryStatistics: builder.query<
+      {
+        data: {
+          totalMainCategories: number;
+          totalVisibleCategories: number;
+          totalCategories: number;
+        };
+      },
+      undefined
+    >({
+      query: () => {
+        return {
+          url: `/category/statistics`,
+          method: "GET",
+        };
+      },
+      providesTags: ["categories"],
+    }),
   }),
 });
 
@@ -43,4 +73,6 @@ export const {
   useGetAllCategoriesQuery,
   useDeleteCategoryByIdMutation,
   useCreateCategoryMutation,
+  useGetCategoryStatisticsQuery,
+  useUpdateCategoryMutation,
 } = categoryApi;

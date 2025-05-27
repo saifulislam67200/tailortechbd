@@ -1,24 +1,44 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import Image from "next/image";
 import { MdEdit } from "react-icons/md";
 import { IOrderItem } from "@/types/order";
-// import { useUpdateOrderMutation } from "@/redux/features/order/order.api";
-// import { toast } from "sonner";
-// import EditModal from "./EditModal";
-// import { useState } from "react";
+import { useUpdateOrderMutation } from "@/redux/features/order/order.api";
+import { toast } from "sonner";
+import EditModal from "./EditModal";
+import { useState } from "react";
 
 interface OrderItemsProps {
   orderItems: IOrderItem[];
 }
 
 export default function OrderItems({ orderItems }: OrderItemsProps) {
-//   const [updateOrder, { isLoading }] = useUpdateOrderMutation();
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const handleCloseModal = () => {
-//     setIsModalOpen(false);
-//   };
+  const [updateOrder, { isLoading }] = useUpdateOrderMutation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<IOrderItem | null>(null);
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedItem(null);
+  };
+
+  const handleUpdateItem = async (updatedItem: IOrderItem) => {
+    const updatedOrderItems = orderItems.map((item) =>
+      item.product_id === updatedItem.product_id ? updatedItem : item
+    );
+
+    try {
+      await updateOrder({
+        id: updatedItem.product_id,
+        data: { orderItems: updatedOrderItems },
+      }).unwrap();
+      toast.success("Order item updated successfully!");
+      handleCloseModal();
+    } catch (error) {
+      toast.error("Failed to update order item.");
+    }
+  };
   return (
     <>
       <div className="mt-6 mb-6 rounded-md border border-slate-300 bg-white p-6">
@@ -60,6 +80,10 @@ export default function OrderItems({ orderItems }: OrderItemsProps) {
               </div>
               <div className="flex items-center gap-2">
                 <button
+                  onClick={() => {
+                    setSelectedItem(item);
+                    setIsModalOpen(true);
+                  }}
                   className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600 transition-colors hover:bg-blue-200"
                   title="Edit Product"
                 >
@@ -71,11 +95,13 @@ export default function OrderItems({ orderItems }: OrderItemsProps) {
         </div>
       </div>
 
-      {/* <EditModal
+      <EditModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+        item={selectedItem}
+        onUpdate={handleUpdateItem}
         isLoading={isLoading}
-      /> */}
+      />
     </>
   );
 }
