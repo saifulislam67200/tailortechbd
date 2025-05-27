@@ -34,7 +34,7 @@ const ForgotPasswordView = () => {
         email: values.email,
         mode,
       });
-
+      console.log({ data: res?.data });
       const error = res.error as IQueruMutationErrorResponse;
 
       if (error) {
