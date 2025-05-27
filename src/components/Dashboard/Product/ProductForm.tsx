@@ -4,14 +4,14 @@ import Button from "@/components/ui/Button";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Input from "@/components/ui/Input";
 import RichTextArea from "@/components/ui/RichTextArea";
-import TableInput from "@/components/ui/TableInput";
 import { IProduct } from "@/types/product";
 import { ErrorMessage, Field, FieldArray, Form, Formik, FormikHelpers } from "formik";
-import { BsTrash2 } from "react-icons/bs";
+import { FaRegTrashAlt } from "react-icons/fa";
 import { twMerge } from "tailwind-merge";
 import * as Yup from "yup";
 import CategorySelector from "./CategorySelector";
 import ImageUploader from "./ImageUploader";
+import ProductSizeInput from "./ProductSizeInput";
 
 const initialValues: Omit<
   IProduct,
@@ -193,7 +193,7 @@ export default function ProductForm({
 
           <div className="flex w-full flex-col gap-[5px] bg-white p-[16px]">
             <SectionTitle>Product Chart (Size)</SectionTitle>
-            <TableInput
+            <ProductSizeInput
               defaultValue={defaultValue?.chart}
               onChange={(data) => setFieldValue("chart", data)}
             />
@@ -216,11 +216,11 @@ export default function ProductForm({
                             className="flex-1 rounded border p-[8px]"
                           />
                           <button
-                            className="cursor-pointer"
+                            className="cursor-pointer text-danger"
                             type="button"
                             onClick={() => remove(i)}
                           >
-                            <BsTrash2 />
+                            <FaRegTrashAlt />
                           </button>
                         </div>
                         <ErrorMessage
@@ -260,8 +260,12 @@ export default function ProductForm({
                                       type="number"
                                       className="flex-1 rounded border p-[8px]"
                                     />{" "}
-                                    <button type="button" onClick={() => remove(j)}>
-                                      <BsTrash2 />
+                                    <button
+                                      type="button"
+                                      onClick={() => remove(j)}
+                                      className="cursor-pointer text-danger"
+                                    >
+                                      <FaRegTrashAlt />
                                     </button>
                                   </div>
                                   <ErrorMessage

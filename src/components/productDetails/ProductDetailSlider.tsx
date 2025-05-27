@@ -14,9 +14,11 @@ import MagnifierPortal from "../ui/MagnifierPortal";
 const ProductDetailsSlider = ({
   product,
   selectedColor,
+  setSelectedColor,
 }: {
   product: Pick<IProduct, "images" | "colors">;
   selectedColor: IColor | undefined;
+  setSelectedColor: (color: IColor | undefined) => void;
 }) => {
   const ZOOM_LEVEL = 2.5;
 
@@ -92,6 +94,9 @@ const ProductDetailsSlider = ({
           modules={[Thumbs]}
           spaceBetween={10}
           className="main-slider h-full w-full"
+          onSlideChange={() => {
+            setSelectedColor(undefined);
+          }}
         >
           {images.map((img, index) => (
             <SwiperSlide key={index}>
