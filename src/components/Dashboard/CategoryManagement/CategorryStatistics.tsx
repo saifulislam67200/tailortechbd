@@ -1,7 +1,9 @@
-"use client"
+"use client";
 
-import { useGetCategoryStatisticsQuery } from "@/redux/features/category/category.api"
-import { IoIosMenu } from "react-icons/io"
+import Tooltip from "@/components/ui/ToolTip";
+import { useGetCategoryStatisticsQuery } from "@/redux/features/category/category.api";
+import { FaInfo } from "react-icons/fa";
+import { IoIosMenu } from "react-icons/io";
 
 const CategoryStatisticsSkeleton = () => {
   return (
@@ -9,30 +11,30 @@ const CategoryStatisticsSkeleton = () => {
       {[...Array(4)].map((_, index) => (
         <div key={index} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
           <div className="flex items-center">
-            <span className="rounded-lg bg-gray-200 p-2 animate-pulse">
-              <span className="block h-6 w-6 bg-gray-300 rounded"></span>
+            <span className="animate-pulse rounded-lg bg-gray-200 p-2">
+              <span className="block h-6 w-6 rounded bg-gray-300"></span>
             </span>
             <div className="ml-4 flex-1">
-              <span className="block h-4 w-24 bg-gray-200 rounded animate-pulse mb-2"></span>
-              <span className="block h-8 w-16 bg-gray-200 rounded animate-pulse"></span>
+              <span className="mb-2 block h-4 w-24 animate-pulse rounded bg-gray-200"></span>
+              <span className="block h-8 w-16 animate-pulse rounded bg-gray-200"></span>
             </div>
           </div>
         </div>
       ))}
     </div>
-  )
-}
+  );
+};
 
 const CategoryStatistics = () => {
-  const { data, isFetching } = useGetCategoryStatisticsQuery(undefined)
-  const statisticsData = data?.data
-  const totalVisible = statisticsData?.totalVisibleCategories || 0
-  const totalCategories = statisticsData?.totalCategories || 0
-  const totalRootCategories = statisticsData?.totalMainCategories || 0
-  const totalHidenCategories = totalCategories - totalVisible
+  const { data, isFetching } = useGetCategoryStatisticsQuery(undefined);
+  const statisticsData = data?.data;
+  const totalVisible = statisticsData?.totalVisibleCategories || 0;
+  const totalCategories = statisticsData?.totalCategories || 0;
+  const totalRootCategories = statisticsData?.totalMainCategories || 0;
+  const totalHidenCategories = totalCategories - totalVisible;
 
   if (isFetching) {
-    return <CategoryStatisticsSkeleton />
+    return <CategoryStatisticsSkeleton />;
   }
 
   return (
@@ -43,8 +45,8 @@ const CategoryStatistics = () => {
             <IoIosMenu className="h-[24px] w-[24px] text-blue-600" />
           </span>
           <div className="ml-4">
-            <p className="text-sm font-medium text-gray-600">Total Categories</p>
-            <p className="text-2xl font-bold text-gray-900">{totalCategories}</p>
+            <p className="text-sm font-medium text-primary/70">Total Categories</p>
+            <p className="text-2xl font-bold text-primary">{totalCategories}</p>
           </div>
         </div>
       </div>
@@ -52,8 +54,18 @@ const CategoryStatistics = () => {
       <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
         <div className="flex items-center">
           <div className="rounded-lg bg-green-100 p-2">
-            <svg className="h-6 w-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <svg
+              className="h-6 w-6 text-success"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -63,8 +75,15 @@ const CategoryStatistics = () => {
             </svg>
           </div>
           <div className="ml-4">
-            <p className="text-sm font-medium text-gray-600">Visible</p>
-            <p className="text-2xl font-bold text-gray-900">{totalVisible}</p>
+            <p className="flex items-center gap-[4px] text-sm font-medium text-primary/70">
+              Visible{" "}
+              <Tooltip content="Total visible categories on homepage on Top Categories section">
+                <span className="center aspect-square w-[20px] cursor-pointer rounded-full border-[1px] border-border-muted">
+                  <FaInfo className="text-[10px]" />
+                </span>
+              </Tooltip>
+            </p>
+            <p className="text-2xl font-bold text-primary">{totalVisible}</p>
           </div>
         </div>
       </div>
@@ -72,7 +91,12 @@ const CategoryStatistics = () => {
       <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
         <div className="flex items-center">
           <div className="rounded-lg bg-yellow-100 p-2">
-            <svg className="h-6 w-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="h-6 w-6 text-yellow-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -82,8 +106,15 @@ const CategoryStatistics = () => {
             </svg>
           </div>
           <div className="ml-4">
-            <p className="text-sm font-medium text-gray-600">Hidden</p>
-            <p className="text-2xl font-bold text-gray-900">{totalHidenCategories}</p>
+            <p className="flex items-center gap-[4px] text-sm font-medium text-primary/70">
+              Hidden
+              <Tooltip content="Total hidden categories on homepage on Top Categories section">
+                <span className="center aspect-square w-[20px] cursor-pointer rounded-full border-[1px] border-border-muted">
+                  <FaInfo className="text-[10px]" />
+                </span>
+              </Tooltip>
+            </p>
+            <p className="text-2xl font-bold text-primary">{totalHidenCategories}</p>
           </div>
         </div>
       </div>
@@ -91,7 +122,12 @@ const CategoryStatistics = () => {
       <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
         <div className="flex items-center">
           <div className="rounded-lg bg-purple-100 p-2">
-            <svg className="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              className="h-6 w-6 text-purple-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -101,13 +137,13 @@ const CategoryStatistics = () => {
             </svg>
           </div>
           <div className="ml-4">
-            <p className="text-sm font-medium text-gray-600">Root Categories</p>
-            <p className="text-2xl font-bold text-gray-900">{totalRootCategories}</p>
+            <p className="text-sm font-medium text-primary/70">Root Categories</p>
+            <p className="text-2xl font-bold text-primary">{totalRootCategories}</p>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CategoryStatistics
+export default CategoryStatistics;
