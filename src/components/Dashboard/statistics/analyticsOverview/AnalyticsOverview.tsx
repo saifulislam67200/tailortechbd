@@ -4,11 +4,11 @@ import TopSelling from "./TopSellingTable";
 
 const AnalyticsOverview = () => {
   return (
-    <div className="w-full space-y-[16px]">
+    <section className="w-full space-y-[16px]">
       <OverviewChart />
       <RecentSales />
       <TopSelling />
-    </div>
+    </section>
   );
 };
 
