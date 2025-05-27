@@ -46,6 +46,24 @@ const orderApi = api.injectEndpoints({
         invalidatesTags: ["order"],
       }
     ),
+
+    updateOrder: builder.mutation<
+      { data: IOrder },
+      { id: string; data: Pick<IOrder, "orderItems"> }
+    >({
+      query: ({ id, data }) => ({
+        url: `/order/update/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["order"],
+    }),
   }),
 });
-export const { useCreateOrderMutation, useGetMyOrdersQuery, useGetAllOrdersQuery, useChangeOrderStatusMutation } = orderApi;
+export const {
+  useCreateOrderMutation,
+  useGetMyOrdersQuery,
+  useGetAllOrdersQuery,
+  useChangeOrderStatusMutation,
+  useUpdateOrderMutation
+} = orderApi;
