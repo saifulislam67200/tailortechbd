@@ -3,11 +3,7 @@ import { getPageMetaData } from "@/utils/meta";
 
 export const metadata = getPageMetaData("Wishlist");
 const page = () => {
-  return (
-    <div>
-      <Wishlist />
-    </div>
-  );
+  return <Wishlist />;
 };
 
 export default page;
