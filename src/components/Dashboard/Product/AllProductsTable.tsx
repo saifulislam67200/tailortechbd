@@ -8,9 +8,10 @@ import dateUtils from "@/utils/date";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { FaChevronDown, FaChevronUp, FaRegTrashAlt } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { GoPencil } from "react-icons/go";
 import { RxMagnifyingGlass } from "react-icons/rx";
+import DeleteProductById from "./DeleteProductById";
 
 const tableHead = [
   { label: "Name", field: "name" },
@@ -152,9 +153,7 @@ const AllProductsTable = () => {
                     >
                       <GoPencil />
                     </Link>
-                    <button className="center aspect-square w-[30px] cursor-pointer rounded-full border-[1px] border-danger bg-danger/5 text-danger">
-                      <FaRegTrashAlt />
-                    </button>
+                    <DeleteProductById productId={product._id} productName={product.name} />
                   </div>
                 </td>
               </tr>
