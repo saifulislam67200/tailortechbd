@@ -166,7 +166,7 @@ const AllOrderTable = () => {
                             <div className="h-12 w-12 flex-shrink-0">
                               <Image
                                 className="h-12 w-12 rounded-lg object-cover"
-                                src={order.orderItems[0]?.product?.image || "/images/avatar.png"}
+                                src={order.orderItems[0]?.product?.image || "/images/avatar.jpg"}
                                 alt={order.orderItems[0]?.product?.name || "Product"}
                                 width={48}
                                 height={48}
