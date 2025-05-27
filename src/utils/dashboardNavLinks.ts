@@ -3,6 +3,7 @@ import { MdInventory2 } from "react-icons/md";
 import { PiShoppingCartSimpleBold } from "react-icons/pi";
 import { TbCategory } from "react-icons/tb";
 import { VscGraphLine } from "react-icons/vsc";
+import { GoQuestion } from "react-icons/go";
 export interface IDashboardNavLinks {
   label: string;
   icon?: React.ElementType;
@@ -39,6 +40,11 @@ export const admin: IDashboardNavLinks[] = [
     icon: TbCategory,
     label: "Manage Categories",
     path: "/dashboard/manage-category",
+  },
+  {
+    icon: GoQuestion,
+    label: "QNA",
+    path: "/dashboard/qna",
   },
 ];
 

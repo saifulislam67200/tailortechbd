@@ -1,5 +1,8 @@
 import { IQuestionAndAns } from "@/components/productDetails/QuestionAnswer";
 import { api } from "@/redux/api/api";
+import { IMeta } from "@/types/meta";
+import { IQuestionsAndAns } from "@/types/QuestionAndAns";
+import { generateQueryParams } from "@/utils";
 
 const questionAndAnswerApi = api.injectEndpoints({
   endpoints: (builder) => ({
@@ -18,7 +21,51 @@ const questionAndAnswerApi = api.injectEndpoints({
       }),
       providesTags: ["QuestionAndAnswer"],
     }),
+
+    getAllQuestionAnswers: builder.query<
+      { data: IQuestionsAndAns[]; meta?: IMeta },
+      Record<string, string | number>
+    >({
+      query: (query) => {
+        const queryString = generateQueryParams(query);
+        return {
+          url: `/questionAns?${queryString}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["questionAnswer"],
+    }),
+
+    //  delete
+    deleteQuestionAnswer: builder.mutation({
+      query: (id: string) => ({
+        url: `/questionAns/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["QuestionAndAnswer"],
+    }),
+
+    updateAnswerById: builder.mutation<
+      { data: IQuestionsAndAns },
+      { payload: Partial<IQuestionsAndAns>; id: string }
+    >({
+      query: ({ id, payload }) => ({
+        url: `/questionAns/${id}/answer`,
+        method: "PATCH",
+        body: {
+          ...payload,
+          _id: undefined,
+        },
+      }),
+      invalidatesTags: ["questionAnswer"],
+    }),
   }),
 });
 
-export const { useCreateQuestionMutation, useGetQuestionsByProductIdQuery } = questionAndAnswerApi;
+export const {
+  useCreateQuestionMutation,
+  useGetQuestionsByProductIdQuery,
+  useGetAllQuestionAnswersQuery,
+  useDeleteQuestionAnswerMutation,
+  useUpdateAnswerByIdMutation
+} = questionAndAnswerApi;
