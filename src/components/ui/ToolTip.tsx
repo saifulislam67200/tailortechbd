@@ -54,18 +54,18 @@ const Tooltip: React.FC<TooltipProviderProps> = ({ content, children, delay = 30
 
   return (
     <>
-      <div
+      <span
         ref={triggerRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         className="inline-flex"
       >
         {children}
-      </div>
+      </span>
 
       {visible &&
         createPortal(
-          <div
+          <span
             ref={tooltipRef}
             className="pointer-events-none fixed z-50 max-w-[200px] -translate-x-1/2 transform rounded bg-white p-1 text-center text-[12px] text-muted shadow-md"
             style={{
@@ -75,7 +75,7 @@ const Tooltip: React.FC<TooltipProviderProps> = ({ content, children, delay = 30
             }}
           >
             {content}
-          </div>,
+          </span>,
           document.body
         )}
     </>

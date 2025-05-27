@@ -1,15 +1,49 @@
 "use client";
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
-import { useChangeOrderStatusMutation } from "@/redux/features/order/order.api";
+import {
+  useChangeOrderStatusMutation,
+  useUpdateOrderMutation,
+} from "@/redux/features/order/order.api";
+import { IQueruMutationErrorResponse } from "@/types";
 import { IOrder, IOrderStatus } from "@/types/order";
 import Image from "next/image";
 import { useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
+import { FaTrashAlt } from "react-icons/fa";
+import { ImSpinner11 } from "react-icons/im";
 import { MdCancel, MdCheckCircle, MdLocalShipping, MdPending } from "react-icons/md";
 import { toast } from "sonner";
-import OrderItems from "./OrderItems";
-
+const statuses = [
+  {
+    id: "pending",
+    label: "Pending",
+    icon: MdPending,
+    color: "text-success",
+    bgColor: "bg-success/10",
+  },
+  {
+    id: "on-delivery",
+    label: "On-Delivery",
+    icon: MdLocalShipping,
+    color: "text-success",
+    bgColor: "bg-success/10",
+  },
+  {
+    id: "delivered",
+    label: "Delivered",
+    icon: MdCheckCircle,
+    color: "text-success",
+    bgColor: "bg-success/10",
+  },
+  {
+    id: "cancelled",
+    label: "Cancelled",
+    icon: MdCancel,
+    color: "text-danger",
+    bgColor: "bg-danger/10",
+  },
+];
 type ViewOrderProps = {
   setIsViewOrder: React.Dispatch<React.SetStateAction<boolean>>;
   orderItemView: IOrder;
@@ -20,48 +54,22 @@ export default function ViewOrder({
   orderItemView: initialOrderItemView,
 }: ViewOrderProps) {
   const [changeOrderStatus, { isLoading }] = useChangeOrderStatusMutation();
+
+  const [updateOrder, { isLoading: isUpdating }] = useUpdateOrderMutation();
+
   const [selectedStatus, setSelectedStatus] = useState<IOrderStatus["status"]>("pending");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderItemView, setOrderItemView] = useState(initialOrderItemView);
   const checkCurrentStatus = orderItemView.status[orderItemView.status.length - 1];
   const [currentStatus, setCurrentStatus] = useState(checkCurrentStatus?.status);
 
-  const statuses = [
-    {
-      id: "pending",
-      label: "Pending",
-      icon: MdPending,
-      color: "text-dashboard",
-      bgColor: "bg-dashboard/50",
-    },
-    {
-      id: "on-delivery",
-      label: "On-Delivery",
-      icon: MdLocalShipping,
-      color: "text-dashboard",
-      bgColor: "bg-dashboard/50",
-    },
-    {
-      id: "delivered",
-      label: "Delivered",
-      icon: MdCheckCircle,
-      color: "text-dashboard",
-      bgColor: "bg-dashboard/50",
-    },
-    {
-      id: "cancelled",
-      label: "Cancelled",
-      icon: MdCancel,
-      color: "text-red-500",
-      bgColor: "bg-dashboard/50",
-    },
-  ];
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const handleStatusChange = async () => {
     if (selectedStatus === currentStatus) return;
 
     const result = await changeOrderStatus({
-      id: orderItemView?._id,
+      id: orderItemView?._id || "",
       data: { status: selectedStatus },
     });
     const error = result.error;
@@ -82,7 +90,6 @@ export default function ViewOrder({
     const newStatusEntry = {
       status: selectedStatus,
       createdAt: new Date().toISOString(),
-      _id: `temp-${Date.now()}`, // ======== temporary ID for local state ==========>
     };
 
     setOrderItemView((prev: IOrder) => ({
@@ -105,6 +112,41 @@ export default function ViewOrder({
     });
   };
 
+  const handleRemoveOrderItem = (OrderitemIndex: number) => {
+    const updatedOrderItems = orderItemView.orderItems.filter(
+      (item, index) => index !== OrderitemIndex
+    );
+
+    setOrderItemView({
+      ...orderItemView,
+      orderItems: updatedOrderItems,
+    });
+  };
+
+  const handleUpdate = async () => {
+    const totalAmount = orderItemView.orderItems.reduce(
+      (total, item) => total + item.product.price * item.quantity,
+      0
+    );
+    const res = await updateOrder({
+      data: {
+        ...orderItemView,
+        totalProductAmount: totalAmount,
+      },
+      id: orderItemView?._id || "",
+    });
+    const error = res.error as IQueruMutationErrorResponse;
+    if (error) {
+      if (error.data?.message) {
+        toast.error(error.data?.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+      return;
+    }
+    toast.success("Order updated successfully");
+  };
+
   return (
     <div className="mb-32 rounded-md bg-white p-6">
       <button
@@ -118,7 +160,7 @@ export default function ViewOrder({
         <div className="lg:col-span-1">
           <div className="mb-6">
             <h2 className="text-lg font-semibold text-primary sm:text-[24px]">Orders List</h2>
-            <p className="text-info">ORD-${orderItemView?._id.slice(-8).toUpperCase()}</p>
+            <p className="text-info">ORD-${orderItemView?._id?.slice(-8).toUpperCase()}</p>
           </div>
 
           <div className="relative mb-8">
@@ -142,7 +184,7 @@ export default function ViewOrder({
                   <div
                     className={`flex h-12 w-12 items-center justify-center rounded-full ${
                       isPast || isActive
-                        ? status.bgColor + " text-black"
+                        ? status.bgColor + ` ${status.color}`
                         : "bg-gray-200 text-dashboard"
                     }`}
                   >
@@ -150,7 +192,9 @@ export default function ViewOrder({
                   </div>
 
                   <div className="ml-4">
-                    <h3 className={`font-semibold ${isActive ? status.color : ""}`}>
+                    <h3
+                      className={`font-semibold ${isActive || isPast ? status.color : "text-muted"}`}
+                    >
                       {status.label}
                     </h3>
                     {statusData?.createdAt && (
@@ -162,7 +206,7 @@ export default function ViewOrder({
             })}
           </div>
 
-          <div className="mt-8 rounded-md border border-slate-300 bg-gray-50 p-4">
+          <div className="mt-8 rounded-md border border-border-muted bg-gray-50 p-4">
             <h3 className="mb-4 font-medium">Change Status</h3>
 
             <select
@@ -171,7 +215,7 @@ export default function ViewOrder({
                 setSelectedStatus(e.target.value as IOrderStatus["status"]);
                 setIsModalOpen(true);
               }}
-              className="w-full rounded-md border border-slate-300 bg-white p-2 text-gray-700 focus:border-transparent focus:ring-2 focus:ring-[#ECE3D2] focus:outline-none"
+              className="w-full rounded-md border border-border-muted bg-white p-2 text-gray-700 focus:border-transparent focus:ring-2 focus:ring-[#ECE3D2] focus:outline-none"
             >
               <option value="" disabled>
                 Select Status
@@ -189,8 +233,9 @@ export default function ViewOrder({
           <div className="space-y-6">
             <div className="col-span-full grid grid-cols-1 gap-6 xl:grid-cols-2">
               {/* Customer Information */}
-              <div className="rounded-md border border-slate-300 bg-white p-6">
+              <div className="rounded-md border border-border-muted bg-white p-6">
                 <h2 className="mb-4 text-xl font-semibold text-dashboard">Customer Information</h2>
+
                 <div className="space-y-2">
                   <div className="h-14 w-14 overflow-hidden rounded-full border border-border-muted object-cover object-center">
                     <Image
@@ -212,7 +257,7 @@ export default function ViewOrder({
                 </div>
               </div>
               {/* Shipping Information */}
-              <div className="rounded-md border border-slate-300 bg-white p-6">
+              <div className="rounded-md border border-border-muted bg-white p-6">
                 <h2 className="mb-[16px] text-[20px] font-semibold text-dashboard">
                   Shipping Information
                 </h2>
@@ -241,15 +286,86 @@ export default function ViewOrder({
               </div>
             </div>
           </div>
-          {/* Order Items */}
-          <OrderItems
-            orderItems={orderItemView?.orderItems || []}
-            // onAddProduct={handleAddProduct}
-          />
+          {/* order Item */}
+          <div className="mt-6 mb-6 rounded-md border border-border-muted bg-white p-6">
+            <div className="mb-[10px] flex w-full items-center justify-between">
+              <h2 className="text-xl font-semibold">Order Items</h2>
+              <Button className="bg-success text-white" onClick={() => setIsEditMode(true)}>
+                Edit Items
+              </Button>
+            </div>
+            <div className="w-full space-y-4">
+              {orderItemView?.orderItems?.map((item, i) => (
+                <div
+                  key={item?.product_id}
+                  className="flex w-full items-center justify-between gap-[10px] rounded-md border border-border-muted bg-white p-[16px]"
+                >
+                  <div className="flex items-center gap-[16px]">
+                    <div className="overflow-hidden rounded-md bg-slate-200">
+                      <Image
+                        src={item?.product?.image || "/images/avatar.jpg"}
+                        width={100}
+                        height={100}
+                        alt={`${item?.product?.name || "Product"} image`}
+                        className="h-16 w-16 object-contain object-center"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-[14px]">
+                        <span className="font-semibold text-primary">Name: </span>
+                        {item?.product?.name}
+                      </p>
+                      <p className="text-[14px]">
+                        <span className="font-semibold text-primary">Quantity: </span>
+                        {item?.quantity}
+                      </p>
+                      {item?.color ? (
+                        <p className="text-[14px]">
+                          <span className="font-semibold text-primary">Color: </span>
+                          {item?.color}
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                  {isEditMode ? (
+                    <button
+                      className="shrink-0 cursor-pointer bg-danger/10 p-[5px] text-danger"
+                      onClick={() => handleRemoveOrderItem(i)}
+                    >
+                      <FaTrashAlt />
+                    </button>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              ))}
+              {isEditMode ? (
+                <div className="flex w-full items-center justify-end gap-[10px]">
+                  <button
+                    onClick={handleUpdate}
+                    disabled={isUpdating}
+                    className="flex cursor-pointer items-center gap-[5px] text-[14px] text-primary hover:underline disabled:cursor-not-allowed"
+                  >
+                    Save changes {isUpdating ? <ImSpinner11 className="animate-spin" /> : ""}
+                  </button>
+                  <button
+                    className="cursor-pointer text-[14px] text-primary hover:underline"
+                    onClick={() => setOrderItemView(initialOrderItemView)}
+                  >
+                    Undo changes
+                  </button>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
 
           {/* order summery */}
-          <div className="rounded-md border border-slate-300 bg-white p-6">
-            <h2 className="mb-[16px] text-[20px] font-semibold text-dashboard">Order Summary</h2>
+          <div className="rounded-md border border-border-muted bg-white p-6">
+            <h2 className="mb-[16px] text-[20px] font-semibold">Order Summary</h2>
             <div className="space-y-2">
               <p>
                 <span className="text-[17px] font-semibold">Total Amount: </span>
