@@ -80,7 +80,7 @@ const ImageDisplay = ({
   );
 };
 
-const ProductImageUploader: React.FC<IProps> = ({
+const ImageUploader: React.FC<IProps> = ({
   children,
   onChange,
   defaultImages = [],
@@ -174,4 +174,4 @@ const ProductImageUploader: React.FC<IProps> = ({
   );
 };
 
-export default ProductImageUploader;
+export default ImageUploader;

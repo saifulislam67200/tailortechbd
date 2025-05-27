@@ -11,7 +11,7 @@ import { BsTrash2 } from "react-icons/bs";
 import { twMerge } from "tailwind-merge";
 import * as Yup from "yup";
 import CategorySelector from "./CategorySelector";
-import ProductImageUploader from "./ProductImageUploader";
+import ImageUploader from "./ImageUploader";
 
 const initialValues: Omit<
   IProduct,
@@ -158,7 +158,7 @@ export default function ProductForm({
 
             <div className="flex w-full flex-col gap-[16px] bg-white p-[16px]">
               <SectionTitle>Product Image Gallery</SectionTitle>
-              <ProductImageUploader
+              <ImageUploader
                 defaultImages={defaultValue?.images}
                 onChange={(urls) => {
                   setFieldValue("images", urls || []);
@@ -282,14 +282,14 @@ export default function ProductForm({
                           </div>
                         )}
                       </FieldArray>
-                      <ProductImageUploader
+                      <ImageUploader
                         defaultImages={defaultValue?.colors[i]?.images}
                         inputId={`colors.${i}.image_uploader`}
                         onChange={(urls) => setFieldValue(`colors.${i}.images`, urls)}
                       >
                         <h6 className="font-[700]">You can upload image for this color </h6>
                         <p className="text-muted">uploading image for color variant is optional</p>
-                      </ProductImageUploader>
+                      </ImageUploader>
                     </div>
                   ))}
                   <button
