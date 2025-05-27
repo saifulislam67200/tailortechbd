@@ -12,8 +12,9 @@ import { toast } from "sonner";
 interface IProps {
   category: ICategory;
   parentCategory?: ICategory;
+  onDelete?: (id: string) => void;
 }
-const DeleteCategory: React.FC<IProps> = ({ category, parentCategory }) => {
+const DeleteCategory: React.FC<IProps> = ({ category, parentCategory ,onDelete}) => {
   const [open, setOpen] = useState(false);
   const [deleteCategory, { isLoading }] = useDeleteCategoryByIdMutation();
   const handleDelete = async () => {
@@ -29,6 +30,7 @@ const DeleteCategory: React.FC<IProps> = ({ category, parentCategory }) => {
       return;
     }
     toast.success("Category deleted successfully");
+    onDelete?.(category._id);
     setOpen(false);
   };
   return (

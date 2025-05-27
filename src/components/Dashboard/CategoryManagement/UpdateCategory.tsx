@@ -1,6 +1,6 @@
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
-import { useCreateCategoryMutation } from "@/redux/features/category/category.api";
+import { useUpdateCategoryMutation } from "@/redux/features/category/category.api";
 import { IQueruMutationErrorResponse } from "@/types";
 import { ICategory } from "@/types/category";
 import { ErrorMessage, Field, Form, Formik } from "formik";
@@ -13,14 +13,15 @@ import ImageUploader from "../Product/ImageUploader";
 
 interface IProps {
   children?: React.ReactNode;
-  parent?: ICategory;
-  onSuccess?: (parentId: string) => void;
+  onSuccess?: (id: string) => void;
+  defaultValue: Partial<ICategory>;
+  categoryId: string;
 }
 
-const CreateCategory: React.FC<IProps> = ({ children, parent, onSuccess }) => {
+const UpdateCategory: React.FC<IProps> = ({ children, onSuccess, defaultValue, categoryId }) => {
   const [open, setOpen] = useState(false);
 
-  const [create, { isLoading }] = useCreateCategoryMutation();
+  const [updatecategory, { isLoading }] = useUpdateCategoryMutation();
 
   const validationSchema = Yup.object().shape({
     label: Yup.string().required("Category label is required"),
@@ -32,21 +33,21 @@ const CreateCategory: React.FC<IProps> = ({ children, parent, onSuccess }) => {
         otherwise: (schema) => schema.notRequired(),
       }),
     display: Yup.boolean(),
-    parent: Yup.string()
-      .optional()
-      .default(parent?._id || undefined),
+    parent: Yup.string().optional(),
   });
 
   const initialValues = {
-    label: "",
-    thumbnail: "",
-    display: false,
-    parent: parent?._id || undefined,
+    label: defaultValue.label || "",
+    thumbnail: defaultValue.thumbnail || "",
+    display: defaultValue.display || false,
+    parent: defaultValue.parent || undefined,
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
-    console.log("Form values:", values);
-    const res = await create(values);
+    const res = await updatecategory({
+      _id: categoryId || "",
+      payload: values,
+    });
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
       if (error.data?.message) {
@@ -57,7 +58,7 @@ const CreateCategory: React.FC<IProps> = ({ children, parent, onSuccess }) => {
       return;
     }
     toast.success("Category created successfully");
-    onSuccess?.(parent?._id || "");
+    onSuccess?.(categoryId || "");
     setOpen(false);
   };
 
@@ -71,17 +72,15 @@ const CreateCategory: React.FC<IProps> = ({ children, parent, onSuccess }) => {
           onClick={() => setOpen(true)}
           className="mt-1 w-full cursor-pointer border border-[#c5c5c5] bg-primary py-[6px] text-sm font-bold text-white"
         >
-          Create Category
+          update Category
         </button>
       )}
       <DialogProvider state={open} setState={setOpen} className="w-full max-w-[700px]">
         <div className="relative w-full transform rounded-lg bg-white shadow-xl transition-all">
           <div className="flex items-center justify-between border-b border-gray-200 p-6">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">
-                {parent ? `Create New Sub-Category of ${parent.label}` : "Create New Category"}
-              </h3>
-              <p className="text-sm text-gray-500">Add a new category to organize your content.</p>
+              <h3 className="text-lg font-semibold text-gray-900">Update Category</h3>
+              <p className="text-sm text-gray-500">Updaet category your existing category</p>
             </div>
             <button
               onClick={() => setOpen(false)}
@@ -113,6 +112,7 @@ const CreateCategory: React.FC<IProps> = ({ children, parent, onSuccess }) => {
 
                 <div className="space-y-2">
                   <ImageUploader
+                    defaultImages={values.thumbnail ? [values.thumbnail] : undefined}
                     onChange={(images) => {
                       const lastImage = images ? images[images.length - 1] : "";
                       setFieldValue("thumbnail", lastImage);
@@ -167,7 +167,7 @@ const CreateCategory: React.FC<IProps> = ({ children, parent, onSuccess }) => {
                     Cancel
                   </button>
                   <Button isLoading={isLoading} type="submit" className="flex-1">
-                    Create
+                    Update
                   </Button>
                 </div>
               </Form>
@@ -179,4 +179,4 @@ const CreateCategory: React.FC<IProps> = ({ children, parent, onSuccess }) => {
   );
 };
 
-export default CreateCategory;
+export default UpdateCategory;
