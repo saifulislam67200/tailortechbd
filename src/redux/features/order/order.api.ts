@@ -43,7 +43,7 @@ const orderApi = api.injectEndpoints({
           method: "PUT",
           body: data,
         }),
-        invalidatesTags: ["order"],
+        invalidatesTags: ["order", "statistics"],
       }
     ),
   }),
