@@ -25,20 +25,27 @@ const orderApi = api.injectEndpoints({
       providesTags: ["order"],
     }),
 
-    getAllOrders: builder.query<
-  { data: IOrder[]; meta?: IMeta },
-  Record<string, string | number>
->({
-  query: (query) => {
-    const queryString = generateQueryParams(query);
-    return {
-      url: `/order/all?${queryString}`,
-      method: "GET",
-    };
-  },
-  providesTags: ["order"],
-}),
+    getAllOrders: builder.query<{ data: IOrder[]; meta?: IMeta }, Record<string, string | number>>({
+      query: (query) => {
+        const queryString = generateQueryParams(query);
+        return {
+          url: `/order/all?${queryString}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["order"],
+    }),
 
+    changeOrderStatus: builder.mutation<{ data: IOrder }, { id: string; data: { status: string } }>(
+      {
+        query: ({ id, data }) => ({
+          url: `/order/update/status/${id}`,
+          method: "PUT",
+          body: data,
+        }),
+        invalidatesTags: ["order"],
+      }
+    ),
   }),
 });
-export const { useCreateOrderMutation, useGetMyOrdersQuery, useGetAllOrdersQuery } = orderApi;
+export const { useCreateOrderMutation, useGetMyOrdersQuery, useGetAllOrdersQuery, useChangeOrderStatusMutation } = orderApi;
