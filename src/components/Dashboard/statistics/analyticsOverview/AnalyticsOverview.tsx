@@ -1,6 +1,6 @@
 import OverviewChart from "./OverviewChart";
-import RecentSales from "./RecentSales";
-import TopSelling from "./TopSelling";
+import RecentSales from "./RecentSalesTable";
+import TopSelling from "./TopSellingTable";
 
 const AnalyticsOverview = () => {
   return (

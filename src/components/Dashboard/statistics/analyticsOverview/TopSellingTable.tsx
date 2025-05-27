@@ -1,0 +1,109 @@
+"use client";
+import Image from "next/image";
+import { useState } from "react";
+import AnalyticsOverviewFilter from "./AnalyticsOverviewFilter";
+
+const topSellingData = [
+  {
+    id: 1,
+    image: "/macbook.jpeg",
+    name: "lorem ipsum dolor sit amet",
+    price: "$64",
+    sold: 124,
+    revenue: "$5,828",
+  },
+  {
+    id: 2,
+    image: "/macbook.jpeg",
+    name: "lorem ipsum dolor sit amet consectetur",
+    price: "$46",
+    sold: 98,
+    revenue: "$4,508",
+  },
+  {
+    id: 3,
+    image: "/macbook.jpeg",
+    name: "lorem ipsum dolor sit amet consectetur adipisicing",
+    price: "$59",
+    sold: 74,
+    revenue: "$4,366",
+  },
+  {
+    id: 4,
+    image: "/macbook.jpeg",
+    name: "lorem ipsum dolor sit amet consectetur adipisicing elit",
+    price: "$32",
+    sold: 63,
+    revenue: "$2,016",
+  },
+  {
+    id: 5,
+    image: "/macbook.jpeg",
+    name: "lorem ipsum dolor sit amet consectetur adipisicing elit",
+    price: "$79",
+    sold: 41,
+    revenue: "$3,239",
+  },
+];
+
+const options = [
+  { value: "overall", label: "Overall" },
+  { value: "today", label: "Today" },
+  { value: "this_month", label: "This Month" },
+  { value: "this_year", label: "This Year" },
+];
+
+const TopSellingTable = () => {
+  const [selectedFilter, setSelectedFilter] = useState(options[0]);
+
+  return (
+    <div className="overflow-x-auto bg-white p-[16px]">
+      <div className="flex items-center justify-between pb-4">
+        <h2 className="text-lg font-semibold">
+          Top Selling{" "}
+          <span className="text-sm font-normal text-info">| {selectedFilter.label}</span>
+        </h2>
+
+        <AnalyticsOverviewFilter
+          options={options}
+          selected={selectedFilter}
+          onChange={setSelectedFilter}
+        />
+      </div>
+      <table className="min-w-full text-sm">
+        <thead>
+          <tr className="text-left text-info">
+            <th className="px-4 py-2">Preview</th>
+            <th className="px-4 py-2">Product</th>
+            <th className="px-4 py-2">Price</th>
+            <th className="px-4 py-2">Sold</th>
+            <th className="px-4 py-2">Earning</th>
+          </tr>
+        </thead>
+        <tbody>
+          {topSellingData.map((item) => (
+            <tr key={item.id} className="border-t hover:bg-gray-100">
+              <td className="px-4 py-3">
+                <Image
+                  width={200}
+                  height={200}
+                  src={item.image}
+                  alt={item.name}
+                  className="h-12 w-12 rounded object-cover"
+                />
+              </td>
+              <td className="cursor-pointer px-4 py-3 font-medium text-primary hover:underline">
+                {item.name}
+              </td>
+              <td className="px-4 py-3">{item.price}</td>
+              <td className="px-4 py-3 font-bold">{item.sold}</td>
+              <td className="px-4 py-3">{item.revenue}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default TopSellingTable;
