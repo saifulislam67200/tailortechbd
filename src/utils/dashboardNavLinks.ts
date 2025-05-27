@@ -1,7 +1,8 @@
 "use client";
 import { MdInventory2 } from "react-icons/md";
-import { VscGraphLine } from "react-icons/vsc";
 import { PiShoppingCartSimpleBold } from "react-icons/pi";
+import { TbCategory } from "react-icons/tb";
+import { VscGraphLine } from "react-icons/vsc";
 export interface IDashboardNavLinks {
   label: string;
   icon?: React.ElementType;
@@ -13,7 +14,7 @@ export const admin: IDashboardNavLinks[] = [
   {
     icon: VscGraphLine,
     label: "Dashboard Statistics",
-    path: "/dashboard/",
+    path: "/dashboard",
   },
   {
     label: "Product Inventory",
@@ -32,7 +33,12 @@ export const admin: IDashboardNavLinks[] = [
   {
     icon: PiShoppingCartSimpleBold,
     label: "All Orders",
-    path: "/dashboard/all-orders/",
+    path: "/dashboard/all-orders",
+  },
+  {
+    icon: TbCategory,
+    label: "Manage Categories",
+    path: "/dashboard/manage-category",
   },
 ];
 
