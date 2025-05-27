@@ -17,7 +17,9 @@ export interface ICategory {
 }
 
 function CategoryManagementView() {
-  const { data } = useGetAllCategoriesQuery({ mode: "tree" });
+  const [searchQuery] = useState({ mode: "tree", searchTerm: "" });
+
+  const { data } = useGetAllCategoriesQuery(searchQuery);
   const [activeTab, setActiveTab] = useState("tree");
 
   const categories = data?.data || [];
