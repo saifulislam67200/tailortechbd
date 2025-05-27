@@ -2,20 +2,36 @@
 
 import { TCategoryWithSubcategories } from "@/types/category";
 import { useState } from "react";
+import { FaPlus } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
+import CreateCategory from "./CreateCategory";
 import DeleteCategory from "./DeleteCategory";
+import UpdateCategory from "./UpdateCategory";
 
 interface CategoryTreeProps {
   categories: TCategoryWithSubcategories[];
   onDelete: (id: string) => void;
-  onToggleDisplay: (id: string) => void;
   onAddSubcategory: (parentId: string) => void;
+  onUpdate: (id: string) => void;
 }
 
-const RenderCategory: React.FC<{
+interface SubcategoryItemProps {
   category: TCategoryWithSubcategories;
   parentCategory?: TCategoryWithSubcategories;
   level?: number;
-}> = ({ category, level = 0, parentCategory }) => {
+  onDelete: (id: string) => void;
+  onAddSubcategory: (parentId: string) => void;
+  onUpdate: (id: string) => void;
+}
+
+const RenderCategory: React.FC<SubcategoryItemProps> = ({
+  category,
+  level = 0,
+  parentCategory,
+  onUpdate,
+  onAddSubcategory,
+  onDelete,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const hasChildren = category.subcategories && category.subcategories.length > 0;
@@ -80,69 +96,29 @@ const RenderCategory: React.FC<{
         </div>
 
         <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-          <button
-            className="flex h-8 w-8 items-center justify-center rounded transition-colors hover:bg-green-100"
-            title="Add subcategory"
-          >
-            <svg
-              className="h-4 w-4 text-success"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-          </button>
-          {level === 0 ? (
+          <CreateCategory parent={category} onSuccess={onAddSubcategory}>
             <button
-              className="flex h-8 w-8 items-center justify-center rounded transition-colors hover:bg-gray-200"
-              title={category.display ? "Hide category" : "Show category"}
+              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded transition-colors hover:bg-success/10"
+              title="Add subcategory"
             >
-              {category.display ? (
-                <svg
-                  className="h-4 w-4 text-success"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                  />
-                </svg>
-              ) : (
-                <svg
-                  className="h-4 w-4 text-red-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
-                  />
-                </svg>
-              )}
+              <FaPlus className="text-success" />
             </button>
-          ) : (
-            ""
-          )}
-          <DeleteCategory category={category} parentCategory={parentCategory} />
+          </CreateCategory>
+
+          <UpdateCategory
+            categoryId={category._id}
+            onSuccess={onAddSubcategory}
+            defaultValue={category}
+          >
+            <button
+              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded transition-colors hover:bg-success/10"
+              title="update subcategory"
+            >
+              <MdEdit className="text-success" />
+            </button>
+          </UpdateCategory>
+
+          <DeleteCategory onDelete={onDelete} category={category} parentCategory={parentCategory} />
         </div>
       </div>
 
@@ -150,6 +126,9 @@ const RenderCategory: React.FC<{
         <div className="space-y-1">
           {category.subcategories?.map((child) => (
             <RenderCategory
+              onUpdate={onUpdate}
+              onAddSubcategory={onAddSubcategory}
+              onDelete={onDelete}
               level={level + 1}
               key={child._id}
               category={child}
@@ -161,7 +140,12 @@ const RenderCategory: React.FC<{
     </div>
   );
 };
-export function CategoryTree({ categories }: CategoryTreeProps) {
+export function CategoryTree({
+  categories,
+  onAddSubcategory,
+  onDelete,
+  onUpdate,
+}: CategoryTreeProps) {
   return (
     <div className="space-y-1">
       {categories.length === 0 ? (
@@ -169,7 +153,15 @@ export function CategoryTree({ categories }: CategoryTreeProps) {
           <p>No categories found. Create your first category to get started.</p>
         </div>
       ) : (
-        categories.map((category) => <RenderCategory key={category._id} category={category} />)
+        categories.map((category) => (
+          <RenderCategory
+            key={category._id}
+            onUpdate={onUpdate}
+            category={category}
+            onAddSubcategory={onAddSubcategory}
+            onDelete={onDelete}
+          />
+        ))
       )}
     </div>
   );

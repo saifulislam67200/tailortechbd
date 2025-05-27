@@ -40,6 +40,8 @@ const EmailLogin = () => {
     }
 
     const user = res.data?.data.result;
+    console.log(user);
+
     if (user) {
       dispatch(setUser(user));
     }
