@@ -23,7 +23,7 @@ const EarningCard = ({
           </div>
         </div>
         <div className="h-full w-full">
-          <h1 className="text-[20px] font-bold 2xl:text-[25px]">{value}</h1>
+          <h1 className="text-[20px] font-bold 2xl:text-[25px]">{Math.floor(value)}</h1>
           <p className="text-[14px] font-bold 2xl:text-[16px]">
             <span className="text-success">{increase}%</span> increase
           </p>
