@@ -1,11 +1,11 @@
 import React from "react";
-import MonthlySellingPieChart from "./MonthlySellingPieChart";
 import RecentQuestions from "./RecentQuestions";
+import YearlySellingPieChart from "./YearlySellingPieChart";
 
 const StatisticsAside = () => {
   return (
     <aside>
-      <MonthlySellingPieChart />
+      <YearlySellingPieChart />
       <RecentQuestions />
     </aside>
   );

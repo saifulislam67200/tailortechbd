@@ -9,9 +9,17 @@ const statisticsApi = api.injectEndpoints({
             }),
             providesTags: ["statistics"],
         }),
+        getThisYearEarnings: builder.query({
+            query: () => ({
+                url: `/statistics/earnings-this-year`,
+                method: "GET",
+            }),
+            providesTags: ["statistics"],
+        }),
     }),
 });
 
 export const {
-    useGetSalesSummaryQuery
+    useGetSalesSummaryQuery,
+    useGetThisYearEarningsQuery
 } = statisticsApi;
