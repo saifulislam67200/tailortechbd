@@ -73,16 +73,16 @@ const TopSellingTable = () => {
       <table className="min-w-full text-sm">
         <thead>
           <tr className="text-left text-info">
-            <th className="px-4 py-2">Preview</th>
-            <th className="px-4 py-2">Product</th>
-            <th className="px-4 py-2">Price</th>
-            <th className="px-4 py-2">Sold</th>
-            <th className="px-4 py-2">Earning</th>
+            <th className="px-4 py-[20px]">Preview</th>
+            <th className="px-4 py-[20px]">Product</th>
+            <th className="px-4 py-[20px]">Price</th>
+            <th className="px-4 py-[20px]">Sold</th>
+            <th className="px-4 py-[20px]">Earning</th>
           </tr>
         </thead>
         <tbody>
           {topSellingData.map((item) => (
-            <tr key={item.id} className="border-t hover:bg-gray-100">
+            <tr key={item.id} className="border-t border-t-quaternary hover:bg-quaternary/20">
               <td className="px-4 py-3">
                 <Image
                   width={200}
