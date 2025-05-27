@@ -8,6 +8,7 @@ import { useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { MdCancel, MdCheckCircle, MdLocalShipping, MdPending } from "react-icons/md";
 import { toast } from "sonner";
+import OrderItems from "./OrderItems";
 
 type ViewOrderProps = {
   setIsViewOrder: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,7 +23,6 @@ export default function ViewOrder({
   const [selectedStatus, setSelectedStatus] = useState<IOrderStatus["status"]>("pending");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderItemView, setOrderItemView] = useState(initialOrderItemView);
-  console.log(orderItemView);
   const checkCurrentStatus = orderItemView.status[orderItemView.status.length - 1];
   const [currentStatus, setCurrentStatus] = useState(checkCurrentStatus?.status);
 
@@ -241,50 +241,15 @@ export default function ViewOrder({
               </div>
             </div>
           </div>
-          {/* order Item */}
-          <div className="mt-6 mb-6 rounded-md border border-slate-300 bg-white p-6">
-            <h2 className="mb-4 text-[20px] text-dashboard font-semibold">Order Items</h2>
-            <div className="space-y-4">
-              {orderItemView?.orderItems?.map((item) => (
-                <div
-                  key={item?.product_id}
-                  className="flex items-center gap-[16px] rounded-md border border-slate-300 bg-white p-[16px]"
-                >
-                  <div className="overflow-hidden rounded-md bg-slate-200">
-                    <Image
-                      src={item?.product?.image || "/images/avatar.jpg"}
-                      width={100}
-                      height={100}
-                      alt={`${item?.product?.name || "Product"} image`}
-                      className="h-16 w-16 object-contain object-center"
-                    />
-                  </div>
-                  <div>
-                    <p>
-                      <span className="font-semibold">Name: </span>
-                      {item?.product?.name}
-                    </p>
-                    <p>
-                      <span className="font-semibold">Quantity: </span>
-                      {item?.quantity}
-                    </p>
-                    {item?.color ? (
-                      <p>
-                        <span className="font-semibold">Color: </span>
-                        {item?.color}
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Order Items */}
+          <OrderItems
+            orderItems={orderItemView?.orderItems || []}
+            // onAddProduct={handleAddProduct}
+          />
 
           {/* order summery */}
           <div className="rounded-md border border-slate-300 bg-white p-6">
-            <h2 className="mb-[16px] text-[20px] text-dashboard font-semibold">Order Summary</h2>
+            <h2 className="mb-[16px] text-[20px] font-semibold text-dashboard">Order Summary</h2>
             <div className="space-y-2">
               <p>
                 <span className="text-[17px] font-semibold">Total Amount: </span>

@@ -240,7 +240,7 @@ export default function OrderHistory() {
                                     </div>
                                   </div>
                                   {/* // review button */}
-                                  {currentStatus !== "delivered" && (
+                                  {currentStatus == "delivered" && (
                                     <button
                                       onClick={() => handleReviewClick(item, order?._id)}
                                       className="absolute top-2 right-2 flex h-[30px] w-[70px] cursor-pointer items-center justify-center rounded-[5px] border border-quaternary px-2 text-info transition-colors duration-200 hover:border-primary hover:text-primary"

@@ -222,7 +222,7 @@ const AllOrderTable = () => {
                             <button
                               onClick={() => handleOrderView(order)}
                               className="flex h-8 w-8 items-center justify-center rounded-full border border-dashboard/20 text-dashboard transition-all duration-200 hover:border-dashboard/40 hover:bg-dashboard/10 hover:text-dashboard/80"
-                              title="Update Order"
+                              title="View Details"
                             >
                               <FiEdit className="h-4 w-4" />
                             </button>
