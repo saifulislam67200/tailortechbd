@@ -57,12 +57,12 @@ const TopSellingTable = () => {
   const [selectedFilter, setSelectedFilter] = useState(options[0]);
 
   return (
-    <div className="overflow-x-auto bg-white p-[16px]">
+    <div className="overflow-x-auto rounded-[5px] bg-white p-[16px]">
       <div className="flex items-center justify-between pb-4">
-        <h2 className="text-lg font-semibold">
-          Top Selling{" "}
-          <span className="text-sm font-normal text-info">| {selectedFilter.label}</span>
-        </h2>
+        <div className="flex items-center gap-[5px]">
+          <h3 className="text-[14px] font-bold text-primary sm:text-[16px]">Top Selling</h3> |{" "}
+          <p className="text-[14px] font-semibold text-info capitalize">{selectedFilter.label}</p>
+        </div>
 
         <AnalyticsOverviewFilter
           options={options}
