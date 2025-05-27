@@ -3,11 +3,7 @@ import { getPageMetaData } from "@/utils/meta";
 
 export const metadata = getPageMetaData("Privacy Policy");
 const page = () => {
-  return (
-    <div>
-      <PrivacyPolicy />
-    </div>
-  );
+  return <PrivacyPolicy />;
 };
 
 export default page;

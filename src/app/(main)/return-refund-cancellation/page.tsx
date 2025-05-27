@@ -3,11 +3,7 @@ import { getPageMetaData } from "@/utils/meta";
 
 export const metadata = getPageMetaData("Return, Refund & Cancellation");
 const page = () => {
-  return (
-    <div>
-      <ReturnRefundAndCancellation />
-    </div>
-  );
+  return <ReturnRefundAndCancellation />;
 };
 
 export default page;
