@@ -30,7 +30,6 @@ const EditProductView = ({ slug }: { slug: string }) => {
     if (isUpdating) {
       return;
     }
-    console.log(payload);
 
     const res = await updateProduct({
       productId: data.data._id,
@@ -54,6 +53,7 @@ const EditProductView = ({ slug }: { slug: string }) => {
     <div className="flex flex-col gap-[20px]">
       <Breadcrumb />
       <ProductForm
+        buttonLabel="Update Product"
         onSubmit={handleSubmit}
         isLoading={isUpdating}
         defaultValue={{
