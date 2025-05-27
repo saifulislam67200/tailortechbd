@@ -12,6 +12,7 @@ export interface IOrderItem {
 
 export interface IOrderStatus {
   status: "pending" | "on-delivery" | "delivered" | "cancelled";
+  createdAt?: string;
 }
 
 export interface IShippingAddress {
