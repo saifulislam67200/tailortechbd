@@ -8,6 +8,7 @@ import {
 import { IQueruMutationErrorResponse } from "@/types";
 import { IOrder, IOrderStatus } from "@/types/order";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
@@ -128,11 +129,14 @@ export default function ViewOrder({
       (total, item) => total + item.product.price * item.quantity,
       0
     );
+
+    const updatedData = {
+      ...orderItemView,
+      totalProductAmount: totalAmount,
+    };
+
     const res = await updateOrder({
-      data: {
-        ...orderItemView,
-        totalProductAmount: totalAmount,
-      },
+      data: updatedData,
       id: orderItemView?._id || "",
     });
     const error = res.error as IQueruMutationErrorResponse;
@@ -144,6 +148,7 @@ export default function ViewOrder({
       }
       return;
     }
+    setOrderItemView(res.data?.data || updatedData);
     toast.success("Order updated successfully");
   };
 
@@ -247,40 +252,47 @@ export default function ViewOrder({
                   </div>
 
                   <p>
-                    <span className="text-[17px] font-semibold">Name: </span>
+                    <span className="text-[14px] font-[700] text-primary">Name: </span>
                     {orderItemView?.shippingAddress?.name}
                   </p>
                   <p>
-                    <span className="text-[17px] font-semibold">Call: </span>
-                    {orderItemView?.shippingAddress?.phoneNumber || "N/A"}
+                    <span className="text-[14px] font-[700] text-primary">Call: </span>
+                    <Link
+                      className="hover:underline"
+                      href={`tel:${orderItemView?.shippingAddress?.phoneNumber}`}
+                    >
+                      {orderItemView?.shippingAddress?.phoneNumber || "N/A"}
+                    </Link>
                   </p>
                 </div>
               </div>
               {/* Shipping Information */}
-              <div className="rounded-md border border-border-muted bg-white p-6">
+              <div className="w-full rounded-md border border-border-muted bg-white p-6">
                 <h2 className="mb-[16px] text-[20px] font-semibold text-dashboard">
                   Shipping Information
                 </h2>
-                <div className="space-y-2">
+                <div className="w-full space-y-2">
                   <p>
-                    <span className="text-[17px] font-semibold">Name: </span>
+                    <span className="text-[14px] font-[700] text-primary">Name: </span>
                     {orderItemView?.shippingAddress?.name}
                   </p>
                   <p>
-                    <span className="text-[17px] font-semibold">Division: </span>
+                    <span className="text-[14px] font-[700] text-primary">Division: </span>
                     {orderItemView?.shippingAddress?.division}
                   </p>
                   <p>
-                    <span className="text-[17px] font-semibold">District: </span>
+                    <span className="text-[14px] font-[700] text-primary">District: </span>
                     {orderItemView?.shippingAddress?.district}
                   </p>
                   <p>
-                    <span className="text-[17px] font-semibold">Upazila: </span>
+                    <span className="text-[14px] font-[700] text-primary">Upazila/City: </span>
                     {orderItemView?.shippingAddress?.upazila}
                   </p>
-                  <p>
-                    <span className="text-[17px] font-semibold">Shipping Address: </span>
-                    {orderItemView?.shippingAddress?.address}
+                  <p className="flex w-full flex-col gap-[10px]">
+                    <span className="text-[14px] font-[700] text-primary">Shipping Address: </span>
+                    <span className="w-full rounded-[5px] bg-primary/5 p-[8px]">
+                      {orderItemView?.shippingAddress?.address}
+                    </span>
                   </p>
                 </div>
               </div>
@@ -290,8 +302,16 @@ export default function ViewOrder({
           <div className="mt-6 mb-6 rounded-md border border-border-muted bg-white p-6">
             <div className="mb-[10px] flex w-full items-center justify-between">
               <h2 className="text-xl font-semibold">Order Items</h2>
-              <Button className="bg-success text-white" onClick={() => setIsEditMode(true)}>
-                Edit Items
+              <Button
+                className={`${isEditMode ? "bg-danger text-white" : "bg-success text-white"}`}
+                onClick={() => {
+                  if (isEditMode) {
+                    setOrderItemView(initialOrderItemView);
+                  }
+                  setIsEditMode(!isEditMode);
+                }}
+              >
+                {isEditMode ? "Cancel Edit" : "Edit Items"}
               </Button>
             </div>
             <div className="w-full space-y-4">
@@ -368,16 +388,16 @@ export default function ViewOrder({
             <h2 className="mb-[16px] text-[20px] font-semibold">Order Summary</h2>
             <div className="space-y-2">
               <p>
-                <span className="text-[17px] font-semibold">Total Amount: </span>
+                <span className="text-[14px] font-[700] text-primary">Total Amount: </span>
                 {Math.round(orderItemView?.totalProductAmount || 0)} BDT
               </p>
               <p>
-                <span className="text-[17px] font-semibold">Payment Status: </span>
+                <span className="text-[14px] font-[700] text-primary">Payment Status: </span>
                 {/* {orderItemView?.paymentStatus || "COD"} */}
                 COD
               </p>
               <p>
-                <span className="text-[17px] font-semibold">Date: </span>
+                <span className="text-[14px] font-[700] text-primary">Date: </span>
                 {orderItemView?.createdAt
                   ? new Date(orderItemView.createdAt).toLocaleDateString("en-US", {
                       year: "numeric",

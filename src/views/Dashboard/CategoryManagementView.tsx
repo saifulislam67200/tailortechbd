@@ -23,6 +23,9 @@ function CategoryManagementView() {
       const categoryData = data?.data || [];
       setCategories((prevCategories) => [...prevCategories, ...categoryData]);
     }
+    return () => {
+      setCategories([]);
+    };
   }, [isLoading]);
 
   // Flatten categories for easier manipulation
