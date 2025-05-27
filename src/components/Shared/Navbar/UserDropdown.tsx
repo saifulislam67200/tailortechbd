@@ -62,7 +62,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
             width={30}
             height={30}
             alt="User Avatar"
-            className="aspect-square w-[30px] overflow-hidden rounded-full"
+            className="aspect-square w-[30px] overflow-hidden rounded-full border border-quaternary/30 object-cover"
           />
         ) : (
           <FaCircleUser size={22} />
@@ -86,13 +86,13 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
           <div className="border-b border-gray-100 px-4 py-3">
             <div className="flex items-center space-x-3">
               {user?.avatar ? (
-                <div className="aspect-square w-[40px] overflow-hidden rounded-full">
+                <div className="aspect-square w-[40px] overflow-hidden rounded-full border border-quaternary/30">
                   <Image
                     src={user?.avatar}
                     width={40}
                     height={40}
                     alt="Avatar"
-                    className="h-full w-full"
+                    className="h-full w-full object-cover"
                   />
                 </div>
               ) : (
