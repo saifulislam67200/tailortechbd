@@ -34,7 +34,7 @@ const ProductHoverIcons = ({
   return (
     <div
       className={twMerge(
-        "absolute top-[20%] right-2 flex -translate-y-1/2 flex-col gap-[5px] opacity-0 transition-opacity duration-300 group-hover:opacity-100",
+        "absolute top-[20%] right-2 z-[5] flex -translate-y-1/2 flex-col gap-[5px] opacity-0 transition-opacity duration-300 group-hover:opacity-100",
         className
       )}
     >

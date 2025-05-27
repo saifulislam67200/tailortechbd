@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import { FaBoxOpen, FaEnvelope, FaHeadset, FaPhoneAlt, FaTag } from "react-icons/fa";
+import { FaBoxOpen, FaEnvelope, FaHeadset, FaPhoneAlt } from "react-icons/fa";
 
 // Define prop types
 interface TopBarItemProps {
@@ -28,7 +28,6 @@ const TopBarItem: React.FC<TopBarItemProps> = ({ icon: Icon, label, href }) => {
 const topBarItems: TopBarItemProps[] = [
   { icon: FaPhoneAlt, label: "16810", href: "tel:16810" },
   { icon: FaEnvelope, label: "info@bdshop.com", href: "mailto:info@bdshop.com" },
-  { icon: FaTag, label: "Offer", href: "/offer" },
   { icon: FaBoxOpen, label: "New Arrival", href: "/new-arrival" },
   { icon: FaHeadset, label: "Customer Service", href: "/customer-service" },
 ];
