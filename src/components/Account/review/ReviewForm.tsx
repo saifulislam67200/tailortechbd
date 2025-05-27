@@ -1,14 +1,14 @@
 "use client";
-import { Rating } from "react-simple-star-rating";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-import ProductImageUploader from "@/components/Dashboard/Product/ProductImageUploader";
-import { useCreateReviewMutation } from "@/redux/features/review/review.api";
-import { toast } from "sonner";
+import ImageUploader from "@/components/Dashboard/Product/ImageUploader";
 import { useAppSelector } from "@/hooks/redux";
+import { useCreateReviewMutation } from "@/redux/features/review/review.api";
 import { IQueruMutationErrorResponse } from "@/types";
 import { IProduct } from "@/types/product";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { MdOutlineKeyboardBackspace } from "react-icons/md";
+import { Rating } from "react-simple-star-rating";
+import { toast } from "sonner";
+import * as Yup from "yup";
 
 const MAX_REVIEW_LENGTH = 500;
 
@@ -61,7 +61,7 @@ const ReviewForm = ({ productToReview, setIsReviewOpen }: ReviewFormProps) => {
         if (error?.data?.message === "Validation error") {
           toast("Something went wrong");
         } else {
-          toast(error.data.message);
+          toast(error.data?.message);
         }
       } else {
         toast("Something went wrong");
@@ -135,7 +135,7 @@ const ReviewForm = ({ productToReview, setIsReviewOpen }: ReviewFormProps) => {
           </div>
 
           <div className="mb-[16px]">
-            <ProductImageUploader
+            <ImageUploader
               inputId="review-image-upload"
               labelStyle="!h-[120px] !rounded-[5px]"
               defaultImages={values.images}

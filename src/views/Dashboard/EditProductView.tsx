@@ -39,7 +39,7 @@ const EditProductView = ({ slug }: { slug: string }) => {
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
       if (error?.data?.message) {
-        toast(error.data.message);
+        toast(error.data?.message);
       } else {
         toast("Something went wrong");
       }
