@@ -148,8 +148,8 @@ export default function ViewOrder({
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="lg:col-span-1">
           <div className="mb-6">
-            <h2 className="text-lg text-gray-800 sm:text-2xl">Orders List</h2>
-            <p className="text-gray-600">ORD-${orderItemView?._id.slice(-8).toUpperCase()}</p>
+            <h2 className="text-lg text-primary sm:text-[24px] font-semibold">Orders List</h2>
+            <p className="text-info">ORD-${orderItemView?._id.slice(-8).toUpperCase()}</p>
           </div>
 
           <div className="relative mb-8">
