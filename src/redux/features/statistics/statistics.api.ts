@@ -36,7 +36,14 @@ const statisticsApi = api.injectEndpoints({
                 }
             },
             providesTags: ["statistics"]
-        })
+        }),
+        getRecentUnansweredQuestion: builder.query({
+            query: () => ({
+                url: "statistics/recent-unanswered-question",
+                method: "GET",
+            }),
+            providesTags: ["statistics"],
+        }),
     }),
 });
 
@@ -44,5 +51,6 @@ export const {
     useGetSalesSummaryQuery,
     useGetThisYearEarningsQuery,
     useGetRecentSalesQuery,
-    useGetTopSellingProductsQuery
+    useGetTopSellingProductsQuery,
+    useGetRecentUnansweredQuestionQuery
 } = statisticsApi;
