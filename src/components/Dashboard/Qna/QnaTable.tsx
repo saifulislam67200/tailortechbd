@@ -2,17 +2,15 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { FiTrash2 } from "react-icons/fi";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import useDebounce from "@/hooks/useDebounce";
 import {
-  useDeleteQuestionAnswerMutation,
   useGetAllQuestionAnswersQuery,
 } from "@/redux/features/Q&A/questionAndAnswer.api";
 import Pagination from "@/components/ui/Pagination";
-import { toast } from "sonner";
 import AnswerModal from "./AnswerModal";
+import DeleteQna from "./DeleteQna";
 
 const tableHead = [
   { label: "Customer", field: "name" },
@@ -29,17 +27,6 @@ export default function QnaTable() {
   const { data } = useGetAllQuestionAnswersQuery({ searchTerm, page, limit: 10 });
   const questionAndAnswer = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
-  const [deleteQuestionAnswer] = useDeleteQuestionAnswerMutation();
-  console.log(questionAndAnswer);
-
-  const handleDelete = async (id: string) => {
-    try {
-      await deleteQuestionAnswer(id);
-      toast.success("Question delete successfully");
-    } catch (error) {
-      console.error("Failed to delete:", error);
-    }
-  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -140,13 +127,7 @@ export default function QnaTable() {
                         
                         {/* Answer Modal */}
                         <AnswerModal item={item}  />
-                        <button
-                          onClick={() => handleDelete(item._id)}
-                          className="rounded-full border-[1px] border-red-200 bg-red-600/5 p-[7px] text-red-600"
-                          title="Delete"
-                        >
-                          <FiTrash2 size={18} />
-                        </button>
+                        <DeleteQna id={item?._id} customerName={item?.name} />
                       </div>
                     </td>
                   </tr>

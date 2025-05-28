@@ -15,10 +15,10 @@ interface PropsType {
 }
 const AnswerModal: React.FC<PropsType> = ({ item, children }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState(item?.answer);
   const [updateAnswerById, { isLoading }] = useUpdateAnswerByIdMutation();
   const handleUpdate = async () => {
-    if (!answer.trim()) {
+    if (!answer?.trim()) {
       toast.error("Answer cannot be empty.");
       return;
     }
@@ -55,11 +55,7 @@ const AnswerModal: React.FC<PropsType> = ({ item, children }) => {
         <button
           onClick={() => setIsOpen(true)}
           // disabled={!!item?.answer}
-          className={`rounded-full border-[1px] p-[7px] transition-colors ${
-            item?.answer
-              ? "cursor-not-allowed border-gray-300 bg-gray-50 text-gray-400"
-              : "border-dashboard bg-dashboard/5 text-dashboard"
-          }`}
+          className={`rounded-full border-[1px] border-dashboard bg-dashboard/5 p-[7px] text-dashboard transition-colors cursor-pointer`}
           title={item?.answer ? "Already Answered" : "Answer Question"}
         >
           <FiMessageSquare size={17} />
@@ -123,7 +119,6 @@ const AnswerModal: React.FC<PropsType> = ({ item, children }) => {
                 id="answer"
                 rows={4}
                 value={answer}
-                defaultValue={item?.answer}
                 onChange={(e) => setAnswer(e.target.value)}
                 className="w-full resize-none rounded-lg border border-gray-300 px-3 py-2 outline-none focus:border-border-main"
                 placeholder="Type your answer here..."

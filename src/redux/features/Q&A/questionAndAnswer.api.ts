@@ -33,7 +33,7 @@ const questionAndAnswerApi = api.injectEndpoints({
           method: "GET",
         };
       },
-      providesTags: ["questionAnswer"],
+      providesTags: ["QuestionAndAnswer"],
     }),
 
     //  delete
@@ -57,7 +57,7 @@ const questionAndAnswerApi = api.injectEndpoints({
           _id: undefined,
         },
       }),
-      invalidatesTags: ["questionAnswer"],
+      invalidatesTags: ["QuestionAndAnswer"],
     }),
   }),
 });
