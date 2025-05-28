@@ -102,7 +102,9 @@ export default function ProductForm({
     <Formik
       initialValues={initValue || initialValues}
       validationSchema={validationSchema}
-      onSubmit={onSubmit}
+      onSubmit={(values, ...args) => {
+        onSubmit({ ...values, discount: values.discount || 0 }, ...args);
+      }}
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
         <Form className="flex flex-col gap-[16px]">
