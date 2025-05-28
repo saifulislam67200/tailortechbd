@@ -13,6 +13,7 @@ const DeleteQna = ({ id, customerName }: { id: string; customerName: string }) =
     try {
       await deleteQuestionAnswer(id);
       toast.success("Question delete successfully");
+      setIsOpen(false);
     } catch (error) {
       console.error("Failed to delete:", error);
     }
