@@ -15,6 +15,7 @@ import { FaTrashAlt } from "react-icons/fa";
 import { ImSpinner11 } from "react-icons/im";
 import { MdCancel, MdCheckCircle, MdLocalShipping, MdPending } from "react-icons/md";
 import { toast } from "sonner";
+import AddNewItemOnOrder from "./AddNewItemOnOrder";
 const statuses = [
   {
     id: "pending",
@@ -47,20 +48,19 @@ const statuses = [
 ];
 type ViewOrderProps = {
   setIsViewOrder: React.Dispatch<React.SetStateAction<boolean>>;
-  orderItemView: IOrder;
+  orderItem: IOrder;
 };
 
-export default function ViewOrder({
-  setIsViewOrder,
-  orderItemView: initialOrderItemView,
-}: ViewOrderProps) {
+export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps) {
+  const [initialOrderItemView, setInitialOrderItemView] = useState(orderItem);
+
   const [changeOrderStatus, { isLoading }] = useChangeOrderStatusMutation();
 
   const [updateOrder, { isLoading: isUpdating }] = useUpdateOrderMutation();
 
   const [selectedStatus, setSelectedStatus] = useState<IOrderStatus["status"]>("pending");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [orderItemView, setOrderItemView] = useState(initialOrderItemView);
+  const [orderItemView, setOrderItemView] = useState(orderItem);
   const checkCurrentStatus = orderItemView.status[orderItemView.status.length - 1];
   const [currentStatus, setCurrentStatus] = useState(checkCurrentStatus?.status);
 
@@ -122,6 +122,11 @@ export default function ViewOrder({
       ...orderItemView,
       orderItems: updatedOrderItems,
     });
+
+    setInitialOrderItemView({
+      ...initialOrderItemView,
+      orderItems: updatedOrderItems,
+    });
   };
 
   const handleUpdate = async () => {
@@ -149,6 +154,7 @@ export default function ViewOrder({
       return;
     }
     setOrderItemView(res.data?.data || updatedData);
+    setInitialOrderItemView(res.data?.data || updatedData);
     toast.success("Order updated successfully");
   };
 
@@ -306,6 +312,8 @@ export default function ViewOrder({
                 className={`${isEditMode ? "bg-danger text-white" : "bg-success text-white"}`}
                 onClick={() => {
                   if (isEditMode) {
+                    console.log(initialOrderItemView, "edi can");
+
                     setOrderItemView(initialOrderItemView);
                   }
                   setIsEditMode(!isEditMode);
@@ -362,20 +370,30 @@ export default function ViewOrder({
                 </div>
               ))}
               {isEditMode ? (
-                <div className="flex w-full items-center justify-end gap-[10px]">
-                  <button
-                    onClick={handleUpdate}
-                    disabled={isUpdating}
-                    className="flex cursor-pointer items-center gap-[5px] text-[14px] text-primary hover:underline disabled:cursor-not-allowed"
-                  >
-                    Save changes {isUpdating ? <ImSpinner11 className="animate-spin" /> : ""}
-                  </button>
-                  <button
-                    className="cursor-pointer text-[14px] text-primary hover:underline"
-                    onClick={() => setOrderItemView(initialOrderItemView)}
-                  >
-                    Undo changes
-                  </button>
+                <div className="flex w-full items-center justify-between gap-[10px]">
+                  <AddNewItemOnOrder
+                    onAddItem={(item) =>
+                      setOrderItemView({
+                        ...orderItemView,
+                        orderItems: [...orderItemView.orderItems, item],
+                      })
+                    }
+                  />
+                  <div className="flex items-center justify-start gap-[10px]">
+                    <button
+                      onClick={handleUpdate}
+                      disabled={isUpdating}
+                      className="flex cursor-pointer items-center gap-[5px] text-[14px] text-primary hover:underline disabled:cursor-not-allowed"
+                    >
+                      Save changes {isUpdating ? <ImSpinner11 className="animate-spin" /> : ""}
+                    </button>
+                    <button
+                      className="cursor-pointer text-[14px] text-primary hover:underline"
+                      onClick={() => setOrderItemView(initialOrderItemView)}
+                    >
+                      Undo changes
+                    </button>
+                  </div>
                 </div>
               ) : (
                 ""

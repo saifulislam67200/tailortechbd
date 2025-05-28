@@ -18,6 +18,8 @@ function SubcategoryItem({ subcategory, level, expandedItems, onToggle }: Subcat
   const hasChildren = subcategory.subcategories?.length ? true : false;
   const indentClass = `px-${level * 4}`;
 
+  const nextIndentClass = `px-${(level + 1) * 4}`;
+
   return (
     <div className={`relative flex h-fit flex-col ${indentClass}`}>
       {hasChildren ? (
@@ -40,18 +42,17 @@ function SubcategoryItem({ subcategory, level, expandedItems, onToggle }: Subcat
       )}
 
       {/* Nested Subcategories */}
-      {/*  */}
+      {/*   */}
       {hasChildren && isExpanded && (
-        <div className="absolute top-0 left-full z-50 min-w-[200px] border border-border-muted bg-white px-4 py-2 shadow-lg">
-          <div>
+        <div className="absolute top-0 left-full z-50 min-w-[250px] border border-border-muted bg-white px-4 py-2 shadow-lg">
+          <div className={nextIndentClass}>
             <Link
               href={`/shop/${subcategory.slug}`}
-              className="hover_underline block w-fit py-1 text-sm text-primary transition-colors duration-200"
+              className={`hover_underline block w-fit py-1 text-sm font-[700] text-primary transition-colors duration-200`}
             >
               All {subcategory.label}
             </Link>
           </div>
-
           {subcategory.subcategories?.map((nestedSub) => (
             <SubcategoryItem
               key={nestedSub._id}

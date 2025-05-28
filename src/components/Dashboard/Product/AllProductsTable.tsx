@@ -2,6 +2,8 @@
 
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Pagination from "@/components/ui/Pagination";
+import TableDataNotFound from "@/components/ui/TableDataNotFound";
+import TableSkeleton from "@/components/ui/TableSkeleton";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
 import dateUtils from "@/utils/date";
@@ -32,7 +34,7 @@ const AllProductsTable = () => {
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
   });
 
-  const { data } = useGetAllProductsQuery({ ...query, searchTerm });
+  const { data, isLoading } = useGetAllProductsQuery({ ...query, searchTerm });
   const productData = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 
@@ -111,53 +113,59 @@ const AllProductsTable = () => {
           </thead>
 
           <tbody className="divide-y divide-dashboard/20">
-            {productData?.map((product) => (
-              <tr key={product?._id} className="hover:bg-gray-50">
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-[5px]">
-                    <span className="flex aspect-square max-h-[50px] w-[50px] items-center justify-start bg-white">
-                      <Image
-                        src={product.images[0]}
-                        alt={`${product.name} image`}
-                        width={80}
-                        height={80}
-                        className="mx-auto h-full w-auto max-w-full object-contain"
-                      />
+            {isLoading ? (
+              <TableSkeleton columns={tableHead.length} />
+            ) : data?.data.length ? (
+              productData?.map((product) => (
+                <tr key={product?._id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-[5px]">
+                      <span className="flex aspect-square max-h-[50px] w-[50px] items-center justify-start bg-white">
+                        <Image
+                          src={product.images[0]}
+                          alt={`${product.name} image`}
+                          width={80}
+                          height={80}
+                          className="mx-auto h-full w-auto max-w-full object-contain"
+                        />
+                      </span>
+                      <span className="line-clamp-1 text-[14px]">{product.name}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="text-[14px]">৳ {product.price}</span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="text-[14px]">{product.discount || "N/A"}</span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="text-[14px]">
+                      {typeof product.category === "string"
+                        ? product.category
+                        : product.category?.label || "N/A"}
                     </span>
-                    <span className="line-clamp-1 text-[14px]">{product.name}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="text-[14px]">৳ {product.price}</span>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="text-[14px]">{product.discount || "N/A"}</span>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="text-[14px]">
-                    {typeof product.category === "string"
-                      ? product.category
-                      : product.category?.label || "N/A"}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <span className="text-[14px]">
-                    {dateUtils.formateCreateOrUpdateDate(product.createdAt) || "N/A"}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-[8px]">
-                    <Link
-                      href={`/dashboard/products/${product.slug}`}
-                      className="center aspect-square w-[30px] cursor-pointer rounded-full border-[1px] border-dashboard bg-dashboard/5 text-dashboard"
-                    >
-                      <GoPencil />
-                    </Link>
-                    <DeleteProductById productId={product._id} productName={product.name} />
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className="text-[14px]">
+                      {dateUtils.formateCreateOrUpdateDate(product.createdAt) || "N/A"}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-[8px]">
+                      <Link
+                        href={`/dashboard/products/${product.slug}`}
+                        className="center aspect-square w-[30px] cursor-pointer rounded-full border-[1px] border-dashboard bg-dashboard/5 text-dashboard"
+                      >
+                        <GoPencil />
+                      </Link>
+                      <DeleteProductById productId={product._id} productName={product.name} />
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <TableDataNotFound span={tableHead.length} message="No Product Found" />
+            )}
           </tbody>
         </table>
       </div>

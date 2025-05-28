@@ -20,9 +20,18 @@ const statisticsApi = api.injectEndpoints({
         getRecentSales: builder.query({
             query: (query) => {
                 const queryString = generateQueryParams(query);
-                console.log(queryString, "queryString🐞🐞")
                 return {
                     url: `/statistics/recent-sales?${queryString}`,
+                    method: "GET"
+                }
+            },
+            providesTags: ["statistics"]
+        }),
+        getTopSellingProducts: builder.query({
+            query: (query) => {
+                const queryString = generateQueryParams(query);
+                return {
+                    url: `/statistics/top-selling-products?${queryString}`,
                     method: "GET"
                 }
             },
@@ -34,5 +43,6 @@ const statisticsApi = api.injectEndpoints({
 export const {
     useGetSalesSummaryQuery,
     useGetThisYearEarningsQuery,
-    useGetRecentSalesQuery
+    useGetRecentSalesQuery,
+    useGetTopSellingProductsQuery
 } = statisticsApi;
