@@ -28,6 +28,21 @@ const bannerApi = api.injectEndpoints({
       invalidatesTags: ["banner"],
     }),
 
+    updateBannerById: builder.mutation<
+      { data: IBanner },
+      { bannerId: string; payload: Partial<IBanner> }
+    >({
+      query: ({ bannerId, payload }) => ({
+        url: `/banner/update/${bannerId}`,
+        method: "PATCH",
+        body: {
+          ...payload,
+          _id: undefined,
+        },
+      }),
+      invalidatesTags: ["banner"],
+    }),
+
     deleteBannerById: builder.mutation<{ data: IBanner }, string>({
       query: (bannerId) => ({
         url: `/banner/delete/${bannerId}`,
@@ -38,5 +53,10 @@ const bannerApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllBannersQuery, useToggleBannerStatusMutation, useCreateBannerMutation, useDeleteBannerByIdMutation, } =
-  bannerApi;
+export const {
+  useGetAllBannersQuery,
+  useToggleBannerStatusMutation,
+  useCreateBannerMutation,
+  useUpdateBannerByIdMutation,
+  useDeleteBannerByIdMutation,
+} = bannerApi;
