@@ -1,18 +1,19 @@
+import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
-import { IQuestionsAndAns } from "@/types/QuestionAndAns";
-import Image from "next/image";
-import { LuX } from "react-icons/lu";
-import { FiMessageSquare } from "react-icons/fi";
-import { useState } from "react";
-import Button from "@/components/ui/Button";
 import { useUpdateAnswerByIdMutation } from "@/redux/features/Q&A/questionAndAnswer.api";
-import { toast } from "sonner";
+import { IQuestionsAndAns } from "@/types/QuestionAndAns";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import Image from "next/image";
+import { cloneElement, isValidElement, ReactElement, useState } from "react";
+import { FiMessageSquare } from "react-icons/fi";
+import { LuX } from "react-icons/lu";
+import { toast } from "sonner";
 interface PropsType {
   item: IQuestionsAndAns;
+  children?: React.ReactNode;
 }
-const AnswerModal: React.FC<PropsType> = ({ item }) => {
+const AnswerModal: React.FC<PropsType> = ({ item, children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [answer, setAnswer] = useState("");
   const [updateAnswerById, { isLoading }] = useUpdateAnswerByIdMutation();
@@ -33,7 +34,7 @@ const AnswerModal: React.FC<PropsType> = ({ item }) => {
       toast.success("Answer updated successfully");
       console.log("Update success:", res);
       setIsOpen(false);
-    //   setAnswer("");
+      //   setAnswer("");
     } catch (err) {
       const error = err as FetchBaseQueryError & {
         data?: { message?: string };
@@ -47,18 +48,23 @@ const AnswerModal: React.FC<PropsType> = ({ item }) => {
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        // disabled={!!item?.answer}
-        className={`rounded-full border-[1px] p-[7px] transition-colors ${
-          item?.answer
-            ? "cursor-not-allowed border-gray-300 bg-gray-50 text-gray-400"
-            : "border-dashboard bg-dashboard/5 text-dashboard"
-        }`}
-        title={item?.answer ? "Already Answered" : "Answer Question"}
-      >
-        <FiMessageSquare size={17} />
-      </button>
+      {children && isValidElement(children) ? (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        cloneElement(children as ReactElement<any>, { onClick: () => setIsOpen(true) })
+      ) : (
+        <button
+          onClick={() => setIsOpen(true)}
+          // disabled={!!item?.answer}
+          className={`rounded-full border-[1px] p-[7px] transition-colors ${
+            item?.answer
+              ? "cursor-not-allowed border-gray-300 bg-gray-50 text-gray-400"
+              : "border-dashboard bg-dashboard/5 text-dashboard"
+          }`}
+          title={item?.answer ? "Already Answered" : "Answer Question"}
+        >
+          <FiMessageSquare size={17} />
+        </button>
+      )}
 
       <DialogProvider
         state={isOpen}
