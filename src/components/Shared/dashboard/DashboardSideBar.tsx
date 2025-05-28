@@ -37,7 +37,7 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
   }, [isOpen]);
 
   return (
-    <div className={""}>
+    <div className={"relative"}>
       {hasChildren ? (
         <div
           className={`flex cursor-pointer items-center justify-between gap-[8px] px-[16px] py-[10px] text-sm font-medium hover:text-primary ${
@@ -50,6 +50,7 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
             <span className="select-none">{navlink.label}</span>
           </div>
           <GoChevronDown className={`h-4 w-4 ${isOpen ? "rotate-180" : ""} duration-300`} />
+          {navlink.element ? <navlink.element /> : ""}
         </div>
       ) : (
         <Link
@@ -73,6 +74,7 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
           )}
           {Icon ? <Icon className="h-4 w-4" /> : ""}
           <span className="line-clamp-1 select-none">{navlink.label}</span>
+          {navlink.element ? <navlink.element /> : ""}
         </Link>
       )}
 

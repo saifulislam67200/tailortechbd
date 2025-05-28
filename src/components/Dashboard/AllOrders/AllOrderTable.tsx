@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { FiEye } from "react-icons/fi";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import TableSkeleton from "../../ui/TableSkeleton";
+import OrderStatusDropDown from "./OrderStatusDropDown";
+import OrderTimelineDropDown from "./OrderTimelineDropDown";
 import ViewOrder from "./ViewOrder";
 
 const tableHead = [
@@ -24,12 +26,16 @@ const tableHead = [
 const AllOrderTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [page, setPage] = useState<number>(1);
+  const [query, setQuery] = useState<Record<string, string | number>>({
+    status: "",
+    day_count: "7",
+  });
   // const [statusFilter, setStatusFilter] = useState<string>("all")
   const [isViewOrder, setIsViewOrder] = useState(false);
   // const [orderItemView, setOrderItemView] = useState({});
   const [orderItemView, setOrderItemView] = useState<IOrder | null>(null);
 
-  const { data, isLoading } = useGetAllOrdersQuery({ searchTerm, page, limit: 10 });
+  const { data, isLoading } = useGetAllOrdersQuery({ searchTerm, page, limit: 10, ...query });
   const orders = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 
@@ -117,21 +123,14 @@ const AllOrderTable = () => {
                 />
                 <RxMagnifyingGlass />
               </div>
-
-              {/* Filters */}
-              {/* <div className="flex flex-col gap-4 sm:flex-row">
-            <select
-              className="rounded-[5px] border-[1px] border-dashboard/20 p-[5px] focus:border-dashboard/20"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="all">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="confirmed">On Delivery</option>
-              <option value="delivered">Delivered</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-          </div> */}
+              <div className="flex items-center justify-start gap-[10px]">
+                <OrderTimelineDropDown
+                  onSelect={({ value }) => setQuery({ ...query, day_count: value })}
+                />
+                <OrderStatusDropDown
+                  onSelect={({ value }) => setQuery({ ...query, status: value })}
+                />
+              </div>
             </div>
 
             {/* Orders Table */}

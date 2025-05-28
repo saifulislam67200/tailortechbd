@@ -35,6 +35,15 @@ const questionAndAnswerApi = api.injectEndpoints({
       },
       providesTags: ["QuestionAndAnswer"],
     }),
+    getPendingQuestionCount: builder.query<{ data: { pendingQuestionCount: number } }, undefined>({
+      query: () => {
+        return {
+          url: `/questionAns/pending/count`,
+          method: "GET",
+        };
+      },
+      providesTags: ["QuestionAndAnswer"],
+    }),
 
     //  delete
     deleteQuestionAnswer: builder.mutation({
@@ -67,5 +76,6 @@ export const {
   useGetQuestionsByProductIdQuery,
   useGetAllQuestionAnswersQuery,
   useDeleteQuestionAnswerMutation,
-  useUpdateAnswerByIdMutation
+  useUpdateAnswerByIdMutation,
+  useGetPendingQuestionCountQuery,
 } = questionAndAnswerApi;
