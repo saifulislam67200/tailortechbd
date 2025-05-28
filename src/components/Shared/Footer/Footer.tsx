@@ -116,19 +116,19 @@ const Footer = () => {
                   <FaMapMarkerAlt size={16} className="flex-shrink-0 text-white md:mt-1" />
                   <div className="mt-1 md:ml-3">
                     <p className="text-[14px]">
-                      123 Fashion Street, Gulshan-1
+                      Kalshi Road, Mirpur-11
                       <br />
-                      Dhaka-1212, Bangladesh
+                      Dhaka-1216, Bangladesh
                     </p>
                   </div>
                 </div>
                 <div className="flex flex-col items-center md:flex-row">
                   <FaPhone size={16} className="flex-shrink-0 text-white" />
-                  <p className="mt-1 text-[14px] md:ml-3">+880 1XXX-XXXXXX</p>
+                  <p className="mt-1 text-[14px] md:ml-3">+880 1711 923276</p>
                 </div>
                 <div className="flex flex-col items-center md:flex-row">
                   <FaEnvelope size={16} className="flex-shrink-0 text-white" />
-                  <p className="mt-1 text-[14px] md:ml-3">info@tailortech.com</p>
+                  <p className="mt-1 text-[14px] md:ml-3">tailortechbd2025@gmail.com</p>
                 </div>
               </div>
             </div>
@@ -143,17 +143,17 @@ const Footer = () => {
                 <div className="flex items-center justify-center space-x-3">
                   <div>
                     <p className="text-center text-[14px]">
-                      123 Fashion Street, Gulshan-1, Dhaka-1212, Bangladesh
+                      Kalshi Road, Mirpur-11, Dhaka-1216, Bangladesh
                     </p>
                   </div>
                 </div>
                 <div className="flex items-center justify-center space-x-3">
                   <FaPhone size={16} className="flex-shrink-0 text-white" />
-                  <p className="text-[14px]">+880 1XXX-XXXXXX</p>
+                  <p className="text-[14px]">+880 1711 923276</p>
                 </div>
                 <div className="flex items-center justify-center space-x-3">
                   <FaEnvelope size={16} className="flex-shrink-0 text-white" />
-                  <p className="text-[14px]">info@tailortech.com</p>
+                  <p className="text-[14px]">tailortechbd2025@gmail.com</p>
                 </div>
               </div>
             </div>

@@ -76,10 +76,10 @@ const ReturnRefundCancellation = () => {
                     <p>
                       Email:{" "}
                       <a
-                        href="mailto:info@tailortech.com"
+                        href="mailto:tailortechbd2025@gmail.com"
                         className="text-blue-600 hover:underline"
                       >
-                        info@tailortech.com
+                        tailortechbd2025@gmail.com
                       </a>
                     </p>
                     <p>
@@ -223,10 +223,10 @@ const ReturnRefundCancellation = () => {
                     <p>
                       ইমেইলঃ{" "}
                       <a
-                        href="mailto:info@tailortech.com"
+                        href="mailto:tailortechbd2025@gmail.com"
                         className="text-blue-600 hover:underline"
                       >
-                        info@tailortech.com
+                        tailortechbd2025@gmail.com
                       </a>
                     </p>
                     <p>

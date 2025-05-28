@@ -69,7 +69,7 @@ const AnswerModal: React.FC<PropsType> = ({ item, children }) => {
       >
         <div className="w-full bg-white p-[16px]">
           <div className="flex items-center justify-between">
-            <h5 className="text-[20px] font-[700] text-strong">Add To Cart</h5>
+            <h5 className="text-[20px] font-[700] text-strong">Answer the Question</h5>
             <button onClick={() => setIsOpen(false)} className="cursor-pointer">
               <LuX />
             </button>
