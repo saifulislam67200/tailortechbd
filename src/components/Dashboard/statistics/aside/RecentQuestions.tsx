@@ -30,7 +30,7 @@ const RecentQuestions = () => {
   }
 
   return (
-    <div className="mt-[16px] h-[700px] w-full rounded-[5px] bg-white p-[16px] xl:w-[400px] 2xl:w-[450px]">
+    <div className="mt-[16px] h-[700px] w-full rounded-[5px] bg-white p-[16px] xl:w-[450px] 2xl:w-[550px]">
       <h2 className="mb-[20px] text-[14px] font-bold text-primary sm:text-[16px]">
         Recent Questions <span className="text-[12px] text-info">(Recent 10 max)</span>
       </h2>

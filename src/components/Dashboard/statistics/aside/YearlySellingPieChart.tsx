@@ -25,7 +25,7 @@ const YearlySellingPieChart = () => {
   }
 
   return (
-    <div className="w-full rounded-[5px] bg-white p-[16px] xl:w-[400px] 2xl:w-[450px]">
+    <div className="h-fit min-h-[370px] w-full rounded-[5px] bg-white p-[16px] xl:w-[450px] 2xl:min-h-[450px] 2xl:w-[550px]">
       <div className="mb-4">
         <h2 className="text-[14px] font-bold text-black sm:text-[16px]">Earnings This Year</h2>
         <p className="mt-1 flex items-center text-[16px] font-semibold text-info">
@@ -37,7 +37,7 @@ const YearlySellingPieChart = () => {
         )}
       </div>
 
-      <div className="h-[300px] w-full">
+      <div className="h-[200px] w-full 2xl:h-[260px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
@@ -45,7 +45,7 @@ const YearlySellingPieChart = () => {
               cx="50%"
               cy="50%"
               dataKey="value"
-              label={({ name, value }) => `${name} ($${Math.floor(value).toLocaleString()})`}
+              label={({ name, value }) => `${name} (${"৳"}${Math.floor(value).toLocaleString()})`}
               minAngle={15}
             >
               {earningsData?.data?.map((entry: EarningsEntry, index: number) => (
