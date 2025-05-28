@@ -1,4 +1,5 @@
-import React, { ReactNode, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 interface TooltipProviderProps {
   content: ReactNode;
@@ -8,7 +9,22 @@ interface TooltipProviderProps {
 
 const Tooltip: React.FC<TooltipProviderProps> = ({ content, children, delay = 300 }) => {
   const [visible, setVisible] = useState(false);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const tooltipRef = useRef<HTMLDivElement>(null);
+
+  const calculatePosition = () => {
+    if (triggerRef.current && tooltipRef.current) {
+      const triggerRect = triggerRef.current.getBoundingClientRect();
+      const tooltipRect = tooltipRef.current.getBoundingClientRect();
+
+      const top = triggerRect.top + window.scrollY - tooltipRect.height - 8; // 8px gap
+      const left = triggerRect.left + window.scrollX + triggerRect.width / 2;
+
+      setPosition({ top, left });
+    }
+  };
 
   const handleMouseEnter = () => {
     timeoutRef.current = setTimeout(() => {
@@ -17,27 +33,52 @@ const Tooltip: React.FC<TooltipProviderProps> = ({ content, children, delay = 30
   };
 
   const handleMouseLeave = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setVisible(false);
   };
 
+  // Recalculate after tooltip becomes visible
+  useEffect(() => {
+    if (visible) {
+      requestAnimationFrame(() => {
+        calculatePosition();
+      });
+    }
+  }, [visible]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   return (
-    <div
-      className="relative inline-block w-full"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      {children}
-      <div
-        className={`absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 transform rounded bg-primary px-2 py-1 text-xs whitespace-nowrap text-white transition-opacity duration-200 ${
-          visible ? "opacity-100" : "opacity-0"
-        }`}
+    <>
+      <span
+        ref={triggerRef}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="inline-flex"
       >
-        {content}
-      </div>
-    </div>
+        {children}
+      </span>
+
+      {visible &&
+        createPortal(
+          <span
+            ref={tooltipRef}
+            className="pointer-events-none fixed z-50 max-w-[200px] -translate-x-1/2 transform rounded bg-white p-1 text-center text-[12px] text-muted shadow-md"
+            style={{
+              top: position.top,
+              left: position.left,
+              whiteSpace: "normal",
+            }}
+          >
+            {content}
+          </span>,
+          document.body
+        )}
+    </>
   );
 };
 

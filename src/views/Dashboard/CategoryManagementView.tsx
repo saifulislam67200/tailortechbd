@@ -23,6 +23,9 @@ function CategoryManagementView() {
       const categoryData = data?.data || [];
       setCategories((prevCategories) => [...prevCategories, ...categoryData]);
     }
+    return () => {
+      setCategories([]);
+    };
   }, [isLoading]);
 
   // Flatten categories for easier manipulation
@@ -35,7 +38,7 @@ function CategoryManagementView() {
   };
 
   return (
-    <div className="w-full p-6">
+    <div className="w-full">
       <div className="mb-8 flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">Category Management</h1>

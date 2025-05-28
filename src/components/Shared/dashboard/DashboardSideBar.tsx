@@ -37,7 +37,7 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
   }, [isOpen]);
 
   return (
-    <div className={isMainParent ? "py-2" : ""}>
+    <div className={""}>
       {hasChildren ? (
         <div
           className={`flex cursor-pointer items-center justify-between gap-[8px] px-[16px] py-[10px] text-sm font-medium hover:text-primary ${

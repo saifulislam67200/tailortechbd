@@ -1,12 +1,12 @@
 "use client";
 
+import { IBanner } from "@/types/banner";
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
-import { IBanner } from "@/types/banner";
+import { Autoplay } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 type Props = {
   banners: IBanner[];
@@ -17,7 +17,7 @@ const Banner = ({ banners }: Props) => {
   const swiperRef = useRef<SwiperType | null>(null);
   return (
     <div className="w-full bg-white">
-      <div className="relative mb-[8px] aspect-[834.66/407] w-full lg:h-[434.7px]">
+      <div className="relative mb-[10px] aspect-[834.66/300] w-full">
         <Swiper
           loop={true}
           speed={600}
@@ -57,7 +57,7 @@ const Banner = ({ banners }: Props) => {
               setActiveSlide(index);
               swiperRef.current?.slideToLoop(index);
             }}
-            className={`h-[3px] w-[30px] cursor-pointer lg:h-[3px] lg:w-[40px] ${
+            className={`h-[5px] w-[30px] cursor-pointer lg:h-[3px] lg:w-[40px] ${
               activeSlide === index ? "bg-black" : "bg-[#878787]"
             }`}
             aria-label={`slide-${index + 1}`}
