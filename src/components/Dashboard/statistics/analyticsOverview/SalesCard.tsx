@@ -3,7 +3,7 @@ import { IoCartOutline } from "react-icons/io5";
 const SalesCard = ({
   value,
   selectedFilter,
-  increase,
+  // increase,
 }: {
   value: number;
   selectedFilter: string;
@@ -24,9 +24,10 @@ const SalesCard = ({
         </div>
         <div className="h-full w-full">
           <h1 className="text-[20px] font-bold 2xl:text-[25px]">{value}</h1>
-          <p className="text-[14px] font-bold 2xl:text-[16px]">
+          {/* //! please don't remove this line */}
+          {/* <p className="text-[14px] font-bold 2xl:text-[16px]">
             <span className="text-success">{increase}%</span> increase
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

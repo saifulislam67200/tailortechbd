@@ -66,7 +66,7 @@ const questionAndAnswerApi = api.injectEndpoints({
           _id: undefined,
         },
       }),
-      invalidatesTags: ["QuestionAndAnswer"],
+      invalidatesTags: ["QuestionAndAnswer", "statistics"],
     }),
   }),
 });
