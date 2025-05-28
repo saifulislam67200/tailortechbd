@@ -5,12 +5,11 @@ import Image from "next/image";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import useDebounce from "@/hooks/useDebounce";
-import {
-  useGetAllQuestionAnswersQuery,
-} from "@/redux/features/Q&A/questionAndAnswer.api";
+import { useGetAllQuestionAnswersQuery } from "@/redux/features/Q&A/questionAndAnswer.api";
 import Pagination from "@/components/ui/Pagination";
 import AnswerModal from "./AnswerModal";
 import DeleteQna from "./DeleteQna";
+import QnaSkeleton from "./QnaSkeleton";
 
 const tableHead = [
   { label: "Customer", field: "name" },
@@ -24,7 +23,7 @@ const tableHead = [
 export default function QnaTable() {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [page, setPage] = useState<number>(1);
-  const { data } = useGetAllQuestionAnswersQuery({ searchTerm, page, limit: 10 });
+  const { data, isLoading } = useGetAllQuestionAnswersQuery({ searchTerm, page, limit: 10 });
   const questionAndAnswer = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 
@@ -45,8 +44,9 @@ export default function QnaTable() {
           <div className="flex flex-col gap-[5px]">
             <h1 className="text-[16px] font-[600]">Questions & Answers Management</h1>
             <p className="text-[14px] text-muted">
-             You are managing a total of {" "}
-              <span className="font-bold text-dashboard">{metaData.totalDoc}</span>Q&A entries. These are divided into{" "}
+              You are managing a total of{" "}
+              <span className="font-bold text-dashboard">{metaData.totalDoc}</span>Q&A entries.
+              These are divided into{" "}
               <span className="font-bold text-dashboard">
                 {Math.ceil(metaData.totalDoc / 10)} pages
               </span>{" "}
@@ -83,7 +83,10 @@ export default function QnaTable() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-dashboard/20 bg-white">
-                {questionAndAnswer.map((item) => (
+              {isLoading ? (
+                  <QnaSkeleton rows={10} />
+                ) : (
+                questionAndAnswer.map((item) => (
                   <tr key={item._id} className="transition-colors hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-[12px] font-medium">{item.name}</div>
@@ -124,14 +127,14 @@ export default function QnaTable() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center justify-center gap-3">
-                        
                         {/* Answer Modal */}
-                        <AnswerModal item={item}  />
+                        <AnswerModal item={item} />
                         <DeleteQna id={item?._id} customerName={item?.name} />
                       </div>
                     </td>
                   </tr>
-                ))}
+                  ))
+                )}
               </tbody>
             </table>
           </div>
