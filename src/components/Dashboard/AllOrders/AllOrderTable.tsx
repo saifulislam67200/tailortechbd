@@ -9,6 +9,7 @@ import { RxMagnifyingGlass } from "react-icons/rx";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Image from "next/image";
 import ViewOrder from "./ViewOrder";
+import TableSkeleton from "./TableSkeleton";
 
 const tableHead = [
   { label: "Customer Info", field: "name" },
@@ -28,7 +29,7 @@ const AllOrderTable = () => {
   // const [orderItemView, setOrderItemView] = useState({});
   const [orderItemView, setOrderItemView] = useState<IOrder | null>(null);
 
-  const { data } = useGetAllOrdersQuery({ searchTerm, page, limit: 10 });
+  const { data, isLoading } = useGetAllOrdersQuery({ searchTerm, page, limit: 10 });
   const orders = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 
@@ -136,96 +137,100 @@ const AllOrderTable = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {orders?.map((order) => (
-                    <tr key={order._id} className="hover:bg-gray-50">
-                      {/* Customer Info */}
-                      <td className="w-[180px] px-[24px] py-[16px]">
-                        <div className="max-w-[150px]">
-                          <div
-                            className="truncate text-[14px] capitalize"
-                            title={order.shippingAddress.name}
-                          >
-                            {order.shippingAddress.name}
-                          </div>
-                          <div
-                            className="truncate text-[12px] text-gray-500"
-                            title={order.shippingAddress.phoneNumber}
-                          >
-                            {order.shippingAddress.phoneNumber}
-                          </div>
-                        </div>
-                      </td>
-
-                      {/* Product */}
-                      <td className="px-[24px] py-[16px]">
-                        <div className="flex max-w-[200px] items-center space-x-3">
-                          <div className="h-12 w-12 flex-shrink-0">
-                            <Image
-                              className="h-12 w-12 rounded-lg object-cover"
-                              src={order.orderItems[0]?.product?.image || "/images/avatar.png"}
-                              alt={order.orderItems[0]?.product?.name || "Product"}
-                              width={48}
-                              height={48}
-                            />
-                          </div>
-                          <div className="min-w-0 flex-1">
+                  {isLoading ? (
+                    <TableSkeleton />
+                  ) : (
+                    orders?.map((order) => (
+                      <tr key={order._id} className="hover:bg-gray-50">
+                        {/* Customer Info */}
+                        <td className="w-[180px] px-[24px] py-[16px]">
+                          <div className="max-w-[150px]">
                             <div
-                              className="truncate text-[14px]"
-                              title={order.orderItems[0]?.product?.name || "Product"}
+                              className="truncate text-[14px] capitalize"
+                              title={order.shippingAddress.name}
                             >
-                              {order.orderItems[0]?.product?.name || "Product"}
+                              {order.shippingAddress.name}
                             </div>
-                            <div className="text-[12px] text-gray-500">
-                              {order.orderItems[0]?.color && order.orderItems[0]?.size
-                                ? `${order.orderItems[0].color} - ${order.orderItems[0].size}`
-                                : "N/A"}
+                            <div
+                              className="truncate text-[12px] text-gray-500"
+                              title={order.shippingAddress.phoneNumber}
+                            >
+                              {order.shippingAddress.phoneNumber}
                             </div>
                           </div>
-                        </div>
-                      </td>
+                        </td>
 
-                      {/* Total Items */}
-                      <td className="px-[24px] py-[16px] whitespace-nowrap">
-                        <span className="text-[14px]">
-                          {getTotalItems(order?.orderItems)} items
-                        </span>
-                      </td>
+                        {/* Product */}
+                        <td className="px-[24px] py-[16px]">
+                          <div className="flex max-w-[200px] items-center space-x-3">
+                            <div className="h-12 w-12 flex-shrink-0">
+                              <Image
+                                className="h-12 w-12 rounded-lg object-cover"
+                                src={order.orderItems[0]?.product?.image || "/images/avatar.jpg"}
+                                alt={order.orderItems[0]?.product?.name || "Product"}
+                                width={48}
+                                height={48}
+                              />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div
+                                className="truncate text-[14px]"
+                                title={order.orderItems[0]?.product?.name || "Product"}
+                              >
+                                {order.orderItems[0]?.product?.name || "Product"}
+                              </div>
+                              <div className="text-[12px] text-gray-500">
+                                {order.orderItems[0]?.color && order.orderItems[0]?.size
+                                  ? `${order.orderItems[0].color} - ${order.orderItems[0].size}`
+                                  : "N/A"}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
 
-                      {/* Total Amount */}
-                      <td className="px-[24px] py-[16px] whitespace-nowrap">
-                        <span className="text-[14px]">
-                          {formatPrice(order.totalProductAmount + (order?.deliveryFee || 0))}
-                        </span>
-                      </td>
+                        {/* Total Items */}
+                        <td className="px-[24px] py-[16px] whitespace-nowrap">
+                          <span className="text-[14px]">
+                            {getTotalItems(order?.orderItems)} items
+                          </span>
+                        </td>
 
-                      {/* Status */}
-                      <td className="px-[24px] py-[16px] whitespace-nowrap">
-                        <span
-                          className={`inline-flex rounded-full px-2 py-1 text-[13px] capitalize ${getStatusBadgeColor(getCurrentStatus(order.status))}`}
-                        >
-                          {getCurrentStatus(order.status)}
-                        </span>
-                      </td>
+                        {/* Total Amount */}
+                        <td className="px-[24px] py-[16px] whitespace-nowrap">
+                          <span className="text-[14px]">
+                            {formatPrice(order.totalProductAmount + (order?.deliveryFee || 0))}
+                          </span>
+                        </td>
 
-                      {/* Date */}
-                      <td className="px-[24px] py-[16px] text-[14px] whitespace-nowrap">
-                        {formatDate(order?.createdAt || "")}
-                      </td>
-
-                      {/* Actions */}
-                      <td className="px-[24px] py-[16px] text-[14px] font-medium whitespace-nowrap">
-                        <div className="flex justify-center">
-                          <button
-                            onClick={() => handleOrderView(order)}
-                            className="flex h-8 w-8 items-center justify-center rounded-full border border-dashboard/20 text-dashboard transition-all duration-200 hover:border-dashboard/40 hover:bg-dashboard/10 hover:text-dashboard/80"
-                            title="Update Order"
+                        {/* Status */}
+                        <td className="px-[24px] py-[16px] whitespace-nowrap">
+                          <span
+                            className={`inline-flex rounded-full px-2 py-1 text-[13px] capitalize ${getStatusBadgeColor(getCurrentStatus(order.status))}`}
                           >
-                            <FiEdit className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                            {getCurrentStatus(order.status)}
+                          </span>
+                        </td>
+
+                        {/* Date */}
+                        <td className="px-[24px] py-[16px] text-[14px] whitespace-nowrap">
+                          {formatDate(order?.createdAt || "")}
+                        </td>
+
+                        {/* Actions */}
+                        <td className="px-[24px] py-[16px] text-[14px] font-medium whitespace-nowrap">
+                          <div className="flex justify-center">
+                            <button
+                              onClick={() => handleOrderView(order)}
+                              className="flex h-8 w-8 items-center justify-center rounded-full border border-dashboard/20 text-dashboard transition-all duration-200 hover:border-dashboard/40 hover:bg-dashboard/10 hover:text-dashboard/80"
+                              title="View Details"
+                            >
+                              <FiEdit className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
 

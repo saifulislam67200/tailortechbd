@@ -416,7 +416,7 @@ export default function ViewOrder({
         className="w-full max-w-[500px]"
       >
         <div className="flex w-full flex-col gap-[12px] rounded-[8px] bg-white p-[16px]">
-          <h1 className="mb-1 text-xl">Are you sure?</h1>
+          <h1 className="mb-1 text-[22px] text-dashboard">Are you sure?</h1>
           <p>
             Want to change status to <span className="font-bold">{selectedStatus}</span>?
           </p>

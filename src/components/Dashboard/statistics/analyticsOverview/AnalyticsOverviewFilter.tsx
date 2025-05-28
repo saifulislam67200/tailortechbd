@@ -32,7 +32,7 @@ const AnalyticsOverviewFilter = ({ options, selected, onChange }: AnalyticsOverv
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="h-[28px] w-[90px] cursor-pointer border border-quaternary bg-white text-[14px] text-primary"
+        className="h-[28px] w-[90px] cursor-pointer rounded-[3px] border border-quaternary bg-white text-[14px] text-primary transition-colors duration-200 hover:border-primary"
       >
         {selected.label}
       </button>
