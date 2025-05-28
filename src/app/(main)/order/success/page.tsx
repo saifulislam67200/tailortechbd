@@ -33,7 +33,6 @@ const OrderSuccess = () => {
   useEffect(() => {
     return () => {
       if (hasMounted.current) {
-        console.log("cleanup");
         dispatch(removeAllItemsFromCheckout());
       }
       hasMounted.current = true;
@@ -105,7 +104,7 @@ const OrderSuccess = () => {
             <span>৳ {grandTotal.toFixed(2)}</span>
           </div>
         </div>
-        <Button className="mx-auto mt-4" onClick={() => router.push("/")}>
+        <Button className="mx-auto mt-4" onClick={() => router.replace("/")}>
           Continue Shopping
         </Button>
       </div>

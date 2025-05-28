@@ -90,6 +90,10 @@ const cartSlice = createSlice({
       }
     },
 
+    unMarkAllCartItems(state) {
+      state.items.forEach((item) => (item.isChecked = false));
+    },
+
     deleteCheckedItems(state) {
       state.items = state.items.filter((item) => !item.isChecked);
     },
@@ -110,5 +114,6 @@ export const {
   toggleCheckItem,
   deleteCheckedItems,
   toggleSelectAll,
+  unMarkAllCartItems,
 } = cartSlice.actions;
 export default cartSlice.reducer;

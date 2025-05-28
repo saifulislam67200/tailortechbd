@@ -1,13 +1,15 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { twMerge } from "tailwind-merge";
 
 interface TooltipProviderProps {
   content: ReactNode;
   children: ReactNode;
   delay?: number;
+  className?: string;
 }
 
-const Tooltip: React.FC<TooltipProviderProps> = ({ content, children, delay = 300 }) => {
+const Tooltip: React.FC<TooltipProviderProps> = ({ content, children, delay = 300, className }) => {
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -58,7 +60,7 @@ const Tooltip: React.FC<TooltipProviderProps> = ({ content, children, delay = 30
         ref={triggerRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="inline-flex"
+        className={twMerge("inline-flex", className)}
       >
         {children}
       </span>

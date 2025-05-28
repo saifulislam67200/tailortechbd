@@ -1,4 +1,5 @@
 // import { useAppSelector } from "@/redux/hooks";
+import { unMarkAllCartItems } from "@/redux/features/cart/cartSlice";
 import { useGetAuthorQuery } from "@/redux/features/user/user.api";
 import { logout, setLoading, setUser } from "@/redux/features/user/user.slice";
 import React, { useEffect } from "react";
@@ -8,6 +9,10 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // const { token } = useAppSelector((state) => state.auth);
 
   const { data, isSuccess, isError, isFetching } = useGetAuthorQuery(undefined);
+
+  useEffect(() => {
+    dispatch(unMarkAllCartItems());
+  }, []);
 
   useEffect(() => {
     dispatch(setLoading(isFetching));

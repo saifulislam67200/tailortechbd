@@ -26,10 +26,14 @@ const TopBarItem: React.FC<TopBarItemProps> = ({ icon: Icon, label, href }) => {
 
 // Data array
 const topBarItems: TopBarItemProps[] = [
-  { icon: FaPhoneAlt, label: "16810", href: "tel:16810" },
-  { icon: FaEnvelope, label: "info@bdshop.com", href: "mailto:info@bdshop.com" },
-  { icon: FaBoxOpen, label: "New Arrival", href: "/new-arrival" },
-  { icon: FaHeadset, label: "Customer Service", href: "/customer-service" },
+  { icon: FaPhoneAlt, label: "01911 696556", href: "tel:+8801911696556" },
+  {
+    icon: FaEnvelope,
+    label: "tailortechbd2025@gmail.com",
+    href: "mailto:tailortechbd2025@gmail.com",
+  },
+  { icon: FaBoxOpen, label: "New Arrival", href: "/shop/new-arrival" },
+  { icon: FaHeadset, label: "Customer Service", href: "/contact" },
 ];
 
 const TopBar: React.FC = () => {

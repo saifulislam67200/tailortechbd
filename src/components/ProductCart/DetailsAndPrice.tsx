@@ -92,7 +92,7 @@ const DetailsAndPrice = () => {
           />
         </button>
       ) : (
-        <Tooltip content="Please select at least one item">
+        <Tooltip content="Please select at least one item" className="w-full">
           <button className="center flex w-full cursor-not-allowed items-center justify-center gap-[10px] overflow-hidden bg-primary/50 py-[8px] text-[14px] font-bold text-primary">
             Checkout
           </button>
