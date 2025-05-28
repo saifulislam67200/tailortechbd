@@ -65,11 +65,11 @@ const OrderSuccess = () => {
                     <p>
                       {item.discount ? (
                         <>
-                          <span className="mr-2 text-muted line-through">
-                            ৳ {item.product.price}
-                          </span>
-                          <span className="font-semibold text-success">
+                          <span className="text-[16px] font-semibold text-success">
                             ৳ {discountedPrice.toFixed(2)}
+                          </span>
+                          <span className="mr-2 text-[14px] text-muted line-through">
+                            ৳ {item.product.price}
                           </span>
                         </>
                       ) : (

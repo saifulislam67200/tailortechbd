@@ -15,8 +15,6 @@ import { FaTrashAlt } from "react-icons/fa";
 import { ImSpinner11 } from "react-icons/im";
 import { MdCancel, MdCheckCircle, MdLocalShipping, MdPending } from "react-icons/md";
 import { toast } from "sonner";
-// import OrderItems from "./OrderItems";
-
 const statuses = [
   {
     id: "pending",
