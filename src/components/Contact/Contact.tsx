@@ -10,17 +10,17 @@ export default function Contact() {
     {
       icon: FiMapPin,
       title: "Address",
-      details: ["123 Business Street", "Dhaka 1000, Bangladesh"],
+      details: ["Kalshi Road, Mirpur-11", "Dhaka-1216, Bangladesh"],
     },
     {
       icon: FiPhone,
       title: "Phone",
-      details: ["+880 1234-567890", "+880 9876-543210"],
+      details: ["+880 1911 696556", "+880 1711 923276"],
     },
     {
       icon: FiMail,
       title: "Email",
-      details: ["info@yourstore.com", "support@yourstore.com"],
+      details: ["tailortechbd2025@gmail.com", "supporttailortech@gmail.com"],
     },
     {
       icon: FiClock,

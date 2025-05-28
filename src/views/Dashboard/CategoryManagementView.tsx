@@ -150,9 +150,7 @@ function CategoryManagementView() {
                         src={category.thumbnail || "/images/category_blank.png"}
                         alt={category.label}
                         className="h-10 w-10 rounded-lg object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = "/images/category_blank.png";
-                        }}
+                        onError={(e) => (e.currentTarget.src = "/images/category_blank.png")}
                       />
                       <div>
                         <h3 className="font-medium text-gray-900">{category.label}</h3>

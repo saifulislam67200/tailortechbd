@@ -152,7 +152,9 @@ const Footer = () => {
                 <p className="text-center text-[14px]"> Head office</p>
                 <div className="flex items-center justify-center space-x-3">
                   <div>
-                    <p className="text-center text-[14px]">Kalshi Road, Mirpur-11, Dhaka-1216</p>
+                    <p className="text-center text-[14px]">
+                      Kalshi Road, Mirpur-11, Dhaka-1216, Bangladesh
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center justify-center space-x-3">

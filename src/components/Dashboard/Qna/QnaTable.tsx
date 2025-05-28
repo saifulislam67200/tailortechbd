@@ -2,17 +2,14 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { FiTrash2 } from "react-icons/fi";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import useDebounce from "@/hooks/useDebounce";
-import {
-  useDeleteQuestionAnswerMutation,
-  useGetAllQuestionAnswersQuery,
-} from "@/redux/features/Q&A/questionAndAnswer.api";
+import { useGetAllQuestionAnswersQuery } from "@/redux/features/Q&A/questionAndAnswer.api";
 import Pagination from "@/components/ui/Pagination";
-import { toast } from "sonner";
 import AnswerModal from "./AnswerModal";
+import DeleteQna from "./DeleteQna";
+import QnaSkeleton from "./QnaSkeleton";
 
 const tableHead = [
   { label: "Customer", field: "name" },
@@ -26,20 +23,9 @@ const tableHead = [
 export default function QnaTable() {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [page, setPage] = useState<number>(1);
-  const { data } = useGetAllQuestionAnswersQuery({ searchTerm, page, limit: 10 });
+  const { data, isLoading } = useGetAllQuestionAnswersQuery({ searchTerm, page, limit: 10 });
   const questionAndAnswer = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
-  const [deleteQuestionAnswer] = useDeleteQuestionAnswerMutation();
-  console.log(questionAndAnswer);
-
-  const handleDelete = async (id: string) => {
-    try {
-      await deleteQuestionAnswer(id);
-      toast.success("Question delete successfully");
-    } catch (error) {
-      console.error("Failed to delete:", error);
-    }
-  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -58,8 +44,9 @@ export default function QnaTable() {
           <div className="flex flex-col gap-[5px]">
             <h1 className="text-[16px] font-[600]">Questions & Answers Management</h1>
             <p className="text-[14px] text-muted">
-             You are managing a total of {" "}
-              <span className="font-bold text-dashboard">{metaData.totalDoc}</span>Q&A entries. These are divided into{" "}
+              You are managing a total of{" "}
+              <span className="font-bold text-dashboard">{metaData.totalDoc}</span>Q&A entries.
+              These are divided into{" "}
               <span className="font-bold text-dashboard">
                 {Math.ceil(metaData.totalDoc / 10)} pages
               </span>{" "}
@@ -96,70 +83,75 @@ export default function QnaTable() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-dashboard/20 bg-white">
-                {questionAndAnswer.map((item) => (
-                  <tr key={item._id} className="transition-colors hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-[12px] font-medium">{item.name}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex max-w-[250px] items-center gap-3">
-                        <div className="h-12 w-12 flex-shrink-0">
-                          <Image
-                            src={item.product.image || "/placeholder.svg?height=48&width=48"}
-                            alt={item.product.name}
-                            width={48}
-                            height={48}
-                            className="h-12 w-12 rounded-lg object-cover"
-                          />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="truncate text-[12px] font-medium">
-                            {item.product.name}
-                          </div>
-                          <div className="truncate text-[12px] text-info">ID: {item.productId}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="line-clamp-2 max-w-[250px] text-[12px]">{item.question}</div>
-                    </td>
-                    <td className="px-6 py-4">
-                      {item.answer ? (
-                        <div className="line-clamp-2 max-w-[250px] text-[12px]">{item.answer}</div>
-                      ) : (
-                        <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
-                          Pending Answer
+                {isLoading ? (
+                  <QnaSkeleton rows={10} />
+                ) : (
+                  questionAndAnswer.map((item) => (
+                    <tr key={item._id} className="transition-colors hover:bg-gray-50">
+                      <td className="px-[24px] py-[16px] whitespace-nowrap">
+                        <span className="block text-[12px] font-medium">{item.name}</span>
+                      </td>
+                      <td className="px-[24px] py-[16px]">
+                        <span className="flex max-w-[250px] items-center gap-3">
+                          <span className="h-[48px] w-[48px] flex-shrink-0">
+                            <Image
+                              src={item.product.image || "/images/avatar.jpg"}
+                              alt={item.product.name}
+                              width={48}
+                              height={48}
+                              className="h-[48px] w-[48px] rounded-lg object-cover"
+                            />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block truncate text-[12px] font-medium">
+                              {item.product.name}
+                            </span>
+                            <span className="block truncate text-[12px] text-info">
+                              ID: {item.productId}
+                            </span>
+                          </span>
                         </span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-[12px]">{formatDate(item?.createdAt || "")}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center justify-center gap-3">
-                        
-                        {/* Answer Modal */}
-                        <AnswerModal item={item}  />
-                        <button
-                          onClick={() => handleDelete(item._id)}
-                          className="rounded-full border-[1px] border-red-200 bg-red-600/5 p-[7px] text-red-600"
-                          title="Delete"
-                        >
-                          <FiTrash2 size={18} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="px-[24px] py-[16px]">
+                        <span className="line-clamp-2 block h-[32px] max-w-[250px] text-[12px]">
+                          {item.question}
+                        </span>
+                      </td>
+                      <td className="px-[24px] py-[16px]">
+                        {item.answer ? (
+                          <span className="line-clamp-2 block h-[32px] max-w-[250px] text-[12px]">
+                            {item.answer}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
+                            Pending Answer
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-[24px] py-[16px] whitespace-nowrap">
+                        <span className="block text-[12px]">
+                          {formatDate(item?.createdAt || "")}
+                        </span>
+                      </td>
+                      <td className="px-[24px] py-[16px] whitespace-nowrap">
+                        <span className="flex items-center justify-center gap-3">
+                          {/* Answer Modal */}
+                          <AnswerModal item={item} />
+                          <DeleteQna id={item?._id} customerName={item?.name} />
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
 
           {/* Empty State */}
           {questionAndAnswer.length === 0 && (
-            <div className="py-12 text-center">
-              <div className="text-lg text-info">No data found</div>
-              <div className="mt-2 text-[12px] text-gray-400">
+            <div className="py-[48px] text-center">
+              <div className="text-[18px] text-primary">No data found</div>
+              <div className="mt-[8px] text-[12px] text-info">
                 Try searching with different keywords
               </div>
             </div>

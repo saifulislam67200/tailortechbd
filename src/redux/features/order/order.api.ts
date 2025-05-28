@@ -35,6 +35,15 @@ const orderApi = api.injectEndpoints({
       },
       providesTags: ["order"],
     }),
+    getPendingOrderCount: builder.query<{ data: { pendingOrderCount: number } }, undefined>({
+      query: () => {
+        return {
+          url: `/order/pending-count`,
+          method: "GET",
+        };
+      },
+      providesTags: ["order"],
+    }),
 
     changeOrderStatus: builder.mutation<{ data: IOrder }, { id: string; data: { status: string } }>(
       {
@@ -62,4 +71,5 @@ export const {
   useGetAllOrdersQuery,
   useChangeOrderStatusMutation,
   useUpdateOrderMutation,
+  useGetPendingOrderCountQuery,
 } = orderApi;

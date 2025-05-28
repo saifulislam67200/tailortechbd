@@ -33,7 +33,16 @@ const questionAndAnswerApi = api.injectEndpoints({
           method: "GET",
         };
       },
-      providesTags: ["questionAnswer"],
+      providesTags: ["QuestionAndAnswer"],
+    }),
+    getPendingQuestionCount: builder.query<{ data: { pendingQuestionCount: number } }, undefined>({
+      query: () => {
+        return {
+          url: `/questionAns/pending/count`,
+          method: "GET",
+        };
+      },
+      providesTags: ["QuestionAndAnswer"],
     }),
 
     //  delete
@@ -57,7 +66,7 @@ const questionAndAnswerApi = api.injectEndpoints({
           _id: undefined,
         },
       }),
-      invalidatesTags: ["questionAnswer"],
+      invalidatesTags: ["QuestionAndAnswer"],
     }),
   }),
 });
@@ -67,5 +76,6 @@ export const {
   useGetQuestionsByProductIdQuery,
   useGetAllQuestionAnswersQuery,
   useDeleteQuestionAnswerMutation,
-  useUpdateAnswerByIdMutation
+  useUpdateAnswerByIdMutation,
+  useGetPendingQuestionCountQuery,
 } = questionAndAnswerApi;
