@@ -2,6 +2,7 @@
 import Loader from "@/components/ui/Loader";
 import { useGetThisYearEarningsQuery } from "@/redux/features/statistics/statistics.api";
 import React from "react";
+import { TbCurrencyTaka } from "react-icons/tb";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
 type EarningsEntry = {
@@ -27,8 +28,9 @@ const YearlySellingPieChart = () => {
     <div className="w-full rounded-[5px] bg-white p-[16px] xl:w-[400px] 2xl:w-[450px]">
       <div className="mb-4">
         <h2 className="text-[14px] font-bold text-black sm:text-[16px]">Earnings This Year</h2>
-        <p className="mt-1 text-[16px] font-semibold text-info">
-          ${Math.floor(totalSales).toLocaleString()}
+        <p className="mt-1 flex items-center text-[16px] font-semibold text-info">
+          <TbCurrencyTaka size={20} />
+          {Math.floor(totalSales).toLocaleString()}
         </p>
         {!hasMultipleValues && (
           <p className="mt-1 text-[12px] text-info">Only showing data for months with earnings</p>

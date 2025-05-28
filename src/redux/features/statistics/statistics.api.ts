@@ -1,4 +1,5 @@
 import { api } from "@/redux/api/api";
+import { generateQueryParams } from "@/utils";
 
 const statisticsApi = api.injectEndpoints({
     endpoints: (builder) => ({
@@ -16,10 +17,22 @@ const statisticsApi = api.injectEndpoints({
             }),
             providesTags: ["statistics"],
         }),
+        getRecentSales: builder.query({
+            query: (query) => {
+                const queryString = generateQueryParams(query);
+                console.log(queryString, "queryString🐞🐞")
+                return {
+                    url: `/statistics/recent-sales?${queryString}`,
+                    method: "GET"
+                }
+            },
+            providesTags: ["statistics"]
+        })
     }),
 });
 
 export const {
     useGetSalesSummaryQuery,
-    useGetThisYearEarningsQuery
+    useGetThisYearEarningsQuery,
+    useGetRecentSalesQuery
 } = statisticsApi;

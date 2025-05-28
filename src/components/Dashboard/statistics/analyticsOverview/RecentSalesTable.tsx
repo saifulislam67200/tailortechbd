@@ -2,72 +2,92 @@
 import React, { useState } from "react";
 import AnalyticsOverviewFilter from "./AnalyticsOverviewFilter";
 import Image from "next/image";
-
-const salesData = [
-  {
-    _id: "2457",
-    image: "/macbook.jpeg",
-    customer: "Brandon Jacob",
-    product: "At praesentium minu",
-    price: "$64",
-    status: "delivered" as StatusType,
-  },
-  {
-    _id: "2147",
-    image: "/macbook.jpeg",
-    customer: "Bridie Kessler",
-    product: "Blanditiis dolor omnis similique",
-    price: "$47",
-    status: "pending" as StatusType,
-  },
-  {
-    _id: "2049",
-    image: "/macbook.jpeg",
-    customer: "Ashleigh Langosh",
-    product: "At recusandae consectetur",
-    price: "$147",
-    status: "delivered" as StatusType,
-  },
-  {
-    _id: "2644",
-    image: "/macbook.jpeg",
-    customer: "Angus Grady",
-    product: "Ut voluptatem id earum et",
-    price: "$67",
-    status: "cancelled" as StatusType,
-  },
-  {
-    _id: "2644",
-    image: "/macbook.jpeg",
-    customer: "Raheem Lehner",
-    product: "Sunt similique distinctio",
-    price: "$165",
-    status: "delivered" as StatusType,
-  },
-];
-
-type StatusType = "pending" | "on-delivery" | "delivered" | "cancelled";
-
-const statusColors: Record<StatusType, string> = {
-  pending: "bg-yellow-100 text-yellow-800",
-  "on-delivery": "bg-purple-100 text-purple-800",
-  delivered: "bg-green-100 text-green-800",
-  cancelled: "bg-red-100 text-red-400",
-};
+import Pagination from "@/components/ui/Pagination";
+import { useGetRecentSalesQuery } from "@/redux/features/statistics/statistics.api";
+import Loader from "@/components/ui/Loader";
+import { IOrderStatus } from "@/types/order";
 
 const options = [
   { value: "overall", label: "Overall" },
   { value: "today", label: "Today" },
-  { value: "this_month", label: "This Month" },
-  { value: "this_year", label: "This Year" },
+  { value: "this-month", label: "This Month" },
+  { value: "this-year", label: "This Year" },
 ];
+
+const getStatusBadgeColor = (status: string) => {
+  switch (status) {
+    case "pending":
+      return "bg-yellow-100 text-yellow-800";
+    case "on-delivery":
+      return "bg-purple-100 text-purple-800";
+    case "delivered":
+      return "bg-green-100 text-green-800";
+    case "cancelled":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-gray-100 text-gray-800";
+  }
+};
+
+const getCurrentStatus = (statusArray: IOrderStatus[]) => {
+  return statusArray[statusArray.length - 1]?.status || "pending";
+};
+
+export interface IUser {
+  _id: string;
+  fullName: string;
+  role: "user" | "admin"; // Extend with more roles if needed
+  email: string;
+  phoneNumber: string;
+}
+
+export interface IProduct {
+  _id: string;
+  image: string;
+  name: string;
+  price: number;
+}
+
+export interface IOrderItem {
+  _id: string;
+  product_id: string;
+  product: IProduct;
+  color: string;
+  size: string;
+  quantity: number;
+}
+
+export interface ISale {
+  _id: string;
+  user: IUser;
+  orderItems: IOrderItem[];
+  totalProductAmount: number;
+  deliveryFee: number;
+  status: IOrderStatus[];
+  createdAt: string;
+}
 
 const RecentSalesTable = () => {
   const [selectedFilter, setSelectedFilter] = useState(options[0]);
+  const [page, setPage] = useState<number>(1);
+  const limit = 5;
+  const { data: getRecentSales, isLoading } = useGetRecentSalesQuery({
+    period: selectedFilter.value,
+    page,
+    limit,
+  });
+
+  const recentSales = getRecentSales?.data || [];
+
+  const metaData = getRecentSales?.meta || { totalDoc: 0, page: 1 };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
-    <div className="overflow-x-auto rounded-[5px] bg-white p-[16px]">
-      <div className="flex items-center justify-between pb-4">
+    <div className="rounded-[5px] bg-white p-[16px]">
+      <div className="flex flex-col justify-between gap-2 pb-4 md:flex-row md:items-center">
         <div className="flex items-center gap-[5px]">
           <h3 className="text-[14px] font-bold text-primary sm:text-[16px]">Recent Sales</h3> |{" "}
           <p className="text-[14px] font-semibold text-info capitalize">{selectedFilter.label}</p>
@@ -78,45 +98,50 @@ const RecentSalesTable = () => {
           onChange={setSelectedFilter}
         />
       </div>
-      <table className="min-w-full text-sm">
-        <thead>
-          <tr className="0 text-left">
-            <th className="px-4 py-[20px]">image</th>
-            <th className="px-4 py-[20px]">Customer</th>
-            <th className="px-4 py-[20px]">Product</th>
-            <th className="px-4 py-[20px]">Price</th>
-            <th className="px-4 py-[20px]">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {salesData.map((sale, index) => (
-            <tr key={index} className="border-t border-quaternary hover:bg-quaternary/20">
-              <td className="px-4 py-3">
-                <Image
-                  width={200}
-                  height={200}
-                  src={sale.image}
-                  alt={sale.customer}
-                  className="h-12 w-12 rounded object-cover"
-                />
-              </td>
-              <td className="px-4 py-[20px]">{sale.customer}</td>
-              <td className="cursor-pointer px-4 py-[20px]">{sale.product}</td>
-              <td className="px-4 py-[20px]">{sale.price}</td>
-              <td className="px-4 py-[20px]">
-                <span
-                  className={`rounded px-2 py-1 text-xs font-medium ${statusColors[sale.status]}`}
-                >
-                  {sale.status}
-                </span>
-              </td>
+      <div className="w-full overflow-x-auto">
+        <table className="min-w-full text-sm">
+          <thead>
+            <tr className="0 text-left">
+              <th className="px-4 py-[20px]">Product</th>
+              <th className="px-4 py-[20px]">Customer</th>
+              <th className="px-4 py-[20px]">Total Items</th>
+              <th className="px-4 py-[20px]">Price</th>
+              <th className="px-4 py-[20px]">Status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="pt-4 text-sm text-info">
-        Showing 1 to {salesData.length} of {salesData.length} entries
+          </thead>
+          <tbody>
+            {recentSales?.map((sale: ISale) => (
+              <tr key={sale?._id} className="border-t border-quaternary hover:bg-quaternary/20">
+                <td className="flex max-w-[200px] cursor-pointer items-center gap-1 px-4 py-[20px]">
+                  <Image
+                    width={200}
+                    height={200}
+                    src={sale?.orderItems?.[0]?.product?.image}
+                    alt={sale?.orderItems?.[0]?.product?.name.split(" ").join("-")}
+                    className="h-12 w-full max-w-12 rounded border border-quaternary/30 object-cover"
+                  />
+                  <span className="line-clamp-1"> {sale?.orderItems?.[0]?.product?.name}</span>
+                </td>
+                <td className="px-4 py-[20px]">
+                  <span className="line-clamp-1 block capitalize"> {sale?.user?.fullName}</span>
+                  <span className="block">{sale?.user?.phoneNumber}</span>
+                </td>
+
+                <td className="cursor-pointer px-4 py-[20px]">{sale?.orderItems?.length}</td>
+                <td className="px-4 py-[20px]">{Math.floor(sale?.totalProductAmount)}</td>
+                <td className="px-4 py-[20px]">
+                  <span
+                    className={`rounded px-2 py-1 text-xs font-medium ${getStatusBadgeColor(getCurrentStatus(sale?.status))}`}
+                  >
+                    {getCurrentStatus(sale?.status)}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+      <Pagination limit={5} totalDocs={metaData.totalDoc} onPageChange={(page) => setPage(page)} />
     </div>
   );
 };
