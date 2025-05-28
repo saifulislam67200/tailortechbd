@@ -4,9 +4,10 @@ import HorizontalLine from "@/components/ui/HorizontalLine";
 import {
   useGetAllBannersQuery,
 } from "@/redux/features/banner/banner.api";
-import { FiEdit2, FiTrash2, FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEdit2, FiEye, FiEyeOff } from "react-icons/fi";
 import Image from "next/image";
 import ActiveBannerToggle from "./ActiveBannerToggle";
+import DeleteBanner from "./DeleteBanner";
 
 const tableHead = [
   { label: "Order", field: "order" },
@@ -138,12 +139,7 @@ const BannerTable = () => {
                       >
                         <FiEdit2 className="h-4 w-4" />
                       </button>
-                      <button
-                        className="rounded-full border border-red-200 bg-red-50/50 p-2 text-red-600 transition-colors hover:bg-red-50 hover:text-red-900"
-                        title="Delete banner"
-                      >
-                        <FiTrash2 className="h-4 w-4" />
-                      </button>
+                      <DeleteBanner id={banner?._id} name={banner?.name} />
                     </div>
                   </td>
                 </tr>
