@@ -28,7 +28,7 @@ const AllOrderTable = () => {
   const [page, setPage] = useState<number>(1);
   const [query, setQuery] = useState<Record<string, string | number>>({
     status: "",
-    day_count: "7",
+    day_count: "",
   });
   // const [statusFilter, setStatusFilter] = useState<string>("all")
   const [isViewOrder, setIsViewOrder] = useState(false);
