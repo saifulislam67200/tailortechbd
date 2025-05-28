@@ -20,7 +20,7 @@ const layout = ({ children }: { children: ReactNode }) => {
         <DashboardHeader />
         <div className="flex h-[calc(100%-60px)] w-full gap-[0px]">
           <DashboardSideBar navlinks={dashboardNavLinks.admin} />
-          <div className="h-full w-full overflow-auto p-[30px]">{children}</div>
+          <div className="h-full w-full overflow-auto p-[20px] md:p-[30px]">{children}</div>
         </div>
       </div>
     </Protectedroute>
