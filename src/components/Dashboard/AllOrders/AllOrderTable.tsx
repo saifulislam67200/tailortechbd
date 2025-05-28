@@ -1,15 +1,17 @@
 "use client";
-import { useState } from "react";
-import { FiEdit } from "react-icons/fi";
-import type { IOrder, IOrderItem, IOrderStatus } from "@/types/order";
-import { useGetAllOrdersQuery } from "@/redux/features/order/order.api";
+import HorizontalLine from "@/components/ui/HorizontalLine";
 import Pagination from "@/components/ui/Pagination";
 import useDebounce from "@/hooks/useDebounce";
-import { RxMagnifyingGlass } from "react-icons/rx";
-import HorizontalLine from "@/components/ui/HorizontalLine";
+import { useGetAllOrdersQuery } from "@/redux/features/order/order.api";
+import type { IOrder, IOrderItem, IOrderStatus } from "@/types/order";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { FiEye } from "react-icons/fi";
+import { RxMagnifyingGlass } from "react-icons/rx";
+import TableSkeleton from "../../ui/TableSkeleton";
+import OrderStatusDropDown from "./OrderStatusDropDown";
+import OrderTimelineDropDown from "./OrderTimelineDropDown";
 import ViewOrder from "./ViewOrder";
-import TableSkeleton from "./TableSkeleton";
 
 const tableHead = [
   { label: "Customer Info", field: "name" },
@@ -24,12 +26,16 @@ const tableHead = [
 const AllOrderTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [page, setPage] = useState<number>(1);
+  const [query, setQuery] = useState<Record<string, string | number>>({
+    status: "",
+    day_count: "",
+  });
   // const [statusFilter, setStatusFilter] = useState<string>("all")
   const [isViewOrder, setIsViewOrder] = useState(false);
   // const [orderItemView, setOrderItemView] = useState({});
   const [orderItemView, setOrderItemView] = useState<IOrder | null>(null);
 
-  const { data, isLoading } = useGetAllOrdersQuery({ searchTerm, page, limit: 10 });
+  const { data, isLoading } = useGetAllOrdersQuery({ searchTerm, page, limit: 10, ...query });
   const orders = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 
@@ -71,7 +77,20 @@ const AllOrderTable = () => {
   const handleOrderView = (order: IOrder) => {
     setOrderItemView(order);
     setIsViewOrder(true);
+    history.pushState({ viewOrder: true }, "", location.href);
   };
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setIsViewOrder(false);
+      setOrderItemView(null);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   return (
     <>
@@ -104,21 +123,14 @@ const AllOrderTable = () => {
                 />
                 <RxMagnifyingGlass />
               </div>
-
-              {/* Filters */}
-              {/* <div className="flex flex-col gap-4 sm:flex-row">
-            <select
-              className="rounded-[5px] border-[1px] border-dashboard/20 p-[5px] focus:border-dashboard/20"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="all">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="confirmed">On Delivery</option>
-              <option value="delivered">Delivered</option>
-              <option value="cancelled">Cancelled</option>
-            </select>
-          </div> */}
+              <div className="flex items-center justify-start gap-[10px]">
+                <OrderTimelineDropDown
+                  onSelect={({ value }) => setQuery({ ...query, day_count: value })}
+                />
+                <OrderStatusDropDown
+                  onSelect={({ value }) => setQuery({ ...query, status: value })}
+                />
+              </div>
             </div>
 
             {/* Orders Table */}
@@ -138,32 +150,32 @@ const AllOrderTable = () => {
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {isLoading ? (
-                    <TableSkeleton />
+                    <TableSkeleton columns={tableHead.length} />
                   ) : (
                     orders?.map((order) => (
                       <tr key={order._id} className="hover:bg-gray-50">
                         {/* Customer Info */}
                         <td className="w-[180px] px-[24px] py-[16px]">
-                          <div className="max-w-[150px]">
-                            <div
-                              className="truncate text-[14px] capitalize"
+                          <span className="flex max-w-[150px] flex-col">
+                            <span
+                              className="line-clamp-1 truncate text-[14px] capitalize"
                               title={order.shippingAddress.name}
                             >
                               {order.shippingAddress.name}
-                            </div>
-                            <div
-                              className="truncate text-[12px] text-gray-500"
+                            </span>
+                            <span
+                              className="line-clamp-1 truncate text-[12px] text-gray-500"
                               title={order.shippingAddress.phoneNumber}
                             >
                               {order.shippingAddress.phoneNumber}
-                            </div>
-                          </div>
+                            </span>
+                          </span>
                         </td>
 
                         {/* Product */}
                         <td className="px-[24px] py-[16px]">
-                          <div className="flex max-w-[200px] items-center space-x-3">
-                            <div className="h-12 w-12 flex-shrink-0">
+                          <span className="flex max-w-[200px] items-center space-x-3">
+                            <span className="h-12 w-12 flex-shrink-0">
                               <Image
                                 className="h-12 w-12 rounded-lg object-cover"
                                 src={order.orderItems[0]?.product?.image || "/images/avatar.jpg"}
@@ -171,21 +183,18 @@ const AllOrderTable = () => {
                                 width={48}
                                 height={48}
                               />
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <div
-                                className="truncate text-[14px]"
-                                title={order.orderItems[0]?.product?.name || "Product"}
-                              >
+                            </span>
+                            <span className="flex min-w-0 flex-1 flex-col">
+                              <span className="truncate text-[14px]">
                                 {order.orderItems[0]?.product?.name || "Product"}
-                              </div>
-                              <div className="text-[12px] text-gray-500">
+                              </span>
+                              <span className="text-[12px] text-gray-500">
                                 {order.orderItems[0]?.color && order.orderItems[0]?.size
                                   ? `${order.orderItems[0].color} - ${order.orderItems[0].size}`
                                   : "N/A"}
-                              </div>
-                            </div>
-                          </div>
+                              </span>
+                            </span>
+                          </span>
                         </td>
 
                         {/* Total Items */}
@@ -218,15 +227,15 @@ const AllOrderTable = () => {
 
                         {/* Actions */}
                         <td className="px-[24px] py-[16px] text-[14px] font-medium whitespace-nowrap">
-                          <div className="flex justify-center">
+                          <span className="flex justify-center">
                             <button
                               onClick={() => handleOrderView(order)}
-                              className="flex h-8 w-8 items-center justify-center rounded-full border border-dashboard/20 text-dashboard transition-all duration-200 hover:border-dashboard/40 hover:bg-dashboard/10 hover:text-dashboard/80"
+                              className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-dashboard/20 text-dashboard transition-all duration-200 hover:border-dashboard/40 hover:bg-dashboard/10 hover:text-dashboard/80"
                               title="View Details"
                             >
-                              <FiEdit className="h-4 w-4" />
+                              <FiEye className="h-4 w-4" />
                             </button>
-                          </div>
+                          </span>
                         </td>
                       </tr>
                     ))
@@ -245,7 +254,7 @@ const AllOrderTable = () => {
           <Pagination totalDocs={metaData.totalDoc || 0} onPageChange={(page) => setPage(page)} />
         </div>
       ) : orderItemView ? (
-        <ViewOrder setIsViewOrder={setIsViewOrder} orderItemView={orderItemView} />
+        <ViewOrder setIsViewOrder={setIsViewOrder} orderItem={orderItemView} />
       ) : (
         ""
       )}

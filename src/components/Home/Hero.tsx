@@ -1,6 +1,6 @@
 import { baseUrl } from "@/redux/api/api";
-import Banner from "./Banner";
 import { IBanner } from "@/types/banner";
+import Banner from "./Banner";
 
 const Hero = async () => {
   const res = await fetch(`${baseUrl}/banner?active=true`, {

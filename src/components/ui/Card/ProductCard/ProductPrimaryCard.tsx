@@ -14,7 +14,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
       )}
     >
       {product.discount ? (
-        <span className="absolute top-0 right-0 z-[3] line-clamp-1 bg-secondary px-[4px] py-[2px] text-[12px] text-white">
+        <span className="absolute top-0 right-0 z-[3] line-clamp-1 bg-secondary px-[4px] py-[2px] text-[10px] text-white sm:text-[12px]">
           {/* Save {Math.ceil(getProductDiscountPrice(product.price, product.discount))} ৳ */}
           Save {product?.discount}% Off
         </span>
@@ -25,7 +25,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
       {/* Image */}
       <Link
         href={`/product/${product?.slug}`}
-        className="relative flex h-[227px] w-full shrink-0 items-center justify-start overflow-hidden bg-white"
+        className="relative flex h-[120px] w-full shrink-0 items-center justify-start overflow-hidden bg-white sm:h-[227px]"
       >
         {product.images[1] ? (
           <>

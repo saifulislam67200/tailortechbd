@@ -7,6 +7,7 @@ import { MdEdit } from "react-icons/md";
 import CreateCategory from "./CreateCategory";
 import DeleteCategory from "./DeleteCategory";
 import UpdateCategory from "./UpdateCategory";
+import Image from "next/image";
 
 interface CategoryTreeProps {
   categories: TCategoryWithSubcategories[];
@@ -71,7 +72,7 @@ const RenderCategory: React.FC<SubcategoryItemProps> = ({
           <span className="w-6" />
         )}
 
-        <img
+        <Image
           width={32}
           height={32}
           src={category.thumbnail || "/images/category_blank.png"}

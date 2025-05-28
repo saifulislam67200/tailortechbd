@@ -1,15 +1,17 @@
 "use client";
+import SidebarElement from "@/components/Shared/dashboard/SidebarElement";
+import { GoQuestion } from "react-icons/go";
 import { MdInventory2 } from "react-icons/md";
 import { PiShoppingCartSimpleBold } from "react-icons/pi";
 import { TbCategory } from "react-icons/tb";
 import { VscGraphLine } from "react-icons/vsc";
-import { GoQuestion } from "react-icons/go";
 import { PiFlagBannerFoldBold } from "react-icons/pi";
 export interface IDashboardNavLinks {
   label: string;
   icon?: React.ElementType;
   path?: string;
   children?: IDashboardNavLinks[];
+  element?: React.ElementType;
 }
 
 export const admin: IDashboardNavLinks[] = [
@@ -36,6 +38,7 @@ export const admin: IDashboardNavLinks[] = [
     icon: PiShoppingCartSimpleBold,
     label: "All Orders",
     path: "/dashboard/all-orders",
+    element: SidebarElement.PendingOrderCount,
   },
   {
     icon: TbCategory,
@@ -46,6 +49,7 @@ export const admin: IDashboardNavLinks[] = [
     icon: GoQuestion,
     label: "QNA",
     path: "/dashboard/qna",
+    element: SidebarElement.PendingQuestionCount,
   },
   {
     icon: PiFlagBannerFoldBold,

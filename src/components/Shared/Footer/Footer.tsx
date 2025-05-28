@@ -1,11 +1,11 @@
 import { socialLinks } from "@/utils/site";
 import Image from "next/image";
 import Link from "next/link";
-import { FaPhone, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { FaEnvelope, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="relative mb-[45px] w-full overflow-hidden text-white lg:mb-0 bg-primary">
+    <footer className="relative mb-[45px] w-full overflow-hidden bg-primary text-white lg:mb-0">
       {/* Main Footer Content */}
       <div className="main_container relative mx-auto w-full px-4 py-[30px] sm:py-[40px]">
         <div className="flex flex-col gap-[18px] md:gap-[28px] lg:flex-row lg:gap-[48px]">
@@ -115,20 +115,30 @@ const Footer = () => {
                 <div className="flex flex-col items-center md:flex-row md:items-start">
                   <FaMapMarkerAlt size={16} className="flex-shrink-0 text-white md:mt-1" />
                   <div className="mt-1 md:ml-3">
-                    <p className="text-[14px]">
-                      Kalshi Road, Mirpur-11
-                      <br />
-                      Dhaka-1216, Bangladesh
-                    </p>
+                    <p className="text-[14px]">Kalshi Road, Mirpur-11, Dhaka-1216</p>
                   </div>
                 </div>
-                <div className="flex flex-col items-center md:flex-row">
+                <div className="flex flex-col items-center gap-[5px] md:flex-row">
                   <FaPhone size={16} className="flex-shrink-0 text-white" />
-                  <p className="mt-1 text-[14px] md:ml-3">+880 1711 923276</p>
+                  <Link href={"tel:+8801711923276"} className="text-[14px] hover:underline">
+                    +880 01711 923276
+                  </Link>
+                </div>
+                <div className="flex flex-col items-center gap-[5px] md:flex-row">
+                  <FaPhone size={16} className="flex-shrink-0 text-white" />
+
+                  <Link href={"tel:+8801911696556"} className="text-[14px] hover:underline">
+                    +880 01911 696556
+                  </Link>
                 </div>
                 <div className="flex flex-col items-center md:flex-row">
                   <FaEnvelope size={16} className="flex-shrink-0 text-white" />
-                  <p className="mt-1 text-[14px] md:ml-3">tailortechbd2025@gmail.com</p>
+                  <Link
+                    href={"mailto:tailortechbd2025@gmail.com"}
+                    className="mt-1 text-[14px] md:ml-3"
+                  >
+                    tailortechbd2025@gmail.com
+                  </Link>
                 </div>
               </div>
             </div>
@@ -149,11 +159,20 @@ const Footer = () => {
                 </div>
                 <div className="flex items-center justify-center space-x-3">
                   <FaPhone size={16} className="flex-shrink-0 text-white" />
-                  <p className="text-[14px]">+880 1711 923276</p>
+                  <div className="flex flex-col gap-[8px]">
+                    <Link href={"tel:+8801711923276"} className="text-[14px]">
+                      +880 01711 923276
+                    </Link>
+                    <Link href={"tel:+8801911696556"} className="text-[14px]">
+                      +880 01911 696556
+                    </Link>
+                  </div>
                 </div>
                 <div className="flex items-center justify-center space-x-3">
                   <FaEnvelope size={16} className="flex-shrink-0 text-white" />
-                  <p className="text-[14px]">tailortechbd2025@gmail.com</p>
+                  <Link className="text-[14px]" href={"mailto:tailortechbd2025@gmail.com"}>
+                    tailortechbd2025@gmail.com
+                  </Link>
                 </div>
               </div>
             </div>

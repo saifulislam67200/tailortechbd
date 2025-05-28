@@ -88,7 +88,7 @@ const CheckoutView = () => {
       (!values.billing_address || !values.billing_phoneNumber || !values.billing_name)
     ) {
       setFormMessage({
-        message: "Please fill up all billing information if you arenot using same address",
+        message: "Please fill up all billing information if you are'nt using same address",
         type: "error",
       });
       return;
@@ -131,7 +131,7 @@ const CheckoutView = () => {
     }
     // change it with order success page
     dispatch(clearCart());
-    router.push(`/order/success?o_id=${res.data?.data._id}`);
+    router.replace(`/order/success?o_id=${res.data?.data._id}`);
   };
 
   return (
@@ -366,6 +366,13 @@ const CheckoutView = () => {
                 <CheckoutPaymentOptions />
                 <CheeckoutOverview />
                 {formMessage ? <FormMessage formMessage={formMessage} /> : ""}
+                {isValid ? (
+                  ""
+                ) : (
+                  <span className="font-[600] text-danger">
+                    * please fill all the required fields
+                  </span>
+                )}
                 <div className="item-center flex w-full justify-center gap-[16px]">
                   <Button
                     type="button"
