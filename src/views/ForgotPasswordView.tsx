@@ -23,7 +23,7 @@ const ForgotPasswordView = () => {
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
   const [country, setCountry] = useState<ICountry>();
   const [mode, setMode] = useState<"email" | "phoneNumber">("email");
-  const [isSent, setIsSent] = useState(true);
+  const [isSent, setIsSent] = useState(false);
 
   const handleSubmit = async (
     values: { email: string; phoneNumber: string },
@@ -112,12 +112,16 @@ const ForgotPasswordView = () => {
           </Formik>
         </FormCard>
       ) : (
-        <div className="mx-auto mt-[50px] flex w-full max-w-[500px] flex-col gap-[10px] border-[1px] border-border-muted bg-white p-[16px] shadow-md">
-          <Image src="/images/logos/logo.png" width={100} height={100} alt="success" />
-          <h6 className="fot-[700] text-start text-[25px] text-primary">
-            Password reset link sent
-          </h6>
-          <span className="text-start text-[14px] text-muted">
+        <div className="center mx-auto mt-[50px] flex h-full w-full max-w-[500px] flex-col gap-[10px] bg-transparent p-[16px]">
+          <Image
+            src="/images/logos/logo.png"
+            width={100}
+            height={100}
+            alt="success"
+            className="mx-auto"
+          />
+          <h6 className="fot-[700] text-center text-[25px]">Password reset link sent</h6>
+          <span className="text-center text-[14px] text-muted">
             We have sent a password reset link to your provided information. Check your inbox or
             spam section for the link. if you did not receive the link, please try again.
           </span>
