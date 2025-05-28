@@ -7,6 +7,7 @@ import DeleteCategory from "@/components/Dashboard/CategoryManagement/DeleteCate
 import Button from "@/components/ui/Button";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/category.api";
 import { TCategoryWithSubcategories } from "@/types/category";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaPlus } from "react-icons/fa";
@@ -143,10 +144,13 @@ function CategoryManagementView() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <img
+                      <Image
+                        width={32}
+                        height={32}
                         src={category.thumbnail || "/images/category_blank.png"}
                         alt={category.label}
                         className="h-10 w-10 rounded-lg object-cover"
+                        onError={(e) => (e.currentTarget.src = "/images/category_blank.png")}
                       />
                       <div>
                         <h3 className="font-medium text-gray-900">{category.label}</h3>

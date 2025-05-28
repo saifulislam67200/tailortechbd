@@ -54,7 +54,7 @@ const OverviewChart = () => {
     "this-year": "this_year",
   };
 
-  console.log(salesSummaryData, "salesSummaryData");
+  // console.log(salesSummaryData, "salesSummaryData");
 
   // Get current data from API if available, otherwise fallback to empty array
   const currentData = salesSummaryData?.data?.[filterKeyMap[selectedFilter.value]] ?? [];
