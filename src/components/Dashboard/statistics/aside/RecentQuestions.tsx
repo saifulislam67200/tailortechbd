@@ -1,9 +1,9 @@
 "use client";
-import Loader from "@/components/ui/Loader";
 import { useGetRecentUnansweredQuestionQuery } from "@/redux/features/statistics/statistics.api";
 import Image from "next/image";
 import React from "react";
 import AnswerModal from "../../Qna/AnswerModal";
+import Loader from "@/components/ui/Loader";
 
 interface IProduct {
   _id: string;

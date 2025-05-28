@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { GoChevronDown } from "react-icons/go";
+import { IoIosArrowBack } from "react-icons/io";
 
 const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: number }) => {
   const path = usePathname();
@@ -96,13 +97,35 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
 };
 
 const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
+  const [isNavOpen, setIsNavOpen] = useState(true);
+
+  const toggleNav = () => {
+    setIsNavOpen(!isNavOpen);
+  };
+
   return (
-    <div className="flex h-full w-[300px] shrink-0 flex-col justify-between border-r-[1px] border-border-muted bg-white p-[20px]">
-      <div className="flex flex-col gap-[0]">
-        {navlinks?.map((link, index) => (
-          <NavBox navlink={link} key={index + (link.path || "parent")} />
-        ))}
+    <div className={`relative ${isNavOpen ? "w-[300px]" : "w-0"}`}>
+      <div
+        className={`absolute ${isNavOpen ? "-right-[15px]" : "-right-[35px]"} flex h-full items-center`}
+      >
+        <button
+          onClick={toggleNav}
+          className={`flex h-[30] w-[30px] cursor-pointer items-center justify-center rounded-full border border-quaternary bg-white ${isNavOpen ? "" : "rotate-180"}`}
+          title={isNavOpen ? "Click to close sidebar" : "Click to open sidebar"}
+        >
+          <IoIosArrowBack size={20} />
+        </button>
       </div>
+
+      {isNavOpen && (
+        <div className="h-full w-[300px] shrink-0 flex-col justify-between border-r-[1px] border-border-muted bg-white p-[20px] lg:flex">
+          <div className="flex flex-col gap-[0]">
+            {navlinks?.map((link, index) => (
+              <NavBox navlink={link} key={index + (link.path || "parent")} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
