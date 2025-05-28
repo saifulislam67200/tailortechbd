@@ -21,7 +21,7 @@ const DialogProvider: React.FC<PropsType> = ({ children, state, setState, classN
   if (!state) return null;
 
   return createPortal(
-    <div className="center fixed top-0 left-0 z-[999] h-full w-full">
+    <div className="center fixed top-0 left-0 z-[999] h-full w-full overflow-y-auto">
       <div
         className="absolute top-0 left-0 z-[99] h-full w-full bg-black/40"
         onClick={() => setState(false)}
