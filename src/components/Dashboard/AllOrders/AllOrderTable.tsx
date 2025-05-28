@@ -99,7 +99,7 @@ const AllOrderTable = () => {
           <div className="flex flex-col gap-[15px] bg-white p-[16px]">
             <div className="flex flex-col gap-[5px]">
               <h1 className="text-[16px] font-[600]">Order List</h1>
-              <p className="text-[14px] text-muted">
+              <p className="text-[12px] md:text-[14px] text-muted">
                 Displaying All the available orders in your store. There is total{" "}
                 <span className="font-bold text-dashboard">{metaData.totalDoc}</span> orders. Data
                 is Devided into{" "}
@@ -112,9 +112,9 @@ const AllOrderTable = () => {
             </div>
             <HorizontalLine className="my-[10px]" />
 
-            <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-center sm:gap-2">
+            <div className="flex flex-col justify-between gap-[16] md:flex-row md:items-center md:gap-[8px]">
               {/* Search */}
-              <div className="flex w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
+              <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
                 <input
                   type="text"
                   className="w-full bg-transparent outline-none"
@@ -123,7 +123,7 @@ const AllOrderTable = () => {
                 />
                 <RxMagnifyingGlass />
               </div>
-              <div className="flex items-center justify-start gap-[10px]">
+              <div className="flex items-center justify-start gap-[10px] xl:mb-0 sm:mb-[20px] mb-0">
                 <OrderTimelineDropDown
                   onSelect={({ value }) => setQuery({ ...query, day_count: value })}
                 />
