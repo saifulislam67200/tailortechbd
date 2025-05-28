@@ -2,6 +2,10 @@ import SelectionBox from "@/components/ui/SelectionBox";
 
 const dayFilterings = [
   {
+    label: "All Time",
+    value: "",
+  },
+  {
     label: "Today",
     value: "1",
   },
