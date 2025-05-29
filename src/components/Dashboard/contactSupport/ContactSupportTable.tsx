@@ -1,35 +1,25 @@
 import HorizontalLine from "@/components/ui/HorizontalLine";
-import {
-  useGetAllClientsQuery,
-  useToggleAccountActivationMutation,
-} from "@/redux/features/admin/admin.api";
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-
 import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
-import Toggle from "@/components/ui/Toggle";
 import dateUtils from "@/utils/date";
-import Image from "next/image";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import Pagination from "@/components/ui/Pagination";
 import useDebounce from "@/hooks/useDebounce";
-import { useAppSelector } from "@/hooks/redux";
+import { useGetAllContactsToSupportQuery } from "@/redux/features/contactSupport/contactSupport.api";
 
 const tableHead = [
-  { label: "Name", field: "name" },
-  { label: "Contact", field: "" },
-  { label: "Activation Status", field: "active" },
+  { label: "fullName", field: "name" },
+  { label: "email", field: "email" },
+  { label: "subject", field: "" },
+  { label: "message", field: "" },
   { label: "Date Created", field: "createdAt" },
-  { label: "Actions", field: "" },
 ];
 
 const ContactSupportTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
-  const { user: currentUser } = useAppSelector((state) => state.user);
-
-  const [toggleAvtivation] = useToggleAccountActivationMutation();
 
   const [query, setQuery] = useState<Record<string, string | number>>({
     page: 1,
@@ -38,8 +28,8 @@ const ContactSupportTable = () => {
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
   });
 
-  const { data, isLoading } = useGetAllClientsQuery({ ...query, searchTerm });
-  const userData = data?.data || [];
+  const { data, isLoading } = useGetAllContactsToSupportQuery({ ...query, searchTerm });
+  const contactSupportData = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
   const handleSort = (field: string) => {
     const newOrder = sort.field === field && sort.order === "asc" ? "desc" : "asc";
@@ -56,7 +46,7 @@ const ContactSupportTable = () => {
         <div className="flex flex-col gap-[5px]">
           <h1 className="text-[16px] font-[600]">Contact Support</h1>
           <p className="text-[12px] text-muted md:text-[14px]">
-            Displaying All Contacts. There is total{" "}
+            Displaying All Contacts to support customers
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
@@ -113,51 +103,24 @@ const ContactSupportTable = () => {
               {isLoading ? (
                 <TableSkeleton columns={tableHead.length} />
               ) : data?.data.length ? (
-                userData?.map((user) => (
-                  <tr key={user?._id} className="hover:bg-gray-50">
+                contactSupportData?.map((contact) => (
+                  <tr key={contact?._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-[5px]">
-                        <span className="flex aspect-square max-h-[50px] w-[50px] items-center justify-start bg-white">
-                          <Image
-                            src={user.avatar || "/"}
-                            alt={`${user.fullName} image`}
-                            width={80}
-                            height={80}
-                            className="mx-auto h-full w-auto max-w-full object-contain"
-                          />
-                        </span>
-                        <span className="line-clamp-1 text-[14px]">{user.fullName}</span>
+                        <span className="line-clamp-1 text-[14px]">{contact.fullName}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className="flex flex-col gap-[6px]">
-                        <span className="text-[14px]">Email: {user.email || "N/A"}</span>
-                        <span className="text-[14px]">Phone: {user.phoneNumber}</span>
+                        <span className="text-[14px]">Email: {contact.email || "N/A"}</span>
+                        <span className="text-[14px]">Phone: {contact.phoneNumber}</span>
                       </span>
                     </td>
-                    <td className="px-6 py-4">
-                      {user.isActive ? (
-                        <span className="rounded-full bg-success/10 px-[8px] py-[2px] text-[14px] text-success">
-                          Active
-                        </span>
-                      ) : (
-                        <span className="rounded-full bg-danger/10 px-[8px] py-[2px] text-[14px] text-danger">
-                          Inactive
-                        </span>
-                      )}
-                    </td>
+                    <td className="px-6 py-4">{contact.subject}</td>
 
+                    <td className="max-w-[300px] px-6 py-4">{contact.message}</td>
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">
-                        {dateUtils.formateCreateOrUpdateDate(user.createdAt) || "N/A"}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <Toggle
-                        disabled={user._id === currentUser?._id}
-                        onToggle={() => toggleAvtivation(user._id)}
-                        defaultActive={user.isActive}
-                      />
+                      {dateUtils.formateCreateOrUpdateDate(contact.createdAt) || "N/A"}
                     </td>
                   </tr>
                 ))
