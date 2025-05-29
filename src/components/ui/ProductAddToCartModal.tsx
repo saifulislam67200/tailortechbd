@@ -2,7 +2,7 @@
 import { addToCart } from "@/redux/features/cart/cartSlice";
 import { IColor, IProduct, ISize } from "@/types/product";
 import Image from "next/image";
-import { cloneElement, isValidElement, ReactElement, ReactNode, useState } from "react";
+import { cloneElement, isValidElement, ReactElement, ReactNode, useEffect, useState } from "react";
 import { LuX } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
@@ -10,23 +10,38 @@ import Button from "./Button";
 import DialogProvider from "./DialogProvider";
 import HorizontalLine from "./HorizontalLine";
 import SelectionBox from "./SelectionBox";
+import { useGetProductByProductSlugQuery } from "@/redux/features/product/product.api";
+import Loader from "./Loader";
 
 interface Props {
   children?: ReactNode;
   product: Pick<IProduct, "_id" | "colors" | "images" | "name" | "price" | "discount" | "slug">;
 }
 
-const ProductAddToCartModal = ({ children, product }: Props) => {
+const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
+  const slug = clickedProduct?.slug || "";
 
-  const [selectedColor, setSelectedColor] = useState<IColor | undefined>(
-    product?.colors?.[0] || undefined
-  );
+  const { data: clickedProductData, isLoading } = useGetProductByProductSlugQuery(slug, {
+    skip: !slug,
+  });
 
-  const [selectedSize, setSelectedSize] = useState<ISize | undefined>(
-    selectedColor?.sizes?.[0] || undefined
-  );
+  const product = clickedProductData?.data as IProduct;
+
+  const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
+  const [selectedSize, setSelectedSize] = useState<ISize | undefined>();
+
+  useEffect(() => {
+    if (product?.colors?.length) {
+      setSelectedColor(product.colors[0]);
+      setSelectedSize(product.colors[0]?.sizes?.[0]);
+    }
+  }, [product]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   const getColorVariantImage = (colorName: string): string => {
     if (!product?.colors || !Array.isArray(product.colors)) {
@@ -95,7 +110,14 @@ const ProductAddToCartModal = ({ children, product }: Props) => {
           <HorizontalLine className="my-[20px]" />
 
           <div className="flex flex-col items-center justify-start gap-[20px] md:flex-row md:items-start">
-            <div className="aspect-square w-full max-w-[200px] shrink-0 md:w-[300px]">
+            <div className="relative aspect-square w-full max-w-[200px] shrink-0 md:w-[300px]">
+              {selectedColor &&
+                selectedSize &&
+                selectedColor?.sizes?.find((s) => s.size === selectedSize.size)?.stock === 0 && (
+                  <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 text-lg font-semibold text-white">
+                    Out of Stock
+                  </div>
+                )}
               <Image
                 src={product.images[0] || "/"}
                 alt={product.name}
@@ -146,7 +168,13 @@ const ProductAddToCartModal = ({ children, product }: Props) => {
                   }
                 />
               </div>
-              <Button onClick={handleAddToCart} className="mt-[20px]">
+              <Button
+                disabled={
+                  selectedColor?.sizes?.find((s) => s?.size === selectedSize?.size)?.stock === 0
+                }
+                onClick={handleAddToCart}
+                className="mt-[20px]"
+              >
                 Add To Cart
               </Button>
             </div>

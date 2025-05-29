@@ -100,6 +100,23 @@ const userApi = api.injectEndpoints({
       },
       invalidatesTags: ["user"],
     }),
+
+
+
+    loginAdmin: builder.mutation<
+      { data: { result: IUser; token: string } },
+      { email?: string; phoneNumber?: string; mode?: "email" | "phoneNumber"; password: string }
+    >({
+      query: (post) => ({
+        url: "/user/login-admin",
+        method: "POST",
+        body: post,
+      }),
+      invalidatesTags: ["user"],
+    }),
+
+
+
   }),
 });
 export const {
@@ -113,4 +130,5 @@ export const {
   useLogoutUserMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useLoginAdminMutation
 } = userApi;
