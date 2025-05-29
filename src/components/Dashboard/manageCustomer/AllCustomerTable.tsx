@@ -1,5 +1,4 @@
 import HorizontalLine from "@/components/ui/HorizontalLine";
-import useDebounce from "@/hooks/useDebounce";
 import {
   useGetAllClientsQuery,
   useToggleAccountActivationMutation,
@@ -14,6 +13,7 @@ import dateUtils from "@/utils/date";
 import Image from "next/image";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import Pagination from "@/components/ui/Pagination";
+import useDebounce from "@/hooks/useDebounce";
 
 const tableHead = [
   { label: "Name", field: "name" },
@@ -23,7 +23,7 @@ const tableHead = [
   { label: "Actions", field: "" },
 ];
 
-const AllAdminTable = () => {
+const AllCustomerTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
 
@@ -31,7 +31,7 @@ const AllAdminTable = () => {
 
   const [query, setQuery] = useState<Record<string, string | number>>({
     page: 1,
-    role: "admin",
+    role: "user",
     fields: "name,slug,price,images,discount,category,createdAt",
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
   });
@@ -47,13 +47,14 @@ const AllAdminTable = () => {
       sort: `${newOrder === "desc" ? "-" : ""}${field}`,
     }));
   };
+
   return (
     <div className="flex flex-col gap-[10px]">
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
         <div className="flex flex-col gap-[5px]">
-          <h1 className="text-[16px] font-[600]">All {`Admin's`}</h1>
+          <h1 className="text-[16px] font-[600]">All Customers</h1>
           <p className="text-[12px] text-muted md:text-[14px]">
-            Displaying All {`Admin's`}. There is total{" "}
+            Displaying All customers. There is total{" "}
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
@@ -130,6 +131,7 @@ const AllAdminTable = () => {
                       <span className="flex flex-col gap-[6px]">
                         <span className="text-[14px]">Email: {user.email || "N/A"}</span>
                         <span className="text-[14px]">Phone: {user.phoneNumber}</span>
+                        <span className="text-[14px]">Phone: {user.role}</span>
                       </span>
                     </td>
                     <td className="px-6 py-4">
@@ -169,4 +171,4 @@ const AllAdminTable = () => {
   );
 };
 
-export default AllAdminTable;
+export default AllCustomerTable;
