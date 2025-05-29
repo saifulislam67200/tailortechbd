@@ -11,6 +11,7 @@ import UpdateBanner from "./UpdateBanner";
 import Button from "@/components/ui/Button";
 import ManageBannerPosition from "./ManageBannerPosition";
 import { useState } from "react";
+import BannerTableSkeleton from "./BannerTableSkeleton";
 
 const tableHead = [
   { label: "Order", field: "order" },
@@ -23,7 +24,7 @@ const tableHead = [
 ];
 
 const BannerTable = () => {
-  const { data } = useGetAllBannersQuery();
+  const { data, isLoading } = useGetAllBannersQuery();
   const banners = data?.data || [];
   const [isViewBannerPosition, setIsViewBannerPosition] = useState(false);
 
@@ -76,81 +77,87 @@ const BannerTable = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {banners.map((banner) => (
-                    <tr key={banner._id} className="transition-colors hover:bg-gray-50">
-                      {/* Order Column */}
-                      <td className="px-[24px] py-[16px] whitespace-nowrap">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-[14px] font-medium">{banner.index}</span>
-                        </div>
-                      </td>
+                  {isLoading ? (
+                    <BannerTableSkeleton rows={tableHead.length} />
+                  ) : (
+                    banners.map((banner) => (
+                      <tr key={banner._id} className="transition-colors hover:bg-gray-50">
+                        {/* Order Column */}
+                        <td className="px-[24px] py-[16px] whitespace-nowrap">
+                          <span className="flex items-center space-x-2">
+                            <span className="text-[14px] font-medium">{banner.index}</span>
+                          </span>
+                        </td>
 
-                      {/* Banner Image */}
-                      <td className="px-[24px] py-[16px] whitespace-nowrap">
-                        <div className="relative h-12 w-20 overflow-hidden rounded-lg border border-border-muted bg-gray-100">
-                          <Image
-                            src={banner.thumbnail || "/images/avatar.jpg"}
-                            alt={banner.name}
-                            fill
-                            className="object-cover"
-                            sizes="80px"
-                          />
-                        </div>
-                      </td>
+                        {/* Banner Image */}
+                        <td className="px-[24px] py-[16px] whitespace-nowrap">
+                          <span className="relative block h-12 w-20 overflow-hidden rounded-lg border border-border-muted bg-gray-100">
+                            <Image
+                              src={banner.thumbnail || "/images/avatar.jpg"}
+                              alt={banner.name}
+                              fill
+                              className="object-cover"
+                              sizes="80px"
+                            />
+                          </span>
+                        </td>
 
-                      {/* Name */}
-                      <td className="px-[24px] py-[16px] whitespace-nowrap">
-                        <div className="text-[14px] font-medium capitalize">{banner.name}</div>
-                      </td>
+                        {/* Name */}
+                        <td className="px-[24px] py-[16px] whitespace-nowrap">
+                          <span className="block text-[14px] font-medium capitalize">
+                            {banner.name}
+                          </span>
+                        </td>
 
-                      {/* Toggle Column */}
-                      <td className="px-[24px] py-[16px] whitespace-nowrap">
-                        <ActiveBannerToggle id={banner._id} active={banner?.active} />
-                      </td>
+                        {/* Toggle Column */}
+                        <td className="px-[24px] py-[16px] whitespace-nowrap">
+                          <ActiveBannerToggle id={banner._id} active={banner?.active} />
+                        </td>
 
-                      {/* Status */}
-                      <td className="px-[24px] py-[16px] whitespace-nowrap">
-                        <span
-                          className={`inline-flex w-[87px] items-center rounded-full px-3 py-1 text-xs font-medium ${
-                            banner.active
-                              ? "border border-green-200 bg-green-100 text-green-800"
-                              : "border border-red-200 bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {banner.active ? (
-                            <>
-                              <FiEye className="mr-1 h-3 w-3" />
-                              Active
-                            </>
-                          ) : (
-                            <>
-                              <FiEyeOff className="mr-1 h-3 w-3" />
-                              Inactive
-                            </>
-                          )}
-                        </span>
-                      </td>
+                        {/* Status */}
+                        <td className="px-[24px] py-[16px] whitespace-nowrap">
+                          <span
+                            className={`inline-flex w-[87px] items-center rounded-full px-3 py-1 text-xs font-medium ${
+                              banner.active
+                                ? "border border-green-200 bg-green-100 text-green-800"
+                                : "border border-red-200 bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {banner.active ? (
+                              <>
+                                <FiEye className="mr-1 h-3 w-3" />
+                                Active
+                              </>
+                            ) : (
+                              <>
+                                <FiEyeOff className="mr-1 h-3 w-3" />
+                                Inactive
+                              </>
+                            )}
+                          </span>
+                        </td>
 
-                      {/* Created Date */}
-                      <td className="px-[24px] py-[16px] text-[14px] whitespace-nowrap text-info">
-                        {banner.createdAt ? formatDate(banner.createdAt) : "N/A"}
-                      </td>
+                        {/* Created Date */}
+                        <td className="px-[24px] py-[16px] text-[14px] whitespace-nowrap text-info">
+                          {banner.createdAt ? formatDate(banner.createdAt) : "N/A"}
+                        </td>
 
-                      {/* Actions */}
-                      <td className="px-[24px] py-[16px] text-[14px] font-medium whitespace-nowrap">
-                        <div className="flex items-center space-x-3">
-                          <UpdateBanner banner={banner} />
-                          <DeleteBanner id={banner?._id} name={banner?.name} />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        {/* Actions */}
+                        <td className="px-[24px] py-[16px] text-[14px] font-medium whitespace-nowrap">
+                          <span className="flex items-center space-x-3">
+                            <UpdateBanner banner={banner} />
+                            <DeleteBanner id={banner?._id} name={banner?.name} />
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
 
             {/* Empty State */}
-            {banners.length === 0 && (
+            {!isLoading && banners.length === 0 && (
               <div className="py-16 text-center">
                 <h3 className="mb-2 text-lg font-medium text-primary">No banners found</h3>
                 <p className="mb-6 text-info">Get started by creating your first banner.</p>
