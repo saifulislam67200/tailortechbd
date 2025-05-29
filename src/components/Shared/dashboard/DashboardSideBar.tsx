@@ -6,7 +6,15 @@ import { useEffect, useRef, useState } from "react";
 import { GoChevronDown } from "react-icons/go";
 import { IoIosArrowBack } from "react-icons/io";
 
-const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: number }) => {
+const NavBox = ({
+  navlink,
+  depth = 0,
+  setIsNavOpen,
+}: {
+  navlink: IDashboardNavLinks;
+  depth?: number;
+  setIsNavOpen: (value: boolean) => void;
+}) => {
   const path = usePathname();
   const [isOpen, setIsOpen] = useState(true);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -63,6 +71,7 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
                 : "text-dashboard"
               : "text-primary"
           }`}
+          onClick={() => setIsNavOpen(false)}
         >
           {depth !== 0 ? (
             <span
@@ -88,7 +97,7 @@ const NavBox = ({ navlink, depth = 0 }: { navlink: IDashboardNavLinks; depth?: n
           }}
         >
           {navlink.children?.map((child, index) => (
-            <NavBox key={index} navlink={child} depth={depth + 1} />
+            <NavBox key={index} navlink={child} depth={depth + 1} setIsNavOpen={setIsNavOpen} />
           ))}
         </div>
       )}
@@ -105,7 +114,7 @@ const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 700) {
+      if (window.innerWidth <= 750) {
         setIsNavOpen(false);
       } else {
         setIsNavOpen(true);
@@ -119,28 +128,38 @@ const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
   }, []);
 
   return (
-    <div className={`relative ${isNavOpen ? "w-[300px]" : "w-0"}`}>
-      <div
-        className={`absolute ${isNavOpen ? "-right-[15px]" : "-right-[35px]"} flex h-full items-center`}
-      >
-        <button
-          onClick={toggleNav}
-          className={`flex h-[30] w-[30px] cursor-pointer items-center justify-center rounded-full border border-quaternary bg-white ${isNavOpen ? "" : "rotate-180"}`}
-          title={isNavOpen ? "Click to close sidebar" : "Click to open sidebar"}
+    <div
+      className={`${
+        window.innerWidth <= 750 ? "absolute top-0 left-0 z-50 min-h-screen" : ""
+      } ${isNavOpen ? "w-[300px]" : "w-0"}`}
+    >
+      <div className={`relative h-[100dvh] ${isNavOpen ? "w-[300px]" : "w-0"}`}>
+        <div
+          className={`absolute ${isNavOpen ? "-right-[15px]" : "-right-[35px]"} flex h-full items-center`}
         >
-          <IoIosArrowBack size={20} />
-        </button>
-      </div>
-
-      {isNavOpen && (
-        <div className="h-full w-[300px] shrink-0 flex-col justify-between border-r-[1px] border-border-muted bg-white p-[20px] lg:flex">
-          <div className="flex flex-col gap-[0]">
-            {navlinks?.map((link, index) => (
-              <NavBox navlink={link} key={index + (link.path || "parent")} />
-            ))}
-          </div>
+          <button
+            onClick={toggleNav}
+            className={`flex h-[30] w-[30px] cursor-pointer items-center justify-center rounded-full border border-quaternary bg-white ${isNavOpen ? "" : "rotate-180"}`}
+            title={isNavOpen ? "Click to close sidebar" : "Click to open sidebar"}
+          >
+            <IoIosArrowBack size={20} />
+          </button>
         </div>
-      )}
+
+        {isNavOpen && (
+          <div className="h-full w-[300px] shrink-0 flex-col justify-between border-r-[1px] border-border-muted bg-white p-[20px] lg:flex">
+            <div className="flex flex-col gap-[0]">
+              {navlinks?.map((link, index) => (
+                <NavBox
+                  navlink={link}
+                  key={index + (link.path || "parent")}
+                  setIsNavOpen={setIsNavOpen}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
