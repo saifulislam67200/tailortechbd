@@ -6,11 +6,11 @@ const uploadApi = api.injectEndpoints({
     // Create blog post
     createContactSupport: builder.mutation<{ data: IContactSupport }, IContactSupport>({
       query: (id) => ({
-        url: `/upload/multiple`,
+        url: `/contact-support/create`,
         method: "POST",
         body: id,
       }),
-      invalidatesTags: ["file"],
+      invalidatesTags: ["contactSupport"],
     }),
   }),
 });

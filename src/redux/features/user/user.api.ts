@@ -5,7 +5,7 @@ const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
     // Create blog post
     registerCustomer: builder.mutation<
-      { data: { result: IUser; token: string } },
+      { data: { result: IUser; accessToken: string } },
       Pick<IUser, "password" | "phoneNumber" | "fullName" | "geo_profile">
     >({
       query: (post) => ({
@@ -16,7 +16,7 @@ const userApi = api.injectEndpoints({
       invalidatesTags: ["user"],
     }),
     loginUser: builder.mutation<
-      { data: { result: IUser; token: string } },
+      { data: { result: IUser; accessToken: string } },
       { email?: string; phoneNumber?: string; mode?: "email" | "phoneNumber"; password: string }
     >({
       query: (post) => ({

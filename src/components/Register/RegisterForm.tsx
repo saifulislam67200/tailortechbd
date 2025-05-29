@@ -72,7 +72,7 @@ const RegisterForm = () => {
     }
 
     const user = res.data?.data.result;
-    const token = res.data?.data.token;
+    const token = res.data?.data.accessToken;
 
     if (user) {
       dispatch(setUser(user));

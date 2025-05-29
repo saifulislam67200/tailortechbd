@@ -1,8 +1,9 @@
 "use client";
 
 import { useAppSelector } from "@/hooks/redux";
+import { useCreateContactSupportMutation } from "@/redux/features/contactSupport/contactSupport.api";
+import { IQueruMutationErrorResponse } from "@/types";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
-import { useState } from "react";
 import { FiSend } from "react-icons/fi";
 import { toast } from "sonner";
 import * as Yup from "yup";
@@ -27,6 +28,9 @@ const validationSchema = Yup.object({
 
 export default function ContactForm() {
   const { user } = useAppSelector((state) => state.user);
+
+  const [createContactSupport, { isLoading }] = useCreateContactSupportMutation();
+
   const splitDialCode = () => {
     let phoneNumber = user?.phoneNumber || "";
     const dialCode = user?.geo_profile?.phone_code || "+880";
@@ -34,27 +38,24 @@ export default function ContactForm() {
     return { dialCode, phoneNumber };
   };
   const { dialCode, phoneNumber } = splitDialCode();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (
     values: typeof initialValues,
-    { setSubmitting, resetForm }: FormikHelpers<typeof initialValues>
+    { resetForm }: FormikHelpers<typeof initialValues>
   ) => {
-    setIsSubmitting(true);
-
-    try {
-      //  API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      console.log("Form submitted:", values);
-      resetForm();
-      toast.success("Message sent successfully!");
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Failed to send message. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-      setSubmitting(false);
+    const res = await createContactSupport(values);
+    const error = res.error as IQueruMutationErrorResponse;
+    if (error) {
+      if (error.data?.message) {
+        toast.error(error.data?.message);
+      } else {
+        toast.error("Something went wrong");
+      }
+      return;
     }
+
+    resetForm();
+    toast.success("Message sent successfully!", { description: "We will get back to you soon." });
   };
 
   return (
@@ -68,13 +69,13 @@ export default function ContactForm() {
           ...initialValues,
           fullName: user?.fullName || "",
           email: user?.email || "",
-          phone: phoneNumber,
+          phone: phoneNumber || "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
         enableReinitialize
       >
-        {({ isSubmitting: formikSubmitting }) => (
+        {({}) => (
           <Form className="space-y-[16px] md:space-y-[24px]">
             <div className="grid grid-cols-1 gap-[12px] md:grid-cols-2 md:gap-[24px]">
               {/* Full Name */}
@@ -104,7 +105,12 @@ export default function ContactForm() {
                   <span className="border-y-[1px] border-l-[1px] border-border-main bg-solid-slab px-[12px] py-[6px] text-[12px] text-strong">
                     {dialCode}
                   </span>
-                  <Input type="string" name="phoneNumber" placeholder="Enter Your Mobile Number" />
+                  <Input
+                    defaultValue={phoneNumber}
+                    type="string"
+                    name="phoneNumber"
+                    placeholder="Enter Your Mobile Number"
+                  />
                 </div>
               </div>
 
@@ -131,12 +137,12 @@ export default function ContactForm() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isSubmitting || formikSubmitting}
+              disabled={isLoading}
               className="flex w-full cursor-pointer items-center justify-center space-x-2 rounded-lg bg-primary px-6 py-3 font-semibold text-white transition-all duration-200 hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {isSubmitting || formikSubmitting ? (
+              {isLoading ? (
                 <>
-                  <div className="h-[20px] w-[20px] animate-spin rounded-full border-b-2 border-white"></div>
+                  <span className="h-[20px] w-[20px] animate-spin rounded-full border-b-2 border-white"></span>
                   <span>Sending...</span>
                 </>
               ) : (
