@@ -13,11 +13,7 @@ const About = () => {
           <section>
             <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Our Story</h3>
             <p className="mb-[16px] text-[12px] md:text-[15px]">
-              Founded in 2020, TailorTech emerged from a simple yet powerful idea: to revolutionize
-              the fashion industry by combining the timeless art of tailoring with cutting-edge
-              technology. Our founders, experienced tailors and tech enthusiasts, recognized a gap
-              in the market for perfectly fitted, high-quality apparel that embraces both tradition
-              and innovation.
+              {`Welcome to TailorTech – Where Tradition Meets Innovation. At Tilortech, we believe fashion is more than just clothing — it's a statement of identity. Our brand blends modern design with timeless comfort, offering high-quality apparel for individuals who value style, authenticity, and confidence. We also blend the timeless art of tailoring with cutting-edge fashion technology to bring you modern, perfectly fitted, and stylish apparel. Every piece is crafted with precision, comfort, and confidence in mind. TailorTech is more than a brand — it’s a movement towards smarter fashion. Join us and wear the future.`}
             </p>
             <p className="text-[12px] md:text-[15px]">
               What began as a small workshop in Dhaka has now grown into a respected name in the
