@@ -47,8 +47,8 @@ export const footerLinks = [
     label: "Customer Service",
     contents: [
       {
-        label: "Return & Refund",
-        url: "/return-refund-cancellation",
+        label: "Exchange & Return Policy",
+        url: "/exchange-and-return-policy",
       },
       {
         label: "Privacy Policy",
