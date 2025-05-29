@@ -52,7 +52,7 @@ const AllProductsTable = () => {
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
         <div className="flex flex-col gap-[5px]">
           <h1 className="text-[16px] font-[600]">Product List</h1>
-          <p className="text-[14px] text-muted">
+          <p className="text-[12px] md:text-[14px] text-muted">
             Displaying All the available products in your store. There is total{" "}
             <span className="font-bold text-dashboard">{metaData.totalDoc}</span> products. Data is
             Devided into{" "}
@@ -64,7 +64,7 @@ const AllProductsTable = () => {
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
-        <div className="flex w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
+        <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
           <input
             type="text"
             className="w-full bg-transparent outline-none"
@@ -73,7 +73,8 @@ const AllProductsTable = () => {
           />
           <RxMagnifyingGlass />
         </div>
-        <table className="min-w-full divide-y divide-dashboard/20">
+        <div className="overflow-x-auto">
+        <table className="w-full divide-y divide-dashboard/20">
           <thead className="bg-dashboard/10">
             <tr>
               {tableHead.map((heading) => (
@@ -168,6 +169,7 @@ const AllProductsTable = () => {
             )}
           </tbody>
         </table>
+        </div>
       </div>
       <Pagination
         totalDocs={metaData.totalDoc}

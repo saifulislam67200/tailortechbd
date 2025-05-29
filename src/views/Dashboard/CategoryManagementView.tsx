@@ -40,15 +40,15 @@ function CategoryManagementView() {
 
   return (
     <div className="w-full">
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-[20px] md:mb-[32px] flex flex-col md:flex-row md:items-center justify-between gap-[16px]">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Category Management</h1>
-          <p className="mt-1 text-gray-600">
+          <h1 className="text-[24px] md:text-[30px] font-bold tracking-tight ">Category Management</h1>
+          <p className="mt-1 text-info text-[14px]">
             Manage your product categories and their hierarchical structure
           </p>
         </div>
         <CreateCategory>
-          <button className="flex cursor-pointer items-center gap-2 rounded-lg bg-primary px-4 py-2 text-white">
+          <button className="flex w-full max-w-[157px] cursor-pointer items-center gap-2 rounded-lg bg-primary px-4 py-2 text-white text-[14px] md:text-[]16px]">
             <FaPlus />
             Add Category
           </button>
@@ -60,7 +60,7 @@ function CategoryManagementView() {
 
       {/* Tabs */}
       <div className="mb-6">
-        <div className="border-b border-gray-200">
+        <div className="border-b border-border-main">
           <nav className="-mb-px flex space-x-8">
             <button
               onClick={() => setActiveTab("tree")}
@@ -105,14 +105,14 @@ function CategoryManagementView() {
       ) : (
         <>
           {activeTab === "tree" && (
-            <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
-              <div className="border-b border-gray-200 p-6">
-                <h2 className="text-lg font-semibold text-gray-900">Category Hierarchy</h2>
-                <p className="mt-1 text-sm text-gray-600">
+            <div className="rounded-lg border border-border-main bg-white">
+              <div className="border-b border-border-main p-6">
+                <h2 className="text-lg font-semibold">Category Hierarchy</h2>
+                <p className="mt-1 text-sm text-info">
                   View and manage your categories in a tree structure
                 </p>
               </div>
-              <div className="p-6">
+              <div className="py-[16px]">
                 <CategoryTree
                   categories={categories}
                   onDelete={handleCateogryActionChange}
@@ -140,9 +140,9 @@ function CategoryManagementView() {
               {categories.map((category) => (
                 <div
                   key={category._id}
-                  className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+                  className="rounded-lg border border-border-main bg-white p-4"
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex sm:flex-row flex-col md:items-center justify-between">
                     <div className="flex items-center gap-4">
                       <Image
                         width={32}
@@ -153,7 +153,7 @@ function CategoryManagementView() {
                         onError={(e) => (e.currentTarget.src = "/images/category_blank.png")}
                       />
                       <div>
-                        <h3 className="font-medium text-gray-900">{category.label}</h3>
+                        <h3 className="font-medium ">{category.label}</h3>
                         <p className="text-sm text-gray-500">/{category.slug}</p>
                         {category.parent && (
                           <p className="text-xs text-gray-400">
@@ -163,7 +163,7 @@ function CategoryManagementView() {
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-end gap-2">
                       <span className="text-sm text-gray-500">
                         {category.subCount} subcategories
                       </span>

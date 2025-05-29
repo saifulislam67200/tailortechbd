@@ -10,6 +10,7 @@ import ActiveBannerToggle from "./ActiveBannerToggle";
 import DeleteBanner from "./DeleteBanner";
 import AddBanner from "./AddBanner";
 import UpdateBanner from "./UpdateBanner";
+import Button from "@/components/ui/Button";
 
 const tableHead = [
   { label: "Order", field: "order" },
@@ -47,11 +48,11 @@ const BannerTable = () => {
         </div>
         <HorizontalLine className="my-[10px]" />
         {/* Action Buttons */}
-        <div className="mb-[5px] flex items-center justify-end gap-[12px]">
+        <div className="mb-[5px] flex md:flex-row flex-col md:items-center justify-end gap-[12px]">
           <AddBanner />
-          <button className="flex items-center gap-[8px] rounded-[6px] border border-dashboard/20 bg-dashboard/10 px-[16px] py-[8px] text-[14px] font-medium text-dashboard transition-colors hover:bg-dashboard/20">
+          <Button className="flex items-center gap-[8px] rounded-[6px] border border-dashboard/20 bg-dashboard/10 px-[16px] py-[8px] text-[14px] font-medium text-dashboard transition-colors hover:bg-dashboard/20">
             Manage Banner Position
-          </button>
+          </Button>
         </div>
 
         {/* Table */}

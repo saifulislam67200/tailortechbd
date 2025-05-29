@@ -56,7 +56,7 @@ export default function QnaTable() {
           </div>
           <HorizontalLine className="my-[10px]" />
           {/* Search */}
-          <div className="flex w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
+          <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
             <input
               type="text"
               className="w-full bg-transparent outline-none"
@@ -113,13 +113,13 @@ export default function QnaTable() {
                         </span>
                       </td>
                       <td className="px-[24px] py-[16px]">
-                        <span className="line-clamp-2 block h-[32px] max-w-[250px] text-[12px]">
+                        <span className="line-clamp-2 block h-[32px] w-[250px] text-[12px]">
                           {item.question}
                         </span>
                       </td>
                       <td className="px-[24px] py-[16px]">
                         {item.answer ? (
-                          <span className="line-clamp-2 block h-[32px] max-w-[250px] text-[12px]">
+                          <span className="line-clamp-2 block h-[32px] w-[250px] text-[12px]">
                             {item.answer}
                           </span>
                         ) : (
