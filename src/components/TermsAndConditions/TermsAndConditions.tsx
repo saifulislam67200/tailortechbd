@@ -7,7 +7,7 @@ const TermsAndConditions = () => {
     <div className="main_container flex min-h-[100dvh] w-full flex-col gap-[20px] py-[20px]">
       <Breadcrumb />
 
-      <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-[20px] lg:grid-cols-2">
         {/* English Terms and Conditions */}
         <div className="bg-white">
           <Heading>Terms & Conditions</Heading>
