@@ -74,7 +74,7 @@ const AddNewItemOnOrder: React.FC<IProps> = ({ onAddItem }) => {
       <DialogProvider
         state={isOpen && !selectedProduct}
         setState={setIsOpen}
-        className="w-full max-w-[700px]"
+        className="w-[95vw] md:w-[700px]"
       >
         <div className="max-h-[50vh] w-full overflow-auto bg-white p-[16px]">
           <h1 className="text-[18px] font-bold">Add New Item</h1>
@@ -89,7 +89,7 @@ const AddNewItemOnOrder: React.FC<IProps> = ({ onAddItem }) => {
             />
             <RxMagnifyingGlass />
           </div>
-          <div className="mt-[20px] grid grid-cols-3 gap-[16px]">
+          <div className="mt-[20px] grid grid-cols-1 gap-[16px] sm:grid-cols-2 md:grid-cols-3">
             {data?.data.map((item) => (
               <div
                 key={item._id}
@@ -130,7 +130,7 @@ const AddNewItemOnOrder: React.FC<IProps> = ({ onAddItem }) => {
           setSelectedSize(undefined);
         }}
         state={!!selectedProduct}
-        className="w-full max-w-[700px]"
+        className="w-[95vw] md:w-[700px]"
       >
         {selectedProduct ? (
           <div className="w-full bg-white p-[16px]">
