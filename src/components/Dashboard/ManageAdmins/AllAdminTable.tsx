@@ -7,13 +7,15 @@ import {
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
+import Pagination from "@/components/ui/Pagination";
 import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import Toggle from "@/components/ui/Toggle";
+import { useAppSelector } from "@/hooks/redux";
 import dateUtils from "@/utils/date";
 import Image from "next/image";
 import { RxMagnifyingGlass } from "react-icons/rx";
-import Pagination from "@/components/ui/Pagination";
+import CreateAdmin from "./CreateAdmin";
 
 const tableHead = [
   { label: "Name", field: "name" },
@@ -26,6 +28,7 @@ const tableHead = [
 const AllAdminTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
+  const { user: currentUser } = useAppSelector((state) => state.user);
 
   const [toggleAvtivation] = useToggleAccountActivationMutation();
 
@@ -51,23 +54,24 @@ const AllAdminTable = () => {
     <div className="flex flex-col gap-[10px]">
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
         <div className="flex flex-col gap-[5px]">
-          <h1 className="text-[16px] font-[600]">Product List</h1>
+          <h1 className="text-[16px] font-[600]">Admin List</h1>
           <p className="text-[12px] text-muted md:text-[14px]">
             Displaying All the available products in your store. There is total{" "}
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
-       <div className="flex items-center justify-between gap-[10px] w-full">
-         <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
-          <input
-            type="text"
-            className="w-full bg-transparent outline-none"
-            placeholder="Search Product"
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <RxMagnifyingGlass />
+        <div className="flex w-full items-center justify-between gap-[10px]">
+          <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
+            <input
+              type="text"
+              className="w-full bg-transparent outline-none"
+              placeholder="Search Product"
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <RxMagnifyingGlass />
+          </div>
+          <CreateAdmin />
         </div>
-       </div>
         <div className="overflow-x-auto">
           <table className="w-full divide-y divide-dashboard/20">
             <thead className="bg-dashboard/10">
@@ -118,7 +122,7 @@ const AllAdminTable = () => {
                       <div className="flex items-center gap-[5px]">
                         <span className="flex aspect-square max-h-[50px] w-[50px] items-center justify-start bg-white">
                           <Image
-                            src={user.avatar || "/"}
+                            src={user.avatar || "/images/avatar.jpg"}
                             alt={`${user.fullName} image`}
                             width={80}
                             height={80}
@@ -152,7 +156,11 @@ const AllAdminTable = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <Toggle onToggle={() => toggleAvtivation(user._id)} active={user.isActive} />
+                      <Toggle
+                        disabled={user._id === currentUser?._id}
+                        onToggle={() => toggleAvtivation(user._id)}
+                        defaultActive={user.isActive}
+                      />
                     </td>
                   </tr>
                 ))
