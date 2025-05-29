@@ -71,7 +71,11 @@ const NavBox = ({
                 : "text-dashboard"
               : "text-primary"
           }`}
-          onClick={() => setIsNavOpen(false)}
+          onClick={() => {
+            if (typeof window !== "undefined" && window.innerWidth <= 750) {
+              setIsNavOpen(false);
+            }
+          }}
         >
           {depth !== 0 ? (
             <span
