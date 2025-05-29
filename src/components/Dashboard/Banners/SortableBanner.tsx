@@ -1,10 +1,10 @@
 "use client";
-import Image from "next/image";
-import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { TBanner } from "./ManageBannerPosition";
+import Image from "next/image";
 import { FaGripVertical } from "react-icons/fa";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { TBanner } from "./ManageBannerPosition";
 
 const SortableBanner = ({ banner, index }: { banner: TBanner; index: number }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging, isOver, active } =
@@ -12,10 +12,10 @@ const SortableBanner = ({ banner, index }: { banner: TBanner; index: number }) =
       id: banner._id,
     });
 
+  console.log(transform);
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: isDragging ? "none" : transition,
-    zIndex: isDragging ? 100 : 0,
   };
 
   const isActiveDragging = active?.id === banner._id;
@@ -23,10 +23,15 @@ const SortableBanner = ({ banner, index }: { banner: TBanner; index: number }) =
   return (
     <div
       ref={setNodeRef}
-      style={style}
-      className={`group relative rounded-[5px] border transition-all duration-200 ${
+      style={{
+        ...style,
+        cursor: isDragging ? "grabbing" : "grab",
+      }}
+      {...attributes}
+      {...listeners}
+      className={`group relative my-[20px] shrink-0 rounded-[5px] border ${
         isDragging
-          ? "scale-[1.01] border-primary bg-white/90 shadow-lg"
+          ? "border-primary bg-white/90 shadow-lg"
           : isOver && !isActiveDragging
             ? "border-blue-300 bg-blue-50/50"
             : "border-border-main bg-white"
@@ -45,8 +50,6 @@ const SortableBanner = ({ banner, index }: { banner: TBanner; index: number }) =
       <div className="flex items-center gap-[10px] p-[16px] lg:gap-[16px]">
         {/* Drag Handle */}
         <div
-          {...attributes}
-          {...listeners}
           className={`flex-shrink-0 p-1 text-info/50 transition-colors duration-200 hover:text-info/80 lg:p-2 ${
             isDragging ? "cursor-grabbing" : "cursor-grab"
           }`}

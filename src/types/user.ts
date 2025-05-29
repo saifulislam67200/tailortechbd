@@ -8,6 +8,7 @@ export interface IUser {
   password: string;
   phoneNumber: string;
   isVerified: boolean;
+  isActive: boolean;
   gender?: TGender;
   createdAt: string;
   updatedAt: string;

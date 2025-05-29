@@ -1,5 +1,5 @@
 import { useLoginUserMutation } from "@/redux/features/user/user.api";
-import { setUser } from "@/redux/features/user/user.slice";
+import { setToken, setUser } from "@/redux/features/user/user.slice";
 import { IQueruMutationErrorResponse } from "@/types";
 import { Field, Form, Formik } from "formik";
 import Cookies from "js-cookie";
@@ -40,10 +40,14 @@ const EmailLogin = () => {
     }
 
     const user = res.data?.data.result;
-    console.log(user);
+    const token = res.data?.data.token;
 
     if (user) {
       dispatch(setUser(user));
+    }
+
+    if (token) {
+      dispatch(setToken(token));
     }
     const redirect = Cookies.get("redirect") || "/";
     Cookies.remove("redirect");
