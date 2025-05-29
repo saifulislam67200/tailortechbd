@@ -103,6 +103,21 @@ const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
     setIsNavOpen(!isNavOpen);
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 700) {
+        setIsNavOpen(false);
+      } else {
+        setIsNavOpen(true);
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className={`relative ${isNavOpen ? "w-[300px]" : "w-0"}`}>
       <div
