@@ -9,10 +9,16 @@ import DashboardPathSearchBar from "./DashboardPathSearchBar";
 const DashboardHeader = () => {
   return (
     <div className="sticky top-0 z-[10] flex h-[60px] w-full items-center justify-between border-b border-border-muted bg-white px-4">
-      <Link href={"/"} className="shrink-0 md:w-[300px]">
-        <Image src="/images/logos/logo-text.png" alt="logo" width={150} height={150} />
+      <Link href={"/"} className="w-[100px] shrink-0 lg:w-[284px]">
+        <Image
+          src="/images/logos/logo-text.png"
+          alt="logo"
+          width={150}
+          height={150}
+          className="w-full lg:w-[150px]"
+        />
       </Link>
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-[200px] items-center justify-between lg:w-full">
         <DashboardPathSearchBar navLinks={dashboardNavLinks.admin} />
         <UserDropdown displayName={true} />
       </div>
