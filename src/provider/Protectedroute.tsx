@@ -19,28 +19,32 @@ const Protectedroute: React.FC<IProps> = ({ role, children, checkVerification = 
   const [isAllowed, setIsAllowed] = useState(false);
 
   useEffect(() => {
-    if (isLoading) return;
+    const timeout = setTimeout(() => {
+      if (isLoading) return;
 
-    if (!user) {
-      Cookies.set("redirect", path);
-      router.replace("/login");
-      return;
-    }
+      if (!user) {
+        Cookies.set("redirect", path);
+        router.replace("/login");
+        return;
+      }
 
-    if (user.role !== role && role !== "*") {
-      Cookies.remove("redirect");
-      router.replace("/");
-      return;
-    }
+      if (user.role !== role && role !== "*") {
+        Cookies.remove("redirect");
+        router.replace("/");
+        return;
+      }
 
-    if (!user.isVerified && checkVerification) {
-      Cookies.set("redirect", path);
-      router.replace("/register/verification");
-      return;
-    }
+      if (!user.isVerified && checkVerification) {
+        Cookies.set("redirect", path);
+        router.replace("/register/verification");
+        return;
+      }
 
-    setIsAllowed(true);
-  }, [user, isLoading, path, router, role, checkVerification]);
+      setIsAllowed(true);
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [user, isLoading, role, checkVerification]);
 
   if (isLoading || !isAllowed) {
     return <Loader className="!h-screen" />;

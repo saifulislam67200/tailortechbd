@@ -63,6 +63,8 @@ const PhoneNumberLogin = () => {
     }
 
     const user = res.data?.data.result;
+    console.log(user, "from logn");
+
     if (user) {
       dispatch(setUser(user));
     }
