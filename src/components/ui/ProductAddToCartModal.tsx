@@ -110,7 +110,14 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
           <HorizontalLine className="my-[20px]" />
 
           <div className="flex flex-col items-center justify-start gap-[20px] md:flex-row md:items-start">
-            <div className="aspect-square w-full max-w-[200px] shrink-0 md:w-[300px]">
+            <div className="relative aspect-square w-full max-w-[200px] shrink-0 md:w-[300px]">
+              {selectedColor &&
+                selectedSize &&
+                selectedColor?.sizes?.find((s) => s.size === selectedSize.size)?.stock === 0 && (
+                  <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 text-lg font-semibold text-white">
+                    Out of Stock
+                  </div>
+                )}
               <Image
                 src={product.images[0] || "/"}
                 alt={product.name}
@@ -161,7 +168,13 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
                   }
                 />
               </div>
-              <Button onClick={handleAddToCart} className="mt-[20px]">
+              <Button
+                disabled={
+                  selectedColor?.sizes?.find((s) => s?.size === selectedSize?.size)?.stock === 0
+                }
+                onClick={handleAddToCart}
+                className="mt-[20px]"
+              >
                 Add To Cart
               </Button>
             </div>
