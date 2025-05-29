@@ -1,7 +1,7 @@
 "use client";
 import SidebarElement from "@/components/Shared/dashboard/SidebarElement";
 import { GoQuestion } from "react-icons/go";
-import { MdInventory2 } from "react-icons/md";
+import { MdInventory2, MdOutlineContactSupport } from "react-icons/md";
 import { PiFlagBannerFoldBold, PiShoppingCartSimpleBold } from "react-icons/pi";
 import { RiAdminLine } from "react-icons/ri";
 import { TbCategory } from "react-icons/tb";
@@ -69,6 +69,11 @@ export const admin: IDashboardNavLinks[] = [
         label: "All Customer",
       },
     ],
+  },
+  {
+    icon: MdOutlineContactSupport,
+    label: "Support Contact",
+    path: "/dashboard/contact-support",
   },
 ];
 
