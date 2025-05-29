@@ -35,7 +35,7 @@ const UpdateBanner = ({ banner }: { banner: IBanner }) => {
     try {
       const bannerPayload = {
         name: values.name,
-        thumbnail: values.images[0], // Use the first image URL
+        thumbnail: values.images[0],
         hyperLink: banner?.hyperLink || "#",
         index: banner?.index || 0,
       };

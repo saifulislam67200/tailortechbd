@@ -33,7 +33,7 @@ const AddBanner = () => {
     try {
       const bannerPayload = {
         name: values.name,
-        thumbnail: values.images[0], // Use the first image URL
+        thumbnail: values.images[0],
         hyperLink: "#",
         index: 0,
         active: true,
