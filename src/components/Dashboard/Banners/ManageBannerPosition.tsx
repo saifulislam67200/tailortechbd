@@ -1,16 +1,97 @@
 "use client";
-
 import Button from "@/components/ui/Button";
-import { useGetAllBannersQuery } from "@/redux/features/banner/banner.api";
-import Image from "next/image";
-import { FaGripVertical } from "react-icons/fa";
-import { FiEye, FiEyeOff, FiArrowLeft, FiSave, FiMove } from "react-icons/fi";
+import {
+  useGetAllBannersQuery,
+  useUpdateBannerSequencesMutation,
+} from "@/redux/features/banner/banner.api";
+import { FiArrowLeft, FiSave, FiMove } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import {
+  DndContext,
+  closestCenter,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import SortableBanner from "./SortableBanner";
+import { IQueruMutationErrorResponse } from "@/types";
+import { toast } from "sonner";
+
+export interface TBanner {
+  _id: string;
+  name: string;
+  thumbnail: string;
+  index: number;
+  active: boolean;
+  hyperLink: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
 type ManageBannerPositionProps = {
   setIsViewBannerPosition: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
 const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionProps) => {
   const { data } = useGetAllBannersQuery();
-  const banners = data?.data || [];
+  const [banners, setBanners] = useState<TBanner[]>([]);
+  const [hasChanges, setHasChanges] = useState(false);
+  const [updateBannerSequences, { isLoading }] = useUpdateBannerSequencesMutation();
+  console.log(banners);
+
+  // Initialize banners from API data
+  useEffect(() => {
+    if (data?.data) {
+      setBanners([...data.data].sort((a, b) => a.index - b.index));
+    }
+  }, [data]);
+
+  // Better drag sensitivity
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    setBanners((items) => {
+      const oldIndex = items.findIndex((b) => b._id === active.id);
+      const newIndex = items.findIndex((b) => b._id === over.id);
+      const newBanners = arrayMove(items, oldIndex, newIndex);
+
+      // Update indexes to match new order
+      return newBanners.map((banner, index) => ({
+        ...banner,
+        index,
+      }));
+    });
+    setHasChanges(true);
+  };
+
+  const saveBannerSequences = async () => {
+    const res = await updateBannerSequences({
+      payload: banners.map((banner) => ({
+        _id: banner._id,
+        index: banner.index,
+      })),
+    });
+    console.log(res);
+
+    const error = res.error as IQueruMutationErrorResponse;
+    if (error) {
+      return toast("Something went wrong");
+    }
+    toast.success("Banner sequences updated successfully");
+  };
 
   return (
     <div className="overflow-hidden rounded-lg border border-border-main bg-white">
@@ -28,7 +109,13 @@ const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionP
               <span className="text-[14px] font-medium">Back to Banner Management</span>
             </div>
           </div>
-          <Button className="flex items-center gap-[8px] px-[16px] py-[8px] text-white transition-colors hover:bg-primary/90">
+          <Button
+            onClick={saveBannerSequences}
+            disabled={!hasChanges || isLoading}
+            className={`flex items-center gap-[8px] px-[16px] py-[8px] text-white transition-colors ${
+              hasChanges ? "hover:bg-primary/90" : "cursor-not-allowed opacity-50"
+            }`}
+          >
             <FiSave className="h-4 w-4" />
             Save Changes
           </Button>
@@ -47,11 +134,11 @@ const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionP
       <div className="border-b border-blue-100 bg-blue-50 px-[24px] py-[16px]">
         <div className="flex items-start gap-[12px]">
           <div className="rounded-lg bg-blue-100 p-[8px]">
-            <FiMove className="h-[20px] w-[20px] text-blue-600" />
+            <FiMove className="h-[20px] w-[20px] text-primary" />
           </div>
           <div>
-            <h3 className="mb-1 text-[14px] font-semibold text-blue-900">How to reorder banners</h3>
-            <p className="text-[14px] text-blue-700">
+            <h3 className="mb-1 text-[14px] font-semibold text-primary">How to reorder banners</h3>
+            <p className="text-[14px] text-primary">
               Click and drag the grip handle (⋮⋮) on the left side of each banner card to reorder
               them. Your changes will be saved automatically.
             </p>
@@ -61,116 +148,20 @@ const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionP
 
       {/* Banner Cards Container */}
       <div className="p-[24px]">
-        <div className="space-y-4">
-          {banners.map((banner, index) => (
-            <div
-              key={banner._id}
-              className="group cursor-move rounded-[5px] border border-border-main bg-white transition-all duration-200"
-            >
-              <div className="flex items-center gap-[16px] p-[16px]">
-                {/* Drag Handle */}
-                <div className="flex-shrink-0 cursor-grab p-2 text-gray-400 hover:text-info active:cursor-grabbing">
-                  <FaGripVertical className="h-6 w-6" />
-                </div>
-
-                {/* Position Number */}
-                <div className="flex-shrink-0">
-                  <div className="flex h-[48px] w-[48px] items-center justify-center rounded-[5px] bg-gradient-to-br from-primary to-primary/80 text-[18px] font-bold text-white shadow-sm">
-                    {index + 1}
-                  </div>
-                </div>
-
-                {/* Banner Image - Large */}
-                <div className="flex-shrink-0">
-                  <div className="relative h-[112px] w-[192px] overflow-hidden rounded-lg border-2 border-gray-100 bg-gray-50">
-                    <Image
-                      src={banner.thumbnail || "/placeholder.svg"}
-                      alt={banner.name}
-                      fill
-                      className="object-cover"
-                      sizes="192px"
-                    />
-                    {/* Overlay on hover */}
-                    <div className="absolute inset-0 bg-black/0 transition-colors duration-200 group-hover:bg-black/10" />
-                  </div>
-                </div>
-
-                {/* Banner Details */}
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-start justify-between">
-                    <div className="min-w-0 flex-1">
-                      <h3 className="mb-[8px] truncate text-lg font-semibold capitalize">
-                        {banner.name}
-                      </h3>
-
-                      <div className="mb-[12px] flex items-center gap-3">
-                        {/* Status Badge */}
-                        <span
-                          className={`inline-flex items-center rounded-full px-3 py-1 text-[14px] font-medium ${
-                            banner.active
-                              ? "border border-green-200 bg-green-100 text-green-800"
-                              : "border border-red-200 bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {banner.active ? (
-                            <>
-                              <FiEye className="mr-1.5 h-4 w-4" />
-                              Active
-                            </>
-                          ) : (
-                            <>
-                              <FiEyeOff className="mr-1.5 h-4 w-4" />
-                              Inactive
-                            </>
-                          )}
-                        </span>
-
-                        {/* Link Badge */}
-                        {banner.hyperLink && banner.hyperLink !== "#" && (
-                          <span className="inline-flex items-center rounded-full border border-border-main bg-gray-100 px-3 py-1 text-[14px] text-gray-700">
-                            🔗 Has Link
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Link URL */}
-                      {banner.hyperLink && banner.hyperLink !== "#" && (
-                        <div className="text-[14px] text-gray-500">
-                          <span className="font-medium">Link:</span>{" "}
-                          <span className="inline-block max-w-xs truncate align-bottom">
-                            {banner.hyperLink}
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Created Date */}
-                      {banner.createdAt && (
-                        <div className="mt-2 text-xs text-gray-400">
-                          Created:{" "}
-                          {new Date(banner.createdAt).toLocaleDateString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Move Indicators */}
-                    <div className="ml-4 flex flex-col items-center gap-1">
-                      <div className="h-1 w-8 rounded-full bg-gray-200 transition-colors group-hover:bg-gray-300" />
-                      <div className="h-1 w-6 rounded-full bg-gray-200 transition-colors group-hover:bg-gray-300" />
-                      <div className="h-1 w-4 rounded-full bg-gray-200 transition-colors group-hover:bg-gray-300" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Drag Indicator Line */}
-              <div className="h-1 bg-gradient-to-r from-transparent via-gray-200 to-transparent opacity-0 transition-opacity duration-200 group-hover:opacity-100" />
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          modifiers={[restrictToVerticalAxis]}
+        >
+          <SortableContext items={banners} strategy={verticalListSortingStrategy}>
+            <div className="space-y-4">
+              {banners.map((banner, index) => (
+                <SortableBanner key={banner._id} banner={banner} index={index} />
+              ))}
             </div>
-          ))}
-        </div>
+          </SortableContext>
+        </DndContext>
 
         {/* Empty State */}
         {banners.length === 0 && (
@@ -195,7 +186,9 @@ const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionP
           <div className="text-[14px] text-info">
             Total banners: <span className="font-semibold">{banners.length}</span>
           </div>
-          <div className="text-[14px] text-info">Changes are saved automatically</div>
+          <div className="text-[14px] text-info">
+            {hasChanges ? "Changes pending save" : "Changes are saved automatically"}
+          </div>
         </div>
       </div>
     </div>
