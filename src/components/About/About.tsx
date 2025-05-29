@@ -107,35 +107,6 @@ const About = () => {
           </section>
 
           <section>
-            <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Our Team</h3>
-            <p className="mb-[16px]">
-              Behind TailorTech is a diverse team of passionate professionals united by a shared
-              vision. Our team includes:
-            </p>
-            <ul className="list-disc space-y-[8px] pl-[24px]">
-              <li className="text-[12px] marker:text-primary md:text-[15px]">
-                Master tailors with decades of experience in traditional craftsmanship
-              </li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">
-                Tech specialists who develop and implement our digital solutions
-              </li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">
-                Design experts who stay ahead of fashion trends while honoring timeless styles
-              </li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">
-                Customer experience professionals dedicated to ensuring your satisfaction
-              </li>
-              <li className="text-[12px] marker:text-primary md:text-[15px]">
-                Sustainability advocates who help us minimize our environmental footprint
-              </li>
-            </ul>
-            <p className="mt-4">
-              Together, we work to deliver on our promise: clothing that tells your story, fits your
-              body, and meets the demands of your lifestyle.
-            </p>
-          </section>
-
-          <section>
             <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">
               Our Commitment to You
             </h3>

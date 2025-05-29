@@ -8,7 +8,7 @@ const Footer = () => {
     <footer className="relative mb-[45px] w-full overflow-hidden bg-primary text-white lg:mb-0">
       {/* Main Footer Content */}
       <div className="main_container relative mx-auto w-full px-4 py-[30px] sm:py-[40px]">
-        <div className="flex flex-col gap-[18px] md:gap-[28px] lg:flex-row lg:gap-[48px]">
+        <div className="relative z-10 flex flex-col gap-[18px] md:gap-[28px] lg:flex-row lg:gap-[48px]">
           {/* Company Info */}
           <div className="mx-auto space-y-[16px] lg:ms-0 lg:w-[30%]">
             <div className="flex items-center justify-center space-x-2 lg:justify-start">
@@ -73,10 +73,10 @@ const Footer = () => {
               <ul className="space-y-2">
                 <li className="relative left-0 duration-[0.3s] hover:left-[5px]">
                   <Link
-                    href="/return-refund-cancellation"
+                    href="/exchange-and-return-policy"
                     className="text-[14px] transition-colors hover:text-white"
                   >
-                    Return & Refund
+                    Exchange & Return Policy
                   </Link>
                 </li>
                 <li className="relative left-0 duration-[0.3s] hover:left-[5px]">

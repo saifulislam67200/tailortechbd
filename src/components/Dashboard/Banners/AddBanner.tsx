@@ -52,6 +52,7 @@ const AddBanner = () => {
         thumbnail: uploadedUrl,
         hyperLink: "#",
         index: 0,
+        active: true,
       };
 
       await createBanner(bannerPayload).unwrap();
