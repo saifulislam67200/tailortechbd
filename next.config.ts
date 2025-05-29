@@ -11,10 +11,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**",
       },
-      {
-        protocol: "https",
-        hostname: "i.ibb.co",
-      },
+      // {
+      //   protocol: "https",
+      //   hostname: "i.ibb.co",
+      // },
       {
         protocol: "https",
         hostname: "ruperhat.com",
