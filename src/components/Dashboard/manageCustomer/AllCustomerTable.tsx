@@ -131,7 +131,6 @@ const AllCustomerTable = () => {
                       <span className="flex flex-col gap-[6px]">
                         <span className="text-[14px]">Email: {user.email || "N/A"}</span>
                         <span className="text-[14px]">Phone: {user.phoneNumber}</span>
-                        <span className="text-[14px]">Phone: {user.role}</span>
                       </span>
                     </td>
                     <td className="px-6 py-4">
