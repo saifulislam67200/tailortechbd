@@ -26,7 +26,6 @@ const Collections = async () => {
 
   const data = await res.json();
   const collections: IProduct[] = data?.data || [];
-
   return (
     <section className="w-full py-[16px]">
       <Title title="Latest Collections" />

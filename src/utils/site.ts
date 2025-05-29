@@ -1,4 +1,4 @@
-import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
+import { FaFacebookF } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
 export const socialLinks = [
@@ -7,19 +7,19 @@ export const socialLinks = [
     url: "https://www.facebook.com/tailortechbd",
     icon: FaFacebookF,
   },
-  {
-    name: "youtube",
-    url: "https://www.youtube.com",
-    icon: FaYoutube,
-  },
-  {
-    name: "instagram",
-    url: "https://www.instagram.com",
-    icon: FaInstagram,
-  },
+  // {
+  //   name: "youtube",
+  //   url: "https://www.youtube.com",
+  //   icon: FaYoutube,
+  // },
+  // {
+  //   name: "instagram",
+  //   url: "https://www.instagram.com",
+  //   icon: FaInstagram,
+  // },
   {
     name: "Email",
-    url: "mailto:0Bx3s@example.com",
+    url: "mailto:tailortechbd2025@gmail.com",
     icon: MdEmail,
   },
 ];
@@ -47,8 +47,8 @@ export const footerLinks = [
     label: "Customer Service",
     contents: [
       {
-        label: "Return & Refund",
-        url: "/return-refund-cancellation",
+        label: "Exchange & Return Policy",
+        url: "/exchange-and-return-policy",
       },
       {
         label: "Privacy Policy",

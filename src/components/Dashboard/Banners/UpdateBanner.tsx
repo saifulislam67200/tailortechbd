@@ -84,7 +84,7 @@ const UpdateBanner = ({ banner }: { banner: IBanner }) => {
         <div className="w-full bg-white p-[16px]">
           <div className="flex items-center justify-between">
             <h5 className="text-[18px] font-[700] text-strong md:text-[20px]">Update Banner</h5>
-            <button onClick={() => setIsOpen(false)}>
+            <button onClick={() => setIsOpen(false)} className="cursor-pointer">
               <LuX />
             </button>
           </div>
