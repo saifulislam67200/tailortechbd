@@ -22,6 +22,7 @@ const userSlice = createSlice({
     logout(state) {
       state.user = null;
       state.isLoading = false;
+      state.token = null;
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action?.payload || false;

@@ -1,5 +1,6 @@
 import { useAppDispatch } from "@/hooks/redux";
 import { ICountry } from "@/hooks/useCountries";
+import { useLoginAdminMutation } from "@/redux/features/admin/admin.api";
 import { setToken, setUser } from "@/redux/features/user/user.slice";
 import { IQueruMutationErrorResponse } from "@/types";
 import { Field, Form, Formik, FormikHelpers } from "formik";
@@ -12,7 +13,6 @@ import Button from "../ui/Button";
 import CountrySelector from "../ui/CountrySelector";
 import FormMessage, { IFormMessage } from "../ui/FormMessage";
 import Input from "../ui/Input";
-import { useLoginAdminMutation } from "@/redux/features/admin/admin.api";
 const initialValues = { phoneNumber: "", password: "" };
 const validationSchema = yup.object({
   phoneNumber: yup.string().required("Phone number is required"),
@@ -49,7 +49,7 @@ const AdminPhoneNumberLogin = () => {
       phoneNumber: phone,
       mode: "phoneNumber",
     });
-    const redirect = Cookies.get("redirect") || "/";
+    const redirect = "/dashboard";
     Cookies.remove("redirect");
 
     const error = res.error as IQueruMutationErrorResponse;
@@ -63,7 +63,7 @@ const AdminPhoneNumberLogin = () => {
     }
 
     const user = res.data?.data.result;
-    const token = res.data?.data.token;
+    const token = res.data?.data.accessToken;
 
     if (user) {
       dispatch(setUser(user));

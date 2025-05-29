@@ -1,3 +1,4 @@
+import { useLoginAdminMutation } from "@/redux/features/admin/admin.api";
 import { setToken, setUser } from "@/redux/features/user/user.slice";
 import { IQueruMutationErrorResponse } from "@/types";
 import { Field, Form, Formik } from "formik";
@@ -9,7 +10,6 @@ import * as yup from "yup";
 import Button from "../ui/Button";
 import FormMessage, { IFormMessage } from "../ui/FormMessage";
 import Input from "../ui/Input";
-import { useLoginAdminMutation } from "@/redux/features/admin/admin.api";
 const initialValues = { email: "", password: "" };
 const validationSchema = yup.object({
   email: yup.string().required("Email is required").email("Please enter a valid email address"),
@@ -41,7 +41,7 @@ const AdminEmailLogin = () => {
     }
 
     const user = res.data?.data.result;
-    const token = res.data?.data.token;
+    const token = res.data?.data.accessToken;
 
     if (user) {
       dispatch(setUser(user));
@@ -50,10 +50,9 @@ const AdminEmailLogin = () => {
     if (token) {
       dispatch(setToken(token));
     }
-    const redirect = Cookies.get("redirect") || "/";
+    const redirect = "/dashboard";
     Cookies.remove("redirect");
     setFormMessage(null);
-    console.log(redirect);
 
     router.replace(redirect);
   };

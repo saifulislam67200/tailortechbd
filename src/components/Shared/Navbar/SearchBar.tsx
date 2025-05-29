@@ -28,7 +28,7 @@ export default function SearchBar({ onSearch }: { onSearch?: (value: string) => 
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const search = form.search?.value || "";
-    if (search) {
+    if (search && search !== searchValue) {
       onSearch?.(search);
       router.push(`/shop?searchTerm=${search}`);
     }

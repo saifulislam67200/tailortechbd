@@ -37,7 +37,7 @@ const adminApi = api.injectEndpoints({
     }),
 
     loginAdmin: builder.mutation<
-      { data: { result: IUser; token: string } },
+      { data: { result: IUser; accessToken: string } },
       { email?: string; phoneNumber?: string; mode?: "email" | "phoneNumber"; password: string }
     >({
       query: (post) => ({
@@ -47,8 +47,11 @@ const adminApi = api.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
-
   }),
 });
-export const { useCreateAdminMutation, useGetAllClientsQuery, useToggleAccountActivationMutation, useLoginAdminMutation } =
-  adminApi;
+export const {
+  useCreateAdminMutation,
+  useGetAllClientsQuery,
+  useToggleAccountActivationMutation,
+  useLoginAdminMutation,
+} = adminApi;
