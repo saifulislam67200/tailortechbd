@@ -20,10 +20,11 @@ const Footer = () => {
               />
             </div>
             <p className="w-full text-center text-[14px] leading-relaxed md:max-w-[550px] lg:max-w-[300px] lg:text-start">
-              Where Tradition Meets Innovation. We blend the timeless art of tailoring with
-              cutting-edge fashion technology to bring you modern, perfectly fitted, and stylish
-              apparel.
+              TailorTech – Where tradition meets innovation. We combine expert tailoring with modern
+              fashion technology to deliver stylish, high-quality apparel designed for comfort,
+              confidence, and individuality.
             </p>
+
             <div className="hidden justify-center space-x-4 lg:flex lg:justify-start">
               {socialLinks.map(({ icon: Icon, url, name }, i) => (
                 <Link

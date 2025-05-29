@@ -37,7 +37,10 @@ const QuestionAnswerForm = ({ productId }: { productId: string }) => {
       return;
     }
     resetForm();
-    toast("Question submitted successfully!");
+    // toast("Question submitted successfully!");
+    toast.message("Question submitted successfully!", {
+      description: "We'll notify you once the admin replies.",
+    });
   };
 
   return (

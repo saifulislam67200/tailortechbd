@@ -1,6 +1,7 @@
 "use client";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { addToCart } from "@/redux/features/cart/cartSlice";
+import { addToWishlist } from "@/redux/features/wishlist/wishlistSlice";
 import { IColor, IProduct, ISize } from "@/types/product";
 import React, { useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
@@ -86,6 +87,16 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
     setActiveSize(color.sizes?.[0]);
   };
 
+  const wishlistItems = useAppSelector((state) => state.wishlist.items);
+  const isInWishlist = wishlistItems.some((item) => item._id === product._id);
+
+  const handleToggleWishlist = () => {
+    if (!isInWishlist) {
+      dispatch(addToWishlist(product));
+      toast.success("Added to wishlist");
+    }
+  };
+
   return (
     <div>
       {/* colors  */}
@@ -163,8 +174,16 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
         >
           Add to cart
         </button>
-        <button className="h-[40px] w-full cursor-pointer bg-quaternary transition-all duration-300 hover:bg-strong hover:text-white">
-          Add To Wishlist
+        <button
+          onClick={handleToggleWishlist}
+          disabled={isInWishlist}
+          className={`h-[40px] w-full transition-all duration-300 ${
+            isInWishlist
+              ? "cursor-not-allowed bg-gray-400 text-white"
+              : "cursor-pointer bg-quaternary hover:bg-strong hover:text-white"
+          }`}
+        >
+          {isInWishlist ? "Already in Wishlist" : "Add To Wishlist"}
         </button>
       </div>
     </div>
