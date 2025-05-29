@@ -1,4 +1,3 @@
-import { useLoginAdminMutation } from "@/redux/features/user/user.api";
 import { setToken, setUser } from "@/redux/features/user/user.slice";
 import { IQueruMutationErrorResponse } from "@/types";
 import { Field, Form, Formik } from "formik";
@@ -10,6 +9,7 @@ import * as yup from "yup";
 import Button from "../ui/Button";
 import FormMessage, { IFormMessage } from "../ui/FormMessage";
 import Input from "../ui/Input";
+import { useLoginAdminMutation } from "@/redux/features/admin/admin.api";
 const initialValues = { email: "", password: "" };
 const validationSchema = yup.object({
   email: yup.string().required("Email is required").email("Please enter a valid email address"),
