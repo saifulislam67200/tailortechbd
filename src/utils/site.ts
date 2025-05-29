@@ -4,7 +4,7 @@ import { MdEmail } from "react-icons/md";
 export const socialLinks = [
   {
     name: "facebook",
-    url: "https://www.facebook.com",
+    url: "https://www.facebook.com/tailortechbd",
     icon: FaFacebookF,
   },
   {
