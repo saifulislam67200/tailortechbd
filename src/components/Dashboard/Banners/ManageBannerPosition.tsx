@@ -4,21 +4,21 @@ import {
   useGetAllBannersQuery,
   useUpdateBannerSequencesMutation,
 } from "@/redux/features/banner/banner.api";
-import { FiArrowLeft, FiSave, FiMove } from "react-icons/fi";
-import { useState, useEffect } from "react";
+import { IQueruMutationErrorResponse } from "@/types";
 import {
-  DndContext,
   closestCenter,
+  DndContext,
   DragEndEvent,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import SortableBanner from "./SortableBanner";
-import { IQueruMutationErrorResponse } from "@/types";
+import { useEffect, useState } from "react";
+import { FiArrowLeft, FiMove, FiSave } from "react-icons/fi";
 import { toast } from "sonner";
+import SortableBanner from "./SortableBanner";
 
 export interface TBanner {
   _id: string;
@@ -51,13 +51,7 @@ const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionP
   }, [data]);
 
   // Better drag sensitivity
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 5,
-      },
-    })
-  );
+  const sensors = useSensors(useSensor(TouchSensor), useSensor(PointerSensor));
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -152,14 +146,17 @@ const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionP
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
-          modifiers={[restrictToVerticalAxis]}
+
+          // modifiers={[restrictToVerticalAxis]}
         >
-          <SortableContext items={banners} strategy={verticalListSortingStrategy}>
-            <div className="space-y-4">
-              {banners.map((banner, index) => (
-                <SortableBanner key={banner._id} banner={banner} index={index} />
-              ))}
-            </div>
+          <SortableContext
+            // items={banners as unknown as UniqueIdentifier[]}
+            strategy={verticalListSortingStrategy}
+            items={banners.map((b) => b._id)}
+          >
+            {banners.map((banner, index) => (
+              <SortableBanner key={banner._id} banner={banner} index={index} />
+            ))}
           </SortableContext>
         </DndContext>
 

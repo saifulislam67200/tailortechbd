@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { setToken } from "../features/user/user.slice";
 
 export const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
@@ -16,9 +17,15 @@ const baseQueryWithRefreshToken = async (args: any, api: any, extraOptions: any)
       credentials: "include",
     });
 
-    const data = await res.json();
+    const data = (await res.json()) as {
+      success: boolean;
+      data: {
+        accessToken: string;
+      };
+    };
 
-    if (data?.data?.success) {
+    if (data?.success && data?.data?.accessToken) {
+      api?.dispatch(setToken(data?.data?.accessToken));
       result = await baseQuery(args, api, extraOptions);
     }
     return result;
@@ -29,6 +36,18 @@ const baseQueryWithRefreshToken = async (args: any, api: any, extraOptions: any)
 export const api = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["user", "categories", "file", "geoLocation", "order", "product", "statistics", "QuestionAndAnswer", "review", "banner"],
+  tagTypes: [
+    "user",
+    "categories",
+    "file",
+    "geoLocation",
+    "order",
+    "product",
+    "statistics",
+    "QuestionAndAnswer",
+    "review",
+    "banner",
+    "admin",
+  ],
   endpoints: () => ({}),
 });

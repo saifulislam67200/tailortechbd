@@ -13,6 +13,8 @@ import CountrySelector from "../ui/CountrySelector";
 import FormCard from "../ui/FormCard";
 import FormMessage, { IFormMessage } from "../ui/FormMessage";
 import Input from "../ui/Input";
+import { setToken, setUser } from "@/redux/features/user/user.slice";
+import { useAppDispatch } from "@/hooks/redux";
 
 const generateVerificationCode = () => {
   return Math.floor(100000 + Math.random() * 900000);
@@ -31,6 +33,8 @@ const RegisterForm = () => {
 
   const [registerUser, { isLoading }] = useRegisterCustomerMutation();
   const [formMessage, setFormMessage] = useState<IFormMessage | null>(null);
+
+  const dispatch = useAppDispatch();
 
   const router = useRouter();
 
@@ -65,6 +69,17 @@ const RegisterForm = () => {
         setFormMessage({ message: "Something went wrong", type: "error" });
       }
       return;
+    }
+
+    const user = res.data?.data.result;
+    const token = res.data?.data.token;
+
+    if (user) {
+      dispatch(setUser(user));
+    }
+
+    if (token) {
+      dispatch(setToken(token));
     }
 
     router.replace("/register/verification");
