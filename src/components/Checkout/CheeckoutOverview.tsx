@@ -3,8 +3,11 @@
 import { useAppSelector } from "@/hooks/redux";
 import Image from "next/image";
 
-const CheeckoutOverview = () => {
+const CheeckoutOverview = ({ district }: { district?: string }) => {
   const { items } = useAppSelector((state) => state.checkout);
+
+  const isInsideDhaka = district?.toLowerCase() === "dhaka";
+  const deliveryFee = isInsideDhaka ? 70 : 120;
 
   const getDiscountedPrice = (price: number, discount: number) => {
     return price - (price * discount) / 100;
@@ -88,12 +91,15 @@ const CheeckoutOverview = () => {
         </div>
         <div className="flex w-full items-center justify-between gap-[10px]">
           <span className="text-[14px] font-[700]">Delivery Fee</span>
-          <span className="font-[600]"> 60 TK.</span>
+          <span className="font-[600]"> {deliveryFee} TK.</span>
         </div>
         <span className="h-[1px] w-full bg-border-muted"></span>
         <div className="flex w-full items-center justify-between gap-[10px]">
           <span className="text-[14px] font-[700]">Grand Total</span>
-          <span className="font-[600]"> {(mainTotal - totalDiscount + 60).toFixed(2)} TK.</span>
+          <span className="font-[600]">
+            {" "}
+            {(mainTotal - totalDiscount + deliveryFee).toFixed(2)} TK.
+          </span>
         </div>
       </div>
     </div>

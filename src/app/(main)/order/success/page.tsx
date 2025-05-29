@@ -13,6 +13,7 @@ const OrderSuccess = () => {
 
   const getParams = useSearchParams();
   const orderId = getParams.get("o_id");
+  const insideDhaka = getParams.get("ind") === "1";
 
   const calculateDiscountedPrice = (price: number, discount: number) =>
     price - (price * discount) / 100;
@@ -26,7 +27,7 @@ const OrderSuccess = () => {
     (acc, item) => acc + ((item.product.price * (item.discount || 0)) / 100) * item.quantity,
     0
   );
-  const deliveryFee = 60;
+  const deliveryFee = insideDhaka ? 70 : 120;
   const grandTotal = subtotal + deliveryFee;
 
   const hasMounted = { current: false };

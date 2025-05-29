@@ -20,12 +20,12 @@ export default function Contact() {
     {
       icon: FiMail,
       title: "Email",
-      details: ["tailortechbd2025@gmail.com", "supporttailortech@gmail.com"],
+      details: ["tailortechbd2025@gmail.com"],
     },
     {
       icon: FiClock,
       title: "Business Hours",
-      details: ["Mon - Fri: 9:00 AM - 6:00 PM", "Sat - Sun: 10:00 AM - 4:00 PM"],
+      details: ["Open Everyday.", "Support Available only from: 09:00 AM to 10:00 PM"],
     },
   ];
 

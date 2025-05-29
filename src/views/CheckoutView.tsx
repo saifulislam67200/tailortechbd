@@ -129,9 +129,9 @@ const CheckoutView = () => {
       }
       return;
     }
-    // change it with order success page
     dispatch(clearCart());
-    router.replace(`/order/success?o_id=${res.data?.data._id}`);
+    const isInsideDhaka = values?.district?.toLowerCase() === "dhaka";
+    router.replace(`/order/success?o_id=${res.data?.data._id}?ind=${isInsideDhaka ? 1 : 0}`);
   };
 
   return (
@@ -364,7 +364,7 @@ const CheckoutView = () => {
               </div>
               <div className="flex w-full flex-col gap-[16px]">
                 <CheckoutPaymentOptions />
-                <CheeckoutOverview />
+                <CheeckoutOverview district={values.district || ""} />
                 {formMessage ? <FormMessage formMessage={formMessage} /> : ""}
                 {isValid ? (
                   ""
