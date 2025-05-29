@@ -94,7 +94,7 @@ const OverviewChart = () => {
 
   return (
     <div className="w-full">
-      <div className="mb-4 flex w-full items-center justify-between rounded-[5px] bg-white p-[16px]">
+      <div className="mb-4 flex w-full items-center justify-between bg-white p-[16px]">
         <h1>Hi, {user?.fullName}</h1>
         <AnalyticsOverviewFilter
           options={options}
@@ -117,7 +117,7 @@ const OverviewChart = () => {
         />
       </div>
 
-      <div className="2x:h-[400px] h-[360px] rounded-[5px] bg-white pt-[50px] pr-[16px] pb-[70px] 2xl:h-[500px]">
+      <div className="2x:h-[400px] h-[360px] bg-white pt-[50px] pr-[16px] pb-[70px] 2xl:h-[500px]">
         <h1 className="mb-[20px] pl-[45px] text-[14px] font-semibold text-primary md:text-[16px]">
           Overall Statistics
         </h1>

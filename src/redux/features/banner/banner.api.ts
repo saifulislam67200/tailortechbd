@@ -50,6 +50,20 @@ const bannerApi = api.injectEndpoints({
       }),
       invalidatesTags: ["banner"],
     }),
+
+
+
+    updateBannerSequences: builder.mutation<
+      { message: string; data: unknown },
+      { payload: { _id: string; index: number }[] }
+    >({
+      query: ({ payload }) => ({
+        url: `/banner/update-banner-sequences`,
+        method: "PATCH",
+        body: { payload },
+      }),
+      invalidatesTags: ["banner"],
+    }),
   }),
 });
 
@@ -59,4 +73,5 @@ export const {
   useCreateBannerMutation,
   useUpdateBannerByIdMutation,
   useDeleteBannerByIdMutation,
+  useUpdateBannerSequencesMutation
 } = bannerApi;

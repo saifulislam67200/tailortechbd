@@ -7,9 +7,9 @@ import { IoIosMenu } from "react-icons/io";
 
 const CategoryStatisticsSkeleton = () => {
   return (
-    <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
+    <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
       {[...Array(4)].map((_, index) => (
-        <div key={index} className="rounded-lg border border-border-main bg-white p-4 ">
+        <div key={index} className="rounded-lg border border-border-main bg-white p-4">
           <div className="flex items-center">
             <span className="animate-pulse rounded-lg bg-gray-200 p-2">
               <span className="block h-6 w-6 rounded bg-gray-300"></span>
@@ -38,15 +38,17 @@ const CategoryStatistics = () => {
   }
 
   return (
-    <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
+    <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
       <div className="rounded-lg border border-border-main bg-white p-4">
         <div className="flex items-center">
           <span className="rounded-lg bg-blue-100 p-2">
             <IoIosMenu className="h-[24px] w-[24px] text-blue-600" />
           </span>
           <div className="ml-4">
-            <p className="text-[12px] md:text-[14px] font-medium text-primary/70">Total Categories</p>
-            <p className="text-[18px] md:text-[22px] font-bold text-primary">{totalCategories}</p>
+            <p className="text-[12px] font-medium text-primary/70 md:text-[14px]">
+              Total Categories
+            </p>
+            <p className="text-[18px] font-bold text-primary md:text-[22px]">{totalCategories}</p>
           </div>
         </div>
       </div>
@@ -75,15 +77,15 @@ const CategoryStatistics = () => {
             </svg>
           </div>
           <div className="ml-4">
-            <p className="flex items-center gap-[4px] text-[12px] md:text-[14px] font-medium text-primary/70">
+            <p className="flex items-center gap-[4px] text-[12px] font-medium text-primary/70 md:text-[14px]">
               Visible{" "}
               <Tooltip content="Total visible categories on homepage on Top Categories section">
-                <span className="center aspect-square w-[15px] md:w-[20px] cursor-pointer rounded-full border-[1px] border-border-muted">
+                <span className="center aspect-square w-[15px] cursor-pointer rounded-full border-[1px] border-border-muted md:w-[20px]">
                   <FaInfo className="text-[7px] md:text-[10px]" />
                 </span>
               </Tooltip>
             </p>
-            <p className="text-[18px] md:text-[22px] font-bold text-primary">{totalVisible}</p>
+            <p className="text-[18px] font-bold text-primary md:text-[22px]">{totalVisible}</p>
           </div>
         </div>
       </div>
@@ -106,15 +108,17 @@ const CategoryStatistics = () => {
             </svg>
           </div>
           <div className="ml-4">
-            <p className="flex items-center gap-[4px] text-[12px] md:text-[14px] font-medium text-primary/70">
+            <p className="flex items-center gap-[4px] text-[12px] font-medium text-primary/70 md:text-[14px]">
               Hidden
               <Tooltip content="Total hidden categories on homepage on Top Categories section">
-                <span className="center aspect-square w-[15px] md:w-[20px] cursor-pointer rounded-full border-[1px] border-border-muted">
+                <span className="center aspect-square w-[15px] cursor-pointer rounded-full border-[1px] border-border-muted md:w-[20px]">
                   <FaInfo className="text-[7px] md:text-[10px]" />
                 </span>
               </Tooltip>
             </p>
-            <p className="text-[18px] md:text-[22px] font-bold text-primary">{totalHidenCategories}</p>
+            <p className="text-[18px] font-bold text-primary md:text-[22px]">
+              {totalHidenCategories}
+            </p>
           </div>
         </div>
       </div>
@@ -137,8 +141,12 @@ const CategoryStatistics = () => {
             </svg>
           </div>
           <div className="ml-4">
-            <p className="text-[12px] md:text-[14px] font-medium text-primary/70">Root Categories</p>
-            <p className="text-[18px] md:text-[22px] font-bold text-primary">{totalRootCategories}</p>
+            <p className="text-[12px] font-medium text-primary/70 md:text-[14px]">
+              Root Categories
+            </p>
+            <p className="text-[18px] font-bold text-primary md:text-[22px]">
+              {totalRootCategories}
+            </p>
           </div>
         </div>
       </div>

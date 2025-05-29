@@ -127,7 +127,7 @@ function Pagination({
                 type="button"
                 key={pageNumber}
                 onClick={() => handlePageChange(pageNumber)}
-                className={`center h-[40px] w-[40px] cursor-pointer border-[1px] border-border-muted ${currentPage === pageNumber ? "bg-primary text-white" : ""}`}
+                className={`center h-[20px] w-[20px] cursor-pointer border-[1px] border-border-muted sm:h-[40px] sm:w-[40px] ${currentPage === pageNumber ? "bg-primary text-white" : ""}`}
                 aria-current={currentPage === pageNumber ? "page" : undefined}
               >
                 {pageNumber}

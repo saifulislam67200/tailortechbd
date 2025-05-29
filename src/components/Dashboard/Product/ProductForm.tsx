@@ -108,7 +108,7 @@ export default function ProductForm({
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
         <Form className="flex flex-col gap-[16px]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-[16px]">
+          <div className="grid grid-cols-1 gap-[16px] lg:grid-cols-2">
             <div className="flex w-full flex-col gap-[16px] bg-white p-[16px]">
               <SectionTitle>Basic Information</SectionTitle>
               <div className="w-full">
@@ -117,7 +117,7 @@ export default function ProductForm({
                 {touched.name && errors.name && <span className="text-danger">{errors.name}</span>}
               </div>
 
-              <div className="flex sm:flex-row flex-col w-full items-start justify-start gap-[16px]">
+              <div className="flex w-full flex-col items-start justify-start gap-[16px] sm:flex-row">
                 <div className="flex w-full flex-col gap-[5px]">
                   <label className={labelClass}>Price</label>
                   <Field as={Input} name="price" type="number" placeholder="Price" />
@@ -135,7 +135,7 @@ export default function ProductForm({
                 </div>
               </div>
 
-              <div className="flex sm:flex-row flex-col items-start justify-start gap-[16px]">
+              <div className="flex flex-col items-start justify-start gap-[16px] sm:flex-row">
                 <div className="flex w-full flex-col gap-[5px]">
                   <label className={labelClass}>Tag</label>
                   <Field as={Input} name="tag" placeholder="Tag" />
@@ -237,7 +237,7 @@ export default function ProductForm({
                         {({ push, remove }) => (
                           <div className="flex w-full flex-col items-start gap-[16px]">
                             {color.sizes.map((_size, j) => (
-                              <div key={j} className="flex  w-full items-start gap-[8px]">
+                              <div key={j} className="flex w-full items-start gap-[8px]">
                                 <div className="flex w-full flex-col items-start gap-[8px]">
                                   <label className={labelClass}>Size </label>
                                   <Field
@@ -281,7 +281,7 @@ export default function ProductForm({
                             <button
                               type="button"
                               onClick={() => push({ size: "", stock: "" })}
-                              className="cursor-pointer text-primary text-[14px] md:text-[16px]"
+                              className="cursor-pointer text-[14px] text-primary md:text-[16px]"
                             >
                               + Add Size
                             </button>
@@ -293,8 +293,12 @@ export default function ProductForm({
                         inputId={`colors.${i}.image_uploader`}
                         onChange={(urls) => setFieldValue(`colors.${i}.images`, urls)}
                       >
-                        <h6 className="font-[700] text-[14px] md:text-[16px]">You can upload image for this color </h6>
-                        <p className="text-muted text-[14px] md:text-[16px]">uploading image for color variant is optional</p>
+                        <h6 className="text-[14px] font-[700] md:text-[16px]">
+                          You can upload image for this color{" "}
+                        </h6>
+                        <p className="text-[14px] text-muted md:text-[16px]">
+                          uploading image for color variant is optional
+                        </p>
                       </ImageUploader>
                     </div>
                   ))}
@@ -303,7 +307,7 @@ export default function ProductForm({
                     onClick={() =>
                       push({ color: "", sizes: [{ size: "", stock: "" }], images: [] })
                     }
-                    className="cursor-pointer text-primary text-[14px] md:text-[16px]"
+                    className="cursor-pointer text-[14px] text-primary md:text-[16px]"
                   >
                     + Add Color
                   </button>

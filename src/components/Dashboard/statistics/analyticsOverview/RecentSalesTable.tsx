@@ -86,7 +86,7 @@ const RecentSalesTable = () => {
   }
 
   return (
-    <div className="rounded-[5px] bg-white p-[16px]">
+    <div className="bg-white p-[16px]">
       <div className="flex flex-col justify-between gap-2 pb-4 md:flex-row md:items-center">
         <div className="flex items-center gap-[5px]">
           <h3 className="text-[14px] font-bold text-primary sm:text-[16px]">Recent Sales</h3> |{" "}

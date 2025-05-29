@@ -52,7 +52,7 @@ const AllProductsTable = () => {
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
         <div className="flex flex-col gap-[5px]">
           <h1 className="text-[16px] font-[600]">Product List</h1>
-          <p className="text-[12px] md:text-[14px] text-muted">
+          <p className="text-[12px] text-muted md:text-[14px]">
             Displaying All the available products in your store. There is total{" "}
             <span className="font-bold text-dashboard">{metaData.totalDoc}</span> products. Data is
             Devided into{" "}
@@ -74,101 +74,101 @@ const AllProductsTable = () => {
           <RxMagnifyingGlass />
         </div>
         <div className="overflow-x-auto">
-        <table className="w-full divide-y divide-dashboard/20">
-          <thead className="bg-dashboard/10">
-            <tr>
-              {tableHead.map((heading) => (
-                <th
-                  key={heading.field || heading.label}
-                  className="px-6 py-3 text-left text-sm font-semibold text-dashboard uppercase"
-                >
-                  {heading.field ? (
-                    <button
-                      className="flex cursor-pointer items-center gap-1"
-                      onClick={() => handleSort(heading.field)}
-                    >
-                      <span>{heading.label}</span>
-                      <span className="flex flex-col text-[10px] leading-[10px]">
-                        <FaChevronUp
-                          className={`${
-                            sort.field === heading.field && sort.order === "asc"
-                              ? "font-bold text-dashboard"
-                              : "text-dashboard/30"
-                          }`}
-                        />
-                        <FaChevronDown
-                          className={`${
-                            sort.field === heading.field && sort.order === "desc"
-                              ? "font-bold text-dashboard"
-                              : "text-dashboard/30"
-                          }`}
-                        />
-                      </span>
-                    </button>
-                  ) : (
-                    heading.label
-                  )}
-                </th>
-              ))}
-            </tr>
-          </thead>
-
-          <tbody className="divide-y divide-dashboard/20">
-            {isLoading ? (
-              <TableSkeleton columns={tableHead.length} />
-            ) : data?.data.length ? (
-              productData?.map((product) => (
-                <tr key={product?._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-[5px]">
-                      <span className="flex aspect-square max-h-[50px] w-[50px] items-center justify-start bg-white">
-                        <Image
-                          src={product.images[0]}
-                          alt={`${product.name} image`}
-                          width={80}
-                          height={80}
-                          className="mx-auto h-full w-auto max-w-full object-contain"
-                        />
-                      </span>
-                      <span className="line-clamp-1 text-[14px]">{product.name}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-[14px]">৳ {product.price}</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-[14px]">{product.discount || "N/A"}</span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-[14px]">
-                      {typeof product.category === "string"
-                        ? product.category
-                        : product.category?.label || "N/A"}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="text-[14px]">
-                      {dateUtils.formateCreateOrUpdateDate(product.createdAt) || "N/A"}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-[8px]">
-                      <Link
-                        href={`/dashboard/products/${product.slug}`}
-                        className="center aspect-square w-[30px] cursor-pointer rounded-full border-[1px] border-dashboard bg-dashboard/5 text-dashboard"
+          <table className="w-full divide-y divide-dashboard/20">
+            <thead className="bg-dashboard/10">
+              <tr>
+                {tableHead.map((heading) => (
+                  <th
+                    key={heading.field || heading.label}
+                    className="px-6 py-3 text-left text-sm font-semibold text-dashboard uppercase"
+                  >
+                    {heading.field ? (
+                      <button
+                        className="flex cursor-pointer items-center gap-1"
+                        onClick={() => handleSort(heading.field)}
                       >
-                        <GoPencil />
-                      </Link>
-                      <DeleteProductById productId={product._id} productName={product.name} />
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <TableDataNotFound span={tableHead.length} message="No Product Found" />
-            )}
-          </tbody>
-        </table>
+                        <span>{heading.label}</span>
+                        <span className="flex flex-col text-[10px] leading-[10px]">
+                          <FaChevronUp
+                            className={`${
+                              sort.field === heading.field && sort.order === "asc"
+                                ? "font-bold text-dashboard"
+                                : "text-dashboard/30"
+                            }`}
+                          />
+                          <FaChevronDown
+                            className={`${
+                              sort.field === heading.field && sort.order === "desc"
+                                ? "font-bold text-dashboard"
+                                : "text-dashboard/30"
+                            }`}
+                          />
+                        </span>
+                      </button>
+                    ) : (
+                      heading.label
+                    )}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody className="divide-y divide-dashboard/20">
+              {isLoading ? (
+                <TableSkeleton columns={tableHead.length} />
+              ) : data?.data.length ? (
+                productData?.map((product) => (
+                  <tr key={product?._id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-[5px]">
+                        <span className="flex aspect-square max-h-[50px] w-[50px] items-center justify-start bg-white">
+                          <Image
+                            src={product.images[0]}
+                            alt={`${product.name} image`}
+                            width={80}
+                            height={80}
+                            className="mx-auto h-full w-auto max-w-full object-contain"
+                          />
+                        </span>
+                        <span className="line-clamp-1 text-[14px]">{product.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">৳ {product.price}</span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">{product.discount || "N/A"}</span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">
+                        {typeof product.category === "string"
+                          ? product.category
+                          : product.category?.label || "N/A"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">
+                        {dateUtils.formateCreateOrUpdateDate(product.createdAt) || "N/A"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-[8px]">
+                        <Link
+                          href={`/dashboard/products/${product.slug}`}
+                          className="center aspect-square w-[30px] cursor-pointer rounded-full border-[1px] border-dashboard bg-dashboard/5 text-dashboard"
+                        >
+                          <GoPencil />
+                        </Link>
+                        <DeleteProductById productId={product._id} productName={product.name} />
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <TableDataNotFound span={tableHead.length} message="No Product Found" />
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
       <Pagination
