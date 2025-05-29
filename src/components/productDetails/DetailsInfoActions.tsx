@@ -153,7 +153,11 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
           )}
         </button>
         <p className="w-full text-center text-[14px]">{activeQuantity}</p>
-        <button onClick={() => handleQuantityChange("inc")} className="cursor-pointer text-info">
+        <button
+          disabled={activeSize?.stock === 0 || activeSize?.stock === activeQuantity}
+          onClick={() => handleQuantityChange("inc")}
+          className="cursor-pointer text-info disabled:cursor-not-allowed disabled:opacity-[0.5]"
+        >
           <AiOutlinePlus size={14} />
         </button>
       </div>

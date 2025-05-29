@@ -6,15 +6,15 @@ import {
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
+import Pagination from "@/components/ui/Pagination";
 import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import Toggle from "@/components/ui/Toggle";
+import { useAppSelector } from "@/hooks/redux";
+import useDebounce from "@/hooks/useDebounce";
 import dateUtils from "@/utils/date";
 import Image from "next/image";
 import { RxMagnifyingGlass } from "react-icons/rx";
-import Pagination from "@/components/ui/Pagination";
-import useDebounce from "@/hooks/useDebounce";
-import { useAppSelector } from "@/hooks/redux";
 
 const tableHead = [
   { label: "Name", field: "name" },
@@ -119,7 +119,7 @@ const AllCustomerTable = () => {
                       <div className="flex items-center gap-[5px]">
                         <span className="flex aspect-square max-h-[50px] w-[50px] items-center justify-start bg-white">
                           <Image
-                            src={user.avatar || "/"}
+                            src={user.avatar || "/images/avatar.jpg"}
                             alt={`${user.fullName} image`}
                             width={80}
                             height={80}
