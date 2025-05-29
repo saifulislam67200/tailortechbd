@@ -41,7 +41,7 @@ const TopSellingTable = () => {
   }
 
   return (
-    <div className="rounded-[5px] bg-white p-[16px]">
+    <div className="bg-white p-[16px]">
       <div className="flex items-center justify-between pb-4">
         <div className="flex items-center gap-[5px]">
           <h3 className="text-[14px] font-bold text-primary sm:text-[16px]">Top Selling</h3> |{" "}

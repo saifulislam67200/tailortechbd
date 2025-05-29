@@ -65,7 +65,7 @@ const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionP
           {banners.map((banner, index) => (
             <div
               key={banner._id}
-              className="group cursor-move rounded-xl border-2 border-border-main bg-white transition-all duration-200"
+              className="group cursor-move rounded-[5px] border border-border-main bg-white transition-all duration-200"
             >
               <div className="flex items-center gap-[16px] p-[16px]">
                 {/* Drag Handle */}
@@ -75,7 +75,7 @@ const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionP
 
                 {/* Position Number */}
                 <div className="flex-shrink-0">
-                  <div className="flex h-[48px] w-[48px] items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-[18px] font-bold text-white shadow-sm">
+                  <div className="flex h-[48px] w-[48px] items-center justify-center rounded-[5px] bg-gradient-to-br from-primary to-primary/80 text-[18px] font-bold text-white shadow-sm">
                     {index + 1}
                   </div>
                 </div>
@@ -185,16 +185,6 @@ const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionP
             <button className="rounded-lg bg-primary px-6 py-3 text-white transition-colors hover:bg-primary/90">
               Create Your First Banner
             </button>
-          </div>
-        )}
-
-        {/* Drop Zones Indicator */}
-        {banners.length > 0 && (
-          <div className="mt-8 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-4">
-            <div className="text-center text-gray-500">
-              <FiMove className="mx-auto mb-2 h-8 w-8" />
-              <p className="text-[14px]">Drop zone - Drag banners here to reorder</p>
-            </div>
           </div>
         )}
       </div>
