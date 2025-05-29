@@ -5,7 +5,7 @@ import { generateQueryParams } from "@/utils";
 
 const adminApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    createAdmin: builder.query<
+    createAdmin: builder.mutation<
       { data: string[] },
       Pick<IUser, "email" | "password" | "phoneNumber" | "fullName" | "geo_profile">
     >({
@@ -14,7 +14,7 @@ const adminApi = api.injectEndpoints({
         method: "POST",
         body: id,
       }),
-      providesTags: ["admin"],
+      invalidatesTags: ["admin"],
     }),
     getAllClients: builder.query<{ data: IUser[]; meta: IMeta }, Record<string, string | number>>({
       query: (query) => {
@@ -37,5 +37,5 @@ const adminApi = api.injectEndpoints({
     }),
   }),
 });
-export const { useCreateAdminQuery, useGetAllClientsQuery, useToggleAccountActivationMutation } =
+export const { useCreateAdminMutation, useGetAllClientsQuery, useToggleAccountActivationMutation } =
   adminApi;

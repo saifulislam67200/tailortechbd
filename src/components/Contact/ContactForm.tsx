@@ -1,13 +1,13 @@
 "use client";
 
-import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
-import * as Yup from "yup";
+import { useAppSelector } from "@/hooks/redux";
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { useState } from "react";
 import { FiSend } from "react-icons/fi";
+import { toast } from "sonner";
+import * as Yup from "yup";
 import Input from "../ui/Input";
 import TextArea from "../ui/TextArea";
-import { useAppSelector } from "@/hooks/redux";
-import { toast } from "sonner";
 
 // Initial form values
 const initialValues = {
@@ -33,7 +33,7 @@ export default function ContactForm() {
     phoneNumber = phoneNumber.replace(dialCode, "");
     return { dialCode, phoneNumber };
   };
-  const { dialCode } = splitDialCode();
+  const { dialCode, phoneNumber } = splitDialCode();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (
@@ -64,7 +64,12 @@ export default function ContactForm() {
       </h2>
 
       <Formik
-        initialValues={initialValues}
+        initialValues={{
+          ...initialValues,
+          fullName: user?.fullName || "",
+          email: user?.email || "",
+          phone: phoneNumber,
+        }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
         enableReinitialize

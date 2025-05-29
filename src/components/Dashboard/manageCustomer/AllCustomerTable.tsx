@@ -14,6 +14,7 @@ import Image from "next/image";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import Pagination from "@/components/ui/Pagination";
 import useDebounce from "@/hooks/useDebounce";
+import { useAppSelector } from "@/hooks/redux";
 
 const tableHead = [
   { label: "Name", field: "name" },
@@ -26,6 +27,7 @@ const tableHead = [
 const AllCustomerTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
+  const { user: currentUser } = useAppSelector((state) => state.user);
 
   const [toggleAvtivation] = useToggleAccountActivationMutation();
 
@@ -52,7 +54,7 @@ const AllCustomerTable = () => {
     <div className="flex flex-col gap-[10px]">
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
         <div className="flex flex-col gap-[5px]">
-          <h1 className="text-[16px] font-[600]">All Customers</h1>
+          <h1 className="text-[16px] font-[600]">Customer List</h1>
           <p className="text-[12px] text-muted md:text-[14px]">
             Displaying All customers. There is total{" "}
           </p>
@@ -151,7 +153,11 @@ const AllCustomerTable = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <Toggle onToggle={() => toggleAvtivation(user._id)} active={user.isActive} />
+                      <Toggle
+                        disabled={user._id === currentUser?._id}
+                        onToggle={() => toggleAvtivation(user._id)}
+                        defaultActive={user.isActive}
+                      />
                     </td>
                   </tr>
                 ))

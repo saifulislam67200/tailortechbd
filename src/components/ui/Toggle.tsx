@@ -2,12 +2,14 @@
 import { useState } from "react";
 const Toggle = ({
   onToggle,
-  active,
+  defaultActive,
+  disabled,
 }: {
   onToggle: (boolean: boolean) => void;
-  active?: boolean;
+  defaultActive?: boolean;
+  disabled?: boolean;
 }) => {
-  const [isActive, setIsActive] = useState(Boolean(active));
+  const [isActive, setIsActive] = useState(Boolean(defaultActive));
   const handleToggleActive = async () => {
     setIsActive(!isActive);
     onToggle(!isActive);
@@ -15,8 +17,9 @@ const Toggle = ({
 
   return (
     <button
+      disabled={disabled}
       onClick={() => handleToggleActive()}
-      className={`relative inline-flex h-[24px] w-[44px] cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none ${
+      className={`relative inline-flex h-[24px] w-[44px] cursor-pointer items-center rounded-full transition-colors duration-200 disabled:cursor-not-allowed ${
         isActive ? "bg-primary" : "bg-primary/10"
       }`}
       style={{
