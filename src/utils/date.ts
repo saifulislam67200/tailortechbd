@@ -8,7 +8,7 @@ function formatSecondsToMMSS(totalSeconds: number): string {
   return `${formattedMinutes}:${formattedSeconds}`;
 }
 
-const formateCreateOrUpdateDate = (dateString?: string) => {
+const formateCreateOrUpdateDate = (dateString?: string | Date | undefined) => {
   if (!dateString) return "";
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", { month: "long", year: "numeric", day: "numeric" });

@@ -5,4 +5,5 @@ export interface IContactSupport {
   subject: string;
   message: string;
   createdAt?: Date;
+  _id: string;
 }
