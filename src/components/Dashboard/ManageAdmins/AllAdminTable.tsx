@@ -57,7 +57,8 @@ const AllAdminTable = () => {
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
-        <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
+       <div className="flex items-center justify-between gap-[10px] w-full">
+         <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
           <input
             type="text"
             className="w-full bg-transparent outline-none"
@@ -66,6 +67,7 @@ const AllAdminTable = () => {
           />
           <RxMagnifyingGlass />
         </div>
+       </div>
         <div className="overflow-x-auto">
           <table className="w-full divide-y divide-dashboard/20">
             <thead className="bg-dashboard/10">
