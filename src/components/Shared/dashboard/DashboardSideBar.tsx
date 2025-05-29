@@ -137,7 +137,11 @@ const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
         window.innerWidth <= 750 ? "absolute top-0 left-0 z-50 min-h-screen" : ""
       } ${isNavOpen ? "w-[300px]" : "w-0"}`}
     >
-      <div className={`relative h-[100dvh] ${isNavOpen ? "w-[300px]" : "w-0"}`}>
+      <div
+        className={`relative h-[100dvh] ${
+          window.innerWidth >= 750 ? "h-full" : ""
+        } ${isNavOpen ? "w-[300px]" : "w-0"}`}
+      >
         <div
           className={`absolute ${isNavOpen ? "-right-[15px]" : "-right-[35px]"} flex h-full items-center`}
         >
