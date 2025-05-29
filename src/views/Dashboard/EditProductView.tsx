@@ -1,7 +1,7 @@
 "use client";
 
+import DashboardPageHeadingTitle from "@/components/Dashboard/DashboardPageHeadingTitle";
 import ProductForm from "@/components/Dashboard/Product/ProductForm";
-import Breadcrumb from "@/components/ui/BreadCrumbs";
 import DataNotFound from "@/components/ui/DataNotFound";
 import Loader from "@/components/ui/Loader";
 import {
@@ -51,7 +51,7 @@ const EditProductView = ({ slug }: { slug: string }) => {
 
   return (
     <div className="flex flex-col gap-[20px]">
-      <Breadcrumb />
+      <DashboardPageHeadingTitle title="Edit Product" />
       <ProductForm
         buttonLabel="Update Product"
         onSubmit={handleSubmit}

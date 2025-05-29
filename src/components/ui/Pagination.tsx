@@ -11,6 +11,8 @@ export interface PaginationProps {
   className?: string;
   showText?: boolean;
   textClassName?: string;
+  page?: number;
+  setPage?: (page: number) => void;
 }
 
 interface PaginationTextProps {
@@ -42,9 +44,14 @@ function Pagination({
   className,
   showText = true,
   textClassName,
+  page,
+  setPage,
 }: PaginationProps) {
   const totalPages = Math.ceil(totalDocs / limit);
-  const [currentPage, setCurrentPage] = React.useState(1);
+  const [curPage, setCurPage] = React.useState(1);
+
+  const currentPage = page || curPage;
+  const setCurrentPage = setPage || setCurPage;
 
   const pages = useMemo(() => {
     const items: (number | string)[] = [];
@@ -81,7 +88,7 @@ function Pagination({
     onPageChange?.(page);
   };
 
-  // if (totalPages <= 1) return null;
+  if (totalPages <= 1) return null;
 
   return (
     <div className="space-y-4">

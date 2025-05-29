@@ -99,7 +99,7 @@ const AllOrderTable = () => {
           <div className="flex flex-col gap-[15px] bg-white p-[16px]">
             <div className="flex flex-col gap-[5px]">
               <h1 className="text-[16px] font-[600]">Order List</h1>
-              <p className="text-[12px] md:text-[14px] text-muted">
+              <p className="text-[12px] text-muted md:text-[14px]">
                 Displaying All the available orders in your store. There is total{" "}
                 <span className="font-bold text-dashboard">{metaData.totalDoc}</span> orders. Data
                 is Devided into{" "}
@@ -119,16 +119,25 @@ const AllOrderTable = () => {
                   type="text"
                   className="w-full bg-transparent outline-none"
                   placeholder="Search Order"
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setPage(1);
+                  }}
                 />
                 <RxMagnifyingGlass />
               </div>
-              <div className="flex items-center justify-start gap-[10px] xl:mb-0 sm:mb-[20px] mb-0">
+              <div className="mb-0 flex items-center justify-start gap-[10px] sm:mb-[20px] xl:mb-0">
                 <OrderTimelineDropDown
-                  onSelect={({ value }) => setQuery({ ...query, day_count: value })}
+                  onSelect={({ value }) => {
+                    setQuery({ ...query, day_count: value });
+                    setPage(1);
+                  }}
                 />
                 <OrderStatusDropDown
-                  onSelect={({ value }) => setQuery({ ...query, status: value })}
+                  onSelect={({ value }) => {
+                    setQuery({ ...query, status: value });
+                    setPage(1);
+                  }}
                 />
               </div>
             </div>
@@ -251,7 +260,12 @@ const AllOrderTable = () => {
               )}
             </div>
           </div>
-          <Pagination totalDocs={metaData.totalDoc || 0} onPageChange={(page) => setPage(page)} />
+          <Pagination
+            setPage={setPage}
+            page={page}
+            totalDocs={metaData.totalDoc || 0}
+            onPageChange={(page) => setPage(page)}
+          />
         </div>
       ) : orderItemView ? (
         <ViewOrder setIsViewOrder={setIsViewOrder} orderItem={orderItemView} />
