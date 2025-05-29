@@ -50,7 +50,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
             src={user.avatar}
             width={30}
             height={30}
-            alt="User Avatar"
+            alt="Avatar"
             className="aspect-square w-[30px] overflow-hidden rounded-full border border-quaternary/30 object-cover"
           />
         ) : (

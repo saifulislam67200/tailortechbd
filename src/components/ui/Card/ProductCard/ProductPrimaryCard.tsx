@@ -30,14 +30,14 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
         {product.images[1] ? (
           <>
             <Image
-              src={product.images?.[0] || "/"}
+              src={product.images?.[0] || "/images/category_blank.png"}
               alt={product.name}
               width={200}
               height={200}
               className="relative z-[1] mx-auto h-full w-auto max-w-full object-contain transition-transform duration-300"
             />
             <Image
-              src={product.images?.[1] || "/"}
+              src={product.images?.[1] || "//images/category_blank.png"}
               alt={product.name}
               width={200}
               height={200}
@@ -46,7 +46,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
           </>
         ) : (
           <Image
-            src={product.images?.[0] || "/"}
+            src={product.images?.[0] || "/images/category_blank.png"}
             alt={product.name}
             width={200}
             height={200}

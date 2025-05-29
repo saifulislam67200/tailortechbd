@@ -46,7 +46,7 @@ export default function CartDrawer({ isOpen, setIsOpen }: CartDrawerProps) {
       {/* Drawer - fully opaque */}
       <div
         ref={drawerRef}
-        className={`fixed top-0 right-0 z-50 h-full w-full transform bg-white transition-transform duration-300 ease-in-out sm:w-[75vw] lg:w-[384px] ${
+        className={`fixed top-0 right-0 z-[9999999999] h-full w-full transform bg-white transition-transform duration-300 ease-in-out sm:w-[75vw] lg:w-[384px] ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
         onClick={(e) => e.stopPropagation()}

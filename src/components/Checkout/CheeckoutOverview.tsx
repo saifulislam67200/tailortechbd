@@ -49,11 +49,11 @@ const CheeckoutOverview = ({ district }: { district?: string }) => {
                   <span className="line-clamp-2 text-[12.8px] font-[400]">{item.product.name}</span>
                   {item.discount ? (
                     <span className="flex items-center justify-start gap-[10px]">
-                      <span className="lin text-[12.8px] font-[600] text-muted line-through">
-                        ৳ {item.product.price.toFixed(2)}
-                      </span>
                       <span className="lin text-[12.8px] font-[600] text-primary">
                         ৳ {getDiscountedPrice(item.product.price, item.discount).toFixed(2)}
+                      </span>
+                      <span className="lin text-[12.8px] font-[600] text-muted line-through">
+                        ৳ {item.product.price.toFixed(2)}
                       </span>
                     </span>
                   ) : (
