@@ -5,7 +5,6 @@ import { generateQueryParams } from "@/utils";
 
 const uploadApi = api.injectEndpoints({
   endpoints: (builder) => ({
-
     getAllContactsToSupport: builder.query<
       { data: IContactSupport[]; meta?: IMeta },
       Record<string, string | number>
@@ -17,11 +16,14 @@ const uploadApi = api.injectEndpoints({
           method: "GET",
         };
       },
-      providesTags: ["file"],
+      providesTags: ["contactSupport"],
     }),
 
     // Create blog post
-    createContactSupport: builder.mutation<{ data: IContactSupport }, IContactSupport>({
+    createContactSupport: builder.mutation<
+      { data: IContactSupport },
+      Pick<IContactSupport, "email" | "subject" | "message" | "fullName" | "phoneNumber">
+    >({
       query: (id) => ({
         url: `/contact-support/create`,
         method: "POST",
