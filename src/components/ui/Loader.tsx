@@ -1,17 +1,12 @@
-import Image from "next/image";
+import { ImSpinner11 } from "react-icons/im";
 import { twMerge } from "tailwind-merge";
 
 const Loader = ({ className }: { className?: string }) => {
   return (
-    <div className={twMerge("flex h-screen w-full items-center justify-center", className)}>
-      <div className="flex h-screen w-full items-center justify-center bg-primary/80">
-        <Image
-          src={"/images/logos/logo-symbol-foreground.png"}
-          width={200}
-          height={200}
-          alt="loading"
-          className="animate-pulse"
-        />
+    <div className={twMerge("flex h-[90dvh] w-full items-center justify-center", className)}>
+      <div className="flex h-screen w-full flex-col items-center justify-center gap-[10px] bg-white">
+        <ImSpinner11 className="animate-spin text-[40px]" />
+        <span className="text-[16px] font-[700] text-primary">Loading Content...</span>
       </div>
     </div>
   );

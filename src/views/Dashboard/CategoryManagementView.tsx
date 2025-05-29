@@ -4,6 +4,7 @@ import CategorryStatistics from "@/components/Dashboard/CategoryManagement/Categ
 import { CategoryTree } from "@/components/Dashboard/CategoryManagement/CategoryTree";
 import CreateCategory from "@/components/Dashboard/CategoryManagement/CreateCategory";
 import DeleteCategory from "@/components/Dashboard/CategoryManagement/DeleteCategory";
+import DashboardPageHeadingTitle from "@/components/Dashboard/DashboardPageHeadingTitle";
 import Button from "@/components/ui/Button";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/category.api";
 import { TCategoryWithSubcategories } from "@/types/category";
@@ -40,15 +41,10 @@ function CategoryManagementView() {
 
   return (
     <div className="w-full">
-      <div className="mb-[20px] md:mb-[32px] flex flex-col md:flex-row md:items-center justify-between gap-[16px]">
-        <div>
-          <h1 className="text-[24px] md:text-[30px] font-bold tracking-tight ">Category Management</h1>
-          <p className="mt-1 text-info text-[14px]">
-            Manage your product categories and their hierarchical structure
-          </p>
-        </div>
+      <div className="mb-[20px] flex flex-col justify-between gap-[16px] md:mb-[32px] md:flex-row md:items-center">
+        <DashboardPageHeadingTitle title="Category Management" />
         <CreateCategory>
-          <button className="flex w-full max-w-[157px] cursor-pointer items-center gap-2 rounded-lg bg-primary px-4 py-2 text-white text-[14px] md:text-[]16px]">
+          <button className="md:text-[]16px] flex w-full max-w-[157px] cursor-pointer items-center gap-2 rounded-lg bg-primary px-4 py-2 text-[14px] text-white">
             <FaPlus />
             Add Category
           </button>
@@ -142,7 +138,7 @@ function CategoryManagementView() {
                   key={category._id}
                   className="rounded-lg border border-border-main bg-white p-4"
                 >
-                  <div className="flex sm:flex-row flex-col md:items-center justify-between">
+                  <div className="flex flex-col justify-between sm:flex-row md:items-center">
                     <div className="flex items-center gap-4">
                       <Image
                         width={32}
@@ -153,7 +149,7 @@ function CategoryManagementView() {
                         onError={(e) => (e.currentTarget.src = "/images/category_blank.png")}
                       />
                       <div>
-                        <h3 className="font-medium ">{category.label}</h3>
+                        <h3 className="font-medium">{category.label}</h3>
                         <p className="text-sm text-gray-500">/{category.slug}</p>
                         {category.parent && (
                           <p className="text-xs text-gray-400">
