@@ -1,5 +1,7 @@
-import { FaFacebookF } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
+import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
+import { FaLinkedinIn } from "react-icons/fa";
+import { RiTwitterXFill } from "react-icons/ri";
+// import { MdEmail } from "react-icons/md";
 
 export const socialLinks = [
   {
@@ -7,20 +9,25 @@ export const socialLinks = [
     url: "https://www.facebook.com/tailortechbd",
     icon: FaFacebookF,
   },
-  // {
-  //   name: "youtube",
-  //   url: "https://www.youtube.com",
-  //   icon: FaYoutube,
-  // },
-  // {
-  //   name: "instagram",
-  //   url: "https://www.instagram.com",
-  //   icon: FaInstagram,
-  // },
   {
-    name: "Email",
-    url: "mailto:tailortechbd2025@gmail.com",
-    icon: MdEmail,
+    name: "youtube",
+    url: "https://www.youtube.com",
+    icon: FaYoutube,
+  },
+  {
+    name: "instagram",
+    url: "https://www.instagram.com",
+    icon: FaInstagram,
+  },
+  {
+    name: "LinkedIn",
+    url: "https://www.linkedin.com",
+    icon: FaLinkedinIn,
+  },
+  {
+    name: "LinkedIn",
+    url: "https://www.x.com",
+    icon: RiTwitterXFill,
   },
 ];
 
