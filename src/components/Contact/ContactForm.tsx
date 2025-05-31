@@ -5,6 +5,7 @@ import { useCreateContactSupportMutation } from "@/redux/features/contactSupport
 import { IQueruMutationErrorResponse } from "@/types";
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { FiSend } from "react-icons/fi";
+import { isPossiblePhoneNumber, isValidPhoneNumber } from "react-phone-number-input";
 import { toast } from "sonner";
 import * as Yup from "yup";
 import Input from "../ui/Input";
@@ -14,7 +15,7 @@ import TextArea from "../ui/TextArea";
 const initialValues = {
   fullName: "",
   email: "",
-  phone: "",
+  phoneNumber: "",
   subject: "",
   message: "",
 };
@@ -24,6 +25,7 @@ const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email").required("* Email is required"),
   subject: Yup.string().required("* Subject is required"),
   message: Yup.string().required("* Message is required"),
+  phoneNumber: Yup.string().required("* Phone number is required"),
 });
 
 export default function ContactForm() {
@@ -41,8 +43,15 @@ export default function ContactForm() {
 
   const handleSubmit = async (
     values: typeof initialValues,
-    { resetForm }: FormikHelpers<typeof initialValues>
+    { resetForm, setFieldError }: FormikHelpers<typeof initialValues>
   ) => {
+    const phone = `+880${values.phoneNumber}`;
+
+    if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
+      setFieldError("phone", "* Invalid phone number");
+      return;
+    }
+
     const res = await createContactSupport(values);
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
@@ -69,13 +78,13 @@ export default function ContactForm() {
           ...initialValues,
           fullName: user?.fullName || "",
           email: user?.email || "",
-          phone: phoneNumber || "",
+          phoneNumber: phoneNumber || "",
         }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
         enableReinitialize
       >
-        {({}) => (
+        {({ touched, errors }) => (
           <Form className="space-y-[16px] md:space-y-[24px]">
             <div className="grid grid-cols-1 gap-[12px] md:grid-cols-2 md:gap-[24px]">
               {/* Full Name */}
@@ -84,8 +93,8 @@ export default function ContactForm() {
                 <Field name="fullName" as={Input} placeholder="Enter your full name" />
                 <ErrorMessage
                   name="fullName"
-                  component="div"
-                  className="text-[12px] text-red-500"
+                  component="span"
+                  className="text-[12px] text-danger"
                 />
               </div>
 
@@ -93,7 +102,7 @@ export default function ContactForm() {
               <div className="flex w-full flex-col gap-[6px]">
                 <label className="text-[12px] text-strong">Email *</label>
                 <Field name="email" as={Input} placeholder="Enter your email" />
-                <ErrorMessage name="email" component="div" className="text-[12px] text-red-500" />
+                <ErrorMessage name="email" component="span" className="text-[12px] text-danger" />
               </div>
             </div>
 
@@ -105,20 +114,24 @@ export default function ContactForm() {
                   <span className="border-y-[1px] border-l-[1px] border-border-main bg-solid-slab px-[12px] py-[6px] text-[12px] text-strong">
                     {dialCode}
                   </span>
-                  <Input
-                    defaultValue={phoneNumber}
+
+                  <Field
+                    name="phone"
+                    as={Input}
                     type="string"
-                    name="phoneNumber"
                     placeholder="Enter Your Mobile Number"
                   />
                 </div>
+                {touched.phoneNumber && errors.phoneNumber && (
+                  <span className="text-[12px] text-danger">{errors.phoneNumber}</span>
+                )}
               </div>
 
               {/* subject */}
               <div className="flex w-full flex-col gap-[6px]">
                 <label className="text-[12px] text-strong">Subject *</label>
                 <Field name="subject" as={Input} placeholder="Enter a Subject" />
-                <ErrorMessage name="subject" component="div" className="text-[12px] text-red-500" />
+                <ErrorMessage name="subject" component="span" className="text-[12px] text-danger" />
               </div>
             </div>
 
@@ -131,7 +144,7 @@ export default function ContactForm() {
                 rows={6}
                 placeholder="Tell us how we can help you..."
               />
-              <ErrorMessage name="message" component="div" className="text-[12px] text-red-500" />
+              <ErrorMessage name="message" component="span" className="text-[12px] text-danger" />
             </div>
 
             {/* Submit Button */}

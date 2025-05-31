@@ -7,7 +7,6 @@ import { Field, Form, Formik, FormikHelpers } from "formik";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { isPossiblePhoneNumber, isValidPhoneNumber } from "react-phone-number-input";
 import * as yup from "yup";
 import Button from "../ui/Button";
 import CountrySelector from "../ui/CountrySelector";
@@ -38,11 +37,6 @@ const PhoneNumberLogin = () => {
     }
 
     const phone = `${country?.dial_code}${values.phoneNumber}`;
-
-    if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
-      helper.setFieldError("phoneNumber", "* Invalid phone number");
-      return;
-    }
 
     const res = await login({
       ...values,

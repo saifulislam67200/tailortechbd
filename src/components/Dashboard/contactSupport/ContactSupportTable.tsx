@@ -1,13 +1,14 @@
 import HorizontalLine from "@/components/ui/HorizontalLine";
-import { useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import Pagination from "@/components/ui/Pagination";
 import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
-import dateUtils from "@/utils/date";
-import { RxMagnifyingGlass } from "react-icons/rx";
-import Pagination from "@/components/ui/Pagination";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetAllContactsToSupportQuery } from "@/redux/features/contactSupport/contactSupport.api";
+import dateUtils from "@/utils/date";
+import { useState } from "react";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { RxMagnifyingGlass } from "react-icons/rx";
+import ContactSupportDialog from "./ContactSupportDialog";
 
 const tableHead = [
   { label: "fullName", field: "name" },
@@ -15,6 +16,7 @@ const tableHead = [
   { label: "subject", field: "" },
   { label: "message", field: "" },
   { label: "Date Created", field: "createdAt" },
+  { label: "Actions", field: "" },
 ];
 
 const ContactSupportTable = () => {
@@ -118,9 +120,14 @@ const ContactSupportTable = () => {
                     </td>
                     <td className="px-6 py-4">{contact.subject}</td>
 
-                    <td className="max-w-[300px] px-6 py-4">{contact.message}</td>
+                    <td className="line-clamp-1 max-w-[300px] px-6 py-4">
+                      <span className="line-clamp-2">{contact.message}</span>
+                    </td>
                     <td className="px-6 py-4">
                       {dateUtils.formateCreateOrUpdateDate(contact.createdAt) || "N/A"}
+                    </td>
+                    <td>
+                      <ContactSupportDialog contactSupport={contact} />
                     </td>
                   </tr>
                 ))

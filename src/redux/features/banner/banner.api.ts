@@ -1,13 +1,17 @@
 import { api } from "@/redux/api/api";
 import { IBanner } from "@/types/banner";
+import { generateQueryParams } from "@/utils";
 
 const bannerApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllBanners: builder.query<{ data: IBanner[] }, void>({
-      query: () => ({
-        url: `/banner`,
-        method: "GET",
-      }),
+    getAllBanners: builder.query<{ data: IBanner[] }, Record<string, string | number>>({
+      query: (query) => {
+        const queryString = generateQueryParams(query);
+        return {
+          url: `/banner?${queryString}`,
+          method: "GET",
+        };
+      },
       providesTags: ["banner"],
     }),
 
@@ -51,8 +55,6 @@ const bannerApi = api.injectEndpoints({
       invalidatesTags: ["banner"],
     }),
 
-
-
     updateBannerSequences: builder.mutation<
       { message: string; data: unknown },
       { payload: { _id: string; index: number }[] }
@@ -73,5 +75,5 @@ export const {
   useCreateBannerMutation,
   useUpdateBannerByIdMutation,
   useDeleteBannerByIdMutation,
-  useUpdateBannerSequencesMutation
+  useUpdateBannerSequencesMutation,
 } = bannerApi;

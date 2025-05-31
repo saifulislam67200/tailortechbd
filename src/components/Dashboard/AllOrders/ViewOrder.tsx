@@ -308,19 +308,23 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
           <div className="mt-6 mb-6 rounded-md border border-border-muted bg-white p-6">
             <div className="mb-[10px] flex w-full items-center justify-between">
               <h2 className="text-xl font-semibold">Order Items</h2>
-              <Button
-                className={`${isEditMode ? "bg-danger text-white" : "bg-success text-white"}`}
-                onClick={() => {
-                  if (isEditMode) {
-                    console.log(initialOrderItemView, "edi can");
+              {currentStatus === "pending" ? (
+                <Button
+                  className={`${isEditMode ? "bg-danger text-white" : "bg-success text-white"}`}
+                  onClick={() => {
+                    if (isEditMode) {
+                      console.log(initialOrderItemView, "edi can");
 
-                    setOrderItemView(initialOrderItemView);
-                  }
-                  setIsEditMode(!isEditMode);
-                }}
-              >
-                {isEditMode ? "Cancel Edit" : "Edit Items"}
-              </Button>
+                      setOrderItemView(initialOrderItemView);
+                    }
+                    setIsEditMode(!isEditMode);
+                  }}
+                >
+                  {isEditMode ? "Cancel Edit" : "Edit Items"}
+                </Button>
+              ) : (
+                ""
+              )}
             </div>
             <div className="w-full space-y-4">
               {orderItemView?.orderItems?.map((item, i) => (
