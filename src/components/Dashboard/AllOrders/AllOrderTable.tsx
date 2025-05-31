@@ -12,6 +12,7 @@ import TableSkeleton from "../../ui/TableSkeleton";
 import OrderStatusDropDown from "./OrderStatusDropDown";
 import OrderTimelineDropDown from "./OrderTimelineDropDown";
 import ViewOrder from "./ViewOrder";
+import dateUtils from "@/utils/date";
 
 const tableHead = [
   { label: "Customer Info", field: "name" },
@@ -52,14 +53,6 @@ const AllOrderTable = () => {
       default:
         return "bg-gray-100 text-gray-800";
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
   };
 
   const formatPrice = (price: number) => {
@@ -231,7 +224,8 @@ const AllOrderTable = () => {
 
                         {/* Date */}
                         <td className="px-[24px] py-[16px] text-[14px] whitespace-nowrap">
-                          {formatDate(order?.createdAt || "")}
+                          {/* {formatDate(order?.createdAt || "")} */}
+                          {dateUtils.formateCreateOrUpdateDate(order?.createdAt)}
                         </td>
 
                         {/* Actions */}

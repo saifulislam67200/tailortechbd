@@ -10,6 +10,7 @@ import Pagination from "@/components/ui/Pagination";
 import AnswerModal from "./AnswerModal";
 import DeleteQna from "./DeleteQna";
 import QnaSkeleton from "./QnaSkeleton";
+import dateUtils from "@/utils/date";
 
 const tableHead = [
   { label: "Customer", field: "name" },
@@ -26,15 +27,6 @@ export default function QnaTable() {
   const { data, isLoading } = useGetAllQuestionAnswersQuery({ searchTerm, page, limit: 10 });
   const questionAndAnswer = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
 
   return (
     <>
@@ -130,7 +122,7 @@ export default function QnaTable() {
                       </td>
                       <td className="px-[24px] py-[16px] whitespace-nowrap">
                         <span className="block text-[12px]">
-                          {formatDate(item?.createdAt || "")}
+                          {dateUtils.formateCreateOrUpdateDate(item?.createdAt || "N/A")}
                         </span>
                       </td>
                       <td className="px-[24px] py-[16px] whitespace-nowrap">

@@ -12,6 +12,7 @@ import BannerTableSkeleton from "./BannerTableSkeleton";
 import DeleteBanner from "./DeleteBanner";
 import ManageBannerPosition from "./ManageBannerPosition";
 import UpdateBanner from "./UpdateBanner";
+import dateUtils from "@/utils/date";
 
 const tableHead = [
   { label: "Order", field: "order" },
@@ -28,13 +29,6 @@ const BannerTable = () => {
   const banners = data?.data || [];
   const [isViewBannerPosition, setIsViewBannerPosition] = useState(false);
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
 
   return (
     <>
@@ -139,7 +133,7 @@ const BannerTable = () => {
 
                         {/* Created Date */}
                         <td className="px-[24px] py-[16px] text-[14px] whitespace-nowrap text-info">
-                          {banner.createdAt ? formatDate(banner.createdAt) : "N/A"}
+                          {banner.createdAt ? dateUtils.formateCreateOrUpdateDate(banner.createdAt) : "N/A"}
                         </td>
 
                         {/* Actions */}
