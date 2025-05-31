@@ -37,7 +37,7 @@ const AnalyticsOverviewFilter = ({ options, selected, onChange }: AnalyticsOverv
         {selected.label}
       </button>
       {open && (
-        <ul className="absolute top-full left-0 z-10 m-0 w-full list-none border border-quaternary bg-white p-0">
+        <ul className="absolute top-full left-0 z-10 m-0 max-h-[250px] w-full list-none overflow-y-auto border border-quaternary bg-white p-0">
           {options.map((opt) => (
             <li
               key={opt.value}
