@@ -49,6 +49,7 @@ export const api = createApi({
     "banner",
     "contactSupport",
     "admin",
+    "size-chart"
   ],
   endpoints: () => ({}),
 });
