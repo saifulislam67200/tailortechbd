@@ -132,30 +132,14 @@ const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
   }, []);
 
   return (
-    <div
-      className={`${
-        window.innerWidth <= 750 ? "absolute top-0 left-0 z-50 min-h-screen" : ""
-      } ${isNavOpen ? "w-[300px]" : "w-0"}`}
-    >
+    <>
       <div
-        className={`relative h-[100dvh] ${
-          window.innerWidth >= 750 ? "h-full" : ""
+        className={`shrink-0 overflow-hidden transition-[width] duration-[0.3s] ease-in-out ${
+          window.innerWidth <= 750 ? "absolute top-0 left-0 z-[10] min-h-screen" : ""
         } ${isNavOpen ? "w-[300px]" : "w-0"}`}
       >
-        <div
-          className={`absolute ${isNavOpen ? "-right-[15px]" : "-right-[35px]"} flex h-full items-center`}
-        >
-          <button
-            onClick={toggleNav}
-            className={`flex h-[30] w-[30px] cursor-pointer items-center justify-center rounded-full border border-quaternary bg-white ${isNavOpen ? "" : "rotate-180"}`}
-            title={isNavOpen ? "Click to close sidebar" : "Click to open sidebar"}
-          >
-            <IoIosArrowBack size={20} />
-          </button>
-        </div>
-
-        {isNavOpen && (
-          <div className="h-full w-[300px] shrink-0 flex-col justify-between border-r-[1px] border-border-muted bg-white p-[20px] lg:flex">
+        <div className={`relative h-[100dvh] w-full`}>
+          <div className="h-full w-full flex-col justify-between border-r-[1px] border-border-muted bg-white p-[20px] lg:flex">
             <div className="flex flex-col gap-[0]">
               {navlinks?.map((link, index) => (
                 <NavBox
@@ -166,9 +150,20 @@ const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
               ))}
             </div>
           </div>
-        )}
+        </div>
       </div>
-    </div>
+      <div
+        className={`absolute ${isNavOpen ? "left-[284px]" : "left-0"} top-[60px] z-[11] flex h-[calc(100%-60px)] items-center`}
+      >
+        <button
+          onClick={toggleNav}
+          className={`flex h-[30] w-[30px] cursor-pointer items-center justify-center rounded-full border border-quaternary bg-white ${isNavOpen ? "" : "rotate-180"}`}
+          title={isNavOpen ? "Click to close sidebar" : "Click to open sidebar"}
+        >
+          <IoIosArrowBack size={20} />
+        </button>
+      </div>
+    </>
   );
 };
 
