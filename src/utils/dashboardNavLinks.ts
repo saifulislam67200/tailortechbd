@@ -74,6 +74,7 @@ export const admin: IDashboardNavLinks[] = [
     icon: MdOutlineContactSupport,
     label: "Support Contact",
     path: "/dashboard/contact-support",
+    element: SidebarElement.UnReadContactMessageCount,
   },
 ];
 

@@ -25,8 +25,6 @@ const ContactSupportTable = () => {
 
   const [query, setQuery] = useState<Record<string, string | number>>({
     page: 1,
-    role: "user",
-    fields: "name,slug,price,images,discount,category,createdAt",
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
   });
 

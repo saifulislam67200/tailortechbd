@@ -31,7 +31,7 @@ const ProductCreateView = () => {
   return (
     <div className="flex flex-col gap-[20px]">
       <DashboardPageHeadingTitle title="Create Product" />
-      <ProductForm isLoading={isLoading} onSubmit={(value) => handleSubmit(value)} />;
+      <ProductForm isLoading={isLoading} onSubmit={(value) => handleSubmit(value)} />
     </div>
   );
 };

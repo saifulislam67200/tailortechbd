@@ -20,11 +20,20 @@ const productSizeChartApi = api.injectEndpoints({
             providesTags: ["size-chart"],
         }),
 
+
+        deleteQuickSizeChart: builder.mutation({
+            query: (sizeChartId) => ({
+                url: `/size-chart/delete/${sizeChartId}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["size-chart"],
+        }),
     }),
 });
 
 
 export const {
     useCreateSizeChartMutation,
-    useGetAllSizeChartQuery
+    useGetAllSizeChartQuery,
+    useDeleteQuickSizeChartMutation
 } = productSizeChartApi;

@@ -6,4 +6,5 @@ export interface IContactSupport {
   message: string;
   createdAt?: Date;
   _id: string;
+  isRead?: boolean;
 }

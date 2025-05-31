@@ -19,7 +19,6 @@ const uploadApi = api.injectEndpoints({
       providesTags: ["contactSupport"],
     }),
 
-    // Create blog post
     createContactSupport: builder.mutation<
       { data: IContactSupport },
       Pick<IContactSupport, "email" | "subject" | "message" | "fullName" | "phoneNumber">
@@ -31,6 +30,25 @@ const uploadApi = api.injectEndpoints({
       }),
       invalidatesTags: ["contactSupport"],
     }),
+    markContactMessageAsRead: builder.mutation<{ data: IContactSupport }, string>({
+      query: (messageId) => ({
+        url: `/contact-support/mark-read/${messageId}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["contactSupport"],
+    }),
+    getUnReadContactMessageCount: builder.query<{ data: { count: number } }, undefined>({
+      query: () => ({
+        url: `/contact-support/unread-count`,
+        method: "get",
+      }),
+      providesTags: ["contactSupport"],
+    }),
   }),
 });
-export const { useCreateContactSupportMutation, useGetAllContactsToSupportQuery } = uploadApi;
+export const {
+  useCreateContactSupportMutation,
+  useGetAllContactsToSupportQuery,
+  useGetUnReadContactMessageCountQuery,
+  useMarkContactMessageAsReadMutation
+} = uploadApi;
