@@ -1,13 +1,14 @@
 import { api } from "@/redux/api/api";
 import { IBanner } from "@/types/banner";
+import { generateQueryParams } from "@/utils";
 
 const bannerApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllBanners: builder.query<{ data: IBanner[] }, { active?: boolean } | void>({
-      query: (params) => {
-        const queryParam = params?.active !== undefined ? `?active=${params.active}` : "";
+    getAllBanners: builder.query<{ data: IBanner[] }, Record<string, string | number>>({
+      query: (query) => {
+        const queryString = generateQueryParams(query);
         return {
-          url: `/banner${queryParam}`,
+          url: `/banner?${queryString}`,
           method: "GET",
         };
       },

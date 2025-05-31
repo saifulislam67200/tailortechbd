@@ -23,8 +23,12 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
   const dispatch = useDispatch();
   const slug = clickedProduct?.slug || "";
 
-  const { data: clickedProductData, isLoading } = useGetProductByProductSlugQuery(slug, {
-    skip: !slug,
+  const {
+    data: clickedProductData,
+    isLoading,
+    isError,
+  } = useGetProductByProductSlugQuery(slug, {
+    skip: !slug || !isOpen,
   });
 
   const product = clickedProductData?.data as IProduct;
@@ -100,6 +104,20 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
           <span className="center h-[500px] w-full bg-gray-100">
             <FaSpinner className="animate-spin text-[27px]" />
           </span>
+        ) : isError || !product ? (
+          <div className="flex h-[300px] w-[300px] flex-col items-center justify-center gap-2 bg-white text-center md:w-[400px]">
+            <h2 className="text-lg font-semibold text-red-500">Failed to load product details.</h2>
+            <p className="text-sm text-info">Something went wrong. Please try again.</p>
+            <Button
+              onClick={() => {
+                setIsOpen(false);
+                setTimeout(() => setIsOpen(true), 100);
+              }}
+              className="mt-3"
+            >
+              Retry
+            </Button>
+          </div>
         ) : (
           <div className="w-full bg-white p-[16px]">
             <div className="flex items-center justify-between">
@@ -121,27 +139,27 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
                   )}
                 <Image
                   src={
-                    selectedColor?.images?.[0] || product.images[0] || "/images/category_blank.png"
+                    selectedColor?.images?.[0] || product?.images[0] || "/images/category_blank.png"
                   }
-                  alt={product.name}
+                  alt={product?.name}
                   width={300}
                   height={300}
                   className="h-full w-full object-cover"
                 />
               </div>
               <div className="flex w-full flex-col gap-[10px]">
-                <h3 className="line-clamp-2 text-[20px] font-[700]">{product.name}</h3>
-                <span className="font-bold text-primary">৳ {product.price}</span>
+                <h3 className="line-clamp-2 text-[20px] font-[700]">{product?.name}</h3>
+                <span className="font-bold text-primary">৳ {product?.price}</span>
                 <div className="flex flex-col gap-[5px]">
                   <span className="font-[700]">Select color:</span>
                   <div className="flex flex-wrap items-center justify-start gap-[8px]">
-                    {product.colors.map((color, i) => (
+                    {product?.colors?.map((color, i) => (
                       <button
                         onClick={() => setSelectedColor(color)}
-                        key={color.color + i}
+                        key={color?.color + i}
                         className={`cursor-pointer border-[1px] border-border-muted px-[8px] py-[4px] text-[12px] ${selectedColor?.color === color.color ? "bg-primary-foreground text-white" : ""}`}
                       >
-                        {color.color}
+                        {color?.color}
                       </button>
                     ))}
                   </div>

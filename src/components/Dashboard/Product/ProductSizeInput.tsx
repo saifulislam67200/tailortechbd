@@ -1,12 +1,20 @@
 import TableInput from "@/components/ui/TableInput";
-import sizeChartsConst from "@/utils/sizeConst";
+import { useGetAllSizeChartQuery } from "@/redux/features/productSizeChart/productSizeChart.api";
 import React, { useState } from "react";
+import AddNewProductSizeChart from "./AddNewProductSizeChart";
 interface IProps {
   defaultValue?: string[][];
   onChange?: (value: string[][]) => void;
 }
 
+interface ISizeChart {
+  label: string;
+  chart: string[][];
+}
+
 const ProductSizeInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
+  const { data } = useGetAllSizeChartQuery(undefined);
+  const productSizeChart = data?.data || [];
   const [selectedSize, setSelectedSize] = useState<
     { label: string; chart: string[][] } | undefined
   >();
@@ -22,7 +30,7 @@ const ProductSizeInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
       <div className="flex flex-col gap-[5px]">
         <span className="text-[12px] font-[700]">Quick size select: </span>
         <div className="flex items-center justify-center gap-[10px]">
-          {sizeChartsConst.map(({ chart, label }) => (
+          {productSizeChart?.map(({ chart, label }: ISizeChart) => (
             <button
               type="button"
               onClick={() => setSelectedSize({ chart, label })}
@@ -34,6 +42,7 @@ const ProductSizeInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
               {label}
             </button>
           ))}
+          <AddNewProductSizeChart />
         </div>
       </div>
     </div>

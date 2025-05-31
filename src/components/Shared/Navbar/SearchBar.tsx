@@ -27,11 +27,14 @@ export default function SearchBar({ onSearch }: { onSearch?: (value: string) => 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
+
     const search = form.search?.value || "";
     if (search && search !== searchValue) {
       onSearch?.(search);
       router.push(`/shop?searchTerm=${search}`);
     }
+
+    (form.search as HTMLInputElement)?.blur();
     // Implement search functionality here
   };
 
@@ -59,7 +62,9 @@ export default function SearchBar({ onSearch }: { onSearch?: (value: string) => 
           }}
           placeholder="Enter Your Keyword..."
           className="h-full w-full border-none px-[10px] outline-none"
-          onChange={(e) => setDebounceValue(e.target.value)}
+          onChange={(e) => {
+            setDebounceValue(e.target.value);
+          }}
         />
         <button
           type="submit"

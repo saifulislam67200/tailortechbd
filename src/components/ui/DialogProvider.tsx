@@ -26,7 +26,9 @@ const DialogProvider: React.FC<PropsType> = ({ children, state, setState, classN
         className="absolute top-0 left-0 z-[99] h-full w-full bg-black/40"
         onClick={() => setState(false)}
       ></div>
-      <div className={twMerge("center relative z-[9999] w-fit", className)}>{children}</div>
+      <div className={twMerge("relative z-[9999] max-h-[90dvh] w-fit overflow-y-auto", className)}>
+        {children}
+      </div>
     </div>,
     document.body
   );
