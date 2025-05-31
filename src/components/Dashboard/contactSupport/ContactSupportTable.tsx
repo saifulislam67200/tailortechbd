@@ -9,6 +9,7 @@ import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import ContactSupportDialog from "./ContactSupportDialog";
+import DeleteContactSupport from "./DeleteContactSupport";
 
 const tableHead = [
   { label: "fullName", field: "name" },
@@ -54,7 +55,7 @@ const ContactSupportTable = () => {
           <input
             type="text"
             className="w-full bg-transparent outline-none"
-            placeholder="Search Product"
+            placeholder="Search Message"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <RxMagnifyingGlass />
@@ -124,8 +125,11 @@ const ContactSupportTable = () => {
                     <td className="px-6 py-4">
                       {dateUtils.formateCreateOrUpdateDate(contact.createdAt) || "N/A"}
                     </td>
-                    <td>
-                      <ContactSupportDialog contactSupport={contact} />
+                    <td className="px-[24px] py-[16px]">
+                      <span className="flex items-center space-x-3">
+                        <ContactSupportDialog contactSupport={contact} />
+                        <DeleteContactSupport messageId={contact?._id} name={contact?.fullName} />
+                      </span>
                     </td>
                   </tr>
                 ))

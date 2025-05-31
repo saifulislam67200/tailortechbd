@@ -44,11 +44,20 @@ const uploadApi = api.injectEndpoints({
       }),
       providesTags: ["contactSupport"],
     }),
+
+    deleteContactMessages: builder.mutation({
+      query: (messageId: string) => ({
+        url: `/contact-support/delete/${messageId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["contactSupport"],
+    }),
   }),
 });
 export const {
   useCreateContactSupportMutation,
   useGetAllContactsToSupportQuery,
   useGetUnReadContactMessageCountQuery,
-  useMarkContactMessageAsReadMutation
+  useMarkContactMessageAsReadMutation,
+  useDeleteContactMessagesMutation,
 } = uploadApi;

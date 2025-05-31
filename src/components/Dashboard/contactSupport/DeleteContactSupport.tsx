@@ -1,20 +1,20 @@
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
-import { useDeleteQuestionAnswerMutation } from "@/redux/features/Q&A/questionAndAnswer.api";
+import { useDeleteContactMessagesMutation } from "@/redux/features/contactSupport/contactSupport.api";
 import React, { useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
 
-const DeleteQna = ({ id, customerName }: { id: string; customerName: string }) => {
-  const [deleteQuestionAnswer] = useDeleteQuestionAnswerMutation();
+const DeleteContactSupport = ({ messageId, name }: { messageId: string; name: string }) => {
+  const [deleteContactMessages] = useDeleteContactMessagesMutation();
   const [isOpen, setIsOpen] = useState(false);
   const handleDelete = async () => {
     try {
-      await deleteQuestionAnswer(id);
-      toast.success("Question delete successfully");
+      await deleteContactMessages(messageId).unwrap();
+      toast.success("Message deleted successfully");
       setIsOpen(false);
     } catch (error) {
-      console.error("Failed to delete:", error);
+      console.error("Failed to delete message", error);
     }
   };
 
@@ -49,14 +49,14 @@ const DeleteQna = ({ id, customerName }: { id: string; customerName: string }) =
               </div>
             </div>
             <div className="mt-3 text-center">
-              <h3 className="text-lg leading-6 font-medium text-primary">Delete Q&A</h3>
+              <h3 className="text-lg leading-6 font-medium text-primary">Delete Message</h3>
               <div className="mt-2">
                 <p className="text-sm text-muted">
                   Are you sure you want to delete{" "}
                   <span className="bg-danger/10 p-[2px] font-medium text-danger">
-                    &quot;{customerName}&quot;s
-                  </span> Qna? 
-                  This action cannot be undone.
+                    &quot;{name}&quot;s
+                  </span>{" "}
+                  Message? This action cannot be undone.
                 </p>
               </div>
             </div>
@@ -72,12 +72,12 @@ const DeleteQna = ({ id, customerName }: { id: string; customerName: string }) =
             </Button>
             <Button
               onClick={handleDelete}
-            //   isLoading={isLoading}
-            //   disabled={inputValue !== "DELETE"}
+              //   isLoading={isLoading}
+              //   disabled={inputValue !== "DELETE"}
               type="button"
               className="w-full bg-danger hover:bg-danger/90 disabled:bg-danger/50"
             >
-              Delete QNA
+              Delete Message
             </Button>
           </div>
         </div>
@@ -86,4 +86,4 @@ const DeleteQna = ({ id, customerName }: { id: string; customerName: string }) =
   );
 };
 
-export default DeleteQna;
+export default DeleteContactSupport;
