@@ -37,7 +37,7 @@ type ManageBannerPositionProps = {
 };
 
 const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionProps) => {
-  const { data } = useGetAllBannersQuery();
+  const { data } = useGetAllBannersQuery({ active: "true" });
   const [banners, setBanners] = useState<TBanner[]>([]);
   const [hasChanges, setHasChanges] = useState(false);
   const [updateBannerSequences, { isLoading }] = useUpdateBannerSequencesMutation();

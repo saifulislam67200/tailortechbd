@@ -16,6 +16,7 @@ import dateUtils from "@/utils/date";
 import Image from "next/image";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import CreateAdmin from "./CreateAdmin";
+import DeleteAdmin from "./DeleteAdmin";
 
 const tableHead = [
   { label: "Name", field: "name" },
@@ -155,12 +156,13 @@ const AllAdminTable = () => {
                         {dateUtils.formateCreateOrUpdateDate(user.createdAt) || "N/A"}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="flex items-center justify-start gap-[10px] px-6 py-4">
                       <Toggle
                         disabled={user._id === currentUser?._id}
                         onToggle={() => toggleAvtivation(user._id)}
                         defaultActive={user.isActive}
                       />
+                      <DeleteAdmin admin={user} />
                     </td>
                   </tr>
                 ))

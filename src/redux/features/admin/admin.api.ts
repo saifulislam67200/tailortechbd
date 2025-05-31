@@ -47,6 +47,13 @@ const adminApi = api.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
+    deleteAdminById: builder.mutation<{ data: IUser }, string>({
+      query: (userId) => ({
+        url: `/admin/delete/${userId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["admin"],
+    }),
   }),
 });
 export const {
@@ -54,4 +61,5 @@ export const {
   useGetAllClientsQuery,
   useToggleAccountActivationMutation,
   useLoginAdminMutation,
+  useDeleteAdminByIdMutation,
 } = adminApi;

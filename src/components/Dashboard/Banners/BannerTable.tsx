@@ -1,17 +1,17 @@
 "use client";
 
+import Button from "@/components/ui/Button";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import { useGetAllBannersQuery } from "@/redux/features/banner/banner.api";
-import { FiEye, FiEyeOff } from "react-icons/fi";
 import Image from "next/image";
-import ActiveBannerToggle from "./ActiveBannerToggle";
-import DeleteBanner from "./DeleteBanner";
-import AddBanner from "./AddBanner";
-import UpdateBanner from "./UpdateBanner";
-import Button from "@/components/ui/Button";
-import ManageBannerPosition from "./ManageBannerPosition";
 import { useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import ActiveBannerToggle from "./ActiveBannerToggle";
+import AddBanner from "./AddBanner";
 import BannerTableSkeleton from "./BannerTableSkeleton";
+import DeleteBanner from "./DeleteBanner";
+import ManageBannerPosition from "./ManageBannerPosition";
+import UpdateBanner from "./UpdateBanner";
 
 const tableHead = [
   { label: "Order", field: "order" },
@@ -24,7 +24,7 @@ const tableHead = [
 ];
 
 const BannerTable = () => {
-  const { data, isLoading } = useGetAllBannersQuery();
+  const { data, isLoading } = useGetAllBannersQuery({});
   const banners = data?.data || [];
   const [isViewBannerPosition, setIsViewBannerPosition] = useState(false);
 

@@ -34,7 +34,26 @@ const CategoryShopProductView: React.FC<IProps> = async ({ searchParams, params 
     data: IProduct[];
     meta: { limit: number; page: number; totalDoc: number };
   };
-
+  const formatData = () => {
+    if (!sort) {
+      return data.data || [];
+    }
+    if (sort.includes("-price")) {
+      return data.data.sort((a: IProduct, b: IProduct) => {
+        const A_DiscountedPrice = a.price - (a.price * a.discount) / 100;
+        const B_DiscountedPrice = b.price - (b.price * b.discount) / 100;
+        return B_DiscountedPrice - A_DiscountedPrice;
+      });
+    } else if (sort.includes("price")) {
+      return data.data.sort((a: IProduct, b: IProduct) => {
+        const A_DiscountedPrice = a.price - (a.price * a.discount) / 100;
+        const B_DiscountedPrice = b.price - (b.price * b.discount) / 100;
+        return A_DiscountedPrice - B_DiscountedPrice;
+      });
+    } else {
+      return data.data || [];
+    }
+  };
   return (
     <div className="main_container py-[20px]">
       <Breadcrumb />
@@ -49,7 +68,7 @@ const CategoryShopProductView: React.FC<IProps> = async ({ searchParams, params 
       {data.data.length ? (
         <>
           <div className="mt-4 grid w-full grid-cols-2 justify-center gap-[16px] md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-            {data.data?.map((data) => <ProductPrimaryCard key={data._id} product={data} />)}
+            {formatData()?.map((data) => <ProductPrimaryCard key={data._id} product={data} />)}
           </div>
           <ShopProductPagination totalDoc={data.meta.totalDoc} />
         </>
