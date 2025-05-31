@@ -58,7 +58,7 @@ export const admin: IDashboardNavLinks[] = [
   },
   {
     icon: RiAdminLine,
-    label: "User Controle",
+    label: "User Control",
     children: [
       {
         path: "/dashboard/manage-admins",

@@ -45,7 +45,6 @@ const CreateCategory: React.FC<IProps> = ({ children, parent, onSuccess }) => {
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
-    console.log("Form values:", values);
     const res = await create(values);
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {

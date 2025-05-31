@@ -24,7 +24,7 @@ const AnswerModal: React.FC<PropsType> = ({ item, children }) => {
     }
 
     try {
-      const res = await updateAnswerById({
+      await updateAnswerById({
         id: item?._id,
         payload: {
           answer,
@@ -32,7 +32,6 @@ const AnswerModal: React.FC<PropsType> = ({ item, children }) => {
       }).unwrap();
 
       toast.success("Answer updated successfully");
-      console.log("Update success:", res);
       setIsOpen(false);
       //   setAnswer("");
     } catch (err) {
@@ -55,7 +54,7 @@ const AnswerModal: React.FC<PropsType> = ({ item, children }) => {
         <button
           onClick={() => setIsOpen(true)}
           // disabled={!!item?.answer}
-          className={`rounded-full border-[1px] border-dashboard bg-dashboard/5 p-[7px] text-dashboard transition-colors cursor-pointer`}
+          className={`cursor-pointer rounded-full border-[1px] border-dashboard bg-dashboard/5 p-[7px] text-dashboard transition-colors`}
           title={item?.answer ? "Already Answered" : "Answer Question"}
         >
           <FiMessageSquare size={17} />
@@ -69,7 +68,9 @@ const AnswerModal: React.FC<PropsType> = ({ item, children }) => {
       >
         <div className="w-full bg-white p-[16px]">
           <div className="flex items-center justify-between">
-            <h5 className="text-[18px] md:text-[20px] font-[700] text-strong">Answer the Question</h5>
+            <h5 className="text-[18px] font-[700] text-strong md:text-[20px]">
+              Answer the Question
+            </h5>
             <button onClick={() => setIsOpen(false)} className="cursor-pointer">
               <LuX />
             </button>
@@ -79,32 +80,38 @@ const AnswerModal: React.FC<PropsType> = ({ item, children }) => {
           {/* Modal Content */}
           <div className="md:p-[20px]">
             {/* Customer Info */}
-            <div className="mb-[12px] md:mb-[16px] flex items-center gap-[5px]">
-              <h4 className="mb-[2px] text-[14px] md:text-[16px] font-semibold text-primary">Customer Name :</h4>
-              <p className="text-[12px] md:text-[14px] text-info">{item?.name}</p>
+            <div className="mb-[12px] flex items-center gap-[5px] md:mb-[16px]">
+              <h4 className="mb-[2px] text-[14px] font-semibold text-primary md:text-[16px]">
+                Customer Name :
+              </h4>
+              <p className="text-[12px] text-info md:text-[14px]">{item?.name}</p>
             </div>
 
             {/* Product Info */}
             <div className="mb-[12px] md:mb-[16px]">
-              <h4 className="mb-[8px] text-[14px] md:text-[16px] font-semibold text-primary">Product</h4>
+              <h4 className="mb-[8px] text-[14px] font-semibold text-primary md:text-[16px]">
+                Product
+              </h4>
               <div className="flex items-center gap-3">
                 <Image
                   src={item?.product?.image || "/images/avatar.jpg"}
                   alt={item?.product.name}
                   width={55}
                   height={55}
-                  className="h-[40px] w-[40px] md:h-[60px] md:w-[60px] rounded-lg object-cover"
+                  className="h-[40px] w-[40px] rounded-lg object-cover md:h-[60px] md:w-[60px]"
                 />
                 <div>
-                  <p className="text-[12px] md:text-[14px] font-medium">{item?.product.name}</p>
-                  <p className="text-[11px] md:text-[12px] text-info">ID: {item?.productId}</p>
+                  <p className="text-[12px] font-medium md:text-[14px]">{item?.product.name}</p>
+                  <p className="text-[11px] text-info md:text-[12px]">ID: {item?.productId}</p>
                 </div>
               </div>
             </div>
 
             {/* Question */}
             <div className="mb-[16px] md:mb-[24px]">
-              <h4 className="mb-[8px] text-[14px] md:text-[16px] font-semibold text-primary">Question</h4>
+              <h4 className="mb-[8px] text-[14px] font-semibold text-primary md:text-[16px]">
+                Question
+              </h4>
               <div className="rounded-lg bg-gray-50 p-4">
                 <p className="">{item?.question}</p>
               </div>
@@ -112,7 +119,10 @@ const AnswerModal: React.FC<PropsType> = ({ item, children }) => {
 
             {/* Answer Input */}
             <div className="mb-[4px]">
-              <label htmlFor="answer" className="mb-[8px] text-[14px] md:text-[16px] font-semibold text-primary">
+              <label
+                htmlFor="answer"
+                className="mb-[8px] text-[14px] font-semibold text-primary md:text-[16px]"
+              >
                 Your Answer
               </label>
               <textarea

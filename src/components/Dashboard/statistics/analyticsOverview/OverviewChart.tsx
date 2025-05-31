@@ -1,22 +1,22 @@
 "use client";
-import React, { useState } from "react";
+import OverviewChartSkeleton from "@/components/ui/Skeleton/OverviewChartSkeleton";
+import { useAppSelector } from "@/hooks/redux";
+import { useGetSalesSummaryQuery } from "@/redux/features/statistics/statistics.api";
+import { useState } from "react";
 import {
-  LineChart,
+  CartesianGrid,
+  Legend,
   Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
 } from "recharts";
 import AnalyticsOverviewFilter from "./AnalyticsOverviewFilter";
-import SalesCard from "./SalesCard";
 import CustomersCard from "./CustomersCard";
-import { useAppSelector } from "@/hooks/redux";
 import EarningCard from "./EarningCard";
-import { useGetSalesSummaryQuery } from "@/redux/features/statistics/statistics.api";
-import OverviewChartSkeleton from "@/components/ui/Skeleton/OverviewChartSkeleton";
+import SalesCard from "./SalesCard";
 
 type TimeDataType = {
   time: string;
@@ -53,8 +53,6 @@ const OverviewChart = () => {
     "this-month": "this_month",
     "this-year": "this_year",
   };
-
-  // console.log(salesSummaryData, "salesSummaryData");
 
   // Get current data from API if available, otherwise fallback to empty array
   const currentData = salesSummaryData?.data?.[filterKeyMap[selectedFilter.value]] ?? [];

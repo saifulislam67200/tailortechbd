@@ -1,7 +1,7 @@
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
 import { useDeleteBannerByIdMutation } from "@/redux/features/banner/banner.api";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
 import { toast } from "sonner";
 
@@ -10,10 +10,9 @@ const DeleteBanner = ({ id, name }: { id: string; name: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const handleDelete = async () => {
     try {
-      const res = await deleteBanner(id).unwrap();
+      await deleteBanner(id).unwrap();
       toast.success("Banner delete successfully");
       setIsOpen(false);
-      console.log("Banner deleted:", res);
     } catch (err) {
       console.error("Failed to delete banner:", err);
     }

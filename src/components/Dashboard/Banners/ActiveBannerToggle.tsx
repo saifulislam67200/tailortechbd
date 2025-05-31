@@ -1,14 +1,13 @@
 import { useToggleBannerStatusMutation } from "@/redux/features/banner/banner.api";
-import React from "react";
+import { toast } from "sonner";
 
 const ActiveBannerToggle = ({ id, active }: { id: string; active: boolean }) => {
   const [toggleBannerStatus] = useToggleBannerStatusMutation();
   const handleToggleActive = async (bannerId: string) => {
     try {
-      const res = await toggleBannerStatus(bannerId).unwrap();
-      console.log("Status toggled:", res);
-    } catch (error) {
-      console.error("Failed to toggle status:", error);
+      await toggleBannerStatus(bannerId).unwrap();
+    } catch {
+      toast.error("Something went wrong, please try again later!");
     }
   };
 

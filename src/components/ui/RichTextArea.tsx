@@ -48,9 +48,9 @@ const RichTextArea: React.FC<IProps> = ({
       modules={{
         toolbar: toolbarOptions,
       }}
-      onChangeSelection={(...arg) => {
-        console.log(arg);
-      }}
+      // onChangeSelection={(...arg) => {
+      //   console.log(arg);
+      // }}
       style={{
         height: editorHeight + "px",
         ...style,
@@ -59,9 +59,9 @@ const RichTextArea: React.FC<IProps> = ({
       className={className || ""}
       theme="snow"
       value={value}
-      onChange={(content, _delta, _source, editor) => {
+      onChange={(content) => {
         setValue(content);
-        console.log(editor.getContents());
+
         if (onChange) onChange(content);
       }}
     />

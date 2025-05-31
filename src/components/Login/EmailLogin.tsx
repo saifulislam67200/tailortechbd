@@ -52,7 +52,6 @@ const EmailLogin = () => {
     const redirect = Cookies.get("redirect") || "/";
     Cookies.remove("redirect");
     setFormMessage(null);
-    console.log(redirect);
 
     router.replace(redirect);
   };

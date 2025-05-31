@@ -1,10 +1,10 @@
 "use client";
-import { useGetThisYearEarningsQuery } from "@/redux/features/statistics/statistics.api";
-import React, { useState } from "react";
-import { TbCurrencyTaka } from "react-icons/tb";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-import AnalyticsOverviewFilter from "../analyticsOverview/AnalyticsOverviewFilter";
 import YearlySellingPieChartSkeleton from "@/components/ui/Skeleton/YearlySellingPieChartSkeleton";
+import { useGetThisYearEarningsQuery } from "@/redux/features/statistics/statistics.api";
+import { useState } from "react";
+import { TbCurrencyTaka } from "react-icons/tb";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import AnalyticsOverviewFilter from "../analyticsOverview/AnalyticsOverviewFilter";
 
 const options = [
   { value: "2025", label: "2025" },
@@ -43,7 +43,7 @@ const YearlySellingPieChart = () => {
     <div className="h-fit min-h-[370px] w-full bg-white p-[16px] xl:w-[450px] 2xl:min-h-[450px] 2xl:w-[550px]">
       <div className="mb-4 flex justify-between">
         <div>
-          <h2 className="text-[14px] font-bold text-black sm:text-[16px]">
+          <h2 className="text-[14px] font-bold text-primary sm:text-[16px]">
             Earnings of {selectedFilter?.value}
           </h2>
           <p className="mt-1 flex items-center text-[16px] font-semibold text-info">

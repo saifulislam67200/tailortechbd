@@ -9,9 +9,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const res = await fetch(`${baseUrl}/category/get/${slug}`);
   const data = (await res.json()) as { data: ICategory };
 
-  if (!data) {
-    console.log("not found");
-  }
   return {
     title: data?.data?.label || "Shop | TailorTech",
   };

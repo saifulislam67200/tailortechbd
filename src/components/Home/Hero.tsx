@@ -22,7 +22,6 @@ const Hero = async () => {
 
   const data = await res.json();
   const banners: IBanner[] = data?.data || [];
-  // console.log(banners);
   return (
     <div className="mt-[16px]">
       <div className="flex flex-col gap-[8px] lg:flex-row">

@@ -12,7 +12,6 @@ const SortableBanner = ({ banner, index }: { banner: IBanner; index: number }) =
       id: banner._id,
     });
 
-  console.log(transform);
   const style = {
     transform: CSS.Transform.toString(transform),
     transition: isDragging ? "none" : transition,

@@ -1,5 +1,4 @@
 const ProductSizeChart = ({ chart }: { chart: string[][] }) => {
-  console.log("chart", chart);
   if (!chart || chart.length === 0) {
     return (
       <h3 className="mt-[30px] mb-3 text-[16px]">No size chart is available for this product.</h3>

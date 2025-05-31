@@ -5,6 +5,7 @@ import {
   useUpdateBannerSequencesMutation,
 } from "@/redux/features/banner/banner.api";
 import { IQueruMutationErrorResponse } from "@/types";
+import { IBanner } from "@/types/banner";
 import {
   closestCenter,
   DndContext,
@@ -19,7 +20,6 @@ import { useEffect, useState } from "react";
 import { FiArrowLeft, FiMove, FiSave } from "react-icons/fi";
 import { toast } from "sonner";
 import SortableBanner from "./SortableBanner";
-import { IBanner } from "@/types/banner";
 
 type ManageBannerPositionProps = {
   setIsViewBannerPosition: React.Dispatch<React.SetStateAction<boolean>>;
@@ -30,7 +30,6 @@ const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionP
   const [banners, setBanners] = useState<IBanner[]>([]);
   const [hasChanges, setHasChanges] = useState(false);
   const [updateBannerSequences, { isLoading }] = useUpdateBannerSequencesMutation();
-  console.log(banners);
 
   // Initialize banners from API data
   useEffect(() => {
@@ -67,7 +66,6 @@ const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionP
         index: banner.index,
       })),
     });
-    console.log(res);
 
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {

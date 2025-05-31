@@ -12,10 +12,10 @@ import ContactSupportDialog from "./ContactSupportDialog";
 import DeleteContactSupport from "./DeleteContactSupport";
 
 const tableHead = [
-  { label: "fullName", field: "name" },
-  { label: "email", field: "email" },
-  { label: "subject", field: "" },
-  { label: "message", field: "" },
+  { label: "Full Name", field: "fullName" },
+  { label: "Email", field: "email" },
+  { label: "Subject", field: "" },
+  { label: "Message", field: "" },
   { label: "Date Created", field: "createdAt" },
   { label: "Actions", field: "" },
 ];

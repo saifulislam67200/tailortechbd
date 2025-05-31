@@ -33,7 +33,6 @@ const PendingQuestionCount = () => {
 };
 const UnReadContactMessageCount = () => {
   const { isLoading, data } = useGetUnReadContactMessageCountQuery(undefined);
-  console.log(data);
 
   return (
     <>

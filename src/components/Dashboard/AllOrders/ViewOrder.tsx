@@ -313,8 +313,6 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
                   className={`${isEditMode ? "bg-danger text-white" : "bg-success text-white"}`}
                   onClick={() => {
                     if (isEditMode) {
-                      console.log(initialOrderItemView, "edi can");
-
                       setOrderItemView(initialOrderItemView);
                     }
                     setIsEditMode(!isEditMode);
