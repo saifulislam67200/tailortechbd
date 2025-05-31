@@ -68,7 +68,7 @@ export interface ISale {
 }
 
 const RecentSalesTable = () => {
-  const [selectedFilter, setSelectedFilter] = useState(options[0]);
+  const [selectedFilter, setSelectedFilter] = useState(options[2]);
   const [page, setPage] = useState<number>(1);
   const limit = 5;
   const { data: getRecentSales, isLoading } = useGetRecentSalesQuery({

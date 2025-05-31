@@ -38,7 +38,7 @@ const options = [
 ];
 
 const OverviewChart = () => {
-  const [selectedFilter, setSelectedFilter] = useState(options[0]);
+  const [selectedFilter, setSelectedFilter] = useState(options[2]);
   const { user } = useAppSelector((state) => state.user);
 
   // Fetch sales summary data from API

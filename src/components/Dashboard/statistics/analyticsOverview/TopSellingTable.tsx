@@ -24,7 +24,7 @@ interface IProduct {
 }
 
 const TopSellingTable = () => {
-  const [selectedFilter, setSelectedFilter] = useState(options[0]);
+  const [selectedFilter, setSelectedFilter] = useState(options[2]);
   const [page, setPage] = useState<number>(1);
   const limit = 5;
   const { data: getTopSellingProducts, isLoading } = useGetTopSellingProductsQuery({
