@@ -3,8 +3,8 @@ import Image from "next/image";
 import { useState } from "react";
 import AnalyticsOverviewFilter from "./AnalyticsOverviewFilter";
 import { useGetTopSellingProductsQuery } from "@/redux/features/statistics/statistics.api";
-import Loader from "@/components/ui/Loader";
 import Pagination from "@/components/ui/Pagination";
+import TopSellingTableSkeleton from "@/components/ui/Skeleton/TopSellingTableSekleton";
 
 const options = [
   { value: "overall", label: "Overall" },
@@ -37,7 +37,7 @@ const TopSellingTable = () => {
   const metaData = getTopSellingProducts?.meta || { totalDoc: 0, page: 1 };
 
   if (isLoading) {
-    return <Loader />;
+    return <TopSellingTableSkeleton />;
   }
 
   return (

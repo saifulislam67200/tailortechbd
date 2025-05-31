@@ -109,14 +109,16 @@ export default function ContactForm() {
             <div className="grid grid-cols-1 gap-[12px] md:grid-cols-2 md:gap-[24px]">
               {/* Phone Number */}
               <div className="flex w-full flex-col gap-[6px]">
-                <label className="text-[12px] text-strong">Phone No.</label>
+                <label className="text-[12px] text-strong" htmlFor="phoneNumber">
+                  Phone No.
+                </label>
                 <div className="flex items-center justify-start gap-0">
                   <span className="border-y-[1px] border-l-[1px] border-border-main bg-solid-slab px-[12px] py-[6px] text-[12px] text-strong">
                     {dialCode}
                   </span>
 
                   <Field
-                    name="phone"
+                    name="phoneNumber"
                     as={Input}
                     type="string"
                     placeholder="Enter Your Mobile Number"

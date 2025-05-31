@@ -11,8 +11,8 @@ const statisticsApi = api.injectEndpoints({
             providesTags: ["statistics"],
         }),
         getThisYearEarnings: builder.query({
-            query: () => ({
-                url: `/statistics/earnings-this-year`,
+            query: ({ filter }) => ({
+                url: `/statistics/earnings-this-year?filter=${filter}`,
                 method: "GET",
             }),
             providesTags: ["statistics"],
