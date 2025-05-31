@@ -16,7 +16,7 @@ import CustomersCard from "./CustomersCard";
 import { useAppSelector } from "@/hooks/redux";
 import EarningCard from "./EarningCard";
 import { useGetSalesSummaryQuery } from "@/redux/features/statistics/statistics.api";
-import Loader from "@/components/ui/Loader";
+import OverviewChartSkeleton from "@/components/ui/Skeleton/OverviewChartSkeleton";
 
 type TimeDataType = {
   time: string;
@@ -89,7 +89,7 @@ const OverviewChart = () => {
     currentData && currentData.length > 0 ? (currentData[currentData.length - 1].increase ?? 0) : 0;
 
   if (isLoading) {
-    return <Loader />;
+    return <OverviewChartSkeleton />;
   }
 
   return (

@@ -3,7 +3,7 @@ import { useGetRecentUnansweredQuestionQuery } from "@/redux/features/statistics
 import Image from "next/image";
 import React from "react";
 import AnswerModal from "../../Qna/AnswerModal";
-import Loader from "@/components/ui/Loader";
+import RecentQuestionsSkeleton from "@/components/ui/Skeleton/RecentQuestionsSkeleton";
 
 interface IProduct {
   _id: string;
@@ -26,7 +26,7 @@ const RecentQuestions = () => {
   const recentUnAnsweredQuestions = data?.data || [];
 
   if (isLoading) {
-    return <Loader />;
+    return <RecentQuestionsSkeleton />;
   }
 
   return (

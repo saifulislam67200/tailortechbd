@@ -4,8 +4,8 @@ import AnalyticsOverviewFilter from "./AnalyticsOverviewFilter";
 import Image from "next/image";
 import Pagination from "@/components/ui/Pagination";
 import { useGetRecentSalesQuery } from "@/redux/features/statistics/statistics.api";
-import Loader from "@/components/ui/Loader";
 import { IOrderStatus } from "@/types/order";
+import RecentSalesTableSkeleton from "@/components/ui/Skeleton/RecentSalesTableSkeleton";
 
 const options = [
   { value: "overall", label: "Overall" },
@@ -82,7 +82,7 @@ const RecentSalesTable = () => {
   const metaData = getRecentSales?.meta || { totalDoc: 0, page: 1 };
 
   if (isLoading) {
-    return <Loader />;
+    return <RecentSalesTableSkeleton />;
   }
 
   return (

@@ -1,10 +1,10 @@
 "use client";
-import Loader from "@/components/ui/Loader";
 import { useGetThisYearEarningsQuery } from "@/redux/features/statistics/statistics.api";
 import React, { useState } from "react";
 import { TbCurrencyTaka } from "react-icons/tb";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import AnalyticsOverviewFilter from "../analyticsOverview/AnalyticsOverviewFilter";
+import YearlySellingPieChartSkeleton from "@/components/ui/Skeleton/YearlySellingPieChartSkeleton";
 
 const options = [
   { value: "2025", label: "2025" },
@@ -36,7 +36,7 @@ const YearlySellingPieChart = () => {
     earningsPieData?.filter((entry: EarningsEntry) => entry.value > 0).length > 1;
 
   if (isLoading) {
-    return <Loader />;
+    return <YearlySellingPieChartSkeleton />;
   }
 
   return (
