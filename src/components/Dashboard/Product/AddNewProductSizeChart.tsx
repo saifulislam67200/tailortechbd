@@ -58,7 +58,7 @@ const AddNewProductSizeChart = () => {
       <button
         type="button"
         onClick={handleClick}
-        className="cursor-pointer border-[1px] border-primary bg-primary/50 px-[8px] py-[4px] text-[12px] text-white hover:bg-primary/100"
+        className="cursor-pointer border-[1px] border-primary bg-primary/80 px-[8px] py-[4px] text-[12px] text-white hover:bg-primary/100"
       >
         Add New
       </button>

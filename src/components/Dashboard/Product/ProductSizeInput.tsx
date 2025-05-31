@@ -2,6 +2,7 @@ import TableInput from "@/components/ui/TableInput";
 import { useGetAllSizeChartQuery } from "@/redux/features/productSizeChart/productSizeChart.api";
 import React, { useState } from "react";
 import AddNewProductSizeChart from "./AddNewProductSizeChart";
+import { LiaEdit } from "react-icons/lia";
 interface IProps {
   defaultValue?: string[][];
   onChange?: (value: string[][]) => void;
@@ -28,7 +29,12 @@ const ProductSizeInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
       />
 
       <div className="flex flex-col gap-[5px]">
-        <span className="text-[12px] font-[700]">Quick size select: </span>
+        <div className="flex items-center text-[12px] font-[700]">
+          Quick size select:{" "}
+          <button type="button" className="cursor-pointer p-[5px]">
+            <LiaEdit size={16} />
+          </button>
+        </div>
         <div className="flex items-center justify-center gap-[10px]">
           {productSizeChart?.map(({ chart, label }: ISizeChart) => (
             <button
