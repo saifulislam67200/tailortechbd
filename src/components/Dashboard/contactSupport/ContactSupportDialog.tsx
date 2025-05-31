@@ -1,6 +1,7 @@
 "use client";
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
+import { useMarkContactMessageAsReadMutation } from "@/redux/features/contactSupport/contactSupport.api";
 import { IContactSupport } from "@/types/ContactSupport";
 import Link from "next/link";
 import { useState } from "react";
@@ -10,10 +11,24 @@ import { RxCross1 } from "react-icons/rx";
 import { TfiEmail } from "react-icons/tfi";
 const ContactSupportDialog = ({ contactSupport }: { contactSupport: IContactSupport }) => {
   const [open, setOpen] = useState(false);
+  const [markAsRead] = useMarkContactMessageAsReadMutation();
+
+  const handleClick = async () => {
+    setOpen(true);
+    if (!contactSupport.isRead) {
+      await markAsRead(contactSupport._id);
+    }
+  };
+
   return (
     <>
-      <button onClick={() => setOpen(true)} className="cursor-pointer">
-        View Details
+      <button onClick={handleClick} className="relative cursor-pointer">
+        View Message
+        {!contactSupport.isRead ? (
+          <span className="absolute top-[-1px] right-0 h-2 w-2 rounded-full bg-danger"></span>
+        ) : (
+          ""
+        )}
       </button>
       <DialogProvider className="w-[95vw] max-w-[800px] md:w-full" state={open} setState={setOpen}>
         <div className="w-full bg-white p-[16px]">

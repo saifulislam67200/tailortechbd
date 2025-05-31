@@ -1,3 +1,4 @@
+import { useGetUnReadContactMessageCountQuery } from "@/redux/features/contactSupport/contactSupport.api";
 import { useGetPendingOrderCountQuery } from "@/redux/features/order/order.api";
 import { useGetPendingQuestionCountQuery } from "@/redux/features/Q&A/questionAndAnswer.api";
 
@@ -18,8 +19,6 @@ const PendingOrderCount = () => {
 };
 const PendingQuestionCount = () => {
   const { isLoading, data } = useGetPendingQuestionCountQuery(undefined);
-  console.log(data);
-
   return (
     <>
       {isLoading || !data?.data?.pendingQuestionCount ? (
@@ -32,10 +31,27 @@ const PendingQuestionCount = () => {
     </>
   );
 };
+const UnReadContactMessageCount = () => {
+  const { isLoading, data } = useGetUnReadContactMessageCountQuery(undefined);
+  console.log(data);
+
+  return (
+    <>
+      {isLoading || !data?.data?.count ? (
+        ""
+      ) : (
+        <span className="center absolute top-[-5px] left-[0px] flex h-[20px] w-[20px] rounded-full bg-danger/90 text-[10px] text-white">
+          {data.data.count > 9 ? "9+" : data.data.count}
+        </span>
+      )}
+    </>
+  );
+};
 
 const SidebarElement = {
   PendingOrderCount,
   PendingQuestionCount,
+  UnReadContactMessageCount,
 };
 
 export default SidebarElement;
