@@ -5,7 +5,7 @@ import StatisticsAside from "@/components/Dashboard/statistics/aside/StatisticsA
 const StatisticsView = () => {
   return (
     <div className="flex flex-col gap-[16px]">
-      <DashboardPageHeadingTitle title="Dashboard Statistics" />
+      <DashboardPageHeadingTitle title="Statistics" />
       <div className="flex flex-col gap-[16px] xl:flex-row">
         <AnalyticsOverview />
         <StatisticsAside />

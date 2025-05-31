@@ -19,26 +19,15 @@ import { useEffect, useState } from "react";
 import { FiArrowLeft, FiMove, FiSave } from "react-icons/fi";
 import { toast } from "sonner";
 import SortableBanner from "./SortableBanner";
-
-export interface TBanner {
-  _id: string;
-  name: string;
-  thumbnail: string;
-  index: number;
-  active: boolean;
-  hyperLink: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
+import { IBanner } from "@/types/banner";
 
 type ManageBannerPositionProps = {
   setIsViewBannerPosition: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ManageBannerPosition = ({ setIsViewBannerPosition }: ManageBannerPositionProps) => {
-  const { data } = useGetAllBannersQuery();
-  const [banners, setBanners] = useState<TBanner[]>([]);
+  const { data } = useGetAllBannersQuery({active: true});
+  const [banners, setBanners] = useState<IBanner[]>([]);
   const [hasChanges, setHasChanges] = useState(false);
   const [updateBannerSequences, { isLoading }] = useUpdateBannerSequencesMutation();
   console.log(banners);

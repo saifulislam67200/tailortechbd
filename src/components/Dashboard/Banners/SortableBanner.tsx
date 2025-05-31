@@ -1,12 +1,12 @@
 "use client";
+import { IBanner } from "@/types/banner";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Image from "next/image";
 import { FaGripVertical } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-import { TBanner } from "./ManageBannerPosition";
 
-const SortableBanner = ({ banner, index }: { banner: TBanner; index: number }) => {
+const SortableBanner = ({ banner, index }: { banner: IBanner; index: number }) => {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging, isOver, active } =
     useSortable({
       id: banner._id,

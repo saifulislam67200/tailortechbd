@@ -5,6 +5,7 @@ import Loader from "@/components/ui/Loader";
 import { useGetMyOrdersQuery } from "@/redux/features/order/order.api";
 import type { IOrder, IShippingAddress } from "@/types/order";
 import { IProduct } from "@/types/product";
+import dateUtils from "@/utils/date";
 import Image from "next/image";
 import { useState } from "react";
 import {
@@ -131,6 +132,7 @@ export default function OrderHistory() {
                         </div>
                       </div>
                       <div className="mt-[8px] flex flex-col gap-1 text-[14px] text-muted sm:flex-row sm:items-center sm:gap-[16px]">
+                        <span>Order Date: {dateUtils.formateCreateOrUpdateDate(order.createdAt)}</span>
                         <span>Customer: {order.shippingAddress.name}</span>
                         <span className="hidden sm:inline">•</span>
                         <span>Total: ৳ {getTotalAmount(order)}</span>

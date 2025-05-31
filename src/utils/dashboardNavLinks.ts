@@ -17,7 +17,7 @@ export interface IDashboardNavLinks {
 export const admin: IDashboardNavLinks[] = [
   {
     icon: VscGraphLine,
-    label: "Dashboard Statistics",
+    label: "Statistics",
     path: "/dashboard",
   },
   {

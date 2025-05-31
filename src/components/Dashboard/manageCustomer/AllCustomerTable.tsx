@@ -64,7 +64,7 @@ const AllCustomerTable = () => {
           <input
             type="text"
             className="w-full bg-transparent outline-none"
-            placeholder="Search Product"
+            placeholder="Search User"
             onChange={(e) => setSearchTerm(e.target.value)}
           />
           <RxMagnifyingGlass />

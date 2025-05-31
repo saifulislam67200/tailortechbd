@@ -157,7 +157,7 @@ export default function QnaTable() {
             </div>
           )}
         </div>
-        <Pagination totalDocs={metaData.totalDoc || 0} onPageChange={(page) => setPage(page)} />
+        <Pagination totalDocs={metaData.totalDoc || 0} page={page} onPageChange={(page) => setPage(page)} />
       </div>
     </>
   );

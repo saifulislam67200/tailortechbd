@@ -2,6 +2,18 @@ import React from "react";
 import { IQuestionAndAns } from "./QuestionAnswer";
 
 const QuestionAnswerCard = ({ question, name, answer, createdAt }: IQuestionAndAns) => {
+
+  const formattedDateTime = createdAt
+    ? new Date(createdAt).toLocaleString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      })
+    : "";
+  
   return (
     <div className="rounded-[5px] border border-quaternary bg-white p-[20px]">
       <div className="mb-2">
@@ -11,7 +23,7 @@ const QuestionAnswerCard = ({ question, name, answer, createdAt }: IQuestionAndA
       <div>
         <strong>A:</strong> {answer}
         <div className="text-xs text-gray-500">
-          By Admin , {createdAt?.slice(0, 10)} at {createdAt?.slice(11, 16)}
+          By Admin , {formattedDateTime}
         </div>
       </div>
     </div>

@@ -3,11 +3,14 @@ import { IBanner } from "@/types/banner";
 
 const bannerApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllBanners: builder.query<{ data: IBanner[] }, void>({
-      query: () => ({
-        url: `/banner`,
-        method: "GET",
-      }),
+    getAllBanners: builder.query<{ data: IBanner[] }, { active?: boolean } | void>({
+      query: (params) => {
+        const queryParam = params?.active !== undefined ? `?active=${params.active}` : "";
+        return {
+          url: `/banner${queryParam}`,
+          method: "GET",
+        };
+      },
       providesTags: ["banner"],
     }),
 
@@ -51,8 +54,6 @@ const bannerApi = api.injectEndpoints({
       invalidatesTags: ["banner"],
     }),
 
-
-
     updateBannerSequences: builder.mutation<
       { message: string; data: unknown },
       { payload: { _id: string; index: number }[] }
@@ -73,5 +74,5 @@ export const {
   useCreateBannerMutation,
   useUpdateBannerByIdMutation,
   useDeleteBannerByIdMutation,
-  useUpdateBannerSequencesMutation
+  useUpdateBannerSequencesMutation,
 } = bannerApi;
