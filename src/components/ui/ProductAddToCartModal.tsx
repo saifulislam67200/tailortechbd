@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import Button from "./Button";
 import DialogProvider from "./DialogProvider";
 import HorizontalLine from "./HorizontalLine";
-import SelectionBox from "./SelectionBox";
+// import SelectionBox from "./SelectionBox";
 
 interface Props {
   children?: ReactNode;
@@ -133,9 +133,9 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
                 {selectedColor &&
                   selectedSize &&
                   selectedColor?.sizes?.find((s) => s.size === selectedSize.size)?.stock === 0 && (
-                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 text-lg font-semibold text-white">
+                    <span className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 text-lg font-semibold text-white">
                       Out of Stock
-                    </div>
+                    </span>
                   )}
                 <Image
                   src={
@@ -149,7 +149,7 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
               </div>
               <div className="flex w-full flex-col gap-[10px]">
                 <h3 className="line-clamp-2 text-[20px] font-[700]">{product?.name}</h3>
-                <span className="font-bold text-primary">৳ {product?.price}</span>
+                <span className="font-bold text-primary"> ৳ {Math.round(product?.price - product.price * (product.discount / 100) || 0)}</span>
                 <div className="flex flex-col gap-[5px]">
                   <span className="font-[700]">Select color:</span>
                   <div className="flex flex-wrap items-center justify-start gap-[8px]">
@@ -166,7 +166,7 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
                 </div>
                 <div className="flex w-full flex-col gap-[5px]">
                   <span className="font-[700]">Select Size:</span>
-                  <SelectionBox
+                  {/* <SelectionBox
                     showSearch={false}
                     data={
                       selectedColor?.sizes?.map((size) => {
@@ -187,7 +187,24 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
                         stock: selectedColor?.sizes.find((s) => s.size === item.value)?.stock || 0,
                       })
                     }
-                  />
+                  /> */}
+                  <div className="flex flex-wrap items-center justify-start gap-[8px]">
+                    {selectedColor?.sizes?.map((size) => (
+                      <button
+                        key={size._id}
+                        type="button"
+                        aria-label={`Select size ${size.size}`}
+                        className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+                          selectedSize?.size === size.size
+                            ? "bg-primary text-white shadow-none"
+                            : "bg-white text-black shadow"
+                        } border border-gray-200 hover:bg-primary hover:text-white`}
+                        onClick={() => setSelectedSize(size)}
+                      >
+                        {size.size}
+                      </button>
+                    ))}
+                  </div>
                 </div>
                 <Button
                   disabled={

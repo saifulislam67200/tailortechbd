@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { toast } from "sonner";
 
 export type TCartItem = {
   id: string;
@@ -37,9 +38,17 @@ const cartSlice = createSlice({
       );
       if (item) {
         const newQuantity = item.quantity + action.payload.quantity;
-        item.quantity = newQuantity > item.stock ? item.stock : newQuantity;
+        if (newQuantity > item.stock) {
+          toast.warning("No more stock available!", {
+            description: "You've added the maximum quantity to your cart.",
+          });
+        } else {
+          item.quantity = newQuantity;
+          toast.success("Item quantity updated in cart!");
+        }
       } else {
         state.items.push(action.payload);
+        toast.success("Added to cart!");
       }
     },
     removeFromCart(state, action: PayloadAction<Partial<TCartItem>>) {
