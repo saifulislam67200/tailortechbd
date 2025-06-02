@@ -51,8 +51,6 @@ const CheeckoutOverview = ({
     return acc + (mainPrice - discountPrice);
   }, 0);
 
-  console.log(successfulCouponResponse, "successfulcouponreponse");
-
   const handleApplyCoupon = async () => {
     if (!couponValue) {
       toast.error("Please enter a coupon code");
@@ -169,6 +167,7 @@ const CheeckoutOverview = ({
         <div className="relative">
           <input
             type="text"
+            disabled={!!successfulCouponResponse?.couponDiscount}
             onChange={(e) => setCouponValue(e.target.value)}
             className="h-[40px] w-full border border-quaternary pl-[15px] focus:outline-none"
             placeholder="Coupon Code"
@@ -190,14 +189,6 @@ const CheeckoutOverview = ({
           <span className="font-[600]"> {deliveryFee} TK.</span>
         </div>
         <span className="h-[1px] w-full bg-border-muted"></span>
-        <div className="flex w-full items-center justify-between gap-[10px]">
-          <span className="text-[14px] font-[700]">Grand Total</span>
-
-          <span className="font-[600]">
-            {" "}
-            {Math.floor(mainTotal - totalDiscount + deliveryFee)} TK.
-          </span>
-        </div>
         {successfulCouponResponse?.couponDiscount && (
           <div className="flex items-center justify-between">
             <span className="text-[14px] font-[700] text-success">Coupon Discount</span>
@@ -207,15 +198,19 @@ const CheeckoutOverview = ({
             </span>
           </div>
         )}
-        {successfulCouponResponse?.grandTotal && (
-          <div className="flex w-full items-center justify-between gap-[10px]">
-            <span className="text-[14px] font-[700]">New Grand Total</span>
+        <div className="flex w-full items-center justify-between gap-[10px]">
+          <span className="text-[14px] font-[700]">Grand Total</span>
 
-            <span className="text-[14px] font-[700]">
-              {Math.floor(successfulCouponResponse?.grandTotal)}
-            </span>
-          </div>
-        )}
+          <span className="font-[600]">
+            {Math.floor(
+              mainTotal -
+                totalDiscount +
+                deliveryFee -
+                (successfulCouponResponse?.couponDiscount || 0)
+            )}
+            TK.
+          </span>
+        </div>
       </div>
     </div>
   );

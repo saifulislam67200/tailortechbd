@@ -1,7 +1,10 @@
 "use client";
 import OverviewChartSkeleton from "@/components/ui/Skeleton/OverviewChartSkeleton";
 import { useAppSelector } from "@/hooks/redux";
-import { useGetSalesSummaryQuery } from "@/redux/features/statistics/statistics.api";
+import {
+  useGetSalesSummaryQuery,
+  useGetSmsStatisticsQuery,
+} from "@/redux/features/statistics/statistics.api";
 import { useState } from "react";
 import {
   CartesianGrid,
@@ -17,6 +20,7 @@ import AnalyticsOverviewFilter from "./AnalyticsOverviewFilter";
 import CustomersCard from "./CustomersCard";
 import EarningCard from "./EarningCard";
 import SalesCard from "./SalesCard";
+import SmsOverviewCard from "./SmsOverviewCard";
 
 type TimeDataType = {
   time: string;
@@ -45,6 +49,8 @@ const OverviewChart = () => {
   const { data: salesSummaryData, isLoading } = useGetSalesSummaryQuery({
     searchQuery: selectedFilter.value,
   });
+
+  const { data: smsOverview } = useGetSmsStatisticsQuery(undefined);
 
   // Map filter value to API key
   const filterKeyMap: Record<string, keyof TimePeriodDataType> = {
@@ -101,7 +107,7 @@ const OverviewChart = () => {
         />
       </div>
 
-      <div className="mb-[16px] flex flex-col gap-[16px] lg:flex-row">
+      <div className="mb-[16px] grid grid-cols-1 gap-[16px] sm:grid-cols-2 2xl:grid-cols-4">
         <SalesCard value={totals.Sales} selectedFilter={selectedFilter.value} increase={increase} />
         <EarningCard
           value={totals.Earnings}
@@ -113,6 +119,7 @@ const OverviewChart = () => {
           selectedFilter={selectedFilter.value}
           increase={increase}
         />
+        <SmsOverviewCard  sms={smsOverview?.data}/>
       </div>
 
       <div className="2x:h-[400px] h-[360px] bg-white pt-[50px] pr-[16px] pb-[70px] 2xl:h-[500px]">
