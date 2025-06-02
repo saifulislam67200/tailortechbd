@@ -39,8 +39,10 @@ const validationSchema = Yup.object({
 });
 const CheckoutView = () => {
   const router = useRouter();
+  // this state is lift up from Checkout Overview component
   const [successfulCouponResponse, setSuccessfulCouponResponse] =
     useState<IAppliedCouponResponse | null>(null);
+
   const [creaeOrder, { isLoading }] = useCreateOrderMutation();
   const { items } = useAppSelector((state) => state.checkout);
   const { user } = useAppSelector((state) => state.user);
@@ -118,6 +120,7 @@ const CheckoutView = () => {
 
       orderItems: myOrderItems,
       deliveryFee: 60,
+      coupon: successfulCouponResponse?.appliedCoupon || "",
     };
 
     const res = await creaeOrder(payload);

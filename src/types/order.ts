@@ -40,4 +40,5 @@ export interface IOrder {
   deliveryFee?: number;
   status: IOrderStatus[];
   paymentStatus: "COD" | "pending" | "paid" | "canceled";
+  coupon?: string;
 }

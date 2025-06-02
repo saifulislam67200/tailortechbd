@@ -159,11 +159,11 @@ const CheeckoutOverview = ({
       <div className="flex flex-col gap-[16px] px-[16px]">
         <div className="flex w-full items-center justify-between gap-[10px]">
           <span className="text-[14px] font-[700]">Sub Total</span>
-          <span className="font-[600]">{mainTotal.toFixed(2)} TK.</span>
+          <span className="font-[600]">{Math.floor(mainTotal)} TK.</span>
         </div>
         <div className="flex w-full items-center justify-between gap-[10px]">
           <span className="text-[14px] font-[700]">Discount</span>
-          <span className="font-[600]"> - {totalDiscount.toFixed(2)} TK.</span>
+          <span className="font-[600]"> - {Math.floor(totalDiscount)} TK.</span>
         </div>
         {/* // coupon input start here  */}
         <div className="relative">
@@ -195,7 +195,7 @@ const CheeckoutOverview = ({
 
           <span className="font-[600]">
             {" "}
-            {(mainTotal - totalDiscount + deliveryFee).toFixed(2)} TK.
+            {Math.floor(mainTotal - totalDiscount + deliveryFee)} TK.
           </span>
         </div>
         {successfulCouponResponse?.couponDiscount && (
