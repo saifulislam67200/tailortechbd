@@ -12,6 +12,14 @@ const couponApi = api.injectEndpoints({
             invalidatesTags: ["contactSupport"],
         }),
 
+        createCoupon: builder.mutation({
+            query: (payload) => ({
+                url: `/coupon/create`,
+                method: "POST",
+                body: payload,
+            }),
+            invalidatesTags: ["contactSupport"],
+        }),
 
     }),
 });
@@ -19,5 +27,6 @@ const couponApi = api.injectEndpoints({
 
 
 export const {
-    useApplyCouponMutation
+    useApplyCouponMutation,
+    useCreateCouponMutation
 } = couponApi;

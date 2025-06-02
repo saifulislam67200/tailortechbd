@@ -90,7 +90,6 @@ const CheeckoutOverview = ({
     }
 
     toast.success("Coupon applied successfully");
-    setCouponValue("");
     return;
   };
 

@@ -11,7 +11,7 @@ const OverviewChartSkeleton = () => {
 
       {/* Summary Cards */}
       <div className="mb-[16px] flex flex-col gap-[16px] lg:flex-row">
-        {Array.from({ length: 3 }).map((_, i) => (
+        {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
             className="h-[160px] flex-1 rounded bg-white p-[16px] shadow-sm 2xl:h-[180px]"

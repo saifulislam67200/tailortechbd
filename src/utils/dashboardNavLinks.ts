@@ -3,7 +3,7 @@ import SidebarElement from "@/components/Shared/dashboard/SidebarElement";
 import { GoQuestion } from "react-icons/go";
 import { MdInventory2, MdOutlineContactSupport } from "react-icons/md";
 import { PiFlagBannerFoldBold, PiShoppingCartSimpleBold } from "react-icons/pi";
-import { RiAdminLine } from "react-icons/ri";
+import { RiAdminLine, RiCoupon4Line } from "react-icons/ri";
 import { TbCategory } from "react-icons/tb";
 import { VscGraphLine } from "react-icons/vsc";
 export interface IDashboardNavLinks {
@@ -67,6 +67,20 @@ export const admin: IDashboardNavLinks[] = [
       {
         path: "/dashboard/manage-customers",
         label: "All Customer",
+      },
+    ],
+  },
+  {
+    label: "Coupon",
+    icon: RiCoupon4Line,
+    children: [
+      {
+        label: "Mange Coupons",
+        path: "/dashboard/coupons",
+      },
+      {
+        label: "Create Coupon",
+        path: "/dashboard/create-coupon",
       },
     ],
   },
