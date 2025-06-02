@@ -47,10 +47,10 @@ jobs:
             nvm use node || nvm install node
 
             if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
-              DEPLOY_PATH="/home/ubuntu/tailortech/production/frotend"
+              DEPLOY_PATH="/home/ubuntu/tailortech/production/frontend"
               PM2_NAME="backend-main"
             elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-              DEPLOY_PATH="/home/ubuntu/tailortech/development/frotend"
+              DEPLOY_PATH="/home/ubuntu/tailortech/development/frontend"
               PM2_NAME="backend-dev"
             fi
 
