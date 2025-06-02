@@ -64,6 +64,20 @@ const Footer = () => {
                   </Link>
                 </li>
               </ul>
+              {/* Social Info for tablet */}
+              <div className="hidden space-x-[8px] md:flex lg:hidden lg:justify-start">
+                {socialLinks.map(({ icon: Icon, url, name }, i) => (
+                  <Link
+                    key={i + name}
+                    href={url}
+                    target="_blank"
+                    rel="noopener-noreferrer"
+                    className="center relative top-0 aspect-square w-[22px] rounded-full bg-white text-primary"
+                  >
+                    <Icon className="text-[16px]" />
+                  </Link>
+                ))}
+              </div>
             </div>
 
             {/* Customer Service */}
@@ -176,6 +190,20 @@ const Footer = () => {
                   </Link>
                 </div>
               </div>
+            </div>
+            {/* Social Info for mobile */}
+            <div className="flex justify-center space-x-[12px] md:hidden">
+              {socialLinks.map(({ icon: Icon, url, name }, i) => (
+                <Link
+                  key={i + name}
+                  href={url}
+                  target="_blank"
+                  rel="noopener-noreferrer"
+                  className="center relative top-0 aspect-square w-[24px] rounded-full bg-white text-primary"
+                >
+                  <Icon className="text-[18px]" />
+                </Link>
+              ))}
             </div>
           </div>
         </div>
