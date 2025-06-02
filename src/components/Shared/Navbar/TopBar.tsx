@@ -1,14 +1,13 @@
+import Marquee from "react-fast-marquee";
 const TopBar: React.FC = () => {
   return (
     <div className="hidden w-full border-b border-border-muted bg-white py-2 lg:block">
       <div className="main_container relative mx-auto w-full overflow-hidden">
-        <div className="animate-marquee flex whitespace-nowrap">
-          <span className="px-4 font-bold text-primary capitalize">
+        <Marquee speed={100} pauseOnHover>
+          <span className="w-fit px-4 font-bold text-primary capitalize">
             Your trusted online clothing provider!!!
           </span>
-          {/* <span className="px-4">Your trusted online clothing provider!!!</span>
-          <span className="px-4">Your trusted online clothing provider!!!</span> */}
-        </div>
+        </Marquee>
       </div>
     </div>
   );
