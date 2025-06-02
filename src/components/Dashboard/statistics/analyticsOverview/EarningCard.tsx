@@ -10,9 +10,9 @@ const EarningCard = ({
   increase: number;
 }) => {
   return (
-    <div className="h-[160px] w-full bg-white p-[16px] 2xl:h-[180px]">
-      <div className="flex items-center gap-[5px]">
-        <h3 className="text-[14px] font-bold text-primary sm:text-[16px]">Earnings</h3> |{" "}
+    <div className="min-h-[160px] w-full bg-white p-[16px] 2xl:h-[180px]">
+      <div className="flex flex-col gap-[5px]">
+        <h3 className="text-[14px] font-bold text-primary sm:text-[16px]">Earnings</h3>
         <p className="text-[14px] font-semibold text-info capitalize">{selectedFilter}</p>
       </div>
 
