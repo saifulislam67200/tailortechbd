@@ -8,7 +8,8 @@
     "start": "next start",
     "start-dev": "next start -p 3001",
     "lint": "next lint",
-    "format": "prettier --write .",
+    "fix-format": "prettier --write .",
+    "check-format": "prettier --check .",
     "prepare": "husky",
     "test": "next lint && tsc --noEmit && prettier --check ."
   },

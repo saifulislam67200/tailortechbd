@@ -1,1 +1,12 @@
-yarn test
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 Checking code formatting and linting..."
+
+yarn lint || (echo "❌ Lint check failed 💀💀 your code sucks" && exit 1)
+
+yarn check-format || (
+  echo "❌ Prettier check failed 💀💀 your code formatting sucks"
+  echo "💡 Use 'yarn fix-format' to fix it"
+  exit 1
+)
