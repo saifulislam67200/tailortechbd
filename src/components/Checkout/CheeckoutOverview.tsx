@@ -1,11 +1,42 @@
 "use client";
 
 import { useAppSelector } from "@/hooks/redux";
+import { useApplyCouponMutation } from "@/redux/features/coupon/coupon.api";
+import { IQueruMutationErrorResponse } from "@/types";
 import Image from "next/image";
+import { useState } from "react";
+import { toast } from "sonner";
 
-const CheeckoutOverview = ({ district }: { district?: string }) => {
+export interface IAppliedCouponResponse {
+  appliedCoupon: string;
+  couponDiscount: number;
+  grandTotal: number;
+  subtotal: number;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface ICouponResult {
+  data: {
+    data: IAppliedCouponResponse;
+  };
+  message: string;
+  statusCode: number;
+  success: boolean;
+}
+
+const CheeckoutOverview = ({
+  district,
+  successfulCouponResponse,
+  setSuccessfulCouponResponse,
+}: {
+  district?: string;
+  successfulCouponResponse: IAppliedCouponResponse | null;
+  setSuccessfulCouponResponse: (value: IAppliedCouponResponse | null) => void;
+}) => {
+  const [couponValue, setCouponValue] = useState("");
+
   const { items } = useAppSelector((state) => state.checkout);
-
+  const [applyCoupon, { isLoading }] = useApplyCouponMutation();
   const isInsideDhaka = district?.toLowerCase() === "dhaka";
   const deliveryFee = isInsideDhaka ? 70 : 120;
 
@@ -19,6 +50,51 @@ const CheeckoutOverview = ({ district }: { district?: string }) => {
     const discountPrice = getDiscountedPrice(cur.product.price, cur.discount || 0) * cur.quantity;
     return acc + (mainPrice - discountPrice);
   }, 0);
+
+  console.log(successfulCouponResponse, "successfulcouponreponse");
+
+  const handleApplyCoupon = async () => {
+    if (!couponValue) {
+      toast.error("Please enter a coupon code");
+      setCouponValue("");
+      return;
+    }
+
+    const products = items.map((item) => ({
+      productId: item.product_id.split("-")[0],
+      quantity: item.quantity,
+    }));
+
+    const payload = {
+      code: couponValue.trim(),
+      products,
+    };
+
+    console.log(payload);
+
+    const result = await applyCoupon(payload);
+
+    const couponSuccessResponse: IAppliedCouponResponse = result?.data?.data;
+
+    if (couponSuccessResponse) {
+      setSuccessfulCouponResponse(couponSuccessResponse);
+    }
+
+    const error = result.error as IQueruMutationErrorResponse;
+    if (error) {
+      if (error?.data?.message) {
+        toast(error.data?.message);
+      } else {
+        toast("Something went wrong");
+      }
+
+      return;
+    }
+
+    toast.success("Coupon applied successfully");
+    setCouponValue("");
+    return;
+  };
 
   return (
     <div className="flex flex-col gap-[16px] bg-white py-[8px]">
@@ -83,12 +159,32 @@ const CheeckoutOverview = ({ district }: { district?: string }) => {
       <div className="flex flex-col gap-[16px] px-[16px]">
         <div className="flex w-full items-center justify-between gap-[10px]">
           <span className="text-[14px] font-[700]">Sub Total</span>
-          <span className="font-[600]">{mainTotal.toFixed(2)} TK.</span>
+          <span className="font-[600]">{Math.floor(mainTotal)} TK.</span>
         </div>
         <div className="flex w-full items-center justify-between gap-[10px]">
           <span className="text-[14px] font-[700]">Discount</span>
-          <span className="font-[600]"> - {totalDiscount.toFixed(2)} TK.</span>
+          <span className="font-[600]"> - {Math.floor(totalDiscount)} TK.</span>
         </div>
+        {/* // coupon input start here  */}
+        <div className="relative">
+          <input
+            type="text"
+            onChange={(e) => setCouponValue(e.target.value)}
+            className="h-[40px] w-full border border-quaternary pl-[15px] focus:outline-none"
+            placeholder="Coupon Code"
+            value={couponValue}
+          />
+          <button
+            type="button"
+            onClick={handleApplyCoupon}
+            disabled={isLoading}
+            className="absolute top-0 right-0 h-full cursor-pointer bg-info px-[20px] text-white transition-colors delay-150 hover:bg-primary"
+          >
+            Apply
+          </button>
+        </div>
+
+        {/* // coupon input end here  */}
         <div className="flex w-full items-center justify-between gap-[10px]">
           <span className="text-[14px] font-[700]">Delivery Fee</span>
           <span className="font-[600]"> {deliveryFee} TK.</span>
@@ -96,11 +192,30 @@ const CheeckoutOverview = ({ district }: { district?: string }) => {
         <span className="h-[1px] w-full bg-border-muted"></span>
         <div className="flex w-full items-center justify-between gap-[10px]">
           <span className="text-[14px] font-[700]">Grand Total</span>
+
           <span className="font-[600]">
             {" "}
-            {(mainTotal - totalDiscount + deliveryFee).toFixed(2)} TK.
+            {Math.floor(mainTotal - totalDiscount + deliveryFee)} TK.
           </span>
         </div>
+        {successfulCouponResponse?.couponDiscount && (
+          <div className="flex items-center justify-between">
+            <span className="text-[14px] font-[700] text-success">Coupon Discount</span>
+
+            <span className="text-[14px] font-[700] text-success">
+              - {Math.floor(successfulCouponResponse?.couponDiscount)}
+            </span>
+          </div>
+        )}
+        {successfulCouponResponse?.grandTotal && (
+          <div className="flex w-full items-center justify-between gap-[10px]">
+            <span className="text-[14px] font-[700]">New Grand Total</span>
+
+            <span className="text-[14px] font-[700]">
+              {Math.floor(successfulCouponResponse?.grandTotal)}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 import CheckoutPaymentOptions from "@/components/Checkout/CheckoutPaymentOptions";
-import CheeckoutOverview from "@/components/Checkout/CheeckoutOverview";
+import CheeckoutOverview, { IAppliedCouponResponse } from "@/components/Checkout/CheeckoutOverview";
 import Breadcrumb from "@/components/ui/BreadCrumbs";
 import Button from "@/components/ui/Button";
 import FormMessage, { IFormMessage } from "@/components/ui/FormMessage";
@@ -39,6 +39,9 @@ const validationSchema = Yup.object({
 });
 const CheckoutView = () => {
   const router = useRouter();
+  // this state is lift up from Checkout Overview component
+  const [successfulCouponResponse, setSuccessfulCouponResponse] =
+    useState<IAppliedCouponResponse | null>(null);
 
   const [creaeOrder, { isLoading }] = useCreateOrderMutation();
   const { items } = useAppSelector((state) => state.checkout);
@@ -117,6 +120,7 @@ const CheckoutView = () => {
 
       orderItems: myOrderItems,
       deliveryFee: 60,
+      coupon: successfulCouponResponse?.appliedCoupon || "",
     };
 
     const res = await creaeOrder(payload);
@@ -364,7 +368,11 @@ const CheckoutView = () => {
               </div>
               <div className="flex w-full flex-col gap-[16px]">
                 <CheckoutPaymentOptions />
-                <CheeckoutOverview district={values.district || ""} />
+                <CheeckoutOverview
+                  district={values.district || ""}
+                  successfulCouponResponse={successfulCouponResponse}
+                  setSuccessfulCouponResponse={setSuccessfulCouponResponse}
+                />
                 {formMessage ? <FormMessage formMessage={formMessage} /> : ""}
                 {isValid ? (
                   ""
