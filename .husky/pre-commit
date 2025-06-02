@@ -3,7 +3,7 @@
 
 echo "🔍 Checking code formatting and linting..."
 
-yarn lint || (echo "❌ Lint check failed 💀💀 your code sucks" && exit 1)
+yarn check-lint || (echo "❌ Lint and type check failed 💀💀 your code sucks" && exit 1)
 
 yarn check-format || (
   echo "❌ Prettier check failed 💀💀 your code formatting sucks"
