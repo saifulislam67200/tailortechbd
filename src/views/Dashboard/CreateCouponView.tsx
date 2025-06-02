@@ -51,11 +51,18 @@ const initialValues = {
   couponType: "public",
 };
 
+type TAssignedUser = {
+  _id: string;
+  fullName: string;
+  role: string;
+  email: string;
+  phoneNumber?: string;
+};
 export interface ICoupon {
   code: string;
   discount: number;
   discountType: string;
-  assignedTo: string[];
+  assignedTo: TAssignedUser[];
   minOrderValue: number;
   expiresAt: string;
   isActive: boolean;

@@ -35,8 +35,16 @@ const couponApi = api.injectEndpoints({
 
     toggleActiveInActive: builder.mutation({
       query: (couponId) => ({
-        url: `coupon/${couponId}/toggle`,
+        url: `/coupon/${couponId}/toggle`,
         method: "PATCH",
+      }),
+      invalidatesTags: ["coupon"],
+    }),
+
+    deleteCoupon: builder.mutation({
+      query: (couponId) => ({
+        url: `coupon/delete/${couponId}`,
+        method: "DELETE",
       }),
       invalidatesTags: ["coupon"],
     }),
@@ -48,4 +56,5 @@ export const {
   useCreateCouponMutation,
   useGetAllCouponsQuery,
   useToggleActiveInActiveMutation,
+  useDeleteCouponMutation,
 } = couponApi;

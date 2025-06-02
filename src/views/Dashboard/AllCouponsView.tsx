@@ -13,6 +13,8 @@ import TableSkeleton from "@/components/ui/TableSkeleton";
 import Toggle from "@/components/ui/Toggle";
 import dateUtils from "@/utils/date";
 import { ICoupon } from "./CreateCouponView";
+import DeleteCouponModal from "@/components/Dashboard/coupon/DeleteCouponModal";
+import CouponInfoModal from "@/components/Dashboard/coupon/CouponInfoModal";
 
 const tableHead = [
   { label: "Code", field: "code" },
@@ -20,6 +22,7 @@ const tableHead = [
   { label: "Discount Type", field: "discountType" },
   { label: "isActive", field: "isActive" },
   { label: "Created At", field: "createdAt" },
+  { label: "Status", field: "" },
   { label: "Actions", field: "" },
 ];
 
@@ -132,11 +135,15 @@ const AllCouponsView = () => {
                     <td className="px-6 py-4 text-[14px]">
                       {dateUtils.formateCreateOrUpdateDate(coupon.createdAt)}
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 text-[14px]">
                       <Toggle
                         onToggle={() => handleToggle(coupon._id as string)}
                         defaultActive={coupon.isActive}
                       />
+                    </td>
+                    <td className="flex items-center justify-start gap-[16px] px-6 py-4">
+                      <CouponInfoModal coupon={coupon} />
+                      <DeleteCouponModal coupon={coupon} />
                     </td>
                   </tr>
                 ))
