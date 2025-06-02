@@ -100,10 +100,6 @@ const userApi = api.injectEndpoints({
       },
       invalidatesTags: ["user"],
     }),
-
-
-
-
   }),
 });
 export const {
@@ -117,5 +113,4 @@ export const {
   useLogoutUserMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
-
 } = userApi;

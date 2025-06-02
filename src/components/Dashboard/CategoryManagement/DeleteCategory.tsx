@@ -14,7 +14,7 @@ interface IProps {
   parentCategory?: ICategory;
   onDelete?: (id: string) => void;
 }
-const DeleteCategory: React.FC<IProps> = ({ category, parentCategory ,onDelete}) => {
+const DeleteCategory: React.FC<IProps> = ({ category, parentCategory, onDelete }) => {
   const [open, setOpen] = useState(false);
   const [deleteCategory, { isLoading }] = useDeleteCategoryByIdMutation();
   const handleDelete = async () => {

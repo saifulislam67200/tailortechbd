@@ -1,13 +1,15 @@
-import React from 'react';
+import React from "react";
 
 interface SectionTitleProps {
   children: React.ReactNode;
   className?: string;
 }
 
-const Heading = ({ children, className = '' }: SectionTitleProps) => {
+const Heading = ({ children, className = "" }: SectionTitleProps) => {
   return (
-    <h2 className={`bg-primary py-[6px] text-center text-[18px] font-bold text-white md:py-[8px] md:text-[26px] ${className}`}>
+    <h2
+      className={`bg-primary py-[6px] text-center text-[18px] font-bold text-white md:py-[8px] md:text-[26px] ${className}`}
+    >
       {children}
     </h2>
   );

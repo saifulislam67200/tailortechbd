@@ -45,7 +45,7 @@ const BannerTableSkeleton = ({ rows = 5 }: { rows?: number }) => {
         </tr>
       ))}
     </>
-  )
-}
+  );
+};
 
-export default BannerTableSkeleton
+export default BannerTableSkeleton;

@@ -29,7 +29,6 @@ const BannerTable = () => {
   const banners = data?.data || [];
   const [isViewBannerPosition, setIsViewBannerPosition] = useState(false);
 
-
   return (
     <>
       {!isViewBannerPosition ? (
@@ -133,7 +132,9 @@ const BannerTable = () => {
 
                         {/* Created Date */}
                         <td className="px-[24px] py-[16px] text-[14px] whitespace-nowrap text-info">
-                          {banner.createdAt ? dateUtils.formateCreateOrUpdateDate(banner.createdAt) : "N/A"}
+                          {banner.createdAt
+                            ? dateUtils.formateCreateOrUpdateDate(banner.createdAt)
+                            : "N/A"}
                         </td>
 
                         {/* Actions */}

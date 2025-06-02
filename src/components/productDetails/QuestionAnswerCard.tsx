@@ -2,7 +2,6 @@ import React from "react";
 import { IQuestionAndAns } from "./QuestionAnswer";
 
 const QuestionAnswerCard = ({ question, name, answer, createdAt }: IQuestionAndAns) => {
-
   const formattedDateTime = createdAt
     ? new Date(createdAt).toLocaleString("en-US", {
         year: "numeric",
@@ -13,7 +12,7 @@ const QuestionAnswerCard = ({ question, name, answer, createdAt }: IQuestionAndA
         hour12: true,
       })
     : "";
-  
+
   return (
     <div className="rounded-[5px] border border-quaternary bg-white p-[20px]">
       <div className="mb-2">
@@ -22,9 +21,7 @@ const QuestionAnswerCard = ({ question, name, answer, createdAt }: IQuestionAndA
       </div>
       <div>
         <strong>A:</strong> {answer}
-        <div className="text-xs text-gray-500">
-          By Admin , {formattedDateTime}
-        </div>
+        <div className="text-xs text-gray-500">By Admin , {formattedDateTime}</div>
       </div>
     </div>
   );

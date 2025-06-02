@@ -69,5 +69,5 @@ export const {
   useGetRecentSalesQuery,
   useGetTopSellingProductsQuery,
   useGetRecentUnansweredQuestionQuery,
-  useGetSmsStatisticsQuery
+  useGetSmsStatisticsQuery,
 } = statisticsApi;

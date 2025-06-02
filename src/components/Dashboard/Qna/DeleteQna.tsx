@@ -55,8 +55,8 @@ const DeleteQna = ({ id, customerName }: { id: string; customerName: string }) =
                   Are you sure you want to delete{" "}
                   <span className="bg-danger/10 p-[2px] font-medium text-danger">
                     &quot;{customerName}&quot;s
-                  </span> Qna? 
-                  This action cannot be undone.
+                  </span>{" "}
+                  Qna? This action cannot be undone.
                 </p>
               </div>
             </div>
@@ -72,8 +72,8 @@ const DeleteQna = ({ id, customerName }: { id: string; customerName: string }) =
             </Button>
             <Button
               onClick={handleDelete}
-            //   isLoading={isLoading}
-            //   disabled={inputValue !== "DELETE"}
+              //   isLoading={isLoading}
+              //   disabled={inputValue !== "DELETE"}
               type="button"
               className="w-full bg-danger hover:bg-danger/90 disabled:bg-danger/50"
             >

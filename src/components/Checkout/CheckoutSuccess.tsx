@@ -1,34 +1,21 @@
 "use client";
 import Button from "@/components/ui/Button";
-import { useAppSelector } from "@/hooks/redux";
 import { removeAllItemsFromCheckout } from "@/redux/features/checkout/checkout.slice";
+import { IOrder } from "@/types/order";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-const OrderSuccess = () => {
-  const { items: orderItems } = useAppSelector((state) => state.checkout);
+
+interface IProps {
+  orderData: IOrder;
+}
+const CheckoutSuccess: React.FC<IProps> = ({ orderData }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const getParams = useSearchParams();
-  const orderId = getParams.get("o_id");
-  const insideDhaka = getParams.get("ind") === "1";
-
-  const calculateDiscountedPrice = (price: number, discount: number) =>
-    price - (price * discount) / 100;
-
-  const subtotal = orderItems.reduce(
-    (acc, item) =>
-      acc + calculateDiscountedPrice(item.product.price, item.discount || 0) * item.quantity,
-    0
-  );
-  const totalDiscount = orderItems.reduce(
-    (acc, item) => acc + ((item.product.price * (item.discount || 0)) / 100) * item.quantity,
-    0
-  );
-  const deliveryFee = insideDhaka ? 70 : 120;
-  const grandTotal = subtotal + deliveryFee;
+  const deliveryFee = orderData?.deliveryFee || 120;
+  const grandTotal = orderData?.totalProductAmount + deliveryFee;
 
   const hasMounted = { current: false };
   useEffect(() => {
@@ -43,11 +30,11 @@ const OrderSuccess = () => {
     <div className="min-h-screen bg-[#f4f4f4] px-4 py-10">
       <div className="mx-auto max-w-3xl bg-white p-6 shadow-md">
         <h2 className="mb-4 text-lg font-semibold">✅ Order Placed Successfully</h2>
-        {orderId ? <p className="mb-6 text-sm text-muted">Order ID: #{orderId}</p> : ""}
+        <p className="mb-6 text-sm text-muted">Order ID: #{orderData?._id}</p>
 
-        {orderItems.map((item, index) => {
-          const discountedPrice = calculateDiscountedPrice(item.product.price, item.discount || 0);
-          const totalPrice = discountedPrice * item.quantity;
+        {orderData?.orderItems?.map((item, index) => {
+          const price = item.product.price;
+          const totalPrice = price * item.quantity;
 
           return (
             <div key={index} className="flex items-start justify-between border-t py-4">
@@ -63,18 +50,7 @@ const OrderSuccess = () => {
                   <h3 className="font-semibold">{item.product.name}</h3>
                   <div className="text-sm">
                     <p>
-                      {item.discount ? (
-                        <>
-                          <span className="text-[16px] font-semibold text-success">
-                            ৳ {discountedPrice.toFixed(2)}
-                          </span>
-                          <span className="mr-2 text-[14px] text-muted line-through">
-                            ৳ {item.product.price}
-                          </span>
-                        </>
-                      ) : (
-                        <span className="mr-2 text-success">৳ {item.product.price}</span>
-                      )}
+                      <span className="mr-2 text-success">৳ {item.product.price}</span>
                     </p>
                     <p>
                       Color: {item.color} - Size: {item.size} - Quantity: {item.quantity}
@@ -90,16 +66,22 @@ const OrderSuccess = () => {
         <div className="mt-4 space-y-1 border-t pt-4 text-sm text-gray-700">
           <div className="flex justify-between">
             <span>Sub Total</span>
-            <span>৳ {subtotal.toFixed(2)}</span>
+            <span>৳ {orderData?.totalProductAmount?.toFixed(2)}</span>
           </div>
-          <div className="flex justify-between">
-            <span>Discount</span>
-            <span className="text-danger">- ৳ {totalDiscount.toFixed(2)}</span>
-          </div>
+
           <div className="flex justify-between">
             <span>Delivery Fee</span>
             <span>৳ {deliveryFee}</span>
           </div>
+
+          {orderData.couponDiscount ? (
+            <div className="mt-2 flex justify-between border-t pt-2 font-semibold text-black">
+              <span>Grand Total</span>
+              <span>- ৳ {orderData.couponDiscount.toFixed(2)}</span>
+            </div>
+          ) : (
+            ""
+          )}
           <div className="mt-2 flex justify-between border-t pt-2 font-semibold text-black">
             <span>Grand Total</span>
             <span>৳ {grandTotal.toFixed(2)}</span>
@@ -113,4 +95,4 @@ const OrderSuccess = () => {
   );
 };
 
-export default OrderSuccess;
+export default CheckoutSuccess;

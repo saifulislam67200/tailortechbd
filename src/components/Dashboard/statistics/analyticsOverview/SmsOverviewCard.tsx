@@ -1,3 +1,4 @@
+import dateUtils from "@/utils/date";
 import { MdOutlineSms } from "react-icons/md";
 
 interface IProps {
@@ -19,15 +20,32 @@ const SmsOverviewCard: React.FC<IProps> = ({
         <p className="text-[14px] font-semibold text-info capitalize">Current stats</p>
       </div>
 
-      <div className="mt-[32px] flex w-full items-center gap-[16px]">
-        <div className="w-fit">
-          <div className="flex h-[60px] w-[60px] items-center justify-center rounded-[5px] bg-[#ffc88641] font-bold text-[#ff9e27]">
-            <MdOutlineSms className="size-[25px] 2xl:size-[30px]" />
-          </div>
-        </div>
-        <div className="h-full w-full">
-          <h1 className="text-[20px] font-bold 2xl:text-[20px]">{sms?.balance || 0} BDT</h1>
-          {sms?.validity ? <span>Valid till: {}</span> : ""}
+      <div className="mt-[10px] flex w-full flex-col items-start gap-[6px]">
+        <span className="flex w-fit items-center justify-start gap-[10px]">
+          <span className="flex h-[40px] w-[40px] items-center justify-center rounded-[5px] bg-[#ffc88641] font-bold text-[#ff9e27]">
+            <MdOutlineSms className="size-[25px]" />
+          </span>{" "}
+          <h1 className="text-[20px] leading-[90%] font-bold 2xl:text-[20px]">
+            {sms?.balance || 0} BDT
+          </h1>
+        </span>
+        <div className="flex h-full w-full flex-col gap-[2px]">
+          {sms?.totalSmsRemaining ? (
+            <span className="text-[13px]">
+              <span className="font-[700]">SMS Remaining:</span> {sms.totalSmsRemaining}
+            </span>
+          ) : (
+            ""
+          )}
+
+          {sms?.validity ? (
+            <span className="text-[13px]">
+              <span className="font-[700]">Valid till:</span>{" "}
+              {dateUtils.formateCreateOrUpdateDate(sms?.validity)}
+            </span>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

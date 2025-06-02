@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "start-dev": "next start -p 3001",
-    "lint": "next lint",
-    "format": "prettier --write .",
-    "prepare": "husky",
-    "test": "next lint && tsc --noEmit"
+    "check-lint": "next lint && tsc --noEmit",
+    "fix-format": "prettier --write .",
+    "check-format": "prettier --check .",
+    "prepare": "husky"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -22,6 +22,7 @@
     "next": "^15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-fast-marquee": "^1.6.5",
     "react-icons": "^5.5.0",
     "react-image-magnify": "^2.7.4",
     "react-phone-number-input": "^3.4.12",
@@ -47,7 +48,7 @@
     "eslint-config-next": "15.3.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.0.0",
-    "prettier": "^3.5.3",
+    "prettier": "3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4",
     "typescript": "^5"

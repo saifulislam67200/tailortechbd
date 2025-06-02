@@ -149,7 +149,10 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
               </div>
               <div className="flex w-full flex-col gap-[10px]">
                 <h3 className="line-clamp-2 text-[20px] font-[700]">{product?.name}</h3>
-                <span className="font-bold text-primary"> ৳ {Math.round(product?.price - product.price * (product.discount / 100) || 0)}</span>
+                <span className="font-bold text-primary">
+                  {" "}
+                  ৳ {Math.round(product?.price - product.price * (product.discount / 100) || 0)}
+                </span>
                 <div className="flex flex-col gap-[5px]">
                   <span className="font-[700]">Select color:</span>
                   <div className="flex flex-wrap items-center justify-start gap-[8px]">
