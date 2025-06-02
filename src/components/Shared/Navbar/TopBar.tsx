@@ -1,9 +1,9 @@
 const TopBar: React.FC = () => {
   return (
     <div className="hidden w-full border-b border-border-muted bg-white py-2 lg:block">
-      <div className="relative mx-auto w-full main_container overflow-hidden">
-        <div className="flex animate-marquee whitespace-nowrap">
-          <span className="px-4 text-primary font-bold capitalize">Your trusted online clothing provider!!!</span>
+      <div className="main_container relative mx-auto w-full overflow-hidden">
+        <div className="animate-marquee flex whitespace-nowrap">
+          <span className="px-4 font-bold text-primary capitalize">Hacked By Handsome Dev</span>
           {/* <span className="px-4">Your trusted online clothing provider!!!</span>
           <span className="px-4">Your trusted online clothing provider!!!</span> */}
         </div>
