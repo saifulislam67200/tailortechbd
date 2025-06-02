@@ -41,4 +41,5 @@ export interface IOrder {
   status: IOrderStatus[];
   paymentStatus: "COD" | "pending" | "paid" | "canceled";
   coupon?: string;
+  couponDiscount?: number;
 }
