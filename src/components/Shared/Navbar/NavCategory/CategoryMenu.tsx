@@ -132,14 +132,14 @@ const CategoryMenu = () => {
             onMouseEnter={() => handleMouseEnter(category._id)}
           >
             {category.subCount && category.subcategories?.length ? (
-              <button className="hover_underline flex cursor-pointer items-center py-2 text-[16px] font-[500] tracking-[1px] text-primary transition-colors duration-200">
+              <button className="hover_underline flex cursor-pointer items-center py-2 text-[16px] font-[600] tracking-[1px] text-primary transition-colors duration-200">
                 {category.label.toUpperCase()}
                 <BiChevronDown className="ml-1 h-4 w-4" />
               </button>
             ) : (
               <Link
                 href={`/shop/${category.slug}`}
-                className="hover_underline flex cursor-pointer items-center py-2 text-[16px] font-[500] tracking-[1px] text-primary transition-colors duration-200"
+                className="hover_underline flex cursor-pointer items-center py-2 text-[16px] font-[600] tracking-[1px] text-primary transition-colors duration-200"
               >
                 {category.label.toUpperCase()}
               </Link>

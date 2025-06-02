@@ -2,6 +2,7 @@ import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { FaLinkedinIn } from "react-icons/fa";
 import { RiTwitterXFill } from "react-icons/ri";
 // import { MdEmail } from "react-icons/md";
+import { AiOutlineTikTok } from "react-icons/ai";
 
 export const socialLinks = [
   {
@@ -28,6 +29,11 @@ export const socialLinks = [
     name: "LinkedIn",
     url: "https://www.x.com",
     icon: RiTwitterXFill,
+  },
+  {
+    name: "TikTok",
+    url: "https://www.tiktok.com",
+    icon: AiOutlineTikTok,
   },
 ];
 
