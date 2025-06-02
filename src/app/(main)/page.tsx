@@ -10,7 +10,7 @@ import { Suspense } from "react";
 export default function Home() {
   return (
     <main className="main_container mx-auto">
-      <Suspense fallback={<div className="aspect-[834.66/407] bg-gray-100 animate-pulse" />}>
+      <Suspense fallback={<div className="aspect-[834.66/407] animate-pulse bg-gray-100" />}>
         <Hero />
       </Suspense>
       <TopCategories />

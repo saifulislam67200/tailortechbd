@@ -119,7 +119,7 @@ const OverviewChart = () => {
           selectedFilter={selectedFilter.value}
           increase={increase}
         />
-        <SmsOverviewCard  sms={smsOverview?.data}/>
+        <SmsOverviewCard sms={smsOverview?.data} />
       </div>
 
       <div className="2x:h-[400px] h-[360px] bg-white pt-[50px] pr-[16px] pb-[70px] 2xl:h-[500px]">

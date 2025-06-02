@@ -74,7 +74,7 @@ const TableInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
                 onMouseLeave={() => setMouseOn(null)}
                 type="button"
                 onClick={() => deleteColumn(colIndex)}
-                className="center mb-1 aspect-square w-[30px] cursor-pointer rounded-full border border-border-muted bg-transparent text-[12px] md:text-[16px] text-danger"
+                className="center mb-1 aspect-square w-[30px] cursor-pointer rounded-full border border-border-muted bg-transparent text-[12px] text-danger md:text-[16px]"
                 title="Delete Column"
               >
                 <FaRegTrashAlt />
@@ -91,7 +91,7 @@ const TableInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
                 className={`flex h-[48px] w-full items-center justify-center border border-border-muted ${mouseOn?.type === "delete" && mouseOn?.position === "row" && mouseOn?.index === rowIndex ? "bg-danger/40" : ""} ${mouseOn?.type === "delete" && mouseOn?.position === "column" && mouseOn?.index === colIndex ? "bg-danger/40" : ""} `}
               >
                 <input
-                  className={`h-full w-full px-2 text-center outline-none text-[12px] md:text-[16px] ${
+                  className={`h-full w-full px-2 text-center text-[12px] outline-none md:text-[16px] ${
                     rowIndex === 0 ? "font-bold" : ""
                   }`}
                   value={cell}
@@ -108,7 +108,7 @@ const TableInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
                     className={`flex h-[48px] w-full items-center justify-center border border-border-muted bg-success/40`}
                   >
                     <input
-                      className={`h-full w-full px-2 text-center outline-none text-[12px] md:text-[16px] ${
+                      className={`h-full w-full px-2 text-center text-[12px] outline-none md:text-[16px] ${
                         rowIndex === 0 ? "font-bold" : ""
                       }`}
                     />
@@ -126,7 +126,7 @@ const TableInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
                   onMouseLeave={() => setMouseOn(null)}
                   type="button"
                   onClick={() => deleteRow(rowIndex)}
-                  className="center aspect-square w-[30px] cursor-pointer rounded-full border border-border-muted bg-transparent text-[12px] md:text-[16px] text-danger"
+                  className="center aspect-square w-[30px] cursor-pointer rounded-full border border-border-muted bg-transparent text-[12px] text-danger md:text-[16px]"
                   title="Delete Row"
                 >
                   <FaRegTrashAlt />
@@ -154,7 +154,7 @@ const TableInput: React.FC<IProps> = ({ defaultValue, onChange }) => {
       <button
         type="button"
         onClick={addRow}
-        className="mt-4 cursor-pointer rounded-full border border-border-muted px-4 py-[6px] md:py-2 text-muted text-[12px] md:text-[16px]"
+        className="mt-4 cursor-pointer rounded-full border border-border-muted px-4 py-[6px] text-[12px] text-muted md:py-2 md:text-[16px]"
       >
         <FaPlus className="mr-1 inline" /> Add Row
       </button>

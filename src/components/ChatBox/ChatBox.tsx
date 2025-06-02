@@ -44,7 +44,7 @@ const ChatBox = () => {
           </div>
 
           {/* Chat Input */}
-          <ChatInput/>
+          <ChatInput />
         </div>
       ) : (
         <button

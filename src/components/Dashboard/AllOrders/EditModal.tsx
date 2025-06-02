@@ -75,15 +75,15 @@ export default function EditModal({ isOpen, onClose, item, onUpdate, isLoading }
       <div className="relative w-full max-w-lg scale-100 transform transition-all duration-300">
         <div className="overflow-hidden border border-gray-100 bg-white shadow-2xl">
           {/* Header */}
-          <div className=" px-6 py-4">
+          <div className="px-6 py-4">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-semibold ">Edit Product</h3>
-                <p className="mt-1 text-sm ">Update product information</p>
+                <h3 className="text-xl font-semibold">Edit Product</h3>
+                <p className="mt-1 text-sm">Update product information</p>
               </div>
               <button
                 onClick={onClose}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-black/20  transition-colors duration-200 hover:bg-black/30"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-black/20 transition-colors duration-200 hover:bg-black/30"
               >
                 <MdClose className="h-5 w-5" />
               </button>
@@ -104,7 +104,7 @@ export default function EditModal({ isOpen, onClose, item, onUpdate, isLoading }
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full  border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:border-dashboard focus:ring-2 focus:ring-dashboard/20 focus:outline-none"
+                    className="w-full border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:border-dashboard focus:ring-2 focus:ring-dashboard/20 focus:outline-none"
                     placeholder="Enter product name"
                     required
                   />
@@ -122,7 +122,7 @@ export default function EditModal({ isOpen, onClose, item, onUpdate, isLoading }
                       value={formData.quantity}
                       onChange={handleInputChange}
                       min="1"
-                      className="w-full  border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:border-dashboard focus:ring-2 focus:ring-dashboard/20 focus:outline-none"
+                      className="w-full border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:border-dashboard focus:ring-2 focus:ring-dashboard/20 focus:outline-none"
                       placeholder="0"
                       required
                     />
@@ -138,7 +138,7 @@ export default function EditModal({ isOpen, onClose, item, onUpdate, isLoading }
                       onChange={handleInputChange}
                       min="0"
                       step="0.01"
-                      className="w-full  border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:border-dashboard focus:ring-2 focus:ring-dashboard/20 focus:outline-none"
+                      className="w-full border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:border-dashboard focus:ring-2 focus:ring-dashboard/20 focus:outline-none"
                       placeholder="0.00"
                       required
                     />
@@ -154,7 +154,7 @@ export default function EditModal({ isOpen, onClose, item, onUpdate, isLoading }
                       name="color"
                       value={formData.color}
                       onChange={handleInputChange}
-                      className="w-full  border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:border-dashboard focus:ring-2 focus:ring-dashboard/20 focus:outline-none"
+                      className="w-full border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:border-dashboard focus:ring-2 focus:ring-dashboard/20 focus:outline-none"
                       placeholder="e.g., Red, Blue"
                     />
                   </div>
@@ -165,7 +165,7 @@ export default function EditModal({ isOpen, onClose, item, onUpdate, isLoading }
                       name="size"
                       value={formData.size}
                       onChange={handleInputChange}
-                      className="w-full  border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:border-dashboard focus:ring-2 focus:ring-dashboard/20 focus:outline-none"
+                      className="w-full border border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 transition-colors duration-200 focus:border-dashboard focus:ring-2 focus:ring-dashboard/20 focus:outline-none"
                       placeholder="e.g., M, L, XL"
                     />
                   </div>
@@ -177,14 +177,14 @@ export default function EditModal({ isOpen, onClose, item, onUpdate, isLoading }
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1  border-2 border-gray-300 bg-white px-6 py-3 font-medium text-gray-700 transition-all duration-200 hover:border-gray-400 hover:bg-gray-50 focus:ring-2 focus:ring-gray-300 focus:outline-none"
+                  className="flex-1 border-2 border-gray-300 bg-white px-6 py-3 font-medium text-gray-700 transition-all duration-200 hover:border-gray-400 hover:bg-gray-50 focus:ring-2 focus:ring-gray-300 focus:outline-none"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex-1  bg-gradient-to-r from-dashboard to-dashboard/90 px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-dashboard/90 hover:to-dashboard hover:shadow-xl focus:ring-2 focus:ring-dashboard/50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex-1 bg-gradient-to-r from-dashboard to-dashboard/90 px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:from-dashboard/90 hover:to-dashboard hover:shadow-xl focus:ring-2 focus:ring-dashboard/50 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {isLoading ? (
                     <div className="flex items-center justify-center gap-2">
