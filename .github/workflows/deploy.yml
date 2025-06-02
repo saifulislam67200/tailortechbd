@@ -20,7 +20,7 @@ jobs:
           if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
             echo "target_path=/home/ubuntu/tailortech/production/frontend" >> $GITHUB_OUTPUT
           elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            echo "target_path=/home/ubuntu/tailortech/development/frotend" >> $GITHUB_OUTPUT
+            echo "target_path=/home/ubuntu/tailortech/development/frontend" >> $GITHUB_OUTPUT
           fi
 
       - name: Copy Files to VPS
