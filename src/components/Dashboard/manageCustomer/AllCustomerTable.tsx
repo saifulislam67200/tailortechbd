@@ -34,7 +34,7 @@ const AllCustomerTable = () => {
   const [query, setQuery] = useState<Record<string, string | number>>({
     page: 1,
     role: "user",
-    fields: "name,slug,price,images,discount,category,createdAt",
+    fields: "fullName, email, phoneNumber",
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
   });
 

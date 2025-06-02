@@ -60,6 +60,8 @@ export interface ICoupon {
   expiresAt: string;
   isActive: boolean;
   couponType: string;
+  _id?: string;
+  createdAt?: string;
 }
 
 type TUser = {
