@@ -6,8 +6,9 @@ import { useCreateCouponMutation } from "@/redux/features/coupon/coupon.api";
 import { IQueruMutationErrorResponse } from "@/types";
 import { ErrorMessage, Field, FieldArray, Form, Formik, FormikHelpers } from "formik";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { FiChevronDown, FiDollarSign, FiPercent, FiPlus, FiTag, FiX } from "react-icons/fi";
+import { ChangeEvent, useEffect, useState } from "react";
+import { FiChevronDown, FiPercent, FiPlus, FiTag, FiX } from "react-icons/fi";
+import { TbCurrencyTaka } from "react-icons/tb";
 import { toast } from "sonner";
 import * as Yup from "yup";
 
@@ -33,8 +34,11 @@ const validationSchema = Yup.object().shape({
       schema
         .of(
           Yup.object().shape({
-            id: Yup.string().required(),
-            email: Yup.string().email("Invalid email").required(),
+            id: Yup.string().required("User ID is required"),
+            email: Yup.string().email("Invalid email").optional(),
+            fullName: Yup.string().required("Full name is required"),
+            avatar: Yup.string().required("Avatar is required"),
+            phoneNumber: Yup.string().required("Phone number is required"),
           })
         )
         .min(1, "At least one user required"),
@@ -59,6 +63,7 @@ type TAssignedUser = {
   email: string;
   phoneNumber?: string;
 };
+
 export interface ICoupon {
   code: string;
   discount: number;
@@ -118,7 +123,7 @@ const CreateCouponView = () => {
     { resetForm }: FormikHelpers<typeof initialValues>
   ) => {
     const payload = {
-      assignedTo: values.assignedTo.map((user: { email: string; id: string }) => user.id),
+      assignedTo: values.assignedTo.map((user: { id: string }) => user.id),
       code: values.code,
       discount: values.discount,
       discountType: values.discountType,
@@ -168,10 +173,13 @@ const CreateCouponView = () => {
                 <Field
                   name="code"
                   id="code"
-                  className={`flex-1 border px-3 py-2 ${
+                  className={`flex-1 border px-3 py-2 focus:outline-none ${
                     touched.code && errors.code ? "border-danger" : "border-quaternary"
                   }`}
                   placeholder="Enter coupon code"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setFieldValue("code", e.target.value.toUpperCase())
+                  }
                 />
                 <button
                   type="button"
@@ -181,7 +189,7 @@ const CreateCouponView = () => {
                   Generate
                 </button>
               </div>
-              <ErrorMessage name="code" component="div" className="text-sm text-red-600" />
+              <ErrorMessage name="code" component="div" className="text-sm text-danger" />
             </div>
 
             {/* Discount + Type */}
@@ -197,7 +205,7 @@ const CreateCouponView = () => {
                     touched.discount && errors.discount ? "border-red-500" : "border-quaternary"
                   }`}
                 />
-                <ErrorMessage name="discount" component="div" className="text-sm text-red-600" />
+                <ErrorMessage name="discount" component="div" className="text-sm text-danger" />
               </div>
 
               <div>
@@ -214,7 +222,7 @@ const CreateCouponView = () => {
                       </>
                     ) : (
                       <>
-                        <FiDollarSign /> Fixed Amount
+                        <TbCurrencyTaka size={18} /> Fixed Amount
                       </>
                     )}
                     <FiChevronDown />
@@ -237,9 +245,10 @@ const CreateCouponView = () => {
                           setFieldValue("discountType", "amount");
                           setShowDiscountDropdown(false);
                         }}
-                        className="flex w-full gap-2 px-3 py-2 hover:bg-gray-100"
+                        className="flex w-full items-center gap-2 px-3 py-2 hover:bg-gray-100"
                       >
-                        <FiDollarSign /> Fixed Amount
+                        <TbCurrencyTaka size={18} />
+                        Fixed Amount
                       </button>
                     </div>
                   )}
@@ -261,7 +270,7 @@ const CreateCouponView = () => {
                     : "border-quaternary"
                 }`}
               />
-              <ErrorMessage name="minOrderValue" component="div" className="text-sm text-red-600" />
+              <ErrorMessage name="minOrderValue" component="div" className="text-sm text-danger" />
             </div>
 
             {/* Coupon Type */}
@@ -277,7 +286,7 @@ const CreateCouponView = () => {
                 <option value="public">Public</option>
                 <option value="personal">Personal</option>
               </Field>
-              <ErrorMessage name="couponType" component="div" className="text-sm text-red-600" />
+              <ErrorMessage name="couponType" component="div" className="text-sm text-danger" />
             </div>
 
             {/* Assigned Users if Personal */}
@@ -286,6 +295,45 @@ const CreateCouponView = () => {
                 {({ push, remove }) => (
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-info">Assign to Users</label>
+                    {values.assignedTo.length > 0 && (
+                      <div className="mt-[8px] grid grid-cols-1 gap-[16px] sm:grid-cols-2">
+                        {values.assignedTo.map((user: TUser & { id: string }, index) => (
+                          <div
+                            key={user?.id}
+                            className="flex items-center justify-between border border-quaternary bg-primary/10 px-3 py-1 text-primary"
+                          >
+                            <div className="flex items-center gap-[10px]">
+                              <span className="flex h-[40px] w-[40px] overflow-hidden">
+                                <Image
+                                  src={user.avatar || "/images/avatar.jpg"}
+                                  alt="user"
+                                  width={40}
+                                  height={40}
+                                  className="h-full w-full rounded-full border border-quaternary object-cover"
+                                />
+                              </span>
+                              <div>
+                                <span className="text-[14px] font-semibold">
+                                  Name: {user.fullName ? user.fullName : "N/A"}
+                                </span>
+                                <span className="block text-[14px]">Phone: {user.phoneNumber}</span>
+                                <span className="text-[14px]">
+                                  Email: {user.email ? user.email : "N/A"}
+                                </span>
+                              </div>
+                            </div>
+                            <button
+                              className="cursor-pointer rounded-full bg-danger/20 p-1 text-white hover:bg-danger"
+                              type="button"
+                              onClick={() => remove(index)}
+                            >
+                              <FiX />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
                     <div className="flex gap-2">
                       <input
                         type="email"
@@ -298,11 +346,17 @@ const CreateCouponView = () => {
                         type="button"
                         onClick={() => {
                           if (newUser.trim()) {
-                            const user = users.find((u: TUser) => u.email === newUser.trim());
+                            const user = users.find((u: TUser) => u.phoneNumber === newUser.trim());
                             if (user) {
-                              push({ id: user._id, email: user.email });
+                              push({
+                                id: user._id,
+                                phoneNumber: user.phoneNumber,
+                                email: user.email,
+                                fullName: user.fullName,
+                                avatar: user?.avatar || "",
+                              });
                               setNewUser("");
-                              toast.success(`${user.email} added to coupon`);
+                              toast.success(`${user.fullName} added to coupon`);
                             } else {
                               toast.warning("User not found");
                             }
@@ -317,16 +371,22 @@ const CreateCouponView = () => {
                       {users?.map((user: TUser) => (
                         <div
                           key={user?._id}
-                          className="flex cursor-pointer items-center justify-start gap-[10px] border-b border-quaternary/50 p-[16px] hover:bg-quaternary"
+                          className="flex cursor-pointer items-center justify-start gap-[10px] border-b border-quaternary/50 p-[16px] hover:bg-primary/10"
                           onClick={() => {
                             const isAlreadyAdded = values.assignedTo.some(
-                              (u: { email: string; id: string }) => u.id === user._id
+                              (u: { phoneNumber: string; id: string }) => u.id === user._id
                             );
                             if (!isAlreadyAdded) {
-                              push({ id: user._id, email: user.email });
-                              toast.success(`${user.email} added to coupon`);
+                              push({
+                                id: user._id,
+                                phoneNumber: user.phoneNumber,
+                                email: user.email,
+                                fullName: user.fullName,
+                                avatar: user?.avatar || "/placeholder.png",
+                              });
+                              toast.success(`${user.phoneNumber} added to coupon`);
                             } else {
-                              toast.warning(`${user.email} is already added`);
+                              toast.warning(`${user.phoneNumber} is already added`);
                             }
                           }}
                         >
@@ -340,8 +400,11 @@ const CreateCouponView = () => {
                             />
                           </span>
                           <div className="flex flex-col gap-[3px]">
-                            <span className="text-[14px] text-primary">
+                            <span className="text-[14px] font-semibold text-primary">
                               Name: {user.fullName || ""}
+                            </span>
+                            <span className="text-[14px] text-primary">
+                              Number: {user.phoneNumber || "N/A"}
                             </span>
                             <span className="text-[14px] text-primary">
                               Email: {user.email || "N/A"}
@@ -350,28 +413,14 @@ const CreateCouponView = () => {
                         </div>
                       ))}
                     </div>
-                    <div className="grid grid-cols-1 gap-[16px] sm:grid-cols-2">
-                      {values.assignedTo.map((user: TUser, index) => (
-                        <div
-                          key={user?._id}
-                          className="flex items-center justify-between border border-quaternary px-3 py-1"
-                        >
-                          <span className="text-sm">{user.email}</span>
-                          <button
-                            className="cursor-pointer"
-                            type="button"
-                            onClick={() => remove(index)}
-                          >
-                            <FiX className="text-red-500" />
-                          </button>
+
+                    <ErrorMessage name="assignedTo">
+                      {(msg) => (
+                        <div className="text-sm text-danger">
+                          {typeof msg === "string" ? msg : "Validation error"}
                         </div>
-                      ))}
-                    </div>
-                    <ErrorMessage
-                      name="assignedTo"
-                      component="div"
-                      className="text-sm text-red-600"
-                    />
+                      )}
+                    </ErrorMessage>
                   </div>
                 )}
               </FieldArray>
@@ -387,7 +436,7 @@ const CreateCouponView = () => {
                 name="expiresAt"
                 className="w-full border border-quaternary px-3 py-2"
               />
-              <ErrorMessage name="expiresAt" component="div" className="text-sm text-red-600" />
+              <ErrorMessage name="expiresAt" component="div" className="text-sm text-danger" />
             </div>
 
             {/* Submit */}

@@ -27,10 +27,10 @@ interface IStockRow {
 }
 
 const tableHead = [
-  { label: "Product Name", field: "name" },
-  { label: "Color", field: "colors.color" },
-  { label: "Size", field: "colors.sizes.size" },
-  { label: "Stock Qty", field: "colors.sizes.stock" },
+  { label: "Product Name", field: "" },
+  { label: "Color", field: "" },
+  { label: "Size", field: "" },
+  { label: "Stock Qty", field: "" },
   { label: "Stock Status", field: "" },
   { label: "Last Updated", field: "" },
   { label: "Restock", field: "" },
@@ -135,14 +135,14 @@ const ProductStockIndicatorTable = ({
             <strong>Note:</strong>
             <span className="ml-1">
               <span className="font-medium text-yellow-600">Low Stock</span> (5 or fewer units),{" "}
-              <span className="font-medium text-red-600">Out of Stock</span> (0 units),{" "}
-              <span className="font-medium text-green-600">In Stock</span> (more than 5 units)
+              <span className="font-medium text-danger">Out of Stock</span> (0 units),{" "}
+              <span className="font-medium text-success">In Stock</span> (more than 5 units)
             </span>
           </span>
         </div>
         <HorizontalLine className="my-[10px]" />
-        <div className="flex items-center justify-between">
-          <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
+        <div className="flex flex-col justify-between gap-[24px] md:flex-row md:items-center">
+          <div className="flex w-full items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none md:max-w-[300px]">
             <input
               type="text"
               className="w-full bg-transparent outline-none"
@@ -152,7 +152,7 @@ const ProductStockIndicatorTable = ({
             <RxMagnifyingGlass />
           </div>
 
-          <div className="flex items-center gap-[200px]">
+          <div className="flex items-center gap-[20px] lg:gap-[100px] xl:gap-[200px]">
             <div className="flex items-center gap-2">
               <label className="text-sm">Filter:</label>
               <select
@@ -219,7 +219,7 @@ const ProductStockIndicatorTable = ({
               {paginatedData.length ? (
                 paginatedData.map((item, index) => (
                   <tr key={index} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm whitespace-nowrap text-info">
+                    <td className="line-clamp-1 max-w-[200px] px-6 py-4 text-sm text-ellipsis whitespace-nowrap text-info">
                       {item.productName}
                     </td>
                     <td className="px-6 py-4 text-sm whitespace-nowrap text-info">{item.color}</td>
@@ -230,10 +230,10 @@ const ProductStockIndicatorTable = ({
                     <td
                       className={`px-6 py-4 text-sm whitespace-nowrap ${
                         item.stockStatus.includes("Stock Out")
-                          ? "text-red-600"
+                          ? "text-danger"
                           : item.stockStatus.includes("Low")
                             ? "text-yellow-600"
-                            : "text-green-600"
+                            : "text-success"
                       }`}
                     >
                       {item.stockStatus}
