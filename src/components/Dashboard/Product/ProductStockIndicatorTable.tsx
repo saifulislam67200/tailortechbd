@@ -135,8 +135,8 @@ const ProductStockIndicatorTable = ({
             <strong>Note:</strong>
             <span className="ml-1">
               <span className="font-medium text-yellow-600">Low Stock</span> (5 or fewer units),{" "}
-              <span className="font-medium text-red-600">Out of Stock</span> (0 units),{" "}
-              <span className="font-medium text-green-600">In Stock</span> (more than 5 units)
+              <span className="font-medium text-danger">Out of Stock</span> (0 units),{" "}
+              <span className="font-medium text-success">In Stock</span> (more than 5 units)
             </span>
           </span>
         </div>
