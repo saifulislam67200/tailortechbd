@@ -7,7 +7,7 @@ import { ReactNode } from "react";
 
 export default function layout({ children }: { children: ReactNode }) {
   return (
-    <Protectedroute role="user" checkVerification={true}>
+    <Protectedroute role="*" checkVerification={true}>
       <div className="main_container flex min-h-[100dvh] flex-col gap-[8px] py-[20px]">
         <Breadcrumb />
         <div className="w-full items-start justify-start gap-[8px] lg:flex">
