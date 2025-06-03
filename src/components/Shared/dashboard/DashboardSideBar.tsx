@@ -134,11 +134,11 @@ const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
   return (
     <>
       <div
-        className={`shrink-0 overflow-hidden transition-[width] duration-[0.3s] ease-in-out ${
+        className={`h-[calc(100dvh-60px)] shrink-0 overflow-x-hidden overflow-y-auto transition-[width] duration-[0.3s] ease-in-out ${
           window.innerWidth <= 750 ? "absolute top-0 left-0 z-[10] min-h-screen" : ""
         } ${isNavOpen ? "w-[300px]" : "w-0"}`}
       >
-        <div className={`relative h-[100dvh] w-full`}>
+        <div className={`relative h-full w-full`}>
           <div className="h-full w-full flex-col justify-between border-r-[1px] border-border-muted bg-white p-[20px] lg:flex">
             <div className="flex flex-col gap-[0]">
               {navlinks?.map((link, index) => (
@@ -153,7 +153,7 @@ const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
         </div>
       </div>
       <div
-        className={`absolute ${isNavOpen ? "left-[284px]" : "left-0"} top-[60px] z-[11] flex h-[calc(100%-60px)] items-center`}
+        className={`absolute ${isNavOpen ? "left-[284px]" : "left-0"} top-[60px] z-[11] flex h-[calc(100dvh-60px)] items-center`}
       >
         <button
           onClick={toggleNav}

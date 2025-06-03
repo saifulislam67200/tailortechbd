@@ -98,6 +98,7 @@ export default function ProductForm({
             : defaultValue.category?._id,
       }
     : undefined;
+
   return (
     <Formik
       initialValues={initValue || initialValues}
@@ -106,7 +107,7 @@ export default function ProductForm({
         onSubmit({ ...values, discount: values.discount || 0 }, ...args);
       }}
     >
-      {({ values, errors, touched, setFieldValue, setFieldTouched }) => (
+      {({ values, errors, touched, setFieldValue, setFieldTouched, isValid, submitCount }) => (
         <Form className="flex flex-col gap-[16px]">
           <div className="grid grid-cols-1 gap-[16px] lg:grid-cols-2">
             <div className="flex w-full flex-col gap-[16px] bg-white p-[16px]">
@@ -166,10 +167,10 @@ export default function ProductForm({
                   setFieldValue("images", urls || []);
                 }}
               />
+              <ErrorMessage name="images" component="span" className="text-sm text-danger" />
             </div>
           </div>
 
-          <ErrorMessage name="images" component="span" className="text-sm text-danger" />
           <HorizontalLine className="my-[16px]" />
 
           <div className="w-full bg-white p-[16px]">
@@ -190,7 +191,6 @@ export default function ProductForm({
               <span className="text-danger">{errors.description}</span>
             )}
           </div>
-          <ErrorMessage name="images" component="span" className="text-sm text-danger" />
           <HorizontalLine className="my-[16px]" />
 
           <div className="flex w-full flex-col gap-[5px] bg-white p-[16px]">
@@ -315,7 +315,19 @@ export default function ProductForm({
               )}
             </FieldArray>
           </div>
-
+          {submitCount > 0 && !isValid && (
+            <div className="flex w-full flex-col gap-[10px] bg-white p-[16px]">
+              <span className="font-[700] text-danger">Please Fix These Errors Below:</span>
+              {Object.values(errors).map((value, i) => (
+                <span key={i + "error"} className="text-sm text-danger">
+                  *{" "}
+                  {typeof value === "string"
+                    ? value
+                    : "Please fill the color and sizes form correctly"}
+                </span>
+              ))}
+            </div>
+          )}
           <Button type="submit" isLoading={isLoading} className="mt-[26px]">
             {buttonLabel || "Create Product"}
           </Button>
