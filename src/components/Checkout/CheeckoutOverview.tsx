@@ -175,8 +175,8 @@ const CheeckoutOverview = ({
           <button
             type="button"
             onClick={handleApplyCoupon}
-            disabled={isLoading}
-            className="absolute top-0 right-0 h-full cursor-pointer bg-primary/80 px-[20px] text-white transition-colors delay-100 hover:bg-primary"
+            disabled={isLoading || !!successfulCouponResponse?.couponDiscount}
+            className="absolute top-0 right-0 h-full cursor-pointer bg-primary/80 px-[20px] text-white transition-colors delay-100 hover:bg-primary disabled:cursor-not-allowed"
           >
             Apply
           </button>
