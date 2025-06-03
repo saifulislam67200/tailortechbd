@@ -15,6 +15,7 @@ import dateUtils from "@/utils/date";
 import { ICoupon } from "./CreateCouponView";
 import DeleteCouponModal from "@/components/Dashboard/coupon/DeleteCouponModal";
 import CouponInfoModal from "@/components/Dashboard/coupon/CouponInfoModal";
+import DashboardPageHeadingTitle from "@/components/Dashboard/DashboardPageHeadingTitle";
 
 const tableHead = [
   { label: "Code", field: "code" },
@@ -57,13 +58,16 @@ const AllCouponsView = () => {
 
   return (
     <div className="flex flex-col gap-[10px]">
-      <div className="flex flex-col gap-[15px] bg-white p-[16px]">
-        <div className="flex flex-col gap-[5px]">
-          <h1 className="text-[16px] font-[600]">Coupon List</h1>
-          <p className="text-[12px] text-muted md:text-[14px]">Displaying All coupons</p>
-        </div>
-        <HorizontalLine className="my-[10px]" />
-        {/* <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
+      <DashboardPageHeadingTitle title="All Coupons" />
+
+      <div className="flex flex-col gap-[10px]">
+        <div className="flex flex-col gap-[15px] bg-white p-[16px]">
+          <div className="flex flex-col gap-[5px]">
+            <h1 className="text-[16px] font-[600]">Coupon List</h1>
+            <p className="text-[12px] text-muted md:text-[14px]">Displaying All coupons</p>
+          </div>
+          <HorizontalLine className="my-[10px]" />
+          {/* <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
           <input
             type="text"
             className="w-full bg-transparent outline-none"
@@ -73,93 +77,94 @@ const AllCouponsView = () => {
           <RxMagnifyingGlass />
         </div> */}
 
-        <div className="overflow-x-auto">
-          <table className="w-full divide-y divide-dashboard/20">
-            <thead className="bg-dashboard/10">
-              <tr>
-                {tableHead.map((heading) => (
-                  <th
-                    key={heading.field || heading.label}
-                    className="px-6 py-3 text-left text-sm font-semibold text-dashboard uppercase"
-                  >
-                    {heading.field ? (
-                      <button
-                        className="flex cursor-pointer items-center gap-1"
-                        onClick={() => handleSort(heading.field)}
-                      >
-                        <span>{heading.label}</span>
-                        <span className="flex flex-col text-[10px] leading-[10px]">
-                          <FaChevronUp
-                            className={`${
-                              sort.field === heading.field && sort.order === "asc"
-                                ? "text-dashboard"
-                                : "text-dashboard/30"
-                            }`}
-                          />
-                          <FaChevronDown
-                            className={`${
-                              sort.field === heading.field && sort.order === "desc"
-                                ? "text-dashboard"
-                                : "text-dashboard/30"
-                            }`}
-                          />
-                        </span>
-                      </button>
-                    ) : (
-                      heading.label
-                    )}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-dashboard/20">
-              {isLoading ? (
-                <TableSkeleton columns={tableHead.length} />
-              ) : coupons.length ? (
-                coupons.map((coupon: ICoupon) => (
-                  <tr key={coupon._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-[14px]">{coupon.code}</td>
-                    <td className="px-6 py-4 text-[14px]">{coupon.discount}</td>
-                    <td className="px-6 py-4 text-[14px] capitalize">{coupon.discountType}</td>
-                    <td className="px-6 py-4">
-                      {coupon.isActive ? (
-                        <span className="rounded-full bg-success/10 px-[8px] py-[2px] text-[14px] text-success">
-                          Active
-                        </span>
+          <div className="overflow-x-auto">
+            <table className="w-full divide-y divide-dashboard/20">
+              <thead className="bg-dashboard/10">
+                <tr>
+                  {tableHead.map((heading) => (
+                    <th
+                      key={heading.field || heading.label}
+                      className="px-6 py-3 text-left text-sm font-semibold text-dashboard uppercase"
+                    >
+                      {heading.field ? (
+                        <button
+                          className="flex cursor-pointer items-center gap-1"
+                          onClick={() => handleSort(heading.field)}
+                        >
+                          <span>{heading.label}</span>
+                          <span className="flex flex-col text-[10px] leading-[10px]">
+                            <FaChevronUp
+                              className={`${
+                                sort.field === heading.field && sort.order === "asc"
+                                  ? "text-dashboard"
+                                  : "text-dashboard/30"
+                              }`}
+                            />
+                            <FaChevronDown
+                              className={`${
+                                sort.field === heading.field && sort.order === "desc"
+                                  ? "text-dashboard"
+                                  : "text-dashboard/30"
+                              }`}
+                            />
+                          </span>
+                        </button>
                       ) : (
-                        <span className="rounded-full bg-danger/10 px-[8px] py-[2px] text-[14px] text-danger">
-                          Inactive
-                        </span>
+                        heading.label
                       )}
-                    </td>
-                    <td className="px-6 py-4 text-[14px]">
-                      {dateUtils.formateCreateOrUpdateDate(coupon.createdAt)}
-                    </td>
-                    <td className="px-6 py-4 text-[14px]">
-                      <Toggle
-                        onToggle={() => handleToggle(coupon._id as string)}
-                        defaultActive={coupon.isActive}
-                      />
-                    </td>
-                    <td className="flex items-center justify-start gap-[16px] px-6 py-4">
-                      <CouponInfoModal coupon={coupon} />
-                      <DeleteCouponModal coupon={coupon} />
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <TableDataNotFound span={tableHead.length} message="No Coupon Found" />
-              )}
-            </tbody>
-          </table>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-dashboard/20">
+                {isLoading ? (
+                  <TableSkeleton columns={tableHead.length} />
+                ) : coupons.length ? (
+                  coupons.map((coupon: ICoupon) => (
+                    <tr key={coupon._id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 text-[14px]">{coupon.code}</td>
+                      <td className="px-6 py-4 text-[14px]">{coupon.discount}</td>
+                      <td className="px-6 py-4 text-[14px] capitalize">{coupon.discountType}</td>
+                      <td className="px-6 py-4">
+                        {coupon.isActive ? (
+                          <span className="rounded-full bg-success/10 px-[8px] py-[2px] text-[14px] text-success">
+                            Active
+                          </span>
+                        ) : (
+                          <span className="rounded-full bg-danger/10 px-[8px] py-[2px] text-[14px] text-danger">
+                            Inactive
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-[14px]">
+                        {dateUtils.formateCreateOrUpdateDate(coupon.createdAt)}
+                      </td>
+                      <td className="px-6 py-4 text-[14px]">
+                        <Toggle
+                          onToggle={() => handleToggle(coupon._id as string)}
+                          defaultActive={coupon.isActive}
+                        />
+                      </td>
+                      <td className="flex items-center justify-start gap-[16px] px-6 py-4">
+                        <CouponInfoModal coupon={coupon} />
+                        <DeleteCouponModal coupon={coupon} />
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <TableDataNotFound span={tableHead.length} message="No Coupon Found" />
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-      <Pagination
-        totalDocs={metaData.totalDoc}
-        onPageChange={(page) => setQuery({ ...query, page })}
-        limit={10}
-      />
+        <Pagination
+          totalDocs={metaData.totalDoc}
+          onPageChange={(page) => setQuery({ ...query, page })}
+          limit={10}
+        />
+      </div>
     </div>
   );
 };
