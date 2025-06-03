@@ -265,7 +265,7 @@ export default function OrderHistory() {
                             <IoEye className="h-[16px] w-[16px]" />
                             Order Information
                           </h4>
-                          <div className="rounded-lg border border-border-muted bg-white p-[16px]">
+                          <div className="mb-[24px] rounded-lg border border-border-muted bg-white p-[16px]">
                             <div className="sm:text-[14px]text-[12px] flex items-center justify-between border-b border-border-muted pb-[12px] text-[12px] md:text-[14px]">
                               <span className="font-medium text-info">Order Number:</span>
                               <span className="font-semibold text-primary">
@@ -330,6 +330,28 @@ export default function OrderHistory() {
                               </div>
                             </div>
                           </div>
+
+                          {order?.billingAddress && (
+                            <div className="rounded-md border border-border-muted p-4">
+                              <h2 className="mb-[10px] text-[16px] font-semibold text-black">
+                                Billing Information
+                              </h2>
+                              <div className="space-y-2">
+                                <p className="text-[14px] text-black md:text-[16px]">
+                                  <span className="font-[600] text-info">Name:</span>{" "}
+                                  {order?.billingAddress?.name}
+                                </p>
+                                <p className="text-[14px] text-black md:text-[16px]">
+                                  <span className="font-[600] text-info">Address:</span>{" "}
+                                  {order?.billingAddress?.address}
+                                </p>
+                                <p className="text-[14px] text-black md:text-[16px]">
+                                  <span className="font-[600] text-info">Phone Number:</span>{" "}
+                                  {order?.billingAddress?.phoneNumber}
+                                </p>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

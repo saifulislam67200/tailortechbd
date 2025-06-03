@@ -54,6 +54,8 @@ type ViewOrderProps = {
 export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps) {
   const [initialOrderItemView, setInitialOrderItemView] = useState(orderItem);
 
+  console.log(orderItem, "orderItem");
+
   const [changeOrderStatus, { isLoading }] = useChangeOrderStatusMutation();
 
   const [updateOrder, { isLoading: isUpdating }] = useUpdateOrderMutation();
@@ -303,6 +305,29 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
                 </div>
               </div>
             </div>
+            {/* // billing information start here   */}
+            {orderItemView?.billingAddress && (
+              <div className="rounded-md border border-border-muted p-4">
+                <h2 className="mb-[16px] text-[20px] font-semibold text-dashboard">
+                  Billing Information
+                </h2>
+                <div className="space-y-2">
+                  <p className="text-[14px] text-primary md:text-[16px]">
+                    <span className="font-[600]">Name:</span> {orderItemView?.billingAddress?.name}
+                  </p>
+                  <p className="text-[14px] text-primary md:text-[16px]">
+                    <span className="font-[600]">Address:</span>{" "}
+                    {orderItemView?.billingAddress?.address}
+                  </p>
+                  <p className="text-[14px] text-primary md:text-[16px]">
+                    <span className="font-[600]">Phone Number:</span>{" "}
+                    {orderItemView?.billingAddress?.phoneNumber}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* billing information end here  */}
           </div>
           {/* order Item */}
           <div className="mt-6 mb-6 rounded-md border border-border-muted bg-white p-6">
