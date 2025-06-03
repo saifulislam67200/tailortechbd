@@ -207,8 +207,8 @@ const CreateCouponView = () => {
                   <Field
                     type="number"
                     name="discount"
-                    className={`w-full border px-3 py-2 ${
-                      touched.discount && errors.discount ? "border-red-500" : "border-quaternary"
+                    className={`w-full border px-3 py-2 focus:outline-none ${
+                      touched.discount && errors.discount ? "border-danger" : "border-quaternary"
                     }`}
                   />
                   <ErrorMessage name="discount" component="div" className="text-sm text-danger" />
@@ -271,9 +271,9 @@ const CreateCouponView = () => {
                   id="minOrderValue"
                   type="number"
                   name="minOrderValue"
-                  className={`w-full border px-3 py-2 ${
+                  className={`w-full border px-3 py-2 focus:outline-none ${
                     touched.minOrderValue && errors.minOrderValue
-                      ? "border-red-500"
+                      ? "border-danger"
                       : "border-quaternary"
                   }`}
                 />
@@ -292,7 +292,7 @@ const CreateCouponView = () => {
                 <Field
                   as="select"
                   name="couponType"
-                  className="w-full border border-quaternary px-3 py-2"
+                  className="w-full border border-quaternary px-3 py-2 focus:outline-none"
                 >
                   <option value="public">Public</option>
                   <option value="personal">Personal</option>
@@ -352,7 +352,7 @@ const CreateCouponView = () => {
                           type="email"
                           value={newUser}
                           onChange={(e) => setNewUser(e.target.value)}
-                          className="flex-1 border border-quaternary px-3 py-2"
+                          className="flex-1 border border-quaternary px-3 py-2 focus:outline-none"
                           placeholder="Enter user Name, email or phone number"
                         />
                         <button
