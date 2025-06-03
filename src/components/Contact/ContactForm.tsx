@@ -48,7 +48,7 @@ export default function ContactForm() {
     const phone = `+880${values.phoneNumber}`;
 
     if (!isPossiblePhoneNumber(phone) || !isValidPhoneNumber(phone)) {
-      setFieldError("phone", "* Invalid phone number");
+      setFieldError("phoneNumber", "* Invalid phone number");
       return;
     }
 
@@ -120,7 +120,7 @@ export default function ContactForm() {
                   <Field
                     name="phoneNumber"
                     as={Input}
-                    type="string"
+                    type="text"
                     placeholder="Enter Your Mobile Number"
                   />
                 </div>
