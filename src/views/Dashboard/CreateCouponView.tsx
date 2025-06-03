@@ -1,14 +1,15 @@
 "use client";
 
-import { Formik, Form, Field, FieldArray, ErrorMessage, FormikHelpers } from "formik";
-import * as Yup from "yup";
-import { useEffect, useState } from "react";
-import { FiTag, FiPercent, FiDollarSign, FiChevronDown, FiPlus, FiX } from "react-icons/fi";
-import { useCreateCouponMutation } from "@/redux/features/coupon/coupon.api";
-import { IQueruMutationErrorResponse } from "@/types";
-import { toast } from "sonner";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetAllClientsQuery } from "@/redux/features/admin/admin.api";
+import { useCreateCouponMutation } from "@/redux/features/coupon/coupon.api";
+import { IQueruMutationErrorResponse } from "@/types";
+import { ErrorMessage, Field, FieldArray, Form, Formik, FormikHelpers } from "formik";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { FiChevronDown, FiDollarSign, FiPercent, FiPlus, FiTag, FiX } from "react-icons/fi";
+import { toast } from "sonner";
+import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
   code: Yup.string()
@@ -79,6 +80,7 @@ type TUser = {
   phone_code?: string;
   role: "admin" | "user" | string;
   isActive: boolean;
+  avatar?: string;
   isVerified: boolean;
   createdAt: string;
   updatedAt: string;
@@ -167,7 +169,7 @@ const CreateCouponView = () => {
                   name="code"
                   id="code"
                   className={`flex-1 border px-3 py-2 ${
-                    touched.code && errors.code ? "border-red-500" : "border-quaternary"
+                    touched.code && errors.code ? "border-danger" : "border-quaternary"
                   }`}
                   placeholder="Enter coupon code"
                 />
@@ -290,7 +292,7 @@ const CreateCouponView = () => {
                         value={newUser}
                         onChange={(e) => setNewUser(e.target.value)}
                         className="flex-1 border border-quaternary px-3 py-2"
-                        placeholder="Enter user email"
+                        placeholder="Enter user Name, email or phone number"
                       />
                       <button
                         type="button"
@@ -315,7 +317,7 @@ const CreateCouponView = () => {
                       {users?.map((user: TUser) => (
                         <div
                           key={user?._id}
-                          className="cursor-pointer border-b border-quaternary/50 p-[16px] hover:bg-quaternary"
+                          className="flex cursor-pointer items-center justify-start gap-[10px] border-b border-quaternary/50 p-[16px] hover:bg-quaternary"
                           onClick={() => {
                             const isAlreadyAdded = values.assignedTo.some(
                               (u: { email: string; id: string }) => u.id === user._id
@@ -328,7 +330,23 @@ const CreateCouponView = () => {
                             }
                           }}
                         >
-                          {user?.email}
+                          <span className="flex h-[40px] w-[40px] overflow-hidden">
+                            <Image
+                              src={user.avatar || "/images/avatar.jpg"}
+                              alt="user"
+                              width={40}
+                              height={40}
+                              className="h-full w-full rounded-full object-cover"
+                            />
+                          </span>
+                          <div className="flex flex-col gap-[3px]">
+                            <span className="text-[14px] text-primary">
+                              Name: {user.fullName || ""}
+                            </span>
+                            <span className="text-[14px] text-primary">
+                              Email: {user.email || "N/A"}
+                            </span>
+                          </div>
                         </div>
                       ))}
                     </div>

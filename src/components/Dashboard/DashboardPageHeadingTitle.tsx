@@ -22,14 +22,14 @@ const DashboardPageHeadingTitle = ({ title }: { title: string }) => {
                 {!isLast ? (
                   <>
                     <Link href={href} className="text-[14px] capitalize hover:text-primary">
-                      {truncateChars(segment.replace(/-/g, " ") as string, 10)}
+                      {truncateChars(segment.replace(/-/g, " ") as string, 15)}
                     </Link>
 
                     <span>/</span>
                   </>
                 ) : (
                   <span className="text-[14px] font-[600] text-primary capitalize">
-                    {truncateWords(segment.replace(/-/g, " ") as string, 10)}
+                    {truncateWords(segment.replace(/-/g, " ") as string, 20)}
                   </span>
                 )}
               </Fragment>

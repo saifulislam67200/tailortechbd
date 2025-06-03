@@ -1,26 +1,28 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
-import useDebounce from "@/hooks/useDebounce";
-import Pagination from "@/components/ui/Pagination";
-import TableDataNotFound from "@/components/ui/TableDataNotFound";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { RxMagnifyingGlass } from "react-icons/rx";
 import HorizontalLine from "@/components/ui/HorizontalLine";
-import { BsArrowLeft } from "react-icons/bs";
-import { IProduct } from "@/types/product";
+import Pagination from "@/components/ui/Pagination";
 import ProductStockSkeleton from "@/components/ui/Skeleton/ProductStockSkeleton";
-import { FiExternalLink } from "react-icons/fi";
+import TableDataNotFound from "@/components/ui/TableDataNotFound";
+import useDebounce from "@/hooks/useDebounce";
+import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
+import { IProduct } from "@/types/product";
 import Link from "next/link";
+import { useMemo, useState } from "react";
+import { BsArrowLeft } from "react-icons/bs";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FiExternalLink } from "react-icons/fi";
+import { RxMagnifyingGlass } from "react-icons/rx";
 
 interface IStockRow {
+  productId: string;
   productName: string;
   color: string;
   size: string;
   stockQty: number;
   stockStatus: string;
   lastUpdated: string;
+  image: string;
   slug: string;
 }
 
@@ -71,6 +73,7 @@ const ProductStockIndicatorTable = ({
               color: colorVariant.color,
               size: sizeVariant.size,
               stockQty,
+              image: product.images[0] || "/images/category_blank.png",
               stockStatus,
               lastUpdated: new Date(product.updatedAt ?? Date.now()).toISOString().split("T")[0],
             };
@@ -166,7 +169,7 @@ const ProductStockIndicatorTable = ({
 
             <button
               onClick={handleCheckProductStocks}
-              className="flex h-[33px] w-[120px] items-center justify-center gap-[10px] bg-primary text-white transition-colors duration-100 hover:bg-primary/80"
+              className="flex w-[120px] cursor-pointer items-center justify-center gap-[10px] bg-primary py-[4px] text-white transition-colors duration-100 hover:bg-primary/80"
             >
               <BsArrowLeft /> Back
             </button>

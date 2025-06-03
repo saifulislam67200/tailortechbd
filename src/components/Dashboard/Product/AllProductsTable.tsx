@@ -81,7 +81,7 @@ const AllProductsTable = ({
 
           <button
             onClick={handleCheckProductStocks}
-            className="text- flex h-[33px] w-[120px] items-center justify-center bg-primary/80 text-white transition-colors duration-100 hover:bg-primary"
+            className="text- flex w-[120px] cursor-pointer items-center justify-center bg-primary/80 py-[4px] text-white transition-colors duration-100 hover:bg-primary"
           >
             Check Stocks
           </button>

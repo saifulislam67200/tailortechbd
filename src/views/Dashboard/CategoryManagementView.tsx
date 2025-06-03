@@ -9,6 +9,7 @@ import Button from "@/components/ui/Button";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/category.api";
 import { TCategoryWithSubcategories } from "@/types/category";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaPlus } from "react-icons/fa";
@@ -43,12 +44,14 @@ function CategoryManagementView() {
     <div className="w-full">
       <div className="mb-[20px] flex flex-col justify-between gap-[16px] md:mb-[32px] md:flex-row md:items-center">
         <DashboardPageHeadingTitle title="Category Management" />
-        <CreateCategory>
-          <button className="md:text-[]16px] flex w-full max-w-[157px] cursor-pointer items-center gap-2 rounded-lg bg-primary px-4 py-2 text-[14px] text-white">
-            <FaPlus />
-            Add Category
-          </button>
-        </CreateCategory>
+
+        <Link
+          href={"/dashboard/manage-category/create"}
+          className="md:text-[]16px] flex w-full max-w-[157px] cursor-pointer items-center gap-2 rounded-lg bg-primary px-4 py-2 text-[14px] text-white"
+        >
+          <FaPlus />
+          Add Category
+        </Link>
       </div>
 
       {/* Stats */}

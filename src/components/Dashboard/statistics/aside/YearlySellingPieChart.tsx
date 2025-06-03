@@ -40,7 +40,7 @@ const YearlySellingPieChart = () => {
   }
 
   return (
-    <div className="h-fit min-h-[370px] w-full bg-white p-[16px] xl:w-[450px] 2xl:min-h-[450px] 2xl:w-[550px]">
+    <div className="h-fit min-h-[370px] w-full bg-white p-[16px] xl:w-[450px] 2xl:min-h-[450px] 2xl:w-[450px]">
       <div className="mb-4 flex justify-between">
         <div>
           <h2 className="text-[14px] font-bold text-primary sm:text-[16px]">

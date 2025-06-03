@@ -1,7 +1,7 @@
 "use client";
 
-import { forwardRef, useState } from "react";
 import type { InputHTMLAttributes } from "react";
+import { forwardRef, useState } from "react";
 import { IoMdEyeOff } from "react-icons/io";
 import { MdRemoveRedEye } from "react-icons/md";
 import { twMerge } from "tailwind-merge";
@@ -32,7 +32,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <button
           type="button"
           onClick={() => setShowPass(!showPass)}
-          className="absolute right-3 bottom-2.5 cursor-pointer"
+          className="absolute top-[50%] right-3 bottom-2.5 h-fit -translate-y-1/2 cursor-pointer"
           tabIndex={-1}
         >
           {showPass ? <IoMdEyeOff /> : <MdRemoveRedEye />}

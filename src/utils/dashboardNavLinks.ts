@@ -43,7 +43,17 @@ export const admin: IDashboardNavLinks[] = [
   {
     icon: TbCategory,
     label: "Manage Categories",
-    path: "/dashboard/manage-category",
+
+    children: [
+      {
+        label: "All Categories",
+        path: "/dashboard/manage-category",
+      },
+      {
+        label: "Create New Category",
+        path: "/dashboard/manage-category/create",
+      },
+    ],
   },
   {
     icon: GoQuestion,
