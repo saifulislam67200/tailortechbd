@@ -11,6 +11,8 @@ import HorizontalLine from "@/components/ui/HorizontalLine";
 import { BsArrowLeft } from "react-icons/bs";
 import { IProduct } from "@/types/product";
 import ProductStockSkeleton from "@/components/ui/Skeleton/ProductStockSkeleton";
+import { FiExternalLink } from "react-icons/fi";
+import Link from "next/link";
 
 interface IStockRow {
   productName: string;
@@ -19,6 +21,7 @@ interface IStockRow {
   stockQty: number;
   stockStatus: string;
   lastUpdated: string;
+  slug: string;
 }
 
 const tableHead = [
@@ -28,6 +31,7 @@ const tableHead = [
   { label: "Stock Qty", field: "colors.sizes.stock" },
   { label: "Stock Status", field: "" },
   { label: "Last Updated", field: "" },
+  { label: "Restock", field: "" },
 ];
 
 const ProductStockIndicatorTable = ({
@@ -62,6 +66,7 @@ const ProductStockIndicatorTable = ({
 
             return {
               productId: product._id,
+              slug: product.slug,
               productName: product.name,
               color: colorVariant.color,
               size: sizeVariant.size,
@@ -123,6 +128,14 @@ const ProductStockIndicatorTable = ({
             Displaying stock status for all product variants. Total{" "}
             <span className="font-bold text-dashboard">{stockData.length}</span> variants.
           </p>
+          <span className="text-[12px]">
+            <strong>Note:</strong>
+            <span className="ml-1">
+              <span className="font-medium text-yellow-600">Low Stock</span> (5 or fewer units),{" "}
+              <span className="font-medium text-red-600">Out of Stock</span> (0 units),{" "}
+              <span className="font-medium text-green-600">In Stock</span> (more than 5 units)
+            </span>
+          </span>
         </div>
         <HorizontalLine className="my-[10px]" />
         <div className="flex items-center justify-between">
@@ -203,16 +216,12 @@ const ProductStockIndicatorTable = ({
               {paginatedData.length ? (
                 paginatedData.map((item, index) => (
                   <tr key={index} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-700">
+                    <td className="px-6 py-4 text-sm whitespace-nowrap text-info">
                       {item.productName}
                     </td>
-                    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-700">
-                      {item.color}
-                    </td>
-                    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-700">
-                      {item.size}
-                    </td>
-                    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-700">
+                    <td className="px-6 py-4 text-sm whitespace-nowrap text-info">{item.color}</td>
+                    <td className="px-6 py-4 text-sm whitespace-nowrap text-info">{item.size}</td>
+                    <td className="px-6 py-4 text-sm whitespace-nowrap text-info">
                       {item.stockQty}
                     </td>
                     <td
@@ -226,8 +235,16 @@ const ProductStockIndicatorTable = ({
                     >
                       {item.stockStatus}
                     </td>
-                    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-700">
+                    <td className="px-6 py-4 text-sm whitespace-nowrap text-info">
                       {item.lastUpdated}
+                    </td>
+                    <td>
+                      <Link
+                        href={`/dashboard/products/${item.slug}`}
+                        className="flex h-[35px] w-[35px] cursor-pointer items-center justify-center rounded-full bg-quaternary/20 hover:bg-primary hover:text-white"
+                      >
+                        <FiExternalLink />
+                      </Link>
                     </td>
                   </tr>
                 ))
