@@ -28,5 +28,6 @@ export interface IProduct {
   tag?: string;
   images: string[];
   createdAt: string;
+  updatedAt?: string;
   chart: string[][];
 }

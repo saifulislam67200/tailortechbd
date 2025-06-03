@@ -41,11 +41,24 @@ export interface IUser {
   phoneNumber: string;
 }
 
+interface ProductColor {
+  color: string;
+  sizes: {
+    size: string;
+    stock: number;
+    _id: string;
+  }[];
+  images: string[];
+  _id: string;
+}
+
 export interface IProduct {
   _id: string;
   image: string;
   name: string;
   price: number;
+  colors?: ProductColor[];
+  updatedAt?: string;
 }
 
 export interface IOrderItem {

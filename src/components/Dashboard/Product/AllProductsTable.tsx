@@ -24,7 +24,11 @@ const tableHead = [
   { label: "Actions", field: "" },
 ];
 
-const AllProductsTable = () => {
+const AllProductsTable = ({
+  handleCheckProductStocks,
+}: {
+  handleCheckProductStocks: () => void;
+}) => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
 
@@ -64,14 +68,23 @@ const AllProductsTable = () => {
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
-        <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
-          <input
-            type="text"
-            className="w-full bg-transparent outline-none"
-            placeholder="Search Product"
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <RxMagnifyingGlass />
+        <div className="flex items-center justify-between">
+          <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
+            <input
+              type="text"
+              className="w-full bg-transparent outline-none"
+              placeholder="Search Product"
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <RxMagnifyingGlass />
+          </div>
+
+          <button
+            onClick={handleCheckProductStocks}
+            className="text- flex h-[33px] w-[120px] items-center justify-center bg-primary/80 text-white transition-colors duration-100 hover:bg-primary"
+          >
+            Check Stocks
+          </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full divide-y divide-dashboard/20">
