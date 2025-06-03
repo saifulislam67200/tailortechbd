@@ -1,9 +1,8 @@
 "use client";
+import RecentQuestionsSkeleton from "@/components/ui/Skeleton/RecentQuestionsSkeleton";
 import { useGetRecentUnansweredQuestionQuery } from "@/redux/features/statistics/statistics.api";
 import Image from "next/image";
-import React from "react";
 import AnswerModal from "../../Qna/AnswerModal";
-import RecentQuestionsSkeleton from "@/components/ui/Skeleton/RecentQuestionsSkeleton";
 
 interface IProduct {
   _id: string;
@@ -30,7 +29,7 @@ const RecentQuestions = () => {
   }
 
   return (
-    <div className="mt-[16px] h-[700px] w-full bg-white p-[16px] xl:w-[450px] 2xl:w-[550px]">
+    <div className="mt-[16px] h-[700px] w-full bg-white p-[16px] xl:w-[450px] 2xl:w-[450px]">
       <h2 className="mb-[20px] text-[14px] font-bold text-primary sm:text-[16px]">
         Recent Questions <span className="text-[12px] text-info">(Recent 10 max)</span>
       </h2>
