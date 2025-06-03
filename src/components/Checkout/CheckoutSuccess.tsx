@@ -75,8 +75,8 @@ const CheckoutSuccess: React.FC<IProps> = ({ orderData }) => {
           </div>
 
           {orderData.couponDiscount ? (
-            <div className="mt-2 flex justify-between border-t pt-2 font-semibold text-black">
-              <span>Grand Total</span>
+            <div className="mt-2 flex justify-between border-t border-primary pt-2 font-semibold text-success">
+              <span>Coupon Discount</span>
               <span>- ৳ {orderData.couponDiscount.toFixed(2)}</span>
             </div>
           ) : (
