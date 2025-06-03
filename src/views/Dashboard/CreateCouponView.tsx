@@ -4,6 +4,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { useGetAllClientsQuery } from "@/redux/features/admin/admin.api";
 import { useCreateCouponMutation } from "@/redux/features/coupon/coupon.api";
 import { IQueruMutationErrorResponse } from "@/types";
+import dateUtils from "@/utils/date";
 import { ErrorMessage, Field, FieldArray, Form, Formik, FormikHelpers } from "formik";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -262,6 +263,7 @@ const CreateCouponView = () => {
                 Minimum Order Value
               </label>
               <Field
+                id="minOrderValue"
                 type="number"
                 name="minOrderValue"
                 className={`w-full border px-3 py-2 ${
@@ -431,11 +433,22 @@ const CreateCouponView = () => {
               <label htmlFor="expiresAt" className="text-sm font-medium text-info">
                 Expiration Date
               </label>
-              <Field
-                type="date"
-                name="expiresAt"
-                className="w-full border border-quaternary px-3 py-2"
-              />
+              <div className="relative">
+                {values.expiresAt ? (
+                  <span className="pointer-events-none absolute top-[50%] left-[13px] translate-y-[-50%] bg-white">
+                    {dateUtils.formateCreateOrUpdateDate(values.expiresAt)}
+                  </span>
+                ) : (
+                  ""
+                )}
+                <Field
+                  id="expiresAt"
+                  type="date"
+                  name="expiresAt"
+                  className="w-full border border-quaternary px-3 py-2 focus:outline-none"
+                />
+              </div>
+
               <ErrorMessage name="expiresAt" component="div" className="text-sm text-danger" />
             </div>
 
