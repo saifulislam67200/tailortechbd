@@ -332,7 +332,7 @@ export default function OrderHistory() {
                           </div>
 
                           {order?.billingAddress && (
-                            <div className="rounded-md border border-border-muted p-4">
+                            <div className="rounded-md border border-border-muted bg-white p-4">
                               <h2 className="mb-[10px] text-[16px] font-semibold text-black">
                                 Billing Information
                               </h2>
