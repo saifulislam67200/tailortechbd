@@ -4,6 +4,7 @@ import { deleteCheckedItems, toggleSelectAll } from "@/redux/features/cart/cartS
 import { BiSupport } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import CartCard from "./CartCard";
+import Link from "next/link";
 
 const ProductList = () => {
   const { items: cartItems } = useAppSelector((state) => state?.cart) ?? [];
@@ -25,10 +26,13 @@ const ProductList = () => {
         <p className="line-clamp-1 text-[12px] font-bold text-primary sm:text-[16px]">
           You have ({cartItems?.length}) items in your cart
         </p>
-        <p className="flex shrink-0 items-center gap-[3px] text-[12px] font-bold text-primary underline sm:text-[15px]">
+        <Link
+          href="/contact"
+          className="flex shrink-0 items-center gap-[3px] text-[12px] font-bold text-primary underline sm:text-[15px]"
+        >
           <BiSupport />
           Need Help?
-        </p>
+        </Link>
       </div>
       {cartItems?.length > 0 && (
         <div className="mt-[27px] flex items-center justify-between pr-[12px] pl-[20px] md:pl-[35px]">
