@@ -18,9 +18,11 @@ interface CategoryAccordionProps {
 const CategoryAccordionItem = ({
   category,
   depth = 0,
+  onLinkClick,
 }: {
   category: TCategoryWithSubcategories;
   depth?: number;
+  onLinkClick?: () => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -44,8 +46,8 @@ const CategoryAccordionItem = ({
         </button>
       ) : (
         <Link
+          onClick={onLinkClick}
           href={`/shop/${category.slug}`}
-          onClick={() => toggleCategory()}
           className={`transition-color hover_underline flex w-full items-center justify-between p-[8px] text-left text-white ${depth === 0 ? "border-b-[1px] border-white/20" : ""}`}
         >
           <span className="flex items-center text-[13px] font-medium text-white">
@@ -58,7 +60,7 @@ const CategoryAccordionItem = ({
         <div className="py-2 pl-4 text-white">
           <Link
             href={`/shop/${category.slug}`}
-            onClick={() => toggleCategory()}
+            onClick={onLinkClick}
             className={`transition-color hover_underline flex w-full items-center justify-between p-[8px] text-left text-white`}
           >
             <span className="flex items-center text-[13px] font-medium text-white">
@@ -66,7 +68,12 @@ const CategoryAccordionItem = ({
             </span>
           </Link>
           {category.subcategories?.map((category, i) => (
-            <CategoryAccordionItem key={category._id} category={category} depth={depth + i + 1} />
+            <CategoryAccordionItem
+              key={category._id}
+              category={category}
+              depth={depth + i + 1}
+              onLinkClick={onLinkClick}
+            />
           ))}
         </div>
       ) : (
@@ -102,7 +109,11 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
         <div className="border-y border-quaternary/30">
           <div className="h-[80dvh] overflow-y-auto">
             {categories?.map((category) => (
-              <CategoryAccordionItem key={category._id} category={category} />
+              <CategoryAccordionItem
+                key={category._id}
+                category={category}
+                onLinkClick={() => setIsOpen(false)}
+              />
             ))}
           </div>
         </div>

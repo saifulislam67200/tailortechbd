@@ -1,3 +1,4 @@
+import ChatWidget from "@/components/ChatBox/ChatWidget";
 import Collections from "@/components/Home/Collections";
 import Hero from "@/components/Home/Hero";
 import MostPopular from "@/components/Home/MostPopular";
@@ -10,7 +11,7 @@ import { Suspense } from "react";
 export default function Home() {
   return (
     <main className="main_container mx-auto">
-      {/* <ChatWidget /> */}
+      <ChatWidget />
       <Suspense fallback={<div className="aspect-[834.66/407] animate-pulse bg-gray-100" />}>
         <Hero />
       </Suspense>
