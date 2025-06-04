@@ -6,6 +6,7 @@ import { useAppSelector } from "@/hooks/redux";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import CartDrawer from "./CartDrawer";
+import { RiHome2Line } from "react-icons/ri";
 
 const BottomNav = () => {
   const cartItems = useAppSelector((state) => state?.cart?.items);
@@ -25,8 +26,13 @@ const BottomNav = () => {
   }, [isCartOpen]);
 
   return (
-    <nav className="tex fixed right-0 bottom-0 left-0 z-[45] flex h-[45px] w-full max-w-screen bg-black text-white lg:hidden">
+    <nav className="tex fixed right-0 bottom-0 left-0 z-45 flex h-[50px] w-full max-w-screen bg-black text-white lg:hidden">
       <ul className="flex w-full items-center justify-between px-4">
+        <li>
+          <Link href="/" className="text-white" aria-label="wishlist">
+            <RiHome2Line size={20} />
+          </Link>
+        </li>
         <li>
           <Link href="/wishlist" className="relative text-white" aria-label="wishlist">
             <FaRegHeart size={20} />

@@ -5,7 +5,7 @@ import { FaEnvelope, FaMapMarkerAlt, FaPhone } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="relative mb-[45px] w-full overflow-hidden bg-primary text-white lg:mb-0">
+    <footer className="relative z-0 mb-[45px] w-full overflow-hidden bg-primary text-white lg:mb-0">
       {/* Main Footer Content */}
       <div className="main_container relative mx-auto w-full px-4 py-[30px] sm:py-[40px]">
         <div className="relative z-10 flex flex-col gap-[18px] md:gap-[28px] lg:flex-row lg:gap-[48px]">
