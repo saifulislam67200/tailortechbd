@@ -127,3 +127,5 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
 };
 
 export default CategoryAccordion;
+
+// comment
