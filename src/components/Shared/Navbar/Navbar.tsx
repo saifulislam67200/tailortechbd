@@ -37,15 +37,16 @@ export default function Navbar() {
   return (
     <>
       <TopBar />
-      <nav className="sticky top-0 z-10 border-b-[1px] border-border-muted bg-white px-[16px] py-[10px]">
+      <nav className="sticky top-0 z-10 border-b-[1px] border-border-muted bg-white py-[10px]">
         <div className="main_container mx-auto flex items-center justify-between">
           {/* Hamburger Menu - Mobile only */}
           <div className="flex items-center justify-between gap-[10px]">
-            <div className="mr-[0px] sm:mr-[10px] lg:mr-[0px] lg:hidden">
-              <button className="text-black" onClick={() => setIsMenuOpen(true)}>
-                <MenuIcon />
-              </button>
-            </div>
+            <button
+              className="mr-[0px] text-black sm:mr-[10px] lg:mr-[0px] lg:hidden"
+              onClick={() => setIsMenuOpen(true)}
+            >
+              <MenuIcon />
+            </button>
 
             {/* Logo */}
             <Logo />
