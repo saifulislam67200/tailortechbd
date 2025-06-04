@@ -15,34 +15,47 @@ const ChatWidget = () => {
     script.setAttribute("crossorigin", "*");
     document.body.appendChild(script);
 
-    // Function to adjust the Tawk.to iframe
-    const repositionTawk = () => {
-      let attempts = 0;
-      const maxAttempts = 5;
+    let observer: MutationObserver | null = null;
 
-      const tryReposition = () => {
-        const iframe = document.querySelector('iframe[title="chat widget"]') as HTMLIFrameElement;
-        const windowWidth = window.innerWidth;
-        if (iframe) {
-          if (windowWidth < 768) {
-            iframe.style.bottom = "63px";
-          }
-        } else if (attempts < maxAttempts) {
-          attempts++;
-          setTimeout(tryReposition, 500);
-        }
-      };
-
-      tryReposition();
+    const applyStyle = () => {
+      const iframe = document.querySelector('iframe[title="chat widget"]') as HTMLIFrameElement;
+      const winddowWidth = window.innerWidth;
+      if (iframe && winddowWidth <= 768) {
+        iframe.style.bottom = "63px";
+      }
     };
 
-    // Only reposition on small screens
+    const initObserver = () => {
+      const container = document.body;
+      observer = new MutationObserver(() => {
+        applyStyle(); // re-apply styles on any DOM change
+      });
+
+      observer.observe(container, {
+        childList: true,
+        subtree: true,
+      });
+    };
+
+    // Wait until iframe appears then observe
+    const waitForIframe = (retries = 0) => {
+      if (retries > 5) return;
+      const iframe = document.querySelector('iframe[title="chat widget"]');
+      if (iframe) {
+        applyStyle();
+        initObserver();
+      } else {
+        setTimeout(() => waitForIframe(retries + 1), 500);
+      }
+    };
+
     if (window.innerWidth <= 768) {
-      repositionTawk();
+      waitForIframe();
     }
 
     return () => {
       document.body.removeChild(script);
+      observer?.disconnect();
     };
   }, [NEXT_PUBLIC_CHAT_ID, NEXT_PUBLIC_CHAT_WIDGET_ID]);
 
