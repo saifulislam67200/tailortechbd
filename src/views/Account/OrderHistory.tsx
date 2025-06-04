@@ -162,12 +162,12 @@ export default function OrderHistory() {
                 </div>
 
                 {/* Order Items Preview */}
-                <div className="px-[24px] pb-[16px]">
-                  <div className="flex items-center gap-[12px] overflow-x-auto">
+                <div className="px-[16px] pb-[16px] sm:px-[24px]">
+                  <div className="flex flex-col items-center gap-[12px] sm:flex-row sm:overflow-x-auto">
                     {order.orderItems.slice(0, 3).map((item, index) => (
                       <div
                         key={index}
-                        className="flex flex-shrink-0 items-center gap-[12px] rounded-lg bg-gray-50 p-[12px]"
+                        className="flex w-full flex-shrink-0 items-center gap-[12px] rounded-lg border border-quaternary bg-gray-50 p-[12px] sm:w-fit"
                       >
                         <Image
                           src={item.product.image || "/avatar.png"}
@@ -193,7 +193,7 @@ export default function OrderHistory() {
                 {/* Expanded Order Details */}
                 {isExpanded && (
                   <div className="border-t border-border-main bg-gray-50">
-                    <div className="p-[24px]">
+                    <div className="p-[16px] sm:p-[24px]">
                       <div className="grid gap-[24px] md:grid-cols-2">
                         {/* Order Items */}
                         <div>
