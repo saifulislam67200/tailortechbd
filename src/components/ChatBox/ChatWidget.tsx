@@ -1,63 +1,46 @@
 "use client";
 import { useEffect } from "react";
-
 const ChatWidget = () => {
   const NEXT_PUBLIC_CHAT_WIDGET_ID = process.env.NEXT_PUBLIC_CHAT_WIDGET_ID;
   const NEXT_PUBLIC_CHAT_ID = process.env.NEXT_PUBLIC_CHAT_ID;
+  let isInitialized = false;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const tawkWindow = window as any;
 
   useEffect(() => {
-    if (!NEXT_PUBLIC_CHAT_ID || !NEXT_PUBLIC_CHAT_WIDGET_ID) return;
-
-    const script = document.createElement("script");
-    script.src = `https://embed.tawk.to/${NEXT_PUBLIC_CHAT_ID}/${NEXT_PUBLIC_CHAT_WIDGET_ID}`;
-    script.async = true;
-    script.charset = "UTF-8";
-    script.setAttribute("crossorigin", "*");
-    document.body.appendChild(script);
-
-    let observer: MutationObserver | null = null;
-
-    const applyStyle = () => {
-      const iframe = document.querySelector('iframe[title="chat widget"]') as HTMLIFrameElement;
-      const winddowWidth = window.innerWidth;
-      if (iframe && winddowWidth <= 768) {
-        iframe.style.bottom = "63px";
+    if (NEXT_PUBLIC_CHAT_ID && NEXT_PUBLIC_CHAT_WIDGET_ID && !isInitialized) {
+      if (typeof window !== "undefined") {
+        tawkWindow.Tawk_API = tawkWindow.Tawk_API || {};
+        tawkWindow.Tawk_API.customStyle = {
+          visibility: {
+            bubble: {
+              xOffset: 20, // Right offset (px)
+              yOffset: 90, // Bottom offset (px)
+            },
+            desktop: {
+              xOffset: 20, // Desktop chat widget position
+              yOffset: 20,
+            },
+            mobile: {
+              xOffset: 5, // Mobile chat widget position
+              yOffset: 50,
+            },
+          },
+        };
       }
-    };
 
-    const initObserver = () => {
-      const container = document.body;
-      observer = new MutationObserver(() => {
-        applyStyle(); // re-apply styles on any DOM change
-      });
-
-      observer.observe(container, {
-        childList: true,
-        subtree: true,
-      });
-    };
-
-    // Wait until iframe appears then observe
-    const waitForIframe = (retries = 0) => {
-      if (retries > 5) return;
-      const iframe = document.querySelector('iframe[title="chat widget"]');
-      if (iframe) {
-        applyStyle();
-        initObserver();
-      } else {
-        setTimeout(() => waitForIframe(retries + 1), 500);
-      }
-    };
-
-    if (window.innerWidth <= 768) {
-      waitForIframe();
+      const script = document.createElement("script");
+      script.src = `https://embed.tawk.to/${NEXT_PUBLIC_CHAT_ID}/${NEXT_PUBLIC_CHAT_WIDGET_ID}`;
+      script.async = true;
+      script.charset = "UTF-8";
+      script.setAttribute("crossorigin", "*");
+      document.body.appendChild(script);
+      isInitialized = true;
+      return () => {
+        document.body.removeChild(script);
+      };
     }
-
-    return () => {
-      document.body.removeChild(script);
-      observer?.disconnect();
-    };
-  }, [NEXT_PUBLIC_CHAT_ID, NEXT_PUBLIC_CHAT_WIDGET_ID]);
+  }, [NEXT_PUBLIC_CHAT_ID, NEXT_PUBLIC_CHAT_WIDGET_ID, isInitialized, tawkWindow]);
 
   return null;
 };
