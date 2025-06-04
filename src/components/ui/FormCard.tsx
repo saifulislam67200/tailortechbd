@@ -28,7 +28,7 @@ const FormCard: React.FC<IProps> = ({ headerButtons, children, className }) => {
               setSelectedHeaderIndex(index);
               button.onClick?.({ title: button.title });
             }}
-            className={`center w-full cursor-pointer border-[1px] border-border-main px-[20px] py-[5px] text-[16px] ${index === selectedHeaderIndex ? "bg-primary text-white" : "bg-white font-[700] text-primary"}`}
+            className={`center w-full cursor-pointer border-[1px] border-border-main px-[20px] py-[5px] text-[14px] font-[700] sm:text-[16px] ${index === selectedHeaderIndex ? "bg-primary text-white" : "bg-white text-primary"}`}
           >
             {button.title}
           </button>
