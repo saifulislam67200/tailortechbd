@@ -4,8 +4,31 @@ const ChatWidget = () => {
   const NEXT_PUBLIC_CHAT_WIDGET_ID = process.env.NEXT_PUBLIC_CHAT_WIDGET_ID;
   const NEXT_PUBLIC_CHAT_ID = process.env.NEXT_PUBLIC_CHAT_ID;
   let isInitialized = false;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const tawkWindow = window as any;
+
   useEffect(() => {
     if (NEXT_PUBLIC_CHAT_ID && NEXT_PUBLIC_CHAT_WIDGET_ID && !isInitialized) {
+      if (typeof window !== "undefined") {
+        tawkWindow.Tawk_API = tawkWindow.Tawk_API || {};
+        tawkWindow.Tawk_API.customStyle = {
+          visibility: {
+            bubble: {
+              xOffset: 20, // Right offset (px)
+              yOffset: 90, // Bottom offset (px)
+            },
+            desktop: {
+              xOffset: 20, // Desktop chat widget position
+              yOffset: 20,
+            },
+            mobile: {
+              xOffset: 5, // Mobile chat widget position
+              yOffset: 50,
+            },
+          },
+        };
+      }
+
       const script = document.createElement("script");
       script.src = `https://embed.tawk.to/${NEXT_PUBLIC_CHAT_ID}/${NEXT_PUBLIC_CHAT_WIDGET_ID}`;
       script.async = true;
@@ -17,7 +40,7 @@ const ChatWidget = () => {
         document.body.removeChild(script);
       };
     }
-  }, [NEXT_PUBLIC_CHAT_ID, NEXT_PUBLIC_CHAT_WIDGET_ID, isInitialized]);
+  }, [NEXT_PUBLIC_CHAT_ID, NEXT_PUBLIC_CHAT_WIDGET_ID, isInitialized, tawkWindow]);
 
   return null;
 };
