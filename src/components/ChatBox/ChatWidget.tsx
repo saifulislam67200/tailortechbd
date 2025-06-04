@@ -42,6 +42,28 @@ const ChatWidget = () => {
     }
   }, [NEXT_PUBLIC_CHAT_ID, NEXT_PUBLIC_CHAT_WIDGET_ID, isInitialized, tawkWindow]);
 
+  useEffect(() => {
+    let iframe: HTMLIFrameElement | null = null;
+    let attempts = 0;
+    const maxAttempts = 5;
+
+    const findIframe = () => {
+      iframe = document.querySelector('iframe[title="chat widget"]') as HTMLIFrameElement;
+      if (!iframe && attempts < maxAttempts) {
+        attempts++;
+        setTimeout(findIframe, 500); // retry every 500ms
+      }
+    };
+
+    findIframe();
+
+    return () => {
+      if (iframe && iframe.parentNode) {
+        iframe.parentNode.removeChild(iframe);
+      }
+    };
+  }, []);
+
   return null;
 };
 
