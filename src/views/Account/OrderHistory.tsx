@@ -253,7 +253,7 @@ export default function OrderHistory() {
                                   {currentStatus == "delivered" && (
                                     <button
                                       onClick={() => handleReviewClick(item, order?._id)}
-                                      className="absolute top-2 right-2 flex h-[30px] w-[70px] cursor-pointer items-center justify-center rounded-[5px] border border-quaternary px-2 text-info transition-colors duration-200 hover:border-primary hover:text-primary"
+                                      className="absolute top-2 right-2 z-10 flex cursor-pointer items-center justify-center rounded-[3px] border border-quaternary bg-white px-2 text-[10px] text-info transition-colors duration-200 hover:border-primary hover:text-primary sm:h-[30px] sm:w-[70px] sm:rounded-[5px] sm:text-[14px]"
                                       aria-label="Give Review"
                                     >
                                       Review
