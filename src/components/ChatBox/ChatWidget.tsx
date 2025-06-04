@@ -22,9 +22,11 @@ const ChatWidget = () => {
 
       const tryReposition = () => {
         const iframe = document.querySelector('iframe[title="chat widget"]') as HTMLIFrameElement;
+        const windowWidth = window.innerWidth;
         if (iframe) {
-          iframe.style.bottom = "100px";
-          iframe.style.right = "20px";
+          if (windowWidth < 768) {
+            iframe.style.bottom = "63px";
+          }
         } else if (attempts < maxAttempts) {
           attempts++;
           setTimeout(tryReposition, 500);

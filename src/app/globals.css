@@ -151,3 +151,13 @@ input[type="number"] {
 .animate-marquee {
   animation: marquee 25s linear infinite;
 }
+
+@media screen and (max-width: 768px) {
+  .widget-visible > iframe {
+    bottom: 63px !important;
+  }
+
+  iframe[title="chat-widget"] {
+    inset: auto 20px 133px auto !important;
+  }
+}
