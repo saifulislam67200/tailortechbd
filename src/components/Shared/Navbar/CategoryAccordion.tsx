@@ -1,13 +1,14 @@
 "use client";
 import PlusIcon from "@/components/icons/PlusIcon";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { clearCart } from "@/redux/features/cart/cartSlice";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/category.api";
 import { useLogoutUserMutation } from "@/redux/features/user/user.api";
 import { logout as logoutAction } from "@/redux/features/user/user.slice";
 import { TCategoryWithSubcategories } from "@/types/category";
 import Link from "next/link";
 import { useState } from "react";
-import { FiLogOut } from "react-icons/fi";
+import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { IoHome } from "react-icons/io5";
 import { toast } from "sonner";
 
@@ -86,12 +87,14 @@ const CategoryAccordionItem = ({
 const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
   const { data } = useGetAllCategoriesQuery({ mode: "tree" });
   const categories = data?.data;
+  const { user } = useAppSelector((state) => state.user);
 
   const [logoutUser] = useLogoutUserMutation();
   const dispatch = useAppDispatch();
 
   const handleLogout = async () => {
     dispatch(logoutAction(undefined));
+    dispatch(clearCart());
     setIsOpen(false);
     await logoutUser(undefined);
     toast.success("Logout successfully");
@@ -118,13 +121,24 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
           </div>
         </div>
       </div>
-      <button
-        onClick={() => handleLogout()}
-        className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[14px] text-[14px] text-white"
-      >
-        <FiLogOut className="h-[16px] w-[16px]" />
-        <span>Logout</span>
-      </button>
+      {user && user.phoneNumber ? (
+        <button
+          onClick={() => handleLogout()}
+          className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[14px] text-[14px] text-white"
+        >
+          <FiLogOut className="h-[16px] w-[16px]" />
+          <span>Logout</span>
+        </button>
+      ) : (
+        <Link
+          href="/login"
+          onClick={() => setIsOpen(false)}
+          className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[14px] text-[14px] text-white"
+        >
+          <FiLogIn className="h-[16px] w-[16px]" />
+          <span>Login</span>
+        </Link>
+      )}
     </>
   );
 };

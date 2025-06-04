@@ -60,7 +60,7 @@ export default function OrderHistory() {
   };
 
   return (
-    <div className="flex w-full flex-col gap-[16px] border-[1px] border-border-muted bg-white p-[16px]">
+    <div className="flex w-full flex-col gap-[16px] border-[1px] border-border-muted bg-white p-[8px] sm:p-[16px]">
       {/* Header */}
       <div className="flex flex-col gap-[16px] sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -91,7 +91,7 @@ export default function OrderHistory() {
             return (
               <div key={order._id} className="rounded-lg border border-border-main bg-white">
                 {/* Order Header */}
-                <div className="p-[16px]">
+                <div className="p-[8px] sm:p-[16px]">
                   <div className="flex flex-col gap-[16px] lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex-1">
                       <div className="flex flex-col gap-[8px] sm:flex-row sm:items-center sm:gap-[16px]">
@@ -162,38 +162,42 @@ export default function OrderHistory() {
                 </div>
 
                 {/* Order Items Preview */}
-                <div className="px-[16px] pb-[16px] sm:px-[24px]">
-                  <div className="flex flex-col items-center gap-[12px] sm:flex-row sm:overflow-x-auto">
-                    {order.orderItems.slice(0, 3).map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex w-full flex-shrink-0 items-center gap-[12px] rounded-lg border border-quaternary bg-gray-50 p-[12px] sm:w-fit"
-                      >
-                        <Image
-                          src={item.product.image || "/avatar.png"}
-                          alt={item.product.name}
-                          width={48}
-                          height={48}
-                          className="h-[48px] w-[48px] rounded-md object-cover"
-                        />
-                        <div className="min-w-0">
-                          <p className="truncate text-[14px] font-medium">{item.product.name}</p>
-                          <p className="text-[12px] text-muted">Qty: {item.quantity}</p>
+                {!isExpanded ? (
+                  <div className="px-[8px] pb-[16px] sm:px-[24px]">
+                    <div className="flex w-full flex-col gap-[12px] sm:flex-row sm:flex-wrap sm:items-center">
+                      {order.orderItems.slice(0, 3).map((item, index) => (
+                        <div
+                          key={index}
+                          className="flex w-full flex-shrink-0 items-center gap-[12px] rounded-lg border border-quaternary bg-gray-50 p-[8px] sm:w-fit sm:p-[12px]"
+                        >
+                          <Image
+                            src={item.product.image || "/avatar.png"}
+                            alt={item.product.name}
+                            width={48}
+                            height={48}
+                            className="h-[48px] w-[48px] rounded-md object-cover"
+                          />
+                          <div className="min-w-0">
+                            <p className="truncate text-[14px] font-medium">{item.product.name}</p>
+                            <p className="text-[12px] text-muted">Qty: {item.quantity}</p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                    {order.orderItems.length > 3 && (
-                      <div className="flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-md bg-gray-100 text-[12px] font-medium text-muted">
-                        +{order.orderItems.length - 3}
-                      </div>
-                    )}
+                      ))}
+                      {order.orderItems.length > 1 && (
+                        <div className="flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-md bg-gray-100 text-[12px] font-medium text-muted">
+                          +{order.orderItems.length - 3}
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  ""
+                )}
 
                 {/* Expanded Order Details */}
                 {isExpanded && (
                   <div className="border-t border-border-main bg-gray-50">
-                    <div className="p-[16px] sm:p-[24px]">
+                    <div className="p-[8px] sm:p-[24px]">
                       <div className="grid gap-[24px] md:grid-cols-2">
                         {/* Order Items */}
                         <div>
@@ -211,20 +215,22 @@ export default function OrderHistory() {
                               {order.orderItems.map((item, index) => (
                                 <div
                                   key={index}
-                                  className="relative flex flex-col items-center gap-[12px] rounded-lg border border-border-muted bg-white p-[16px] sm:flex-row"
+                                  className="relative flex flex-row items-center gap-[4px] rounded-lg border border-border-muted bg-white p-[8px] sm:gap-[12px] sm:p-[16px]"
                                 >
                                   <Image
                                     src={item.product.image || "/avatar.png"}
                                     alt={item.product.name}
                                     width={64}
                                     height={64}
-                                    className="h-[64px] w-[64px] rounded-md border object-cover"
+                                    className="h-[50px] w-[50px] rounded-md border object-cover sm:h-[64px] sm:w-[64px]"
                                   />
                                   <div className="min-w-0 flex-1">
-                                    <h5 className="mb-[4px] font-medium">{item.product.name}</h5>
-                                    <div className="sm:text-[14px]text-[12px] mb-[8px] flex items-center gap-[12px] text-[12px] text-muted md:text-[14px]">
+                                    <h5 className="mb-[4px] text-[14px] sm:text-[16px] sm:font-medium">
+                                      {item.product.name}
+                                    </h5>
+                                    <div className="mb-[8px] flex items-center gap-[4px] text-[10px] text-muted sm:gap-[12px] sm:text-[14px] md:text-[14px]">
                                       {item.size && (
-                                        <span className="rounded bg-gray-100 px-[8px] py-[4px]">
+                                        <span className="rounded bg-gray-100 px-[4px] py-[3px] sm:px-[8px] sm:py-[4px]">
                                           Size: {item.size}
                                         </span>
                                       )}
@@ -235,10 +241,10 @@ export default function OrderHistory() {
                                       )}
                                     </div>
                                     <div className="flex items-center justify-between">
-                                      <span className="text-[14px] text-info">
+                                      <span className="text-[12px] text-info sm:text-[14px]">
                                         Qty: {item.quantity}
                                       </span>
-                                      <span className="text-[18px] font-semibold">
+                                      <span className="text-[14px] font-semibold sm:text-[16px]">
                                         ৳ {Math.round(item.product.price * item.quantity)}
                                       </span>
                                     </div>

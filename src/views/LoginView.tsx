@@ -23,7 +23,7 @@ const LoginView = () => {
         ]}
       >
         {loginMode === "phoneNumber" ? <PhoneNumberLogin /> : <EmailLogin />}
-        <div className="flex items-center justify-between gap-[10px]">
+        <div className="flex flex-col justify-between gap-[10px] sm:flex-row sm:items-center">
           <Link
             href={"/forgot-password"}
             className={"text-[14px] text-primary-foreground hover:underline"}
