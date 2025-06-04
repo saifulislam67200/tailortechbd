@@ -13,7 +13,7 @@ export async function generateMetadata({ searchParams }: TSearchParams) {
 const page = async (props: { searchParams: Promise<{ [key: string]: string | undefined }> }) => {
   return (
     <Suspense fallback={<ShopViewFallBack />}>
-      <ShopProductView {...props} />;
+      <ShopProductView {...props} />
     </Suspense>
   );
 };

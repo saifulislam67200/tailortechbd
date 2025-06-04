@@ -89,7 +89,7 @@ export const admin: IDashboardNavLinks[] = [
         path: "/dashboard/coupons",
       },
       {
-        label: "Create Coupon",
+        label: "Create New Coupon",
         path: "/dashboard/create-coupon",
       },
     ],

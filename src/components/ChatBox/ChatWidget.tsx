@@ -19,7 +19,7 @@ const ChatWidget = () => {
             },
             desktop: {
               xOffset: 20, // Desktop chat widget position
-              yOffset: 20,
+              yOffset: 55,
             },
             mobile: {
               xOffset: 5, // Mobile chat widget position

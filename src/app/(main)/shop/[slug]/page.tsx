@@ -20,7 +20,7 @@ const page = async (props: {
 }) => {
   return (
     <Suspense fallback={<ShopViewFallBack />}>
-      <CategoryShopProductView {...props} />;
+      <CategoryShopProductView {...props} />
     </Suspense>
   );
 };
