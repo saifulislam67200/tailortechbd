@@ -149,10 +149,10 @@ const Footer = () => {
                 <div className="flex flex-col items-center md:flex-row">
                   <FaEnvelope size={16} className="flex-shrink-0 text-white" />
                   <Link
-                    href={"mailto:tailortechbd2025@gmail.com"}
+                    href={"mailto:support@tailortechbd.com"}
                     className="mt-1 text-[14px] md:ml-3"
                   >
-                    tailortechbd2025@gmail.com
+                    support@tailortechbd.com
                   </Link>
                 </div>
               </div>
@@ -185,8 +185,8 @@ const Footer = () => {
                 </div>
                 <div className="flex items-center justify-center space-x-3">
                   <FaEnvelope size={16} className="flex-shrink-0 text-white" />
-                  <Link className="text-[14px]" href={"mailto:tailortechbd2025@gmail.com"}>
-                    tailortechbd2025@gmail.com
+                  <Link className="text-[14px]" href={"mailto:support@tailortechbd.com"}>
+                    support@tailortechbd.com
                   </Link>
                 </div>
               </div>
