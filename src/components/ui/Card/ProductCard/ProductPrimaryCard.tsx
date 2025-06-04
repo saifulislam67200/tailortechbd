@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { twMerge } from "tailwind-merge";
 import ProductAddToCartModal from "../../ProductAddToCartModal";
+import ProcutCheckout from "./ProcutCheckout";
 import ProductHoverIcons from "./ProductHoverIcons";
 const ProductPrimaryCard = ({ product, className }: { product: IProduct; className?: string }) => {
   return (
@@ -83,7 +84,10 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
           ) : (
             <p className="text-[15px] font-[700] text-black">৳ {product.price}</p>
           )}
-          <ProductAddToCartModal product={product} />
+          <div className="flex w-full items-center justify-center gap-[10px]">
+            <ProductAddToCartModal product={product} />
+            <ProcutCheckout product={product} />
+          </div>
         </div>
       </div>
     </div>

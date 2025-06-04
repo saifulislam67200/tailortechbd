@@ -161,3 +161,23 @@ input[type="number"] {
     inset: auto 20px 133px auto !important;
   }
 }
+
+.specialBtn {
+  box-shadow: inset 0px 0px 0px var(--primary);
+  transition: all 0.3s ease-in-out;
+}
+
+.specialBtn:hover {
+  box-shadow: inset 210px 0px 0px var(--primary);
+  color: white;
+}
+.checkoutBtn {
+  box-shadow: inset 0px 110px 0px var(--primary);
+  transition: all 0.3s ease-in-out;
+  color: white;
+}
+
+.checkoutBtn:hover {
+  box-shadow: inset 0px 0px 0px var(--primary);
+  color: var(--primary);
+}

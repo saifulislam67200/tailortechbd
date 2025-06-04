@@ -89,7 +89,7 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
       ) : (
         <button
           onClick={handleClick}
-          className="mt-1 w-full cursor-pointer border border-[#c5c5c5] bg-primary py-[6px] text-sm font-bold text-white"
+          className="specialBtn mt-1 w-full cursor-pointer border border-[#c5c5c5] bg-transparent py-[6px] text-sm font-bold"
         >
           Add to Cart
         </button>

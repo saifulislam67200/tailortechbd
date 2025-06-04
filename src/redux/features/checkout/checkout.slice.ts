@@ -2,34 +2,7 @@ import { IOrderItem } from "@/types/order";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: { items: (IOrderItem & { discount?: number })[] } = {
-  items: [
-    {
-      product_id: "682b09aff8a7aa57f37ddcf7",
-      product: {
-        name: "Arabian Sanda Biriyarni",
-        price: 399,
-        image:
-          "https://res.cloudinary.com/dqgynvtyz/image/upload/v1746877351/fv3towuoyseo2psgovj2.jpg",
-      },
-      color: "Red",
-      quantity: 5,
-      size: "S",
-      discount: 10,
-    },
-    {
-      product_id: "682b09aff8a7aa57f37ddcf7",
-      product: {
-        name: "Arabian Sanda Biriyarni",
-        price: 700,
-        image:
-          "https://res.cloudinary.com/dqgynvtyz/image/upload/v1746877351/fv3towuoyseo2psgovj2.jpg",
-      },
-      color: "Red",
-      quantity: 2,
-      size: "S",
-      discount: 10,
-    },
-  ],
+  items: [],
 };
 
 const checkoutSlice = createSlice({

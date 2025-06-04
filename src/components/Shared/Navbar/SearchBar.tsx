@@ -60,7 +60,7 @@ export default function SearchBar({ onSearch }: { onSearch?: (value: string) => 
           onBlur={() => {
             timeoutRef.current = setTimeout(() => setIsOpen(false), 300);
           }}
-          placeholder="Enter Your Keyword..."
+          placeholder="Your trusted online clothing provider!!!"
           className="h-full w-full border-none px-[10px] outline-none"
           onChange={(e) => {
             setDebounceValue(e.target.value);

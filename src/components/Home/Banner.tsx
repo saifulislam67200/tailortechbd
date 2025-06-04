@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 import "swiper/css";
-import { Autoplay } from "swiper/modules";
+import { Autoplay, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 type Props = {
@@ -26,10 +26,10 @@ const Banner = ({ banners }: Props) => {
           style={{ width: "100%", height: "100%" }}
           spaceBetween={20}
           autoplay={{
-            delay: 5000,
+            delay: 6000,
             disableOnInteraction: false,
           }}
-          modules={[Autoplay]}
+          modules={[Autoplay, Thumbs]}
           onSlideChange={(swiper) => setActiveSlide(swiper.realIndex)}
         >
           {banners.map((banner, index) => (
