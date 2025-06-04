@@ -70,6 +70,7 @@ const YearlySellingPieChart = () => {
               cx="50%"
               cy="50%"
               dataKey="value"
+              className="text-[12px]"
               label={({ name, value }) => `${name} (${"৳"}${Math.floor(value).toLocaleString()})`}
               minAngle={15}
             >
@@ -78,7 +79,11 @@ const YearlySellingPieChart = () => {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value, name, props) => [`$${value.toLocaleString()}`, props.payload.name]}
+              formatter={(value, name, props) => [
+                `৳ ${value.toLocaleString()}`,
+                props.payload.name,
+              ]}
+              includeHidden
               contentStyle={{
                 borderRadius: "6px",
                 border: "none",
