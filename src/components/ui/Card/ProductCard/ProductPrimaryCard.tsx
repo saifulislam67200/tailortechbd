@@ -84,7 +84,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
           ) : (
             <p className="text-[15px] font-[700] text-black">৳ {product.price}</p>
           )}
-          <div className="flex w-full items-center justify-center gap-[10px]">
+          <div className="flex w-full flex-col items-center justify-center gap-[10px] md:flex-row">
             <ProductAddToCartModal product={product} />
             <ProcutCheckout product={product} />
           </div>
