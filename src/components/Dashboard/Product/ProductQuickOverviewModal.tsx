@@ -37,9 +37,6 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props)
     skip: !slug || !isOpen,
   });
 
-  console.log(product, "product");
-  console.log(productReviews, "productReviews");
-
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
   const [selectedSize, setSelectedSize] = useState<ISize | undefined>();
 

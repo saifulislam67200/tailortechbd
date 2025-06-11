@@ -4,6 +4,7 @@ import type React from "react";
 import { FiMail, FiPhone, FiMapPin, FiClock } from "react-icons/fi";
 import Breadcrumb from "../ui/BreadCrumbs";
 import ContactForm from "./ContactForm";
+import StoreStaticMap from "./StoreStaticMap";
 
 export default function Contact() {
   const contactInfo = [
@@ -72,6 +73,7 @@ export default function Contact() {
           </div>
         </div>
       </div>
+      <StoreStaticMap />
     </div>
   );
 }
