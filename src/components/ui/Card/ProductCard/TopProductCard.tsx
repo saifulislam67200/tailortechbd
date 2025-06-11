@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { BsEye } from "react-icons/bs";
 import ProductAddToCartModal from "../../ProductAddToCartModal";
+import ProductQuickOverviewModal from "@/components/Dashboard/Product/ProductQuickOverviewModal";
 
 const TopProductCard = ({ product }: { product: IProduct }) => {
   return (
@@ -31,12 +32,14 @@ const TopProductCard = ({ product }: { product: IProduct }) => {
             </button>
           </ProductAddToCartModal>
 
-          <Link
-            href={`/product/${product?.slug}`}
-            className="flex h-[26px] w-[26px] items-center justify-center rounded-[5px] bg-tertiary text-info"
-          >
-            <BsEye />
-          </Link>
+          <ProductQuickOverviewModal product={product}>
+            <button
+              title="Quick overview"
+              className="flex h-[26px] w-[26px] cursor-pointer items-center justify-center rounded-[5px] bg-tertiary text-info"
+            >
+              <BsEye />
+            </button>
+          </ProductQuickOverviewModal>
         </div>
       </div>
     </div>
