@@ -22,6 +22,7 @@ const resetPasswordSchema = Yup.object().shape({
 const ResetPasswordView = ({ slug }: { slug: string }) => {
   const [resetPassword] = useResetPasswordMutation();
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (values: { password: string }) => {
@@ -89,15 +90,15 @@ const ResetPasswordView = ({ slug }: { slug: string }) => {
                   <Field
                     name="confirmPassword"
                     as={Input}
-                    type={showPassword === true ? "text" : "password"}
+                    type={showConfirmPassword === true ? "text" : "password"}
                     placeholder="confirmPassword"
                   />
                   <button
                     type="button"
                     className="absolute right-3 bottom-[8px] cursor-pointer"
-                    onClick={() => setShowPassword(!showPassword)}
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
-                    {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
+                    {showConfirmPassword ? <FaRegEyeSlash /> : <FaRegEye />}
                   </button>
                 </div>
                 <ErrorMessage
