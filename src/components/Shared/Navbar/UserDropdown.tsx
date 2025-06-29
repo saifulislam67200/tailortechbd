@@ -16,6 +16,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [logoutUser] = useLogoutUserMutation();
   const dispatch = useAppDispatch();
+  const [isMouseOver, setIsMouseOver] = useState(false);
 
   const { user } = useAppSelector((state) => state.user);
   useEffect(() => {
@@ -46,6 +47,8 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
         className="flex cursor-pointer items-center gap-[10px] text-primary"
         aria-expanded={isOpen}
         aria-haspopup="true"
+        onMouseOver={() => setIsMouseOver(true)}
+        onMouseLeave={() => setIsMouseOver(false)}
       >
         {user?.avatar ? (
           <Image
@@ -64,9 +67,21 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
               {user?.fullName}
             </span>
             <FiChevronDown size={16} className="ml-[4px]" />
+            {isMouseOver && (
+              <div className="absolute -bottom-10 left-1/2 z-10 w-fit -translate-x-1/2 rounded bg-primary px-2 py-0.5 text-[12px] whitespace-nowrap text-white opacity-100 transition duration-200">
+                Profile
+              </div>
+            )}
           </span>
         ) : (
-          <FiChevronDown size={16} className="ml-[4px]" />
+          <div>
+            <FiChevronDown size={16} className="ml-[4px]" />
+            {isMouseOver && (
+              <div className="absolute -bottom-10 left-1/2 z-10 w-fit -translate-x-1/2 rounded bg-primary px-2 py-0.5 text-[12px] whitespace-nowrap text-white opacity-100 transition duration-200">
+                Profile
+              </div>
+            )}
+          </div>
         )}
       </button>
 

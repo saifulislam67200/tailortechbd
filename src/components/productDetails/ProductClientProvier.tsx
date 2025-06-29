@@ -7,7 +7,7 @@ import DetailsAndInformation from "./DetailsAndInformation";
 import DetailsInfoActions from "./DetailsInfoActions";
 import ProductDetailsSlider from "./ProductDetailSlider";
 import ProductSizeChart from "./ProductSizeChart";
-import RelatedProducts from "./RelatedProducts";
+import DetailsPageTOPProduct from "./DetailsPageTopProduct";
 
 const ProductClientProvier = ({
   product,
@@ -35,9 +35,8 @@ const ProductClientProvier = ({
           <ProductSizeChart chart={product?.chart} />
         </section>
       </div>
-      <DetailsAndInformation product={product} />
-
-      <RelatedProducts slug={slug} />
+      <DetailsAndInformation slug={slug} product={product} />
+      <DetailsPageTOPProduct />
     </div>
   );
 };

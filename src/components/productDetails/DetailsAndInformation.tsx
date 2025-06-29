@@ -1,10 +1,10 @@
 import { IProduct } from "@/types/product";
 import CustomerReview from "./CustomerReview";
 // import DetailsPageTOPProduct from "./DetailsPageTopProduct";
-import DetailsPageTOPProduct from "./DetailsPageTopProduct";
 import QuestionAnswer from "./QuestionAnswer";
 import ScrollDetailsSection from "./ScrollDetailsSection";
-const DetailsAndInformation = ({ product }: { product: IProduct }) => {
+import RelatedProducts from "./RelatedProducts";
+const DetailsAndInformation = ({ product, slug }: { product: IProduct; slug: string }) => {
   return (
     <section className="mt-[15px] flex flex-col gap-[13px] md:flex-row">
       <div className="w-full">
@@ -18,7 +18,7 @@ const DetailsAndInformation = ({ product }: { product: IProduct }) => {
         <CustomerReview productId={product?._id} />
       </div>
 
-      <DetailsPageTOPProduct />
+      <RelatedProducts slug={slug} />
     </section>
   );
 };

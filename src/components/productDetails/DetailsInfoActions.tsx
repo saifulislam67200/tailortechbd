@@ -1,7 +1,7 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch } from "@/hooks/redux";
 import { addToCart } from "@/redux/features/cart/cartSlice";
-import { addToWishlist } from "@/redux/features/wishlist/wishlistSlice";
+// import { addToWishlist } from "@/redux/features/wishlist/wishlistSlice";
 import { IColor, IProduct, ISize } from "@/types/product";
 import React, { useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
@@ -87,15 +87,15 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
     setActiveSize(color.sizes?.[0]);
   };
 
-  const wishlistItems = useAppSelector((state) => state.wishlist.items);
-  const isInWishlist = wishlistItems.some((item) => item._id === product._id);
+  // const wishlistItems = useAppSelector((state) => state.wishlist.items);
+  // const isInWishlist = wishlistItems.some((item) => item._id === product._id);
 
-  const handleToggleWishlist = () => {
-    if (!isInWishlist) {
-      dispatch(addToWishlist(product));
-      toast.success("Added to wishlist");
-    }
-  };
+  // const handleToggleWishlist = () => {
+  //   if (!isInWishlist) {
+  //     dispatch(addToWishlist(product));
+  //     toast.success("Added to wishlist");
+  //   }
+  // };
 
   return (
     <div>
@@ -170,7 +170,7 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
         ""
       )}
       {/* // add to cart button  */}
-      <div className="mt-[10px] flex flex-col items-center gap-[10px] sm:max-w-[350px] sm:flex-row">
+      <div className="mt-[10px] flex flex-col items-center gap-[10px] sm:max-w-[220px] sm:flex-row">
         <button
           disabled={!activeColor || !activeSize || !activeSize.stock}
           onClick={handleAddToCart}
@@ -178,7 +178,7 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
         >
           Add to cart
         </button>
-        <button
+        {/* <button
           onClick={handleToggleWishlist}
           disabled={isInWishlist}
           className={`h-[40px] w-full transition-all duration-300 ${
@@ -188,7 +188,7 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
           }`}
         >
           {isInWishlist ? "Already in Wishlist" : "Add To Wishlist"}
-        </button>
+        </button> */}
       </div>
     </div>
   );

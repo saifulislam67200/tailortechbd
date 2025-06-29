@@ -1,18 +1,19 @@
 "use client";
+import ProductDetailsSlider from "@/components/productDetails/ProductDetailSlider";
+import ProductSizeChart from "@/components/productDetails/ProductSizeChart";
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
-// import { addToCart } from "@/redux/features/cart/cartSlice";
+import { useAppDispatch } from "@/hooks/redux";
+import { addToCart } from "@/redux/features/cart/cartSlice";
 import { useGetProductByProductSlugQuery } from "@/redux/features/product/product.api";
 import { useGetAllReviewByProductIdQuery } from "@/redux/features/review/review.api";
 import { IColor, IProduct, ISize } from "@/types/product";
-import Image from "next/image";
-import { cloneElement, isValidElement, ReactElement, ReactNode, useEffect, useState } from "react";
+import { cloneElement, isValidElement, ReactElement, ReactNode, useState } from "react";
 import { FaEye, FaSpinner } from "react-icons/fa";
 import { IoIosStar } from "react-icons/io";
 import { LuX } from "react-icons/lu";
-// import { useDispatch } from "react-redux";
-// import { toast } from "sonner";
+import { toast } from "sonner";
 
 interface Props {
   children?: ReactNode;
@@ -21,7 +22,7 @@ interface Props {
 
 const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
-  //   const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const slug = clickedProduct?.slug || "";
 
   const {
@@ -37,53 +38,63 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props)
     skip: !slug || !isOpen,
   });
 
+  const [activeColor = product?.colors?.[0], setActiveColor] = useState<IColor | undefined>(
+    product?.colors?.[0]
+  );
+  const [activeSize, setActiveSize] = useState<ISize | undefined>(activeColor?.sizes?.[0]);
+  const [activeQuantity, setActiveQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
-  const [selectedSize, setSelectedSize] = useState<ISize | undefined>();
 
-  useEffect(() => {
-    if (product?.colors?.length) {
-      setSelectedColor(product.colors[0]);
-      setSelectedSize(product.colors[0]?.sizes?.[0]);
+  const getColorVariantImage = (colorName: string): string => {
+    if (!product?.colors || !Array.isArray(product.colors)) {
+      return product?.images?.[0] || "";
     }
-  }, [product]);
 
-  //   const getColorVariantImage = (colorName: string): string => {
-  //     if (!product?.colors || !Array.isArray(product.colors)) {
-  //       return product?.images?.[0] || "";
-  //     }
+    const colorVariant = product.colors.find(
+      (color) => color?.color?.toLowerCase() === colorName.toLowerCase().trim()
+    );
 
-  //     const colorVariant = product.colors.find(
-  //       (color) => color?.color?.toLowerCase() === colorName.toLowerCase().trim()
-  //     );
-
-  //     return colorVariant?.images?.[0] || product?.images?.[0] || "";
-  //   };
+    return colorVariant?.images?.[0] || product?.images?.[0] || "";
+  };
 
   const handleClick = () => {
     setIsOpen(true);
   };
 
-  //   const handleAddToCart = () => {
-  //     if (!selectedColor || !selectedSize) {
-  //       return toast.error("Please select a color and size.", {
-  //         id: "productSelectionToastId",
-  //       });
-  //     }
-  //     const payload = {
-  //       discount: product?.discount,
-  //       id: `${product._id}-${selectedColor!.color.trim()}-${selectedSize!.size.trim()}`,
-  //       name: product?.name,
-  //       price: product?.price,
-  //       quantity: 1,
-  //       size: selectedSize?.size || "",
-  //       stock: selectedSize?.stock || 0,
-  //       color: selectedColor?.color || "",
-  //       image: getColorVariantImage(selectedColor?.color || ""),
-  //       slug: product?.slug,
-  //     };
-  //     dispatch(addToCart(payload));
-  //     setIsOpen(false);
-  //   };
+  const handleColorChange = (color: IColor) => {
+    setActiveColor(color);
+    setSelectedColor(color);
+    setActiveSize(color.sizes?.[0]);
+  };
+
+  // Reset quantity when size changes
+  const handleSizeChange = (size: ISize) => {
+    setActiveSize(size);
+    const quantity = size.stock >= activeQuantity ? activeQuantity : size.stock;
+    setActiveQuantity(quantity);
+  };
+
+  const handleAddToCart = () => {
+    if (!activeColor || !activeSize) {
+      return toast.error("Please select a color and size.", {
+        id: "productSelectionToastId",
+      });
+    }
+    const payload = {
+      discount: product?.discount,
+      id: `${product._id}-${activeColor!.color.trim()}-${activeSize!.size.trim()}`,
+      name: product?.name,
+      price: product?.price,
+      quantity: 1,
+      size: activeSize?.size || "",
+      stock: activeSize?.stock || 0,
+      color: activeColor?.color || "",
+      image: getColorVariantImage(activeColor?.color || ""),
+      slug: product?.slug,
+    };
+    dispatch(addToCart(payload));
+    setIsOpen(false);
+  };
 
   return (
     <>
@@ -103,7 +114,7 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props)
       <DialogProvider
         state={isOpen}
         setState={setIsOpen}
-        className="w-[95%] max-w-[700px] md:w-full"
+        className="w-[95%] max-w-[800px] md:w-full"
       >
         {isLoading ? (
           <span className="center h-[500px] w-full bg-gray-100">
@@ -134,15 +145,15 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props)
             <HorizontalLine className="my-[20px]" />
 
             <div className="flex flex-col items-center justify-start gap-[20px] md:flex-row md:items-start">
-              <div className="relative aspect-square w-full max-w-[200px] shrink-0 md:max-w-[300px]">
-                {selectedColor &&
-                  selectedSize &&
-                  selectedColor?.sizes?.find((s) => s.size === selectedSize.size)?.stock === 0 && (
+              <div className="relative aspect-square w-full max-w-[200px] shrink-0 md:max-w-[380px]">
+                {activeColor &&
+                  activeSize &&
+                  activeColor?.sizes?.find((s) => s.size === activeSize.size)?.stock === 0 && (
                     <span className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 text-lg font-semibold text-white">
                       Out of Stock
                     </span>
                   )}
-                <Image
+                {/* <Image
                   src={
                     selectedColor?.images?.[0] || product?.images[0] || "/images/category_blank.png"
                   }
@@ -150,6 +161,12 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props)
                   width={300}
                   height={300}
                   className="h-full w-full object-cover"
+                /> */}
+
+                <ProductDetailsSlider
+                  product={product}
+                  setSelectedColor={setSelectedColor}
+                  selectedColor={selectedColor}
                 />
               </div>
               <div className="flex w-full flex-col gap-[10px]">
@@ -182,21 +199,67 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props)
                   ""
                 )}
 
-                <div
-                  className="line-clamp-6"
-                  dangerouslySetInnerHTML={{ __html: product?.description || "" }}
-                ></div>
+                <div>
+                  {/* colors  */}
+                  <h1 className="text-[16px]">Colors:</h1>
+                  <div className="mt-[5px] flex items-center gap-[10px]">
+                    {product?.colors?.map((color) => {
+                      return (
+                        <button
+                          key={color._id}
+                          type="button"
+                          aria-label={`Select color ${color.color}`}
+                          className={`flex h-[20px] w-fit cursor-pointer items-center rounded-full border-[1px] border-primary px-[8px] text-[12px] transition-all duration-200 ${
+                            activeColor?.color === color.color
+                              ? "bg-primary text-white"
+                              : "bg-white text-primary"
+                          }`}
+                          onClick={() => handleColorChange(color)}
+                        >
+                          {color.color}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {/* // sizes  */}
+                  <h1 className="mt-[10px] text-[16px]">Sizes:</h1>
+                  <div className="mt-[5px] flex items-center gap-[10px]">
+                    {activeColor?.sizes?.map((size) => (
+                      <button
+                        key={size._id}
+                        type="button"
+                        aria-label={`Select size ${size.size}`}
+                        className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+                          activeSize?.size === size.size
+                            ? "bg-primary text-white shadow-none"
+                            : "bg-white text-black shadow"
+                        } border border-gray-200 hover:bg-primary hover:text-white`}
+                        onClick={() => handleSizeChange(size)}
+                      >
+                        {size.size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
-                {/* <Button
+                <Button
                   disabled={
-                    selectedColor?.sizes?.find((s) => s?.size === selectedSize?.size)?.stock === 0
+                    selectedColor?.sizes?.find((s) => s?.size === activeSize?.size)?.stock === 0
                   }
                   onClick={handleAddToCart}
-                  className="h-[27px] w-[100px] p-0 text-[14px]"
+                  className="mt-[10px] h-[27px] w-[100px] p-0 text-[14px]"
                 >
                   Add To Cart
-                </Button> */}
+                </Button>
+
+                <div
+                  className="mt-[20px] line-clamp-[10]"
+                  dangerouslySetInnerHTML={{ __html: product?.description || "" }}
+                ></div>
               </div>
+            </div>
+            <div className="-mt-[20px]">
+              <ProductSizeChart chart={product?.chart} />
             </div>
           </div>
         )}

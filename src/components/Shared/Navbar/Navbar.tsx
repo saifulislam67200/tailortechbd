@@ -21,6 +21,7 @@ export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { user } = useAppSelector((state) => state.user);
   const cartItems = useAppSelector((state) => state?.cart?.items);
+  const [isMouseOver, setIsMouseOver] = useState(false);
 
   useEffect(() => {
     if (isCartOpen || isMenuOpen) {
@@ -64,8 +65,21 @@ export default function Navbar() {
             {user ? (
               <UserDropdown />
             ) : (
-              <Link href={"/login"} className="hidden text-primary lg:block">
-                <FaCircleUser size={22} />
+              <Link
+                href={"/login"}
+                className="hidden text-primary lg:block"
+                onMouseOver={() => setIsMouseOver(true)}
+                onMouseLeave={() => setIsMouseOver(false)}
+              >
+                <div className="relative">
+                  <FaCircleUser size={22} />
+
+                  {isMouseOver && (
+                    <div className="absolute -bottom-10 left-1/2 z-10 w-fit -translate-x-1/2 rounded bg-primary px-2 py-0.5 text-[12px] whitespace-nowrap text-white opacity-100 transition duration-200">
+                      Profile
+                    </div>
+                  )}
+                </div>
               </Link>
             )}
           </div>
