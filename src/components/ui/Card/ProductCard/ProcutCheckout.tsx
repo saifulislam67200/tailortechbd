@@ -4,7 +4,11 @@ import { addItemsOnCheckout } from "@/redux/features/checkout/checkout.slice";
 import { IProduct } from "@/types/product";
 import { useRouter } from "next/navigation";
 import { IoBagCheckOutline } from "react-icons/io5";
-const ProcutCheckout = ({ product }: { product: IProduct }) => {
+const ProcutCheckout = ({
+  product,
+  btnStyle,
+  ...props
+}: { product: IProduct; btnStyle?: string } & React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -31,7 +35,8 @@ const ProcutCheckout = ({ product }: { product: IProduct }) => {
   return (
     <button
       onClick={handleClick}
-      className="checkoutBtn center mt-1 w-full cursor-pointer gap-[3px] border border-[#c5c5c5] py-[6px] text-sm font-bold"
+      className={`checkoutBtn center mt-1 w-full cursor-pointer gap-[3px] border border-[#c5c5c5] py-[6px] text-sm font-bold ${btnStyle}`}
+      {...props}
     >
       Buy Now <IoBagCheckOutline />
     </button>

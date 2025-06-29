@@ -6,6 +6,7 @@ import { IColor, IProduct, ISize } from "@/types/product";
 import React, { useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { toast } from "sonner";
+import ProcutCheckout from "../ui/Card/ProductCard/ProcutCheckout";
 
 interface IProps {
   product: IProduct;
@@ -170,7 +171,7 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
         ""
       )}
       {/* // add to cart button  */}
-      <div className="mt-[10px] flex flex-col items-center gap-[10px] sm:max-w-[220px] sm:flex-row">
+      <div className="mt-[10px] flex flex-col items-center gap-[10px] sm:max-w-[330px] sm:flex-row">
         <button
           disabled={!activeColor || !activeSize || !activeSize.stock}
           onClick={handleAddToCart}
@@ -189,6 +190,11 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
         >
           {isInWishlist ? "Already in Wishlist" : "Add To Wishlist"}
         </button> */}
+        <ProcutCheckout
+          disabled={activeSize && !activeSize.stock}
+          product={product}
+          btnStyle="h-[42px]  mt-[0px]"
+        />
       </div>
     </div>
   );

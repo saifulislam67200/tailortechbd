@@ -32,6 +32,10 @@ export const admin: IDashboardNavLinks[] = [
         label: "Create New Product",
         path: "/dashboard/product-create",
       },
+      {
+        label: "Restock Requests",
+        path: "/dashboard/restock-requests",
+      },
     ],
   },
   {

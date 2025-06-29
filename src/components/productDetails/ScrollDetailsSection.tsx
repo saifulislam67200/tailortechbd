@@ -8,7 +8,7 @@ const ScrollDetailsSection = () => {
   return (
     <div className="items-cente sticky top-[75px] z-[2] flex">
       {[
-        { label: "Details", id: "product-description" },
+        { label: "Description", id: "product-description" },
         { label: "Q&A", id: "question-answer-form" },
         { label: "Reviews", id: "customer-review-form" },
       ]?.map((item, index) => (
