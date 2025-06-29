@@ -12,7 +12,7 @@ import MobileSearchBar from "./MobileSearchBar";
 import CategoryMenu from "./NavCategory/CategoryMenu";
 import NavIcons from "./NavIcons";
 import SearchBar from "./SearchBar";
-import TopBar from "./TopBar";
+// import TopBar from "./TopBar";
 import UserDropdown from "./UserDropdown";
 
 export default function Navbar() {
@@ -36,7 +36,7 @@ export default function Navbar() {
 
   return (
     <>
-      <TopBar />
+      {/* <TopBar /> */}
       <nav className="sticky top-0 z-10 border-b-[1px] border-border-muted bg-white py-[10px]">
         <div className="main_container mx-auto flex items-center justify-between">
           {/* Hamburger Menu - Mobile only */}
@@ -53,7 +53,7 @@ export default function Navbar() {
           </div>
 
           {/* Search Bar - Desktop only */}
-          <div className="mx-4 hidden max-w-[704px] flex-grow lg:block xl:-mr-[42px]">
+          <div className="mx-4 hidden max-w-[410px] flex-grow lg:block xl:-mr-[42px]">
             <SearchBar />
           </div>
 
