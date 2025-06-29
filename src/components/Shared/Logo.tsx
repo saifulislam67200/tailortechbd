@@ -9,8 +9,8 @@ const Logo = ({ className }: { className?: string }) => {
         <Image
           src="/images/logos/logo.png"
           alt="logo"
-          width={80}
-          height={80}
+          width={230}
+          height={60}
           className="hidden sm:block"
         />
         <Image
