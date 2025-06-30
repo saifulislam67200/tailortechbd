@@ -13,11 +13,17 @@ const Footer = () => {
           <div className="mx-auto space-y-[16px] lg:ms-0 lg:w-[30%]">
             <div className="flex items-center justify-center space-x-2 lg:justify-start">
               <Image
+                src="/images/logos/TailorTech-logo-foreground.svg"
+                alt="logo"
+                width={230}
+                height={60}
+              />
+              {/* <Image
                 src={"/images/logos/logo-foreground.png"}
                 width={100}
                 height={100}
                 alt="TailerTech"
-              />
+              /> */}
             </div>
             <p className="w-full text-justify text-[14px] leading-relaxed md:max-w-[550px] lg:max-w-[301px] lg:text-justify">
               TailorTech – Where tradition meets innovation. We combine expert tailoring with modern
