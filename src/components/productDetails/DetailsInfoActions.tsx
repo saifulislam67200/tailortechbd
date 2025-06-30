@@ -102,7 +102,7 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
 
   return (
     <div>
-      <div className="mt-[15px] flex flex-col gap-[10px] sm:flex-row sm:items-end-safe">
+      <div className="mt-[15px] flex flex-col gap-[25px] sm:flex-row sm:flex-wrap sm:items-end-safe">
         <div>
           {/* colors  */}
           <h1 className="text-[16px]">Colors:</h1>

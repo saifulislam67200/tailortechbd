@@ -1,6 +1,7 @@
 "use client";
 import ProductDetailsSlider from "@/components/productDetails/ProductDetailSlider";
 import ProductSizeChart from "@/components/productDetails/ProductSizeChart";
+import RestockRequestModal from "@/components/productDetails/RestockRequestModal";
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
@@ -9,6 +10,7 @@ import { addToCart } from "@/redux/features/cart/cartSlice";
 import { useGetProductByProductSlugQuery } from "@/redux/features/product/product.api";
 import { useGetAllReviewByProductIdQuery } from "@/redux/features/review/review.api";
 import { IColor, IProduct, ISize } from "@/types/product";
+import Link from "next/link";
 import { cloneElement, isValidElement, ReactElement, ReactNode, useState } from "react";
 import { FaEye, FaSpinner } from "react-icons/fa";
 import { IoIosStar } from "react-icons/io";
@@ -41,7 +43,9 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props)
   const [activeColor = product?.colors?.[0], setActiveColor] = useState<IColor | undefined>(
     product?.colors?.[0]
   );
-  const [activeSize, setActiveSize] = useState<ISize | undefined>(activeColor?.sizes?.[0]);
+  const [activeSize = activeColor?.sizes?.[0], setActiveSize] = useState<ISize | undefined>(
+    activeColor?.sizes?.[0]
+  );
   const [activeQuantity, setActiveQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
 
@@ -247,20 +251,60 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props)
                   </div>
                 </div>
 
-                <Button
-                  disabled={
-                    selectedColor?.sizes?.find((s) => s?.size === activeSize?.size)?.stock === 0
-                  }
-                  onClick={handleAddToCart}
-                  className="mt-[10px] h-[27px] w-[100px] p-0 text-[14px]"
-                >
-                  Add To Cart
-                </Button>
+                {activeSize && !activeSize.stock ? (
+                  <p className="mt-[10px] mb-[5px] text-[15px] font-[600] text-danger">
+                    Sorry this size is currently out of stock
+                  </p>
+                ) : (
+                  ""
+                )}
 
-                <div
-                  className="mt-[20px] line-clamp-[10]"
+                {activeSize && !activeSize.stock ? (
+                  <RestockRequestModal
+                    color={activeColor?.color ?? ""}
+                    size={activeSize.size}
+                    productId={product?._id}
+                  />
+                ) : (
+                  <Button
+                    disabled={
+                      selectedColor?.sizes?.find((s) => s?.size === activeSize?.size)?.stock === 0
+                    }
+                    onClick={handleAddToCart}
+                    className="mt-[10px] h-[27px] w-[100px] p-0 text-[14px]"
+                  >
+                    Add To Cart
+                  </Button>
+                )}
+                {/* <div
+                  className="mt-[20px] line-clamp-[10] line"
                   dangerouslySetInnerHTML={{ __html: product?.description || "" }}
-                ></div>
+                ></div> */}
+                <div className="mt-5">
+                  <div
+                    className="line-clamp-[5] leading-relaxed text-primary"
+                    dangerouslySetInnerHTML={{ __html: product?.description || "" }}
+                  />
+                  <Link
+                    href={`/product/${product?.slug}`}
+                    className="mt-3 inline-flex items-center text-sm font-medium text-info transition-colors duration-200 hover:text-primary"
+                  >
+                    View More
+                    <svg
+                      className="ml-1 h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </Link>
+                </div>
               </div>
             </div>
             <div className="-mt-[20px]">
