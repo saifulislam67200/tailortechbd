@@ -102,6 +102,32 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
 
   return (
     <div>
+      <div className="mt-[15px]">
+        {/* // quantity update  */}
+        <h1 className="text-[16px]">Quantity:</h1>
+
+        <div className="flex h-[30px] w-[80px] items-center border border-quaternary px-[7px]">
+          <button
+            disabled={activeQuantity <= 1}
+            onClick={() => handleQuantityChange("dec")}
+            className={`cursor-pointer text-info ${activeQuantity <= 1 ? "cursor-event-none" : ""}`}
+          >
+            {activeQuantity > 1 ? (
+              <AiOutlineMinus size={14} />
+            ) : (
+              <AiOutlineMinus size={14} className="text-gray-300" />
+            )}
+          </button>
+          <p className="w-full text-center text-[14px]">{activeQuantity}</p>
+          <button
+            disabled={activeSize?.stock === 0 || activeSize?.stock === activeQuantity}
+            onClick={() => handleQuantityChange("inc")}
+            className="cursor-pointer text-info disabled:cursor-not-allowed disabled:opacity-[0.5]"
+          >
+            <AiOutlinePlus size={14} />
+          </button>
+        </div>
+      </div>
       <div className="mt-[15px] flex flex-col gap-[25px] sm:flex-row sm:flex-wrap sm:items-end-safe">
         <div>
           {/* colors  */}
@@ -145,32 +171,6 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
                 {size.size}
               </button>
             ))}
-          </div>
-        </div>
-        <div>
-          {/* // quantity update  */}
-          <h1 className="text-[16px]">Quantity:</h1>
-
-          <div className="flex h-[30px] w-[80px] items-center border border-quaternary px-[7px]">
-            <button
-              disabled={activeQuantity <= 1}
-              onClick={() => handleQuantityChange("dec")}
-              className={`cursor-pointer text-info ${activeQuantity <= 1 ? "cursor-event-none" : ""}`}
-            >
-              {activeQuantity > 1 ? (
-                <AiOutlineMinus size={14} />
-              ) : (
-                <AiOutlineMinus size={14} className="text-gray-300" />
-              )}
-            </button>
-            <p className="w-full text-center text-[14px]">{activeQuantity}</p>
-            <button
-              disabled={activeSize?.stock === 0 || activeSize?.stock === activeQuantity}
-              onClick={() => handleQuantityChange("inc")}
-              className="cursor-pointer text-info disabled:cursor-not-allowed disabled:opacity-[0.5]"
-            >
-              <AiOutlinePlus size={14} />
-            </button>
           </div>
         </div>
       </div>
