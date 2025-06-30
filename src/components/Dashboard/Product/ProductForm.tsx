@@ -19,6 +19,16 @@ const initialValues: Omit<
 > = {
   name: "",
   description: "",
+  quickOverview: `
+   <p><strong>Quick Overview</strong></p>
+  <ul>
+    <li><strong>Brand</strong> - Tailortech</li>
+    <li><strong>Country of origin</strong> - Bangladesh</li>
+    <li><strong>Item</strong> - panjabi</li>
+    <li><strong>GSM</strong> - 180</li>
+    <li><strong>Fabric composition</strong> -100% cotton</li>
+  </ul>
+  `,
   chart: [],
   price: 0,
   discount: 0,
@@ -38,6 +48,7 @@ const initialValues: Omit<
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Product name is required"),
   description: Yup.string().required("Description is required"),
+  quickOverview: Yup.string().required("Quick Overview is required"),
   price: Yup.number().required("Price is required").min(0, "Price must be >= 0"),
   discount: Yup.number().min(0).max(100),
   tag: Yup.string(),
@@ -189,6 +200,24 @@ export default function ProductForm({
 
             {touched.description && errors.description && (
               <span className="text-danger">{errors.description}</span>
+            )}
+          </div>
+          <HorizontalLine className="my-[16px]" />
+
+          <div className="w-full bg-white p-[16px]">
+            <SectionTitle className="mb-[15px]">Quick Overview</SectionTitle>
+
+            <label className={labelClass}>Overview</label>
+            <RichTextArea
+              onChange={(e) => {
+                setFieldValue("quickOverview", e);
+              }}
+              handleBlur={() => setFieldTouched("quickOverview", true)}
+              defaultValue={values.quickOverview}
+            />
+
+            {touched.quickOverview && errors.quickOverview && (
+              <span className="text-danger">{errors.quickOverview}</span>
             )}
           </div>
           <HorizontalLine className="my-[16px]" />

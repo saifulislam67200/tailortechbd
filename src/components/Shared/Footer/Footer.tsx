@@ -18,12 +18,6 @@ const Footer = () => {
                 width={230}
                 height={60}
               />
-              {/* <Image
-                src={"/images/logos/logo-foreground.png"}
-                width={100}
-                height={100}
-                alt="TailerTech"
-              /> */}
             </div>
             <p className="w-full text-justify text-[14px] leading-relaxed md:max-w-[550px] lg:max-w-[301px] lg:text-justify">
               TailorTech – Where tradition meets innovation. We combine expert tailoring with modern
@@ -140,7 +134,13 @@ const Footer = () => {
                   </div>
                 </div>
                 <div className="flex flex-col items-center gap-[5px] md:flex-row">
-                  <FaPhone size={16} className="flex-shrink-0 text-white" />
+                  <Image
+                    src={"images/whatsApp.svg"}
+                    width={100}
+                    height={100}
+                    alt="TailerTech"
+                    className="size-[16px]"
+                  />
                   <Link href={"tel:+8801711923276"} className="text-[14px] hover:underline">
                     +880 01711 923276
                   </Link>

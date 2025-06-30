@@ -10,7 +10,6 @@ import { addToCart } from "@/redux/features/cart/cartSlice";
 import { useGetProductByProductSlugQuery } from "@/redux/features/product/product.api";
 import { useGetAllReviewByProductIdQuery } from "@/redux/features/review/review.api";
 import { IColor, IProduct, ISize } from "@/types/product";
-import Link from "next/link";
 import { cloneElement, isValidElement, ReactElement, ReactNode, useState } from "react";
 import { FaEye, FaSpinner } from "react-icons/fa";
 import { IoIosStar } from "react-icons/io";
@@ -280,31 +279,10 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props)
                   className="mt-[20px] line-clamp-[10] line"
                   dangerouslySetInnerHTML={{ __html: product?.description || "" }}
                 ></div> */}
-                <div className="mt-5">
-                  <div
-                    className="line-clamp-[5] leading-relaxed text-primary"
-                    dangerouslySetInnerHTML={{ __html: product?.description || "" }}
-                  />
-                  <Link
-                    href={`/product/${product?.slug}`}
-                    className="mt-3 inline-flex items-center text-sm font-medium text-info transition-colors duration-200 hover:text-primary"
-                  >
-                    View More
-                    <svg
-                      className="ml-1 h-4 w-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </Link>
-                </div>
+                <div
+                  className="text-primary"
+                  dangerouslySetInnerHTML={{ __html: product?.quickOverview || "" }}
+                />
               </div>
             </div>
             <div className="-mt-[20px]">
