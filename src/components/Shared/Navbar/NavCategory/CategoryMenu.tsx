@@ -148,7 +148,7 @@ const CategoryMenu = () => {
             {/*   */}
             {category.subcategories?.length && activeMenu === category._id ? (
               <div
-                className="fixed top-[173px] left-[50%] z-50 mt-0 w-[800px] translate-x-[-50%] border border-border-muted bg-white shadow-lg"
+                className="fixed top-[141px] left-[50%] z-50 mt-0 w-[800px] translate-x-[-50%] border border-border-muted bg-white shadow-lg"
                 onMouseLeave={handleMouseLeave}
               >
                 {/* here is the issue */}
