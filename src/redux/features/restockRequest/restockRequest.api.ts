@@ -22,7 +22,19 @@ const restockRequestApi = api.injectEndpoints({
       }),
       invalidatesTags: ["restockRequest"],
     }),
+
+    deleteRestockRequest: builder.mutation({
+      query: (id: string) => ({
+        url: `/restock-request/delete/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["restockRequest"],
+    }),
   }),
 });
 
-export const { useGetAllRestockRequestQuery, useCreateRestockRequestMutation } = restockRequestApi;
+export const {
+  useGetAllRestockRequestQuery,
+  useCreateRestockRequestMutation,
+  useDeleteRestockRequestMutation,
+} = restockRequestApi;
