@@ -91,6 +91,7 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props)
       color: activeColor?.color || "",
       image: getColorVariantImage(activeColor?.color || ""),
       slug: product?.slug,
+      sku: product?.sku,
     };
     dispatch(addToCart(payload));
     setIsOpen(false);
@@ -171,16 +172,20 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props)
               </div>
               <div className="flex w-full flex-col gap-[10px]">
                 <h3 className="line-clamp-2 text-[20px] font-[700]">{product?.name}</h3>
-                <span className="flex items-center gap-[5px]">
-                  <div className="flex items-center gap-[5px] text-[12px] text-primary">
-                    <IoIosStar />
-                    <IoIosStar />
-                    <IoIosStar />
-                    <IoIosStar />
-                    <IoIosStar />
-                  </div>
-                  <span className="text-[12px]">reviews({productReviews?.data?.length})</span>
+                <span>
+                  <span className="flex items-center gap-[5px]">
+                    <div className="flex items-center gap-[5px] text-[12px] text-primary">
+                      <IoIosStar />
+                      <IoIosStar />
+                      <IoIosStar />
+                      <IoIosStar />
+                      <IoIosStar />
+                    </div>
+                    <span className="text-[12px]">reviews({productReviews?.data?.length})</span>
+                  </span>
+                  <span className="text-[12px]">Product Id: {product?.sku}</span>
                 </span>
+
                 <span className="h-[55px] w-[150px] bg-quaternary/30 px-[8px] py-[5px] font-bold text-primary">
                   <span className="block text-[12px] font-normal text-primary-foreground">
                     {product?.discount ? "Special Price" : "Price"}

@@ -34,6 +34,9 @@ const ProductSecondaryCard: React.FC<ProductCardProps> = ({ product, className }
             <h3 className="line-clamp-1 text-center text-[14px] font-bold hover:text-primary">
               {product.name}
             </h3>
+            <h5 className="text-light text-center text-[12px] text-info">
+              Product Id: {product.sku}
+            </h5>
             <p
               className="mt-1 line-clamp-2 text-center text-[13px]"
               dangerouslySetInnerHTML={{ __html: product.description || "" }}

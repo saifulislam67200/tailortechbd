@@ -225,9 +225,17 @@ export default function OrderHistory() {
                                     className="h-[50px] w-[50px] rounded-md border object-cover sm:h-[64px] sm:w-[64px]"
                                   />
                                   <div className="min-w-0 flex-1">
-                                    <h5 className="mb-[4px] text-[14px] sm:text-[16px] sm:font-medium">
+                                    <h5 className="text-[14px] sm:text-[16px] sm:font-medium">
                                       {item.product.name}
                                     </h5>
+                                    <p className="mb-[4px] text-[14px] text-info">
+                                      Product Id:{" "}
+                                      {
+                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                        (item as any)?.product?.sku
+                                      }
+                                    </p>
+
                                     <div className="mb-[8px] flex items-center gap-[4px] text-[10px] text-muted sm:gap-[12px] sm:text-[14px] md:text-[14px]">
                                       {item.size && (
                                         <span className="rounded bg-gray-100 px-[4px] py-[3px] sm:px-[8px] sm:py-[4px]">

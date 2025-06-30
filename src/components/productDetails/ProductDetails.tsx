@@ -24,6 +24,8 @@ const ProductDetails: React.FC<IProps> = async ({ params }) => {
     return notFound();
   }
 
+  console.log(params, "params");
+
   return (
     <>
       <ProductClientProvier product={product} slug={slug}>
@@ -45,6 +47,7 @@ const ProductDetails: React.FC<IProps> = async ({ params }) => {
         ) : (
           <span className="text-[18px] font-semibold">৳ {product?.price}</span>
         )}
+        <h5 className="tex-info text-[12px] font-light">Product Id: {product?.sku}</h5>
       </ProductClientProvier>
     </>
   );

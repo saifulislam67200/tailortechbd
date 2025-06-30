@@ -6,7 +6,7 @@ import ProductSecondaryCard from "../ui/Card/ProductCard/ProductSecondaryCard";
 const DetailsPageTOPProduct = () => {
   const { data } = useGetTopProuctsQuery({
     limit: 6,
-    fields: "name,slug,images,price,discount,colors",
+    fields: "name,slug,images,price,discount,colors,sku",
   });
   const products = data?.data || [];
 

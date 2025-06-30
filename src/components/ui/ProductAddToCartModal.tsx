@@ -76,6 +76,7 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
       color: selectedColor?.color || "",
       image: getColorVariantImage(selectedColor?.color || ""),
       slug: product?.slug,
+      sku: product?.sku,
     };
     dispatch(addToCart(payload));
     setIsOpen(false);

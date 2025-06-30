@@ -64,6 +64,7 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
         <Link href={`/product/${product?.slug}`} className="line-clamp-1 hover:text-secondary">
           <span className="text-[14px] font-bold">{product.name}</span>
         </Link>
+        <span className="text-[12px] font-light text-info"> {product?.sku}</span>
 
         <div className="mt-[10px] flex flex-col gap-[5px]">
           <p className="line-clamp-1 text-[12px] font-semibold text-black">

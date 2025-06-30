@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { toast } from "sonner";
 import ProcutCheckout from "../ui/Card/ProductCard/ProcutCheckout";
+import RestockRequestModal from "./RestockRequestModal";
 
 interface IProps {
   product: IProduct;
@@ -76,6 +77,7 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
       color: activeColor.color,
       image: getColorVariantImage(activeColor.color),
       slug: product.slug,
+      sku: product?.sku,
     };
 
     dispatch(addToCart(payload));
@@ -164,38 +166,46 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
       </div>
 
       {activeSize && !activeSize.stock ? (
-        <p className="mt-[30px] text-[15px] font-[600] text-danger">
+        <p className="mt-[10px] mb-[5px] text-[15px] font-[600] text-danger">
           Sorry this size is currently out of stock
         </p>
       ) : (
         ""
       )}
       {/* // add to cart button  */}
-      <div className="mt-[10px] flex flex-col items-center gap-[10px] sm:max-w-[330px] sm:flex-row">
-        <button
-          disabled={!activeColor || !activeSize || !activeSize.stock}
-          onClick={handleAddToCart}
-          className="h-[40px] w-full cursor-pointer bg-primary text-white transition-all duration-300 hover:bg-info disabled:cursor-not-allowed disabled:opacity-[50]"
-        >
-          Add to cart
-        </button>
-        {/* <button
-          onClick={handleToggleWishlist}
-          disabled={isInWishlist}
-          className={`h-[40px] w-full transition-all duration-300 ${
-            isInWishlist
-              ? "cursor-not-allowed bg-gray-400 text-white"
-              : "cursor-pointer bg-quaternary hover:bg-strong hover:text-white"
-          }`}
-        >
-          {isInWishlist ? "Already in Wishlist" : "Add To Wishlist"}
-        </button> */}
-        <ProcutCheckout
-          disabled={activeSize && !activeSize.stock}
-          product={product}
-          btnStyle="h-[42px]  mt-[0px]"
+      {activeSize && !activeSize.stock ? (
+        <RestockRequestModal
+          color={activeColor?.color ?? ""}
+          size={activeSize.size}
+          productId={product?._id}
         />
-      </div>
+      ) : (
+        <div className="mt-[10px] flex flex-col items-center gap-[10px] sm:max-w-[330px] sm:flex-row">
+          <button
+            disabled={!activeColor || !activeSize || !activeSize.stock}
+            onClick={handleAddToCart}
+            className="h-[40px] w-full cursor-pointer bg-primary text-white transition-all duration-300 hover:bg-info disabled:cursor-not-allowed disabled:opacity-[50]"
+          >
+            Add to cart
+          </button>
+          {/* <button
+            onClick={handleToggleWishlist}
+            disabled={isInWishlist}
+            className={`h-[40px] w-full transition-all duration-300 ${
+              isInWishlist
+                ? "cursor-not-allowed bg-gray-400 text-white"
+                : "cursor-pointer bg-quaternary hover:bg-strong hover:text-white"
+            }`}
+          >
+            {isInWishlist ? "Already in Wishlist" : "Add To Wishlist"}
+          </button> */}
+          <ProcutCheckout
+            disabled={activeSize && !activeSize.stock}
+            product={product}
+            btnStyle="h-[42px]  mt-[0px]"
+          />
+        </div>
+      )}
     </div>
   );
 };

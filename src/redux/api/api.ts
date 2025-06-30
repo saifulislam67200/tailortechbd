@@ -51,6 +51,7 @@ export const api = createApi({
     "admin",
     "size-chart",
     "coupon",
+    "restockRequest",
   ],
   endpoints: () => ({}),
 });

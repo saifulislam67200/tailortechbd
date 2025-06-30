@@ -17,6 +17,7 @@ import DeleteProductById from "./DeleteProductById";
 
 const tableHead = [
   { label: "Name", field: "name" },
+  { label: "Product Id", field: "sku" },
   { label: "Price", field: "price" },
   { label: "Discount (%)", field: "discount" },
   { label: "Category", field: "" },
@@ -39,6 +40,7 @@ const AllProductsTable = ({
   });
 
   const { data, isLoading } = useGetAllProductsQuery({ ...query, searchTerm });
+  console.log(data, "all products table");
   const productData = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 
@@ -145,6 +147,9 @@ const AllProductsTable = ({
                         </span>
                         <span className="line-clamp-1 text-[14px]">{product.name}</span>
                       </div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]"> {product?.sku ? product?.sku : "N/A"}</span>
                     </td>
                     <td className="px-6 py-4">
                       <span className="text-[14px]">৳ {product.price}</span>
