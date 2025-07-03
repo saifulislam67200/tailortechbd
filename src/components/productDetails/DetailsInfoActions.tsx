@@ -200,7 +200,7 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
             {isInWishlist ? "Already in Wishlist" : "Add To Wishlist"}
           </button> */}
           <ProcutCheckout
-            disabled={activeSize && !activeSize.stock}
+            // disabled={activeSize && !activeSize.stock}
             product={product}
             btnStyle="h-[42px]  mt-[0px]"
           />

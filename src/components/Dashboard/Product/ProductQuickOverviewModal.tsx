@@ -19,9 +19,10 @@ import { toast } from "sonner";
 interface Props {
   children?: ReactNode;
   product: Pick<IProduct, "_id" | "colors" | "images" | "name" | "price" | "discount" | "slug">;
+  isAllStockOut?: boolean;
 }
 
-const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props) => {
+const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllStockOut }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
   const slug = clickedProduct?.slug || "";
@@ -105,6 +106,13 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct }: Props)
       {children && isValidElement(children) ? (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         cloneElement(children as ReactElement<any>, { onClick: handleClick })
+      ) : isAllStockOut ? (
+        <button
+          onClick={handleClick}
+          className="-mb-[4px] h-[33px] w-full cursor-pointer bg-primary text-white transition-all duration-300 hover:bg-info disabled:cursor-not-allowed disabled:opacity-[50]"
+        >
+          Request Restock
+        </button>
       ) : (
         <button
           onClick={handleClick}

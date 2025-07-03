@@ -6,7 +6,44 @@ import { twMerge } from "tailwind-merge";
 import ProductAddToCartModal from "../../ProductAddToCartModal";
 import ProcutCheckout from "./ProcutCheckout";
 import ProductHoverIcons from "./ProductHoverIcons";
+import ProductQuickOverviewModal from "@/components/Dashboard/Product/ProductQuickOverviewModal";
+
 const ProductPrimaryCard = ({ product, className }: { product: IProduct; className?: string }) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //@ts-ignore
+  const isAllStockOutFunctional = (colors): boolean => {
+    try {
+      if (!Array.isArray(colors) || colors.length === 0) {
+        return true;
+      }
+
+      return !colors.some((color) => {
+        if (!color || !Array.isArray(color.sizes)) {
+          return false;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        return color.sizes.some((size) => {
+          if (!size || typeof size.stock === "undefined") {
+            return false;
+          }
+
+          const stock = parseInt(size.stock.toString(), 10);
+
+          return !isNaN(stock) && stock > 0;
+        });
+      });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error checking stock status:", errorMessage);
+
+      return true;
+    }
+  };
+
+  const isAllStockOut = isAllStockOutFunctional(product?.colors || []);
+
   return (
     <div
       className={twMerge(
@@ -26,8 +63,14 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
       {/* Image */}
       <Link
         href={`/product/${product?.slug}`}
-        className="relative flex h-[120px] w-full shrink-0 items-center justify-start overflow-hidden bg-white sm:h-[227px]"
+        className="relative flex aspect-square h-[120px] w-full shrink-0 items-center justify-start overflow-hidden bg-white sm:h-[227px]"
       >
+        {isAllStockOut && (
+          <span className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 text-lg font-semibold text-white">
+            Out of Stock
+          </span>
+        )}
+
         {product.images[1] ? (
           <>
             <Image
@@ -86,8 +129,13 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
             <p className="text-[15px] font-[700] text-black">৳ {product.price}</p>
           )}
           <div className="flex w-full flex-col items-center justify-center gap-[10px] md:flex-row">
-            <ProductAddToCartModal product={product} />
-            <ProcutCheckout product={product} />
+            <ProductAddToCartModal product={product} isAllStockOut={isAllStockOut} />
+
+            {isAllStockOut ? (
+              <ProductQuickOverviewModal product={product} isAllStockOut={isAllStockOut} />
+            ) : (
+              <ProcutCheckout product={product} />
+            )}
           </div>
         </div>
       </div>

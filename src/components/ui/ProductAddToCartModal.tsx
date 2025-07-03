@@ -11,14 +11,16 @@ import { toast } from "sonner";
 import Button from "./Button";
 import DialogProvider from "./DialogProvider";
 import HorizontalLine from "./HorizontalLine";
+import RestockRequestModal from "../productDetails/RestockRequestModal";
 // import SelectionBox from "./SelectionBox";
 
 interface Props {
   children?: ReactNode;
   product: Pick<IProduct, "_id" | "colors" | "images" | "name" | "price" | "discount" | "slug">;
+  isAllStockOut?: boolean;
 }
 
-const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => {
+const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOut }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const slug = clickedProduct?.slug || "";
@@ -90,7 +92,8 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
       ) : (
         <button
           onClick={handleClick}
-          className="specialBtn mt-1 w-full cursor-pointer border border-[#c5c5c5] bg-transparent py-[6px] text-sm font-bold"
+          disabled={isAllStockOut}
+          className={`specialBtn mt-1 w-full border border-[#c5c5c5] bg-transparent py-[6px] text-sm font-bold ${isAllStockOut ? "cursor-not-allowed opacity-70" : "cursor-pointer opacity-100"}`}
         >
           Add to Cart
         </button>
@@ -210,15 +213,24 @@ const ProductAddToCartModal = ({ children, product: clickedProduct }: Props) => 
                     ))}
                   </div>
                 </div>
-                <Button
-                  disabled={
-                    selectedColor?.sizes?.find((s) => s?.size === selectedSize?.size)?.stock === 0
-                  }
-                  onClick={handleAddToCart}
-                  className="mt-[20px]"
-                >
-                  Add To Cart
-                </Button>
+
+                {selectedColor && !selectedSize?.stock ? (
+                  <RestockRequestModal
+                    color={selectedColor?.color ?? ""}
+                    size={selectedSize?.size as string}
+                    productId={product?._id}
+                  />
+                ) : (
+                  <Button
+                    disabled={
+                      selectedColor?.sizes?.find((s) => s?.size === selectedSize?.size)?.stock === 0
+                    }
+                    onClick={handleAddToCart}
+                    className="mt-[20px]"
+                  >
+                    Add To Cart
+                  </Button>
+                )}
               </div>
             </div>
           </div>
