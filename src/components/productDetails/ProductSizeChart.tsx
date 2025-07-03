@@ -7,7 +7,7 @@ const ProductSizeChart = ({ chart }: { chart: string[][] }) => {
   const [headers, ...rows] = chart;
 
   return (
-    <div className="mt-[30px]">
+    <div className="mt-[30px] max-w-[450px]">
       <div className="mb-[15px] flex flex-col gap-[3px]">
         <p className="text-[16px] font-semibold">Size chart - In inches</p>
         <span className="text-[12px] text-muted">
@@ -21,7 +21,7 @@ const ProductSizeChart = ({ chart }: { chart: string[][] }) => {
               {headers?.map((header, index) => (
                 <th
                   key={index}
-                  className="border border-quaternary bg-primary/80 px-4 py-2 text-left font-medium text-white"
+                  className="border border-quaternary bg-primary/80 px-4 py-2 text-center font-medium text-white"
                 >
                   {header}
                 </th>
@@ -32,7 +32,7 @@ const ProductSizeChart = ({ chart }: { chart: string[][] }) => {
             {rows?.map((row, rowIndex) => (
               <tr key={rowIndex} className="">
                 {row?.map((cell, cellIndex) => (
-                  <td key={cellIndex} className="border border-quaternary px-4 py-2">
+                  <td key={cellIndex} className="border border-quaternary px-4 py-2 text-center">
                     {cell}
                   </td>
                 ))}

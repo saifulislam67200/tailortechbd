@@ -135,7 +135,7 @@ const Footer = () => {
                 </div>
                 <div className="flex flex-col items-center gap-[5px] md:flex-row">
                   <Image
-                    src={"images/whatsApp.svg"}
+                    src={"/images/whatsApp.svg"}
                     width={100}
                     height={100}
                     alt="TailerTech"
