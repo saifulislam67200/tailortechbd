@@ -172,6 +172,16 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
       ) : (
         ""
       )}
+
+      {product?.quickOverview ? (
+        <div
+          className="mt-[10px] mb-[15px] text-primary"
+          dangerouslySetInnerHTML={{ __html: product?.quickOverview || "" }}
+        />
+      ) : (
+        ""
+      )}
+
       {/* // add to cart button  */}
       {activeSize && !activeSize.stock ? (
         <RestockRequestModal
