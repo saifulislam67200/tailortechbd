@@ -24,8 +24,6 @@ const ProductDetails: React.FC<IProps> = async ({ params }) => {
     return notFound();
   }
 
-  console.log(params, "params");
-
   return (
     <>
       <ProductClientProvier product={product} slug={slug}>
