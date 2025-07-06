@@ -10,6 +10,7 @@ export interface IUser {
   isVerified: boolean;
   isActive: boolean;
   gender?: TGender;
+  token?: string;
   createdAt: string;
   updatedAt: string;
   geo_profile: {
