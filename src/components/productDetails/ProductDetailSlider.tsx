@@ -1,5 +1,7 @@
 "use client";
 import { IColor, IProduct } from "@/types/product";
+import FsLightbox from "fslightbox-react";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -8,7 +10,6 @@ import "swiper/css/thumbs";
 import { FreeMode, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
-
 const ProductDetailsSlider = ({
   product,
   selectedColor,
@@ -25,6 +26,8 @@ const ProductDetailsSlider = ({
 
   const colorImages: string[] = product.colors?.flatMap((c) => c?.images || []) || [];
   const images = [...product.images, ...colorImages];
+
+  const [lightBoxImage, setLightBoxImage] = useState<string | undefined>(undefined);
 
   const [zoomable, setZoomable] = useState(false);
   const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
@@ -61,80 +64,103 @@ const ProductDetailsSlider = ({
   };
 
   return (
-    <section className="bg-white px-[10px] py-[14px] md:px-[20px]">
-      <div className="flex flex-col items-center lg:items-start lg:gap-[20px] xl:gap-[30px]">
-        <Swiper
-          onSwiper={(swiper) => {
-            swiperRef.current = swiper;
-          }}
-          thumbs={{ swiper: thumbsSwiper }}
-          modules={[Thumbs]}
-          spaceBetween={10}
-          className="main-slider h-full w-full"
-          onSlideChange={() => {
-            setSelectedColor(undefined);
-          }}
-        >
-          {images.map((img, index) => (
-            <SwiperSlide key={index}>
-              <div className="group flex w-full cursor-crosshair flex-col items-center justify-center gap-4 lg:flex-row">
-                <div
-                  ref={imageContainerRef}
-                  className="relative aspect-square h-full max-h-[600px] w-full border border-info-light p-[5px] lg:p-[0px]"
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                  onMouseMove={handleMouseMove}
-                >
+    <>
+      <section className="bg-white px-[10px] py-[14px] md:px-[20px]">
+        <div className="flex flex-col items-center lg:items-start lg:gap-[20px] xl:gap-[30px]">
+          <Swiper
+            onSwiper={(swiper) => {
+              swiperRef.current = swiper;
+            }}
+            thumbs={{ swiper: thumbsSwiper }}
+            modules={[Thumbs]}
+            spaceBetween={10}
+            className="main-slider h-full w-full"
+            onSlideChange={() => {
+              setSelectedColor(undefined);
+            }}
+          >
+            {images.map((img, index) => (
+              <SwiperSlide key={index}>
+                <div className="group relative flex w-full cursor-crosshair flex-col items-center justify-center gap-4 lg:flex-row">
                   <div
-                    className="h-full w-full bg-center bg-no-repeat"
-                    style={{
-                      backgroundImage: `url(${img})`,
-                      backgroundSize: zoomable
-                        ? `${imageSize.width * ZOOM_LEVEL}px ${imageSize.height * ZOOM_LEVEL}px`
-                        : "contain",
-                      backgroundPosition: zoomable
-                        ? `${-cursorPos.x * ZOOM_LEVEL + imageSize.width / 2}px ${-cursorPos.y * ZOOM_LEVEL + imageSize.height / 2}px`
-                        : "center",
-                      backgroundRepeat: "no-repeat",
-                      width: "100%",
-                      height: "100%",
-                    }}
+                    ref={imageContainerRef}
+                    className="relative aspect-square h-full max-h-[600px] w-full border border-info-light p-[5px] lg:p-[0px]"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                    onMouseMove={handleMouseMove}
+                  >
+                    <div
+                      className="h-full w-full bg-center bg-no-repeat"
+                      style={{
+                        backgroundImage: `url(${img})`,
+                        backgroundSize: zoomable
+                          ? `${imageSize.width * ZOOM_LEVEL}px ${imageSize.height * ZOOM_LEVEL}px`
+                          : "contain",
+                        backgroundPosition: zoomable
+                          ? `${-cursorPos.x * ZOOM_LEVEL + imageSize.width / 2}px ${-cursorPos.y * ZOOM_LEVEL + imageSize.height / 2}px`
+                          : "center",
+                        backgroundRepeat: "no-repeat",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    />
+                  </div>
+                  <button
+                    onClick={() => setLightBoxImage(lightBoxImage ? undefined : img)}
+                    className="center group/fullscreen absolute bottom-5 left-5 h-[30px] w-[30px] cursor-pointer rounded-full border-[1px] border-border-main bg-white hover:bg-black"
+                  >
+                    <Image
+                      src="/images/fullscreenicon.webp"
+                      width={15}
+                      height={15}
+                      alt="Zoom In"
+                      className="group-hover/fullscreen:invert"
+                    />
+                  </button>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+
+          <Swiper
+            onSwiper={setThumbsSwiper}
+            direction="horizontal"
+            spaceBetween={4}
+            slidesPerView={4}
+            freeMode={true}
+            watchSlidesProgress={true}
+            modules={[FreeMode, Thumbs]}
+            className="thumbnail-slider w-full overflow-x-scroll"
+          >
+            {images.map((img, index) => (
+              <SwiperSlide
+                key={index}
+                className="!h-[90px] !w-[80px] border-[1px] border-transparent [&.swiper-slide-thumb-active>.thumb]:border-primary"
+              >
+                <div className="thumb relative h-[60px] w-[60px] cursor-pointer overflow-hidden border border-transparent p-[5px] transition-all duration-300 md:h-[80px] md:w-[80px]">
+                  <img
+                    src={img || "/"}
+                    width={80}
+                    height={80}
+                    className="h-full w-full object-cover"
+                    alt={`Thumbnail ${index + 1}`}
                   />
                 </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
 
-        <Swiper
-          onSwiper={setThumbsSwiper}
-          direction="horizontal"
-          spaceBetween={4}
-          slidesPerView={4}
-          freeMode={true}
-          watchSlidesProgress={true}
-          modules={[FreeMode, Thumbs]}
-          className="thumbnail-slider w-full overflow-x-scroll"
-        >
-          {images.map((img, index) => (
-            <SwiperSlide
-              key={index}
-              className="!h-[90px] !w-[80px] border-[1px] border-transparent [&.swiper-slide-thumb-active>.thumb]:border-primary"
-            >
-              <div className="thumb relative h-[60px] w-[60px] cursor-pointer overflow-hidden border border-transparent p-[5px] transition-all duration-300 md:h-[80px] md:w-[80px]">
-                <img
-                  src={img || "/"}
-                  width={80}
-                  height={80}
-                  className="h-full w-full object-cover"
-                  alt={`Thumbnail ${index + 1}`}
-                />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-    </section>
+        <FsLightbox
+          toggler={Boolean(lightBoxImage)}
+          sources={
+            lightBoxImage
+              ? [lightBoxImage, ...images.filter((img) => img !== lightBoxImage)]
+              : images
+          }
+        />
+      </section>
+    </>
   );
 };
 
