@@ -74,7 +74,7 @@ const ZoomableLightboxImage = ({ src }: { src: string }) => {
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
       onDragStart={(e) => e.preventDefault()}
-      className={`flex items-center justify-center overflow-hidden ${zoomed ? "h-full w-full" : "h-fit w-fit"}`}
+      className={`flex items-center justify-center overflow-auto ${zoomed ? "h-full w-full" : "h-fit w-fit"}`}
       style={{ cursor: zoomed ? "grab" : "zoom-in" }}
     >
       <img
