@@ -1,8 +1,8 @@
 "use client";
 import { IColor, IProduct } from "@/types/product";
-import FsLightbox from "fslightbox-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { PiMagnifyingGlassPlusLight } from "react-icons/pi";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/navigation";
@@ -10,6 +10,128 @@ import "swiper/css/thumbs";
 import { FreeMode, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
+
+const ZoomableLightboxImage = ({ src }: { src: string }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  const ZOOM = 2;
+  const [zoomed, setZoomed] = useState(false);
+  const [origin, setOrigin] = useState("50% 50%");
+  const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(null);
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Prevent toggle if it was a drag
+    if (dragStart) return;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    setOrigin(`${x}% ${y}%`);
+    setTranslate({ x: 0, y: 0 });
+    setZoomed((z) => !z);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (!zoomed) return;
+    setDragStart({ x: e.clientX, y: e.clientY });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!zoomed || !dragStart) return;
+
+    const dx = e.clientX - dragStart.x;
+    const dy = e.clientY - dragStart.y;
+
+    setTranslate((prev) => ({
+      x: prev.x + dx,
+      y: prev.y + dy,
+    }));
+
+    setDragStart({ x: e.clientX, y: e.clientY });
+  };
+
+  const handleMouseUp = () => {
+    setDragStart(null);
+  };
+
+  return (
+    <div
+      ref={containerRef}
+      onClick={handleClick}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseUp}
+      onDragStart={(e) => e.preventDefault()}
+      className={`flex items-center justify-center overflow-hidden ${zoomed ? "h-full w-full" : "h-fit w-fit"}`}
+      style={{ cursor: zoomed ? "grab" : "zoom-in" }}
+    >
+      <img
+        ref={imgRef}
+        src={src}
+        alt="Zoomable"
+        draggable={false}
+        className="pointer-events-none select-none"
+        style={{
+          transformOrigin: origin,
+          transform: zoomed
+            ? `scale(${ZOOM * 1.5}) translate(${translate.x / ZOOM}px, ${translate.y / ZOOM}px)`
+            : "scale(1) translate(0px, 0px)",
+          transition: dragStart ? "none" : "transform 0.25s ease",
+          maxWidth: zoomed ? "100%" : "700px",
+          maxHeight: "100%",
+          objectFit: "contain",
+        }}
+      />
+    </div>
+  );
+};
+
+const LightboxModal = ({
+  open,
+  active,
+  onClose,
+}: {
+  open: boolean;
+  active: string;
+  onClose: () => void;
+}) => {
+  const backdropRef = useRef<HTMLDivElement>(null);
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Close if clicked directly on the backdrop
+    if (e.target === backdropRef.current) {
+      onClose();
+    }
+  };
+
+  if (!open) return null;
+  return (
+    <div
+      ref={backdropRef}
+      onClick={handleBackdropClick}
+      className="fixed inset-0 z-[1000] flex items-center justify-center bg-[#000000a8]"
+    >
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 z-10 cursor-pointer rounded bg-white px-3 py-1 text-black"
+      >
+        ✕
+      </button>
+
+      <button>
+        {/* zoom in button */}
+        <PiMagnifyingGlassPlusLight />
+      </button>
+
+      <ZoomableLightboxImage src={active} />
+    </div>
+  );
+};
+
 const ProductDetailsSlider = ({
   product,
   selectedColor,
@@ -151,13 +273,10 @@ const ProductDetailsSlider = ({
           </Swiper>
         </div>
 
-        <FsLightbox
-          toggler={Boolean(lightBoxImage)}
-          sources={
-            lightBoxImage
-              ? [lightBoxImage, ...images.filter((img) => img !== lightBoxImage)]
-              : images
-          }
+        <LightboxModal
+          open={!!lightBoxImage}
+          active={lightBoxImage!}
+          onClose={() => setLightBoxImage(undefined)}
         />
       </section>
     </>
