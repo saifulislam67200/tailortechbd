@@ -64,7 +64,7 @@ const ZoomableLightboxImage = ({ src }: { src: string }) => {
   const handleMouseUp = () => {
     setDragStart(null);
   };
-
+  //
   return (
     <div
       ref={containerRef}
