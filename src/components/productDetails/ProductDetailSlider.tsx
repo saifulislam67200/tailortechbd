@@ -20,10 +20,13 @@ const ZoomableLightboxImage = ({ src }: { src: string }) => {
   const [origin, setOrigin] = useState("50% 50%");
   const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(null);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const [wasDragging, setWasDragging] = useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Prevent toggle if it was a drag
-    if (dragStart) return;
+    if (wasDragging) {
+      setWasDragging(false);
+      return; // Don't zoom if it was a drag
+    }
 
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -37,6 +40,7 @@ const ZoomableLightboxImage = ({ src }: { src: string }) => {
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!zoomed) return;
     setDragStart({ x: e.clientX, y: e.clientY });
+    setWasDragging(false);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -44,6 +48,10 @@ const ZoomableLightboxImage = ({ src }: { src: string }) => {
 
     const dx = e.clientX - dragStart.x;
     const dy = e.clientY - dragStart.y;
+
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+      setWasDragging(true);
+    }
 
     setTranslate((prev) => ({
       x: prev.x + dx,
@@ -101,14 +109,26 @@ const LightboxModal = ({
 }) => {
   const backdropRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Close if clicked directly on the backdrop
     if (e.target === backdropRef.current) {
       onClose();
     }
   };
 
   if (!open) return null;
+
   return (
     <div
       ref={backdropRef}
@@ -210,6 +230,7 @@ const ProductDetailsSlider = ({
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                     onMouseMove={handleMouseMove}
+                    onClick={() => setLightBoxImage(img)}
                   >
                     <div
                       className="h-full w-full bg-center bg-no-repeat"
