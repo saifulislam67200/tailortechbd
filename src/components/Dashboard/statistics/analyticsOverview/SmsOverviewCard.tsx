@@ -1,3 +1,4 @@
+import { formatNumberWithSuffix } from "@/utils";
 import dateUtils from "@/utils/date";
 import { MdOutlineSms } from "react-icons/md";
 
@@ -9,12 +10,9 @@ interface IProps {
   };
 }
 
-const SmsOverviewCard: React.FC<IProps> = ({
-  sms,
-  // increase,
-}) => {
+const SmsOverviewCard: React.FC<IProps> = ({ sms }) => {
   return (
-    <div className="min-h-[170px] w-full bg-white p-[16px] 2xl:h-[180px]">
+    <div className="min-h-[170px] w-full bg-white p-[16px] 2xl:min-h-[180px]">
       <div className="flex flex-col gap-[5px]">
         <h3 className="text-[14px] font-bold text-primary sm:text-[16px]">SMS</h3>
         <p className="text-[14px] font-semibold text-info capitalize">Current stats</p>
@@ -26,7 +24,7 @@ const SmsOverviewCard: React.FC<IProps> = ({
             <MdOutlineSms className="size-[25px]" />
           </span>{" "}
           <h1 className="text-[20px] leading-[90%] font-bold 2xl:text-[20px]">
-            {sms?.balance || 0} BDT
+            ৳{formatNumberWithSuffix(sms?.balance || 0)}
           </h1>
         </span>
         <div className="flex h-full w-full flex-col gap-[2px]">

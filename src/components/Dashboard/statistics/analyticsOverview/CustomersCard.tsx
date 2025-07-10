@@ -10,7 +10,7 @@ const CustomersCard = ({
   increase: number;
 }) => {
   return (
-    <div className="min-h-[170px] w-full bg-white p-[16px] 2xl:h-[180px]">
+    <div className="min-h-[170px] w-full bg-white p-[16px] 2xl:min-h-[180px]">
       <div className="flex flex-col gap-[5px]">
         <h3 className="text-[14px] font-bold text-primary sm:text-[16px]">Customers</h3>
         <p className="text-[14px] font-semibold text-info capitalize">{selectedFilter}</p>
