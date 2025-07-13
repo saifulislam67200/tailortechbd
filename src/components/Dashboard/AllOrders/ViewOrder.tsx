@@ -25,6 +25,7 @@ import AddNewItemOnOrder from "./AddNewItemOnOrder";
 import { PiKeyReturnFill } from "react-icons/pi";
 import { RiExchangeFill, RiRefundFill } from "react-icons/ri";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
+import InvoiceModal from "./InvoiceModal";
 const statuses = [
   {
     id: "pending",
@@ -97,8 +98,6 @@ type ViewOrderProps = {
 
 export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps) {
   const [initialOrderItemView, setInitialOrderItemView] = useState(orderItem);
-
-  console.log(orderItem, "orderItem");
 
   const [changeOrderStatus, { isLoading }] = useChangeOrderStatusMutation();
 
@@ -216,7 +215,10 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="lg:col-span-1">
           <div className="mb-6">
-            <h2 className="text-lg font-semibold text-primary sm:text-[24px]">Orders List</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-primary sm:text-[24px]">Orders List</h2>
+              {<InvoiceModal orderItem={orderItem} />}
+            </div>
             <p className="text-info">ORD-${orderItemView?._id?.slice(-8).toUpperCase()}</p>
           </div>
 
