@@ -1,10 +1,7 @@
 "use client";
-
 import { MenuIcon } from "@/components/icons/MenuIcon";
 import { useAppSelector } from "@/hooks/redux";
-import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FaCircleUser } from "react-icons/fa6";
 import Logo from "../Logo";
 import CartDrawer from "./CartDrawer";
 import MenuDrawer from "./MenuDrawer";
@@ -14,6 +11,7 @@ import NavIcons from "./NavIcons";
 import SearchBar from "./SearchBar";
 // import TopBar from "./TopBar";
 import UserDropdown from "./UserDropdown";
+import LoginWith from "./LoginWith";
 
 export default function Navbar() {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -21,7 +19,6 @@ export default function Navbar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { user } = useAppSelector((state) => state.user);
   const cartItems = useAppSelector((state) => state?.cart?.items);
-  const [isMouseOver, setIsMouseOver] = useState(false);
 
   useEffect(() => {
     if (isCartOpen || isMenuOpen) {
@@ -62,26 +59,7 @@ export default function Navbar() {
           <div className="flex items-center space-x-4">
             <NavIcons setIsSearchOpen={setIsSearchOpen} setIsCartOpen={setIsCartOpen} />
 
-            {user ? (
-              <UserDropdown />
-            ) : (
-              <Link
-                href={"/login"}
-                className="hidden text-primary lg:block"
-                onMouseOver={() => setIsMouseOver(true)}
-                onMouseLeave={() => setIsMouseOver(false)}
-              >
-                <div className="relative">
-                  <FaCircleUser size={22} />
-
-                  {isMouseOver && (
-                    <div className="absolute -bottom-10 left-1/2 z-10 w-fit -translate-x-1/2 rounded bg-primary px-2 py-0.5 text-[12px] whitespace-nowrap text-white opacity-100 transition duration-200">
-                      Profile
-                    </div>
-                  )}
-                </div>
-              </Link>
-            )}
+            {user ? <UserDropdown /> : <LoginWith />}
           </div>
         </div>
 

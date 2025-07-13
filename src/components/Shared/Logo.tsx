@@ -11,15 +11,15 @@ const Logo = ({ className }: { className?: string }) => {
           alt="logo"
           width={230}
           height={60}
-          className="hidden sm:block"
+          className="w-[130px] sm:w-[230px]"
         />
-        <Image
+        {/* <Image
           src="/images/logos/logo-text.png"
           alt="logo"
           width={80}
           height={80}
           className="block sm:hidden"
-        />
+        /> */}
       </Link>
     </div>
   );

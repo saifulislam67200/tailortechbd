@@ -21,7 +21,7 @@ export const admin: IDashboardNavLinks[] = [
     path: "/dashboard",
   },
   {
-    label: "Product Inventory",
+    label: "Product Management",
     icon: MdInventory2,
     children: [
       {
@@ -40,13 +40,13 @@ export const admin: IDashboardNavLinks[] = [
   },
   {
     icon: PiShoppingCartSimpleBold,
-    label: "All Orders",
+    label: "Order Management",
     path: "/dashboard/all-orders",
     element: SidebarElement.PendingOrderCount,
   },
   {
     icon: TbCategory,
-    label: "Manage Categories",
+    label: "Categories Management",
 
     children: [
       {
@@ -67,12 +67,12 @@ export const admin: IDashboardNavLinks[] = [
   },
   {
     icon: PiFlagBannerFoldBold,
-    label: "Manage Banners",
+    label: "Banners Management",
     path: "/dashboard/banners",
   },
   {
     icon: RiAdminLine,
-    label: "User Control",
+    label: "User Management",
     children: [
       {
         path: "/dashboard/manage-admins",
