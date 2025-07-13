@@ -6,18 +6,10 @@ import { useGetMyOrdersQuery } from "@/redux/features/order/order.api";
 import type { IOrder, IShippingAddress } from "@/types/order";
 import { IProduct } from "@/types/product";
 import dateUtils from "@/utils/date";
+import GetStatusStyleAndIcon from "@/utils/GetStatusStyleAndIcon";
 import Image from "next/image";
 import { useState } from "react";
-import {
-  IoCarSport,
-  IoCheckmarkCircle,
-  IoChevronDown,
-  IoCloseCircle,
-  IoCube,
-  IoEye,
-  // IoDownload,
-  IoTime,
-} from "react-icons/io5";
+import { IoChevronDown, IoCube, IoEye } from "react-icons/io5";
 
 export default function OrderHistory() {
   const { data, isLoading } = useGetMyOrdersQuery();
@@ -86,6 +78,8 @@ export default function OrderHistory() {
         ) : (
           orders?.map((order) => {
             const currentStatus = getCurrentStatus(order);
+            const { bg, text, icon, label } = GetStatusStyleAndIcon(currentStatus);
+
             const isExpanded = expandedOrder === order._id;
 
             return (
@@ -98,36 +92,10 @@ export default function OrderHistory() {
                         <h3 className="font-semibold text-primary">{getOrderNumber(order)}</h3>
                         <div className="flex items-center gap-[8px]">
                           <div
-                            className={`inline-flex items-center gap-1 rounded-full px-[8px] py-[4px] text-[12px] font-medium ${
-                              currentStatus === "pending"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : currentStatus === "on-delivery"
-                                  ? "bg-purple-100 text-purple-800"
-                                  : currentStatus === "delivered"
-                                    ? "bg-green-100 text-green-800"
-                                    : currentStatus === "cancelled"
-                                      ? "bg-red-100 text-red-800"
-                                      : "bg-gray-100 text-gray-800"
-                            }`}
+                            className={`inline-flex items-center gap-1 rounded-full px-[8px] py-[4px] text-[12px] font-medium ${bg} ${text}`}
                           >
-                            {currentStatus === "pending" ? (
-                              <IoTime className="h-3 w-3" />
-                            ) : currentStatus === "on-delivery" ? (
-                              <IoCarSport className="h-3 w-3" />
-                            ) : currentStatus === "delivered" ? (
-                              <IoCheckmarkCircle className="h-3 w-3" />
-                            ) : currentStatus === "cancelled" ? (
-                              <IoCloseCircle className="h-3 w-3" />
-                            ) : null}
-                            {currentStatus === "pending"
-                              ? "Pending"
-                              : currentStatus === "on-delivery"
-                                ? "On Delivery"
-                                : currentStatus === "delivered"
-                                  ? "Delivered"
-                                  : currentStatus === "cancelled"
-                                    ? "Cancelled"
-                                    : "Unknown"}
+                            {icon}
+                            {label}
                           </div>
                         </div>
                       </div>
