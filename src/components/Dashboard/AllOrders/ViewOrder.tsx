@@ -13,16 +13,39 @@ import { useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
 import { ImSpinner11 } from "react-icons/im";
-import { MdCancel, MdCheckCircle, MdLocalShipping, MdPending } from "react-icons/md";
+import {
+  MdCancel,
+  MdCheckCircle,
+  MdLocalShipping,
+  MdPending,
+  MdRunningWithErrors,
+} from "react-icons/md";
 import { toast } from "sonner";
 import AddNewItemOnOrder from "./AddNewItemOnOrder";
+import { PiKeyReturnFill } from "react-icons/pi";
+import { RiExchangeFill, RiRefundFill } from "react-icons/ri";
+import { IoCheckmarkDoneCircle } from "react-icons/io5";
 const statuses = [
   {
     id: "pending",
     label: "Pending",
     icon: MdPending,
-    color: "text-success",
+    color: "text-blue-400",
+    bgColor: "bg-blue-100",
+  },
+  {
+    id: "confirmed",
+    label: "Confirmed",
+    icon: IoCheckmarkDoneCircle,
+    color: "text-purple-800",
     bgColor: "bg-success/10",
+  },
+  {
+    id: "processing",
+    label: "Processing",
+    icon: MdRunningWithErrors,
+    color: "text-orange-800",
+    bgColor: "bg-orange-100",
   },
   {
     id: "on-delivery",
@@ -44,6 +67,27 @@ const statuses = [
     icon: MdCancel,
     color: "text-danger",
     bgColor: "bg-danger/10",
+  },
+  {
+    id: "exchange",
+    label: "Exchange",
+    icon: RiExchangeFill,
+    color: "text-blue-800",
+    bgColor: "bg-blue-100",
+  },
+  {
+    id: "returned",
+    label: "Returned",
+    icon: PiKeyReturnFill,
+    color: "text-yellow-800",
+    bgColor: "bg-yellow-100",
+  },
+  {
+    id: "refunded",
+    label: "Refunded",
+    icon: RiRefundFill,
+    color: "text-indigo-800",
+    bgColor: "bg-indigo-100",
   },
 ];
 type ViewOrderProps = {

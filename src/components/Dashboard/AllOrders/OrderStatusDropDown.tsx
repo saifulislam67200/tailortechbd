@@ -10,7 +10,15 @@ const status = [
     value: "pending",
   },
   {
-    label: "On Delivery",
+    label: "Confirmed",
+    value: "confirmed",
+  },
+  {
+    label: "Processing",
+    value: "processing",
+  },
+  {
+    label: "On-Delivery",
     value: "on-delivery",
   },
   {
@@ -20,6 +28,18 @@ const status = [
   {
     label: "Cancelled",
     value: "cancelled",
+  },
+  {
+    label: "Exchange",
+    value: "exchange",
+  },
+  {
+    label: "Returned",
+    value: "returned",
+  },
+  {
+    label: "Refunded",
+    value: "refunded",
   },
 ];
 
