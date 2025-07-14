@@ -5,8 +5,6 @@ import { IProduct } from "@/types/product";
 import { notFound } from "next/navigation";
 import ProductClientProviderAdmin from "./ProductClientProviderAdmin";
 import DashboardPageHeadingTitle from "../Dashboard/DashboardPageHeadingTitle";
-import { BsArrowLeft } from "react-icons/bs";
-import Link from "next/link";
 
 interface IProps {
   params: Promise<{ slug: string }>;
@@ -32,13 +30,6 @@ const ProductDetailsAdmin: React.FC<IProps> = async ({ params }) => {
       <DashboardPageHeadingTitle title="Product Details" />
 
       <div className="relative mt-[10px] w-full bg-white pt-5">
-        <Link
-          href="/dashboard/products"
-          className="ml-7 flex h-7 w-7 cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200 bg-white text-black shadow-md hover:bg-primary/90 hover:text-white"
-        >
-          <BsArrowLeft size={14} />
-        </Link>
-
         <ProductClientProviderAdmin product={product} slug={slug}>
           <h1 className="line-clamp-1 text-[14px] font-semibold text-strong sm:text-[25px]">
             {product?.name}
