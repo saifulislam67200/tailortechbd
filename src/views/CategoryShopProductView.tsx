@@ -8,6 +8,7 @@ import ProductPrimaryCard from "@/components/ui/Card/ProductCard/ProductPrimaryC
 import DataNotFound from "@/components/ui/DataNotFound";
 import { baseUrl } from "@/redux/api/api";
 import { IProduct } from "@/types/product";
+import Image from "next/image";
 
 interface IProps {
   params: Promise<{ slug: string }>;
@@ -29,6 +30,12 @@ const CategoryShopProductView: React.FC<IProps> = async ({ searchParams, params 
       cache: "no-cache",
     }
   );
+
+  const categoryRes = await fetch(`${baseUrl}/category/get/${slug}`, {
+    cache: "no-cache",
+  });
+
+  const categoryData = (await categoryRes.json()) || [];
 
   const data = (await res.json()) as {
     data: IProduct[];
@@ -54,9 +61,23 @@ const CategoryShopProductView: React.FC<IProps> = async ({ searchParams, params 
       return data.data || [];
     }
   };
+
   return (
     <div className="main_container py-[20px]">
       <Breadcrumb />
+      {categoryData?.data?.banner && (
+        <div className="relative mt-[10px] aspect-[16/6] w-full overflow-hidden sm:mt-0">
+          <Image
+            src={categoryData.data.banner}
+            alt={categoryData.data.label || "Category banner"}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1400px"
+            quality={85}
+            priority
+          />
+        </div>
+      )}
       <div className="my-[20px] flex flex-wrap items-center justify-between gap-[10px] border-[1px] border-border-muted bg-white p-[16px]">
         <p className="font-bold">
           Total <span className="font-[700] text-primary">{data.meta.totalDoc}</span> Products Found

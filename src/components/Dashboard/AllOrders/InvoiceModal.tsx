@@ -6,6 +6,17 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
 import { toast } from "sonner";
 
+const generateInvoiceNumber = (orderItem: IOrder) => {
+  const orderIdPart = orderItem?._id?.slice(-8)?.toUpperCase() || "XXXXXX";
+
+  const phone = orderItem?.shippingAddress?.phoneNumber || "";
+  const mobilePart = phone.slice(-4).padStart(4, "0");
+  const now = new Date();
+  const datePart = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}`;
+
+  return `INV-${datePart}-${orderIdPart}-${mobilePart}`;
+};
+
 const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
   const invoiceRef = useRef<HTMLDivElement>(null);
 
@@ -30,8 +41,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
     hour12: true,
   });
 
-  // Generate invoice number (you might want to use actual order ID or custom logic)
-  const invoiceNumber = `INV-${orderItem._id?.slice(-8)?.toUpperCase() || "XXXXXXXX"}`;
+  const invoiceNumber = generateInvoiceNumber(orderItem);
 
   const handleDownloadPDF = async () => {
     if (!invoiceRef.current) return;

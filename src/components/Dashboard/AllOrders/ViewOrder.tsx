@@ -9,7 +9,7 @@ import { IQueruMutationErrorResponse } from "@/types";
 import { IOrder, IOrderStatus } from "@/types/order";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
 import { ImSpinner11 } from "react-icons/im";
@@ -108,6 +108,7 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
   const [orderItemView, setOrderItemView] = useState(orderItem);
   const checkCurrentStatus = orderItemView.status[orderItemView.status.length - 1];
   const [currentStatus, setCurrentStatus] = useState(checkCurrentStatus?.status);
+  const [showInvoiceButton, setShowInvoiceButton] = useState(false);
 
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -203,6 +204,21 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
     toast.success("Order updated successfully");
   };
 
+  useEffect(() => {
+    if (!orderItem?.status || !Array.isArray(orderItem.status)) {
+      setShowInvoiceButton(false);
+      return;
+    }
+    const hasProcessing = orderItem.status.some((statusObj) => {
+      const status = String(statusObj?.status || "")
+        .toLowerCase()
+        .trim();
+      return status.includes("processing");
+    });
+
+    setShowInvoiceButton(hasProcessing);
+  }, [orderItem?.status]);
+
   return (
     <div className="mb-32 rounded-md bg-white p-6">
       <button
@@ -217,7 +233,7 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
           <div className="mb-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-primary sm:text-[24px]">Orders List</h2>
-              {<InvoiceModal orderItem={orderItem} />}
+              {showInvoiceButton && <InvoiceModal orderItem={orderItem} />}
             </div>
             <p className="text-info">ORD-${orderItemView?._id?.slice(-8).toUpperCase()}</p>
           </div>

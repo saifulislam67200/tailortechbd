@@ -15,6 +15,7 @@ import ViewOrder from "./ViewOrder";
 import dateUtils from "@/utils/date";
 
 const tableHead = [
+  { label: "SL", field: "" },
   { label: "Customer Info", field: "name" },
   { label: "Product", field: "product" },
   { label: "Total Items", field: "price" },
@@ -166,8 +167,10 @@ const AllOrderTable = () => {
                   {isLoading ? (
                     <TableSkeleton columns={tableHead.length} />
                   ) : (
-                    orders?.map((order) => (
+                    orders?.map((order, index) => (
                       <tr key={order._id} className="hover:bg-gray-50">
+                        <td className="px-[24px] py-[16px]">{index + 1}</td>
+
                         {/* Customer Info */}
                         <td className="w-[180px] px-[24px] py-[16px]">
                           <span className="flex max-w-[150px] flex-col">

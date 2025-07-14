@@ -23,13 +23,23 @@ const CreateCategoryForm = () => {
         then: (schema) => schema.required("Thumbnail URL is required when visibility is enabled"),
         otherwise: (schema) => schema.notRequired(),
       }),
+    banner: Yup.string()
+      .url("Invalid URL")
+      .when("display", {
+        is: true,
+        then: (schema) => schema.required("Banner URL is required when visibility is enabled"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
     display: Yup.boolean(),
+    bannerDisplay: Yup.boolean(),
   });
 
   const initialValues = {
     label: "",
     thumbnail: "",
     display: false,
+    banner: "",
+    bannerDisplay: false,
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -72,6 +82,7 @@ const CreateCategoryForm = () => {
 
               <div className="space-y-2">
                 <ImageUploader
+                  inputId="thumbnail-uploader"
                   onChange={(images) => {
                     const lastImage = images ? images[images.length - 1] : "";
                     setFieldValue("thumbnail", lastImage);
@@ -114,6 +125,55 @@ const CreateCategoryForm = () => {
                 <p className="text-xs text-gray-500">
                   Toggle whether this category should be displayed to users on the homepage bellow
                   the banner is top categories section.
+                </p>
+              </div>
+
+              {/* banner  */}
+
+              <div className="mt-10 space-y-2 border-t border-slate-200 pt-10">
+                <ImageUploader
+                  inputId="banner-uploader"
+                  onChange={(images) => {
+                    const lastImage = images ? images[images.length - 1] : "";
+                    setFieldValue("banner", lastImage);
+                  }}
+                >
+                  <label htmlFor="banner" className="block text-sm font-[700] text-primary">
+                    Banner URL <span className="text-muted">(optional)</span>
+                  </label>
+                </ImageUploader>
+                <ErrorMessage name="banner" component="p" className="text-sm text-danger" />
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-primary">Banner Visibility</label>
+                <div className="flex items-center space-x-3">
+                  <button
+                    type="button"
+                    onClick={() => setFieldValue("bannerDisplay", !values.bannerDisplay)}
+                    className={`relative inline-flex h-6 w-11 cursor-pointer items-center rounded-full transition-colors ${
+                      values.bannerDisplay ? "bg-success" : "bg-muted"
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        values.bannerDisplay ? "translate-x-6" : "translate-x-1"
+                      }`}
+                    />
+                  </button>
+                  <div className="flex items-center space-x-2">
+                    {values.bannerDisplay ? (
+                      <>
+                        <BsEye className="h-4 w-4 text-success" />
+                        <span className="text-sm text-primary">Visible on Category Page</span>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500">
+                  Toggle to show or hide this category banner on the category page.
                 </p>
               </div>
 
