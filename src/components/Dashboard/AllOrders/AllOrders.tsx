@@ -6,7 +6,6 @@ export default function OrderList() {
     <div className="flex flex-col gap-[10px]">
       <DashboardPageHeadingTitle title="All Orders" />
       <AllOrderTable />
-      {/* <GenerateInvoiceModal /> */}
     </div>
   );
 }

@@ -4,6 +4,7 @@ export interface IOrderItem {
     image: string;
     name: string;
     price: number;
+    slug?: string;
   };
   color: string;
   size: string;
@@ -11,7 +12,16 @@ export interface IOrderItem {
 }
 
 export interface IOrderStatus {
-  status: "pending" | "on-delivery" | "delivered" | "cancelled";
+  status:
+    | "pending"
+    | "confirmed"
+    | "processing"
+    | "on-delivery"
+    | "delivered"
+    | "cancelled"
+    | "exchange"
+    | "returned"
+    | "refunded";
   createdAt?: string;
 }
 

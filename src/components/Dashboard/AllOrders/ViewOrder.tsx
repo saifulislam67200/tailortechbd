@@ -26,6 +26,7 @@ import { PiKeyReturnFill } from "react-icons/pi";
 import { RiExchangeFill, RiRefundFill } from "react-icons/ri";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
 import InvoiceModal from "./InvoiceModal";
+import { useRouter } from "next/navigation";
 const statuses = [
   {
     id: "pending",
@@ -91,6 +92,7 @@ const statuses = [
     bgColor: "bg-indigo-100",
   },
 ];
+
 type ViewOrderProps = {
   setIsViewOrder: React.Dispatch<React.SetStateAction<boolean>>;
   orderItem: IOrder;
@@ -98,7 +100,7 @@ type ViewOrderProps = {
 
 export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps) {
   const [initialOrderItemView, setInitialOrderItemView] = useState(orderItem);
-
+  const router = useRouter();
   const [changeOrderStatus, { isLoading }] = useChangeOrderStatusMutation();
 
   const [updateOrder, { isLoading: isUpdating }] = useUpdateOrderMutation();
@@ -205,19 +207,18 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
   };
 
   useEffect(() => {
-    if (!orderItem?.status || !Array.isArray(orderItem.status)) {
-      setShowInvoiceButton(false);
-      return;
-    }
-    const hasProcessing = orderItem.status.some((statusObj) => {
-      const status = String(statusObj?.status || "")
+    const hasProcessing = orderItem?.status?.some((statusObj) =>
+      String(statusObj?.status || "")
         .toLowerCase()
-        .trim();
-      return status.includes("processing");
-    });
+        .includes("processing")
+    );
 
-    setShowInvoiceButton(hasProcessing);
+    setShowInvoiceButton(!!hasProcessing);
   }, [orderItem?.status]);
+
+  const productDetails = (slug: string) => {
+    router.push(`/dashboard/product-details/${slug}`);
+  };
 
   return (
     <div className="mb-32 rounded-md bg-white p-6">
@@ -412,52 +413,55 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
               )}
             </div>
             <div className="w-full space-y-4">
-              {orderItemView?.orderItems?.map((item, i) => (
-                <div
-                  key={item?.product_id}
-                  className="flex w-full items-center justify-between gap-[10px] rounded-md border border-border-muted bg-white p-[16px]"
-                >
-                  <div className="flex items-center gap-[16px]">
-                    <div className="overflow-hidden rounded-md bg-slate-200">
-                      <Image
-                        src={item?.product?.image || "/images/avatar.jpg"}
-                        width={100}
-                        height={100}
-                        alt={`${item?.product?.name || "Product"} image`}
-                        className="h-16 w-16 object-contain object-center"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-[14px]">
-                        <span className="font-semibold text-primary">Name: </span>
-                        {item?.product?.name}
-                      </p>
-                      <p className="text-[14px]">
-                        <span className="font-semibold text-primary">Quantity: </span>
-                        {item?.quantity}
-                      </p>
-                      {item?.color ? (
+              {orderItemView?.orderItems?.map((item, i) => {
+                return (
+                  <div
+                    onClick={() => productDetails(item?.product?.slug || "")}
+                    key={item?.product_id}
+                    className="flex w-full cursor-pointer items-center justify-between gap-[10px] rounded-md border border-border-muted bg-white p-[16px]"
+                  >
+                    <div className="flex items-center gap-[16px]">
+                      <div className="overflow-hidden rounded-md bg-slate-200">
+                        <Image
+                          src={item?.product?.image || "/images/avatar.jpg"}
+                          width={100}
+                          height={100}
+                          alt={`${item?.product?.name || "Product"} image`}
+                          className="h-16 w-16 object-contain object-center"
+                        />
+                      </div>
+                      <div>
                         <p className="text-[14px]">
-                          <span className="font-semibold text-primary">Color: </span>
-                          {item?.color}
+                          <span className="font-semibold text-primary">Name: </span>
+                          {item?.product?.name}
                         </p>
-                      ) : (
-                        ""
-                      )}
+                        <p className="text-[14px]">
+                          <span className="font-semibold text-primary">Quantity: </span>
+                          {item?.quantity}
+                        </p>
+                        {item?.color ? (
+                          <p className="text-[14px]">
+                            <span className="font-semibold text-primary">Color: </span>
+                            {item?.color}
+                          </p>
+                        ) : (
+                          ""
+                        )}
+                      </div>
                     </div>
+                    {isEditMode ? (
+                      <button
+                        className="shrink-0 cursor-pointer bg-danger/10 p-[5px] text-danger"
+                        onClick={() => handleRemoveOrderItem(i)}
+                      >
+                        <FaTrashAlt />
+                      </button>
+                    ) : (
+                      ""
+                    )}
                   </div>
-                  {isEditMode ? (
-                    <button
-                      className="shrink-0 cursor-pointer bg-danger/10 p-[5px] text-danger"
-                      onClick={() => handleRemoveOrderItem(i)}
-                    >
-                      <FaTrashAlt />
-                    </button>
-                  ) : (
-                    ""
-                  )}
-                </div>
-              ))}
+                );
+              })}
               {isEditMode ? (
                 <div className="flex w-full items-center justify-between gap-[10px]">
                   <AddNewItemOnOrder

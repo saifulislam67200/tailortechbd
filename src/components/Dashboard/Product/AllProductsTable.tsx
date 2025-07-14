@@ -1,5 +1,4 @@
 "use client";
-
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Pagination from "@/components/ui/Pagination";
 import TableDataNotFound from "@/components/ui/TableDataNotFound";
@@ -14,10 +13,12 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { GoPencil } from "react-icons/go";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import DeleteProductById from "./DeleteProductById";
+import { useRouter } from "next/navigation";
 
 const tableHead = [
-  { label: "Name", field: "name" },
+  { label: "SL", field: "" },
   { label: "Product Id", field: "sku" },
+  { label: "Name", field: "name" },
   { label: "Price", field: "price" },
   { label: "Discount (%)", field: "discount" },
   { label: "Category", field: "" },
@@ -32,6 +33,7 @@ const AllProductsTable = ({
 }) => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
+  const router = useRouter();
 
   const [query, setQuery] = useState<Record<string, string | number>>({
     page: 1,
@@ -51,6 +53,10 @@ const AllProductsTable = ({
       ...prev,
       sort: `${newOrder === "desc" ? "-" : ""}${field}`,
     }));
+  };
+
+  const productDetails = (slug: string) => {
+    router.push(`/dashboard/product-details/${slug}`);
   };
 
   return (
@@ -132,9 +138,26 @@ const AllProductsTable = ({
               {isLoading ? (
                 <TableSkeleton columns={tableHead.length} />
               ) : data?.data.length ? (
-                productData?.map((product) => (
+                productData?.map((product, index) => (
                   <tr key={product?._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4">
+                    <td
+                      className="cursor-pointer px-6 py-4"
+                      onClick={() => productDetails(product?.slug)}
+                    >
+                      <span className="text-[14px]"> {index + 1}</span>
+                    </td>
+
+                    <td
+                      className="cursor-pointer px-6 py-4"
+                      onClick={() => productDetails(product?.slug)}
+                    >
+                      <span className="text-[14px]"> {product?.sku ? product?.sku : "N/A"}</span>
+                    </td>
+
+                    <td
+                      className="cursor-pointer px-6 py-4"
+                      onClick={() => productDetails(product?.slug)}
+                    >
                       <div className="flex items-center gap-[5px]">
                         <span className="flex aspect-square max-h-[50px] w-[50px] items-center justify-start bg-white">
                           <Image
@@ -148,9 +171,7 @@ const AllProductsTable = ({
                         <span className="line-clamp-1 text-[14px]">{product.name}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]"> {product?.sku ? product?.sku : "N/A"}</span>
-                    </td>
+
                     <td className="px-6 py-4">
                       <span className="text-[14px]">৳ {product.price}</span>
                     </td>
