@@ -11,6 +11,7 @@ import { FreeMode, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper/types";
 
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -59,18 +60,27 @@ const ZoomableImage = ({
       ref={imageContainerRef}
       data-pswp-width={width}
       data-pswp-height={height}
-      className="relative aspect-square h-full max-h-[600px] w-full cursor-crosshair border border-info-light p-[5px] lg:p-[0px]"
+      className="group/zoomable relative aspect-square h-full max-h-[600px] w-full cursor-crosshair border border-info-light p-[5px] lg:p-[0px]"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
     >
+      <Image
+        src={src}
+        width={831}
+        height={598}
+        alt="product image"
+        className="relative z-[1] aspect-[831/598] w-full object-contain"
+      />
+
       <div
-        className="h-full w-full bg-center bg-no-repeat"
+        className="absolute top-0 left-0 z-[2] h-full w-full bg-center bg-no-repeat opacity-0 group-hover/zoomable:opacity-100"
         style={{
           backgroundImage: `url(${src})`,
           backgroundSize: zoomable
             ? `${imageSize.width * zoomLevel}px ${imageSize.height * zoomLevel}px`
             : "contain",
+          transition: "opacity 0.3s ease-in-out",
           backgroundPosition: zoomable
             ? `${clamp(
                 -cursorPos.x * zoomLevel + imageSize.width / 2,
