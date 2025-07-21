@@ -4,74 +4,79 @@ import Pagination from "@/components/ui/Pagination";
 import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import useDebounce from "@/hooks/useDebounce";
-import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
-import dateUtils from "@/utils/date";
-import Image from "next/image";
+import { useGetProductStockQuery } from "@/redux/features/product/product.api";
 import Link from "next/link";
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { GoPencil } from "react-icons/go";
 import { RxMagnifyingGlass } from "react-icons/rx";
-import DeleteProductById from "./DeleteProductById";
 import { useRouter } from "next/navigation";
 
-const tableHead = [
+const outOfStockTableHeaders = [
   { label: "SL", field: "" },
-  { label: "Product Id", field: "sku" },
-  { label: "Name", field: "name" },
-  { label: "Price", field: "price" },
-  { label: "Discount (%)", field: "discount" },
+  { label: "Product Code", field: "" },
+  { label: "Name", field: "" },
+  { label: "Price", field: "" },
   { label: "Category", field: "" },
-  { label: "Date Created", field: "createdAt" },
+  { label: "Stock", field: "" },
+  { label: "Value", field: "" },
+  { label: "Status", field: "" },
+  { label: "Sub Category", field: "" },
   { label: "Actions", field: "" },
 ];
 
-const AllProductsTable = ({
-  handleCheckProductStocks,
-}: {
-  handleCheckProductStocks: () => void;
-}) => {
+const OutOfStockProductsTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
+  const [timeFrameFilter, setTimeFrameFilter] = useState<
+    "all" | "today" | "this-week" | "this-month"
+  >("all");
   const router = useRouter();
 
-  const [query, setQuery] = useState<Record<string, string | number>>({
+  const [outOfStockQuery, setOutOfStockQuery] = useState<Record<string, string | number>>({
     page: 1,
-    fields: "name,slug,price,images,discount,category,createdAt",
+    fields: "name,category,createdAt,stock,status",
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
+    timeframe: "all",
   });
 
-  const { data, isLoading } = useGetAllProductsQuery({ ...query, searchTerm });
-  const productData = data?.data || [];
-  const metaData = data?.meta || { totalDoc: 0, page: 1 };
+  const { data: outOfStockData, isLoading: isOutOfStockLoading } = useGetProductStockQuery({
+    ...outOfStockQuery,
+    searchTerm,
+    status: "out-of-stock",
+    limit: 100,
+    timeframe: timeFrameFilter,
+  });
+  const outOfStockProducts = outOfStockData?.data || [];
+  const outOfStockMetaData = outOfStockData?.meta || { totalDoc: 0, page: 1 };
 
   const handleSort = (field: string) => {
     const newOrder = sort.field === field && sort.order === "asc" ? "desc" : "asc";
     setSort({ field, order: newOrder });
-    setQuery((prev) => ({
+    setOutOfStockQuery((prev) => ({
       ...prev,
       sort: `${newOrder === "desc" ? "-" : ""}${field}`,
     }));
   };
 
-  const productDetails = (slug: string) => {
-    router.push(`/dashboard/product-details/${slug}`);
+  const viewProductDetails = (productId: string) => {
+    router.push(`/dashboard/product-details/${productId}`);
   };
 
   return (
     <div className="flex flex-col gap-[10px]">
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
         <div className="flex flex-col gap-[5px]">
-          <h1 className="text-[16px] font-[600]">Product List</h1>
+          <h1 className="text-[16px] font-[600]">Out-of-Stock Products</h1>
           <p className="text-[12px] text-muted md:text-[14px]">
-            Displaying All the available products in your store. There is total{" "}
-            <span className="font-bold text-dashboard">{metaData.totalDoc}</span> products. Data is
-            Devided into{" "}
+            Displaying all out of stock products in your store. Total{" "}
+            <span className="font-bold text-dashboard">{outOfStockMetaData.totalDoc}</span>{" "}
+            products. Divided into{" "}
             <span className="font-bold text-dashboard">
-              {Math.ceil(metaData.totalDoc / 10)} pages
+              {Math.ceil(outOfStockMetaData.totalDoc / 10)} pages
             </span>{" "}
             & currently showing page{" "}
-            <span className="font-bold text-dashboard">{metaData.page}.</span>
+            <span className="font-bold text-dashboard">{outOfStockMetaData.page}.</span>
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
@@ -80,45 +85,52 @@ const AllProductsTable = ({
             <input
               type="text"
               className="w-full bg-transparent outline-none"
-              placeholder="Search Product"
+              placeholder="Search out-of-stock products"
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <RxMagnifyingGlass />
           </div>
 
-          <button
-            onClick={handleCheckProductStocks}
-            className="text- flex w-[120px] cursor-pointer items-center justify-center bg-primary/80 py-[4px] text-white transition-colors duration-100 hover:bg-primary"
-          >
-            Check Stocks
-          </button>
+          <div className="flex items-center gap-2">
+            <label className="text-sm">Filter:</label>
+            <select
+              value={timeFrameFilter}
+              onChange={(e) => setTimeFrameFilter(e.target.value as "all")}
+              className="h-[33px] border border-quaternary px-2 text-sm focus:outline-none"
+            >
+              <option value="all">All</option>
+              <option value="today">Today</option>
+              <option value="this-week">This Week</option>
+              <option value="this-month">This Month</option>
+            </select>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full divide-y divide-dashboard/20">
             <thead className="bg-dashboard/10">
               <tr>
-                {tableHead.map((heading) => (
+                {outOfStockTableHeaders.map((header) => (
                   <th
-                    key={heading.field || heading.label}
+                    key={header.field || header.label}
                     className="px-6 py-3 text-left text-sm font-semibold text-dashboard uppercase"
                   >
-                    {heading.field ? (
+                    {header.field ? (
                       <button
                         className="flex cursor-pointer items-center gap-1"
-                        onClick={() => handleSort(heading.field)}
+                        onClick={() => handleSort(header.field)}
                       >
-                        <span>{heading.label}</span>
+                        <span>{header.label}</span>
                         <span className="flex flex-col text-[10px] leading-[10px]">
                           <FaChevronUp
                             className={`${
-                              sort.field === heading.field && sort.order === "asc"
+                              sort.field === header.field && sort.order === "asc"
                                 ? "font-bold text-dashboard"
                                 : "text-dashboard/30"
                             }`}
                           />
                           <FaChevronDown
                             className={`${
-                              sort.field === heading.field && sort.order === "desc"
+                              sort.field === header.field && sort.order === "desc"
                                 ? "font-bold text-dashboard"
                                 : "text-dashboard/30"
                             }`}
@@ -126,7 +138,7 @@ const AllProductsTable = ({
                         </span>
                       </button>
                     ) : (
-                      heading.label
+                      header.label
                     )}
                   </th>
                 ))}
@@ -134,87 +146,83 @@ const AllProductsTable = ({
             </thead>
 
             <tbody className="divide-y divide-dashboard/20">
-              {isLoading ? (
-                <TableSkeleton columns={tableHead.length} />
-              ) : data?.data.length ? (
-                productData?.map((product, index) => (
+              {isOutOfStockLoading ? (
+                <TableSkeleton columns={outOfStockTableHeaders.length} />
+              ) : outOfStockProducts.length ? (
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                //@ts-ignore
+                outOfStockProducts.map((product, index) => (
                   <tr key={product?._id} className="hover:bg-gray-50">
-                    <td
-                      className="cursor-pointer px-6 py-4"
-                      onClick={() => productDetails(product?.slug)}
-                    >
-                      <span className="text-[14px]"> {index + 1}</span>
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">{index + 1}</span>
+                    </td>
+
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">{product?.productCode || "N/A"}</span>
                     </td>
 
                     <td
                       className="cursor-pointer px-6 py-4"
-                      onClick={() => productDetails(product?.slug)}
+                      onClick={() => viewProductDetails(product._id)}
                     >
-                      <span className="text-[14px]"> {product?.sku ? product?.sku : "N/A"}</span>
-                    </td>
-
-                    <td
-                      className="cursor-pointer px-6 py-4"
-                      onClick={() => productDetails(product?.slug)}
-                    >
-                      <div className="flex items-center gap-[5px]">
-                        <span className="flex aspect-square max-h-[50px] w-[50px] items-center justify-start bg-white">
-                          <Image
-                            src={product.images[0]}
-                            alt={`${product.name} image`}
-                            width={80}
-                            height={80}
-                            className="mx-auto h-full w-auto max-w-full object-contain"
-                          />
-                        </span>
-                        <span className="line-clamp-1 text-[14px]">{product.name}</span>
-                      </div>
+                      <span className="line-clamp-1 text-[14px]">{product.productName}</span>
                     </td>
 
                     <td className="px-6 py-4">
                       <span className="text-[14px]">৳ {product.price}</span>
                     </td>
+
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">{product.discount || "N/A"}</span>
+                      <span className="text-[14px]">{product.category || "N/A"}</span>
                     </td>
+
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">
-                        {typeof product.category === "string"
-                          ? product.category
-                          : product.category?.label || "N/A"}
+                      <span className="text-[14px]">{product.stock || "N/A"}</span>
+                    </td>
+
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">৳ {product.value || "N/A"}</span>
+                    </td>
+
+                    <td className="px-6 py-4">
+                      <span className="text-[14px] text-red-500">
+                        {product.status || "Out of Stock"}
                       </span>
                     </td>
+
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">
-                        {dateUtils.formateCreateOrUpdateDate(product.createdAt) || "N/A"}
-                      </span>
+                      <span className="text-[14px]">{product.subCategory || "N/A"}</span>
                     </td>
+
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-[8px]">
                         <Link
-                          href={`/dashboard/products/${product.slug}`}
+                          href={`/dashboard/products/${product._id}`}
                           className="center aspect-square w-[30px] cursor-pointer rounded-full border-[1px] border-dashboard bg-dashboard/5 text-dashboard"
                         >
                           <GoPencil />
                         </Link>
-                        <DeleteProductById productId={product._id} productName={product.name} />
                       </div>
                     </td>
                   </tr>
                 ))
               ) : (
-                <TableDataNotFound span={tableHead.length} message="No Product Found" />
+                <TableDataNotFound
+                  span={outOfStockTableHeaders.length}
+                  message="No Out-of-Stock Products Found"
+                />
               )}
             </tbody>
           </table>
         </div>
       </div>
       <Pagination
-        totalDocs={metaData.totalDoc}
-        onPageChange={(page) => setQuery({ ...query, page })}
+        totalDocs={outOfStockMetaData.totalDoc}
+        page={outOfStockMetaData.page}
+        onPageChange={(page) => setOutOfStockQuery({ ...outOfStockQuery, page })}
       />
     </div>
   );
 };
 
-export default AllProductsTable;
+export default OutOfStockProductsTable;
