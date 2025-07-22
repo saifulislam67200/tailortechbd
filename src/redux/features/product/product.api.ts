@@ -53,6 +53,18 @@ const productApi = api.injectEndpoints({
       },
       providesTags: ["product"],
     }),
+
+    getProductStock: builder.query({
+      query: (query) => {
+        const queryString = generateQueryParams(query);
+        return {
+          url: `/product/stock-status?${queryString}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["product"],
+    }),
+
     updateProductByProductId: builder.mutation<
       { data: IProduct },
       { payload: Partial<IProduct>; productId: string }
@@ -84,4 +96,5 @@ export const {
   useGetRelatedProuctsByProductSlugQuery,
   useGetTopProuctsQuery,
   useDeleteProductByIdMutation,
+  useGetProductStockQuery,
 } = productApi;
