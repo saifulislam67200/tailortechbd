@@ -42,9 +42,9 @@ const OutOfStockProductsTable = () => {
 
   const { data: outOfStockData, isLoading: isOutOfStockLoading } = useGetProductStockQuery({
     ...outOfStockQuery,
-    searchTerm,
+    search: searchTerm,
     status: "out-of-stock",
-    limit: 100,
+    limit: 10,
     timeframe: timeFrameFilter,
   });
   const outOfStockProducts = outOfStockData?.data || [];
@@ -59,8 +59,8 @@ const OutOfStockProductsTable = () => {
     }));
   };
 
-  const viewProductDetails = (productId: string) => {
-    router.push(`/dashboard/product-details/${productId}`);
+  const viewProductDetails = (slug: string) => {
+    router.push(`/dashboard/product-details/${slug}`);
   };
 
   return (
@@ -157,13 +157,16 @@ const OutOfStockProductsTable = () => {
                       <span className="text-[14px]">{index + 1}</span>
                     </td>
 
-                    <td className="px-6 py-4">
+                    <td
+                      className="cursor-pointer px-6 py-4"
+                      onClick={() => viewProductDetails(product.slug)}
+                    >
                       <span className="text-[14px]">{product?.productCode || "N/A"}</span>
                     </td>
 
                     <td
                       className="cursor-pointer px-6 py-4"
-                      onClick={() => viewProductDetails(product._id)}
+                      onClick={() => viewProductDetails(product.slug)}
                     >
                       <span className="line-clamp-1 text-[14px]">{product.productName}</span>
                     </td>
@@ -197,7 +200,7 @@ const OutOfStockProductsTable = () => {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-[8px]">
                         <Link
-                          href={`/dashboard/products/${product._id}`}
+                          href={`/dashboard/products/${product.slug}`}
                           className="center aspect-square w-[30px] cursor-pointer rounded-full border-[1px] border-dashboard bg-dashboard/5 text-dashboard"
                         >
                           <GoPencil />
