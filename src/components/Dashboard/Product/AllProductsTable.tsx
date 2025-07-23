@@ -14,6 +14,7 @@ import { GoPencil } from "react-icons/go";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import DeleteProductById from "./DeleteProductById";
 import { useRouter } from "next/navigation";
+import BarcodeGeneratorProductSelect from "./BarcodeGeneratorProductSelect";
 
 const tableHead = [
   { label: "SL", field: "" },
@@ -191,6 +192,7 @@ const AllProductsTable = ({
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-[8px]">
+                        <BarcodeGeneratorProductSelect product={product} />
                         <Link
                           href={`/dashboard/products/${product.slug}`}
                           className="center aspect-square w-[30px] cursor-pointer rounded-full border-[1px] border-dashboard bg-dashboard/5 text-dashboard"
