@@ -1,10 +1,9 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
 import JsBarcode from "jsbarcode";
-import html2canvas from "html2canvas";
+import html2canvas from "html2canvas-pro";
 import { toast } from "sonner";
 import DialogProvider from "@/components/ui/DialogProvider";
-import Logo from "@/components/Shared/Logo";
 import { PiBarcodeLight } from "react-icons/pi";
 
 interface BarcodeGeneratorProps {
@@ -17,21 +16,25 @@ interface BarcodeGeneratorProps {
   size?: string;
   color?: string;
   autoDownload?: boolean;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 const BarcodeGenerator = ({
   price = "N/A",
   discount = "0",
-  brandName = "Tallortech",
+  brandName = "Tailortech",
   productName = "N/A",
   productCode = "N/A",
   size = "N/A",
   color = "N/A",
   autoDownload = false,
+  isOpen = false,
+  onClose,
 }: BarcodeGeneratorProps) => {
   const barcodeRef = useRef<HTMLDivElement>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
   // Calculate discounted price
@@ -39,31 +42,48 @@ const BarcodeGenerator = ({
   const discountValue = parseFloat(discount.toString());
   const discountedPrice = (originalPrice - originalPrice * (discountValue / 100)).toFixed(2);
 
-  // Generate current date
-  const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const barcodeValue = `${productCode}`;
+  const modalOpen = isOpen !== undefined ? isOpen : internalIsOpen;
+  const setModalOpen = onClose || setInternalIsOpen;
 
-  const barcodeValue = `${productCode} - ${size} - ${color}`;
-
-  const generateBarcode = () => {
-    if (!svgRef.current || !barcodeValue) return;
-    try {
-      JsBarcode(svgRef.current, barcodeValue, {
-        format: "CODE128",
-        lineColor: "#000000",
-        width: 2,
-        height: 100,
-        displayValue: false,
-        margin: 10,
-      });
-    } catch (error) {
-      toast.error("Failed to generate barcode");
-      console.error("Barcode generation error:", error);
-    }
+  // Generate barcodes for all canvases
+  const generateBarcodes = () => {
+    return new Promise<void>((resolve) => {
+      let completed = 0;
+      for (let i = 0; i < 40; i++) {
+        const canvas = canvasRefs.current[i];
+        if (canvas) {
+          try {
+            JsBarcode(canvas, barcodeValue, {
+              format: "CODE128",
+              lineColor: "#000000",
+              width: 1.2,
+              height: 40,
+              displayValue: false,
+              margin: 3,
+            });
+            completed++;
+            if (completed === 40) {
+              resolve();
+            }
+          } catch (error) {
+            if (i === 0) {
+              toast.error("Failed to generate barcode");
+              console.error("Barcode generation error:", error);
+            }
+            completed++;
+            if (completed === 40) {
+              resolve();
+            }
+          }
+        } else {
+          completed++;
+          if (completed === 40) {
+            resolve();
+          }
+        }
+      }
+    });
   };
 
   const handleDownload = async () => {
@@ -72,23 +92,25 @@ const BarcodeGenerator = ({
     setIsGenerating(true);
 
     try {
-      // Ensure barcode is generated
-      generateBarcode();
+      // Generate bar codes and wait for completion
+      await generateBarcodes();
 
-      // Wait for DOM update
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      // Additional wait to ensure all bar codes are rendered
+      await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // Use html2canvas to capture the element
       const canvas = await html2canvas(barcodeRef.current, {
         backgroundColor: "#ffffff",
-        scale: 2,
+        scale: 3, // Higher scale for better quality
         logging: false,
         useCORS: true,
+        allowTaint: true,
+        width: 2480,
+        height: 3508,
+        foreignObjectRendering: false,
       });
 
-      // Create download link
       const link = document.createElement("a");
-      const fileName = `barcode-${productCode}-${Date.now()}.png`;
+      const fileName = `barcode-sheet-${productCode}-${Date.now()}.png`;
 
       link.download = fileName;
       link.href = canvas.toDataURL("image/png");
@@ -96,113 +118,116 @@ const BarcodeGenerator = ({
       link.click();
       document.body.removeChild(link);
 
-      toast.success("Barcode downloaded successfully!");
+      toast.success("Barcode sheet downloaded successfully!");
     } catch (error) {
       console.error("Download error:", error);
-      toast.error("Failed to download barcode. Please try again.");
+      toast.error("Failed to download barcode sheet. Please try again.");
     } finally {
       setIsGenerating(false);
     }
   };
-  useEffect(() => {
-    if (isOpen) {
-      // Generate barcode when dialog opens
-      const timer = setTimeout(() => {
-        generateBarcode();
 
-        // Auto download if enabled
+  useEffect(() => {
+    if (modalOpen) {
+      const timer = setTimeout(async () => {
+        await generateBarcodes();
         if (autoDownload) {
           setTimeout(() => {
             handleDownload();
-          }, 500);
+          }, 1000);
         }
-      }, 100);
+      }, 200);
 
       return () => clearTimeout(timer);
     }
-  }, [isOpen, autoDownload]);
+  }, [modalOpen, autoDownload]);
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className="center aspect-square w-[30px] cursor-pointer rounded-full border-[1px] border-dashboard bg-dashboard/5 text-dashboard"
-      >
-        <PiBarcodeLight size={20} />
-      </button>
+      {isOpen === undefined && (
+        <button
+          onClick={() => setInternalIsOpen(true)}
+          className="center aspect-square w-[30px] cursor-pointer rounded-full border-[1px] border-dashboard bg-dashboard/5 text-dashboard"
+        >
+          <PiBarcodeLight size={20} />
+        </button>
+      )}
 
       <DialogProvider
-        setState={setIsOpen}
-        state={isOpen}
-        className="max-h-[100vh] min-h-[50vh] w-full max-w-[700px] bg-white"
+        setState={setModalOpen}
+        state={modalOpen}
+        className="max-h-[100vh] w-fit overflow-auto bg-white lg:min-h-[50vh]"
       >
-        <div ref={barcodeRef} className="my-6 w-full p-6">
-          <div className="rounded-lg border border-primary/30 bg-white p-6">
-            {/* Header */}
-            <div className="mb-4 flex justify-between border-b pb-4">
-              <div>
-                <Logo className="h-12" />
-                <p className="text-xs text-muted">{formattedDate}</p>
+        <h1 className="my-2 flex justify-center p-3 text-xl font-semibold text-primary lg:hidden">
+          Barcode Sheet
+        </h1>
+        <div
+          ref={barcodeRef}
+          className="mx-auto hidden min-h-[297mm] w-[210mm] grid-cols-4 gap-1 bg-white p-8 font-sans text-xs text-black lg:grid"
+        >
+          {Array.from({ length: 28 }).map((_, index) => (
+            <div
+              key={index}
+              className="flex min-h-[25mm] flex-col justify-between rounded-sm border border-gray-300 bg-white p-2 text-center text-black"
+            >
+              <div className="mb-[1mm] text-[12px] leading-[1.1] font-bold">{brandName}</div>
+
+              <div className="my-[0.5mm] flex justify-center">
+                <canvas
+                  ref={(el) => {
+                    canvasRefs.current[index] = el;
+                  }}
+                  width={120}
+                  height={45}
+                  style={{ maxWidth: "100%" }}
+                />
               </div>
-              <div className="text-right">
-                <p className="font-bold">{brandName}</p>
-                <p className="text-xs text-muted">Product Code: {productCode}</p>
-              </div>
-            </div>
 
-            {/* Barcode Content */}
-            <div className="text-center">
-              <div className="text-lg font-bold">Product Barcode</div>
-              <svg ref={svgRef} className="mx-auto my-4" />
+              <div className="mb-[0.5mm] font-mono text-[8px]">{barcodeValue}</div>
 
-              <div className="my-2 font-mono text-sm">{barcodeValue}</div>
-
-              <div className="my-3">
-                <span
-                  className={`text-xl font-bold ${discountValue > 0 ? "text-danger line-through" : "text-black"}`}
-                >
-                  BDT: {price}
-                </span>
+              <div className="mb-[1mm]">
                 {discountValue > 0 && (
                   <>
-                    <div className="text-base font-bold text-success">{discount}% OFF</div>
-                    <div className="text-xl font-bold">BDT: {discountedPrice}</div>
+                    <div className="text-[10px] font-bold text-primary line-through">
+                      {discount}% OFF
+                    </div>
+                    <div className="text-[14px] font-bold text-black">BDT: {discountedPrice}</div>
                   </>
                 )}
               </div>
-            </div>
 
-            {/* Product Details */}
-            <div className="mt-6 border-t border-dashed border-info/50 pt-4">
-              <div className="mb-3 text-center text-sm font-bold">PRODUCT DETAILS</div>
-              <div className="space-y-1 text-xs">
-                <p>
-                  <strong>Brand:</strong> {brandName}
-                </p>
-                <p>
-                  <strong>Product:</strong> {productName}
-                </p>
-                <p>
-                  <strong>Code:</strong> {productCode}
-                </p>
-                <p>
-                  <strong>Size:</strong> {size}
-                </p>
-                <p>
-                  <strong>Color:</strong> {color}
-                </p>
+              <div className="border-t border-dashed border-slate-400 pt-[2mm] text-left text-[7px]">
+                <div className="mb-[1mm] text-center text-[8px] font-bold">PRODUCT DETAILS</div>
+                <div className="leading-[1.2]">
+                  <div>
+                    <strong>Brand:</strong> {brandName}
+                  </div>
+                  <div>
+                    <strong>Product:</strong> {productName}
+                  </div>
+                  <div>
+                    <strong>Code:</strong> {productCode}
+                  </div>
+                  <div>
+                    <strong>Size:</strong> {size}
+                  </div>
+                  <div>
+                    <strong>Color:</strong> {color}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
+
         {!autoDownload && (
-          <div className="mb-4 flex w-full justify-center">
+          <div className="sticky bottom-0 mb-4 flex w-full justify-center bg-white p-4 lg:border-t">
             <button
-              className="cursor-pointer rounded bg-primary px-4 py-2 text-white disabled:opacity-50"
+              className="cursor-pointer rounded bg-primary px-6 py-3 font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
               onClick={handleDownload}
               disabled={isGenerating}
             >
-              {isGenerating ? "Generating..." : "Download"}
+              {isGenerating ? "Generating..." : "Download PNG"}
             </button>
           </div>
         )}
