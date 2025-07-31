@@ -80,7 +80,7 @@ const ZoomableImage = ({
           backgroundSize: zoomable
             ? `${imageSize.width * zoomLevel}px ${imageSize.height * zoomLevel}px`
             : "contain",
-          transition: "opacity 0.3s ease-in-out",
+          transition: "opacity 1s ease-in-out",
           backgroundPosition: zoomable
             ? `${clamp(
                 -cursorPos.x * zoomLevel + imageSize.width / 2,
