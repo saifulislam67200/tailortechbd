@@ -13,7 +13,6 @@ import type { Swiper as SwiperType } from "swiper/types";
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 interface ZoomableImageProps {
   src: string;
@@ -24,35 +23,11 @@ interface ZoomableImageProps {
 
 const ZoomableImage = ({
   src,
-  zoomLevel = 2.5,
+
   width = 1200,
   height = 1200,
 }: ZoomableImageProps) => {
   const imageContainerRef = useRef<HTMLAnchorElement>(null);
-  const [zoomable, setZoomable] = useState(false);
-  const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-  const [imageSize, setImageSize] = useState({ width: 0, height: 0 });
-
-  const handleMouseEnter = () => {
-    setZoomable(true);
-    if (imageContainerRef.current) {
-      const rect = imageContainerRef.current.getBoundingClientRect();
-      setImageSize({ width: rect.width, height: rect.height });
-    }
-  };
-
-  const handleMouseLeave = () => setZoomable(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setCursorPos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
-  };
-  function clamp(value: number, min: number, max: number): number {
-    return Math.min(Math.max(value, min), max);
-  }
 
   return (
     <Link
@@ -60,10 +35,7 @@ const ZoomableImage = ({
       ref={imageContainerRef}
       data-pswp-width={width}
       data-pswp-height={height}
-      className="group/zoomable relative aspect-square h-full max-h-[600px] w-full cursor-crosshair border border-info-light p-[5px] lg:p-[0px]"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onMouseMove={handleMouseMove}
+      className="group/zoomable relative aspect-square h-full max-h-[600px] w-full cursor-zoom-in border border-info-light p-[5px] lg:p-[0px]"
     >
       <Image
         src={src}
@@ -71,30 +43,6 @@ const ZoomableImage = ({
         height={598}
         alt="product image"
         className="relative z-[1] aspect-[831/598] w-full object-contain"
-      />
-
-      <div
-        className="absolute top-0 left-0 z-[2] h-full w-full bg-center bg-no-repeat opacity-0 group-hover/zoomable:opacity-100"
-        style={{
-          backgroundImage: `url(${src})`,
-          backgroundSize: zoomable
-            ? `${imageSize.width * zoomLevel}px ${imageSize.height * zoomLevel}px`
-            : "contain",
-          transition: "opacity 1s ease-in-out",
-          backgroundPosition: zoomable
-            ? `${clamp(
-                -cursorPos.x * zoomLevel + imageSize.width / 2,
-                -imageSize.width * (zoomLevel - 1),
-                0
-              )}px ${clamp(
-                -cursorPos.y * zoomLevel + imageSize.height / 2,
-                -imageSize.height * (zoomLevel - 1),
-                0
-              )}px`
-            : "center",
-
-          backgroundRepeat: "no-repeat",
-        }}
       />
     </Link>
   );
@@ -158,7 +106,7 @@ const ProductDetailsSlider = ({
         >
           {images.map((img, index) => (
             <SwiperSlide key={index}>
-              <div className="group flex w-full cursor-crosshair flex-col items-center justify-center gap-4 lg:flex-row">
+              <div className="group flex w-full cursor-zoom-in flex-col items-center justify-center gap-4 lg:flex-row">
                 <ZoomableImage src={img} />
               </div>
             </SwiperSlide>
