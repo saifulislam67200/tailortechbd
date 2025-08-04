@@ -26,7 +26,7 @@ import { PiKeyReturnFill } from "react-icons/pi";
 import { RiExchangeFill, RiRefundFill } from "react-icons/ri";
 import { toast } from "sonner";
 import AddNewItemOnOrder from "./AddNewItemOnOrder";
-import InvoiceModal from "./InvoiceModal";
+import InvoiceModal from "./InvoiceModal/InvoiceModal";
 const statuses = [
   {
     id: "pending",

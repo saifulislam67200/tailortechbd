@@ -17,6 +17,7 @@ import { IoCalendarNumberOutline, IoPrintSharp } from "react-icons/io5";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import { useReactToPrint } from "react-to-print";
 import CategorySelector from "./CategorySelector";
+import "./index.css";
 const stockTableHeaders = [
   { label: "SL", field: "" },
   { label: "Product Name", field: "" },

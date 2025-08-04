@@ -4,6 +4,8 @@ import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
+import "./InvoiceModal.css";
+import { toast } from "sonner";
 const generateInvoiceNumber = (orderItem: IOrder) => {
   const orderIdPart = orderItem?._id?.slice(-8)?.toUpperCase() || "XXXXXX";
 

@@ -1,14 +1,14 @@
 "use client";
-import { useState, useEffect } from "react";
-import { IColor, IProduct, ISize } from "@/types/product";
-import { LuX } from "react-icons/lu";
-import HorizontalLine from "@/components/ui/HorizontalLine";
-import DialogProvider from "@/components/ui/DialogProvider";
 import Button from "@/components/ui/Button";
-import BarcodeGenerator from "./BarcodeGenerator";
+import DialogProvider from "@/components/ui/DialogProvider";
+import HorizontalLine from "@/components/ui/HorizontalLine";
+import { IColor, IProduct, ISize } from "@/types/product";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { LuX } from "react-icons/lu";
 import { PiBarcodeLight } from "react-icons/pi";
 import { toast } from "sonner";
+import BarcodeGenerator from "./BarcodeGenerator";
 
 interface BarcodeGeneratorProductSelectProps {
   product: Pick<
@@ -147,10 +147,6 @@ const BarcodeGeneratorProductSelect = ({ product }: BarcodeGeneratorProductSelec
           price={product?.price || "N/A"}
           discount={product?.discount || "0"}
           brandName="Tallortech"
-          productName={product?.name || ""}
-          productCode={product?.sku || product?._id || ""}
-          size={selectedSize.size}
-          color={selectedColor.color}
           autoDownload={false}
           isOpen={isBarcodeModalOpen}
           onClose={() => setIsBarcodeModalOpen(false)}
