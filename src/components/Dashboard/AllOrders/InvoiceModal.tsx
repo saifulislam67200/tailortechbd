@@ -1,11 +1,9 @@
-import Logo from "@/components/Shared/Logo";
 import DialogProvider from "@/components/ui/DialogProvider";
 import { IOrder } from "@/types/order";
-import { useRef, useState } from "react";
-import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
-import { toast } from "sonner";
-
+import jsPDF from "jspdf";
+import { useRef, useState } from "react";
+import { useReactToPrint } from "react-to-print";
 const generateInvoiceNumber = (orderItem: IOrder) => {
   const orderIdPart = orderItem?._id?.slice(-8)?.toUpperCase() || "XXXXXX";
 
@@ -72,54 +70,9 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
     }
   };
 
-  const handlePrint = () => {
-    if (!invoiceRef.current) return;
-
-    const printWindow = window.open("", "_blank");
-
-    if (!printWindow) {
-      toast.warning(
-        "Popup blocker might be preventing the print window. Please allow popups for this site."
-      );
-      return;
-    }
-
-    const htmlContent = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <!-- Tailwind CSS CDN -->
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-        <style>
-          @media print {
-            body {
-              -webkit-print-color-adjust: exact;
-              print-color-adjust: exact;
-            }
-          }
-        </style>
-      </head>
-      <body>
-        ${invoiceRef.current.innerHTML}
-        <script>
-          window.onload = function () {
-            window.print();
-            window.onafterprint = function () {
-              window.close();
-            };
-          };
-        </script>
-      </body>
-    </html>
-  `;
-
-    printWindow.document.open();
-    printWindow.document.write(htmlContent);
-    printWindow.document.close();
-  };
-
+  const handlePrints = useReactToPrint({
+    contentRef: invoiceRef,
+  });
   return (
     <>
       <button
@@ -144,7 +97,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
           </button>
           <button
             className="cursor-pointer rounded bg-primary px-[10] py-[3px] text-white"
-            onClick={handlePrint}
+            onClick={handlePrints}
           >
             Print
           </button>
@@ -156,13 +109,14 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
             <div className="mb-6 flex items-start justify-between border-b pb-4">
               <div className="space-y-1 text-sm">
                 <div className="mb-3">
-                  {/* <Image
-                  src="/TailorTech-01.svg"
-                  width={200}
-                  height={60}
-                  alt="Picture of the author"
-                /> */}
-                  <Logo />
+                  <div className="mb-4 w-[230px]">
+                    <img
+                      src="/images/logos/logo.png"
+                      width={228}
+                      height={38}
+                      className="h-[38px] w-full"
+                    />
+                  </div>
                 </div>
                 <p>
                   <strong>Address:</strong> Kalshi Road, Mirpur-11, Dhaka-1216
@@ -293,13 +247,14 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
             </div>
 
             {/* Signature */}
-            <div className="mt-10 flex justify-between pt-6">
+            <div className="mt-10 flex items-end justify-between pt-6">
               <div className="text-center">
                 <p className="mx-auto w-40 border-t border-gray-400 pt-1 text-gray-700">
                   Customer Sign
                 </p>
               </div>
-              <div className="text-center">
+              <div className="flex flex-col items-center justify-center text-center">
+                <img src={"/images/authorized_sign.png"} className="w-[80px]" />
                 <p className="mx-auto w-40 border-t border-gray-400 pt-1 text-gray-700">
                   Authorized Sign
                 </p>

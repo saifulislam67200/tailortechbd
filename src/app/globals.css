@@ -181,3 +181,9 @@ input[type="number"] {
   box-shadow: inset 0px 0px 0px var(--primary);
   color: var(--primary);
 }
+@media print {
+  @page {
+    /* size: landscape; */
+    margin: 20px;
+  }
+}

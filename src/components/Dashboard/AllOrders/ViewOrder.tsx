@@ -9,10 +9,12 @@ import { IQueruMutationErrorResponse } from "@/types";
 import { IOrder, IOrderStatus } from "@/types/order";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
 import { ImSpinner11 } from "react-icons/im";
+import { IoCheckmarkDoneCircle } from "react-icons/io5";
 import {
   MdCancel,
   MdCheckCircle,
@@ -20,13 +22,11 @@ import {
   MdPending,
   MdRunningWithErrors,
 } from "react-icons/md";
-import { toast } from "sonner";
-import AddNewItemOnOrder from "./AddNewItemOnOrder";
 import { PiKeyReturnFill } from "react-icons/pi";
 import { RiExchangeFill, RiRefundFill } from "react-icons/ri";
-import { IoCheckmarkDoneCircle } from "react-icons/io5";
+import { toast } from "sonner";
+import AddNewItemOnOrder from "./AddNewItemOnOrder";
 import InvoiceModal from "./InvoiceModal";
-import { useRouter } from "next/navigation";
 const statuses = [
   {
     id: "pending",
@@ -110,7 +110,6 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
   const [orderItemView, setOrderItemView] = useState(orderItem);
   const checkCurrentStatus = orderItemView.status[orderItemView.status.length - 1];
   const [currentStatus, setCurrentStatus] = useState(checkCurrentStatus?.status);
-  const [showInvoiceButton, setShowInvoiceButton] = useState(false);
 
   const [isEditMode, setIsEditMode] = useState(false);
 
@@ -206,20 +205,11 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
     toast.success("Order updated successfully");
   };
 
-  useEffect(() => {
-    const hasProcessing = orderItem?.status?.some((statusObj) =>
-      String(statusObj?.status || "")
-        .toLowerCase()
-        .includes("processing")
-    );
-
-    setShowInvoiceButton(!!hasProcessing);
-  }, [orderItem?.status]);
-
   const productDetails = (slug: string) => {
     router.push(`/dashboard/product-details/${slug}`);
   };
 
+  const shouldShowInvoice = orderItemView.status.some((status) => status.status === "processing");
   return (
     <div className="mb-32 rounded-md bg-white p-6">
       <button
@@ -234,7 +224,7 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
           <div className="mb-6">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-primary sm:text-[24px]">Orders List</h2>
-              {showInvoiceButton && <InvoiceModal orderItem={orderItem} />}
+              {shouldShowInvoice && <InvoiceModal orderItem={orderItem} />}
             </div>
             <p className="text-info">ORD-${orderItemView?._id?.slice(-8).toUpperCase()}</p>
           </div>

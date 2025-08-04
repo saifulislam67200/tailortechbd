@@ -13,13 +13,6 @@ const Logo = ({ className }: { className?: string }) => {
           height={60}
           className="w-[130px] sm:w-[230px]"
         />
-        {/* <Image
-          src="/images/logos/logo-text.png"
-          alt="logo"
-          width={80}
-          height={80}
-          className="block sm:hidden"
-        /> */}
       </Link>
     </div>
   );

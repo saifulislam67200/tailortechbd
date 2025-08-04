@@ -1,13 +1,13 @@
 "use client";
 import DashboardPageHeadingTitle from "@/components/Dashboard/DashboardPageHeadingTitle";
-import InStockProductTable from "@/components/Dashboard/Product/InStockProductTable";
-const InStockProductView = () => {
+import ProductStockTable from "@/components/Dashboard/Product/ProductStockTable";
+const ProductStockView = () => {
   return (
     <div className="flex flex-col gap-[10px]">
-      <DashboardPageHeadingTitle title="In Stock Products" />
-      <InStockProductTable />
+      <DashboardPageHeadingTitle title="Products Stock" />
+      <ProductStockTable />
     </div>
   );
 };
 
-export default InStockProductView;
+export default ProductStockView;
