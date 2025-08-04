@@ -4,8 +4,8 @@ import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
-import "./InvoiceModal.css";
 import { toast } from "sonner";
+import "./InvoiceModal.css";
 const generateInvoiceNumber = (orderItem: IOrder) => {
   const orderIdPart = orderItem?._id?.slice(-8)?.toUpperCase() || "XXXXXX";
 
@@ -130,10 +130,10 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
                   <strong>Email:</strong> support@tailortechbd.com
                 </p>
                 <p>
-                  <strong>Website:</strong> www.tailortech.com
+                  <strong>Website:</strong> www.tailortechbd.com
                 </p>
                 <p>
-                  <strong>Facebook:</strong> fb.com/tailortech
+                  <strong>Facebook:</strong> fb.com/tailortechbd
                 </p>
               </div>
               <div className="space-y-1 text-right text-sm">
