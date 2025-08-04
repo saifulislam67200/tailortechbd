@@ -122,7 +122,7 @@ const ProductStockTable = () => {
             />
             -
             <DatePicker
-              selected={dateRange.startDate}
+              selected={dateRange.endDate}
               dateFormat={"dd MMM yyyy"}
               placeholderText="End Date"
               icon={<IoCalendarNumberOutline />}
