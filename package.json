@@ -21,6 +21,7 @@
     "fslightbox-react": "^1.8.0",
     "html2canvas-pro": "^1.5.11",
     "js-cookie": "^3.0.5",
+    "jsbarcode": "^3.12.1",
     "jspdf": "^3.0.1",
     "next": "^15.3.2",
     "photoswipe": "^5.4.4",

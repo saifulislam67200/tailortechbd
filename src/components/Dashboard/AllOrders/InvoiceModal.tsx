@@ -64,7 +64,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
       pdf.save(`invoice-${invoiceNumber}.pdf`);
     } catch (error) {
       console.error("Failed to generate PDF:", error);
-      alert("Failed to generate PDF. Please try again.");
+      toast.error("Failed to generate PDF. Please try again.");
     } finally {
       setIsGeneratingPDF(false);
     }
