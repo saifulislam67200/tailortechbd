@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
@@ -7,13 +8,9 @@ import {
 } from "@/redux/features/order/order.api";
 import { IQueruMutationErrorResponse } from "@/types";
 import { IOrder, IOrderStatus } from "@/types/order";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
-import { FaTrashAlt } from "react-icons/fa";
-import { ImSpinner11 } from "react-icons/im";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
 import {
   MdCancel,
@@ -25,36 +22,34 @@ import {
 import { PiKeyReturnFill } from "react-icons/pi";
 import { RiExchangeFill, RiRefundFill } from "react-icons/ri";
 import { toast } from "sonner";
-import AddNewItemOnOrder from "./AddNewItemOnOrder";
-import InvoiceModal from "./InvoiceModal/InvoiceModal";
 const statuses = [
   {
     id: "pending",
     label: "Pending",
     icon: MdPending,
-    color: "text-blue-400",
-    bgColor: "bg-blue-100",
+    color: "text-success",
+    bgColor: "bg-success/10",
   },
   {
     id: "confirmed",
     label: "Confirmed",
     icon: IoCheckmarkDoneCircle,
-    color: "text-purple-800",
+    color: "text-success",
     bgColor: "bg-success/10",
   },
   {
     id: "processing",
     label: "Processing",
     icon: MdRunningWithErrors,
-    color: "text-orange-800",
-    bgColor: "bg-orange-100",
+    color: "text-success",
+    bgColor: "bg-success/10",
   },
   {
     id: "on-delivery",
     label: "On-Delivery",
     icon: MdLocalShipping,
-    color: "text-success",
-    bgColor: "bg-success/10",
+    color: "text-orange-300",
+    bgColor: "bg-orange-100",
   },
   {
     id: "delivered",
@@ -105,7 +100,9 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
 
   const [updateOrder, { isLoading: isUpdating }] = useUpdateOrderMutation();
 
-  const [selectedStatus, setSelectedStatus] = useState<IOrderStatus["status"]>("pending");
+  const [selectedStatus, setSelectedStatus] = useState<IOrderStatus["status"]>(
+    orderItem.status[orderItem.status.length - 1].status
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderItemView, setOrderItemView] = useState(orderItem);
   const checkCurrentStatus = orderItemView.status[orderItemView.status.length - 1];
@@ -142,7 +139,7 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
 
     setOrderItemView((prev: IOrder) => ({
       ...prev,
-      status: [newStatusEntry, ...prev.status], // ========= add the new status at the beginning =======>
+      status: [...prev.status, newStatusEntry], // ========= add the new status at the beginning =======>
     }));
 
     setCurrentStatus(selectedStatus);
@@ -162,7 +159,7 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
 
   const handleRemoveOrderItem = (OrderitemIndex: number) => {
     const updatedOrderItems = orderItemView.orderItems.filter(
-      (item, index) => index !== OrderitemIndex
+      (_item, index) => index !== OrderitemIndex
     );
 
     setOrderItemView({
@@ -211,7 +208,7 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
 
   const shouldShowInvoice = orderItemView.status.some((status) => status.status === "processing");
   return (
-    <div className="mb-32 rounded-md bg-white p-6">
+    <div className="mb-32">
       <button
         onClick={() => setIsViewOrder(false)}
         className="mb-5 flex h-7 w-7 cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200 bg-white text-black shadow-md hover:bg-primary/90 hover:text-white"
@@ -219,295 +216,56 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
         <BsArrowLeft size={14} />
       </button>
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-        <div className="lg:col-span-1">
-          <div className="mb-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-primary sm:text-[24px]">Orders List</h2>
-              {shouldShowInvoice && <InvoiceModal orderItem={orderItem} />}
+      <div>
+        <div className="flex w-full flex-wrap items-center justify-between gap-[10px]">
+          <div className="flex flex-col gap-[16px]">
+            <div className="flex flex-col gap-[0]">
+              <h2 className="text-[32px] font-[600]">Order Details</h2>
+              <span className="text-[14px] text-strong">
+                Order ID:{" "}
+                <span className="font-[600]">
+                  #ORD-{orderItemView?._id?.slice(-8).toUpperCase()}
+                </span>
+              </span>
             </div>
-            <p className="text-info">ORD-${orderItemView?._id?.slice(-8).toUpperCase()}</p>
-          </div>
+            <div className="flex items-center justify-start gap-[10px]">
+              {orderItemView.status.map((status, index) => {
+                const color = statuses.find((s) => s.id === status.status);
 
-          <div className="relative mb-8">
-            {statuses?.map((status, index) => {
-              const isActive = currentStatus === status.id;
-              const isPast = statuses.findIndex((s) => s.id === currentStatus) > index;
-              const statusData = orderItemView?.status?.find(
-                (s: IOrderStatus) => s.status === status.id
-              );
-
-              return (
-                <div key={status.id} className="relative mb-8 flex">
-                  {index < statuses.length - 1 && (
-                    <div
-                      className={`absolute top-10 left-6 -z-10 h-full w-0.5 ${
-                        isPast || isActive ? status.bgColor : "bg-gray-200"
-                      }`}
-                    />
-                  )}
-
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-full ${
-                      isPast || isActive
-                        ? status.bgColor + ` ${status.color}`
-                        : "bg-gray-200 text-dashboard"
-                    }`}
+                return (
+                  <span
+                    key={status.status + index}
+                    className={`text-[16px] font-[600] capitalize ${color ? color.color : ""}`}
                   >
-                    <status.icon className="h-6 w-6" />
-                  </div>
-
-                  <div className="ml-4">
-                    <h3
-                      className={`font-semibold ${isActive || isPast ? status.color : "text-muted"}`}
-                    >
-                      {status.label}
-                    </h3>
-                    {statusData?.createdAt && (
-                      <p className="text-sm text-gray-500">{formatDate(statusData.createdAt)}</p>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+                    {status.status}
+                  </span>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="mt-8 rounded-md border border-border-muted bg-gray-50 p-4">
-            <h3 className="mb-4 font-medium">Change Status</h3>
-
+          <div className="flex flex-col gap-[10px]">
+            <span>Change Status:</span>
             <select
-              value={selectedStatus}
+              defaultValue={currentStatus}
               onChange={(e) => {
-                setSelectedStatus(e.target.value as IOrderStatus["status"]);
-                setIsModalOpen(true);
+                const status = statuses.find((s) => s.id === e.target.value);
+                if (status) {
+                  setSelectedStatus(status.id as IOrderStatus["status"]);
+                }
               }}
-              className="w-full rounded-md border border-border-muted bg-white p-2 text-gray-700 focus:border-transparent focus:ring-2 focus:ring-[#ECE3D2] focus:outline-none"
+              className="appearanc w-[150px] rounded-[4px] border-[1px] border-border-main bg-white px-[0.75rem] py-[0.375rem] pr-[2.25rem] text-base leading-[1.5] font-normal transition duration-150 ease-in-out outline-none"
             >
-              <option value="" disabled>
-                Select Status
-              </option>
               {statuses.map((status) => (
                 <option key={status.id} value={status.id}>
                   {status.label}
                 </option>
               ))}
             </select>
-          </div>
-        </div>
 
-        <div className="lg:col-span-2">
-          <div className="space-y-6">
-            <div className="col-span-full grid grid-cols-1 gap-6 xl:grid-cols-2">
-              {/* Customer Information */}
-              <div className="rounded-md border border-border-muted bg-white p-6">
-                <h2 className="mb-4 text-xl font-semibold text-dashboard">Customer Information</h2>
-
-                <div className="space-y-2">
-                  <div className="h-14 w-14 overflow-hidden rounded-full border border-border-muted object-cover object-center">
-                    <Image
-                      src={"/images/avatar.jpg"}
-                      width={100}
-                      height={100}
-                      alt={`${orderItemView?.shippingAddress?.name || "Customer"} avatar`}
-                    />
-                  </div>
-
-                  <p>
-                    <span className="text-[14px] font-[700] text-primary">Name: </span>
-                    {orderItemView?.shippingAddress?.name}
-                  </p>
-                  <p>
-                    <span className="text-[14px] font-[700] text-primary">Call: </span>
-                    <Link
-                      className="hover:underline"
-                      href={`tel:${orderItemView?.shippingAddress?.phoneNumber}`}
-                    >
-                      {orderItemView?.shippingAddress?.phoneNumber || "N/A"}
-                    </Link>
-                  </p>
-                </div>
-              </div>
-              {/* Shipping Information */}
-              <div className="w-full rounded-md border border-border-muted bg-white p-6">
-                <h2 className="mb-[16px] text-[20px] font-semibold text-dashboard">
-                  Shipping Information
-                </h2>
-                <div className="w-full space-y-2">
-                  <p>
-                    <span className="text-[14px] font-[700] text-primary">Name: </span>
-                    {orderItemView?.shippingAddress?.name}
-                  </p>
-                  <p>
-                    <span className="text-[14px] font-[700] text-primary">Division: </span>
-                    {orderItemView?.shippingAddress?.division}
-                  </p>
-                  <p>
-                    <span className="text-[14px] font-[700] text-primary">District: </span>
-                    {orderItemView?.shippingAddress?.district}
-                  </p>
-                  <p>
-                    <span className="text-[14px] font-[700] text-primary">Upazila/City: </span>
-                    {orderItemView?.shippingAddress?.upazila}
-                  </p>
-                  <p className="flex w-full flex-col gap-[10px]">
-                    <span className="text-[14px] font-[700] text-primary">Shipping Address: </span>
-                    <span className="w-full rounded-[5px] bg-primary/5 p-[8px]">
-                      {orderItemView?.shippingAddress?.address}
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-            {/* // billing information start here   */}
-            {orderItemView?.billingAddress && (
-              <div className="rounded-md border border-border-muted p-4">
-                <h2 className="mb-[16px] text-[20px] font-semibold text-dashboard">
-                  Billing Information
-                </h2>
-                <div className="space-y-2">
-                  <p className="text-[14px] text-primary md:text-[16px]">
-                    <span className="font-[600]">Name:</span> {orderItemView?.billingAddress?.name}
-                  </p>
-                  <p className="text-[14px] text-primary md:text-[16px]">
-                    <span className="font-[600]">Address:</span>{" "}
-                    {orderItemView?.billingAddress?.address}
-                  </p>
-                  <p className="text-[14px] text-primary md:text-[16px]">
-                    <span className="font-[600]">Phone Number:</span>{" "}
-                    {orderItemView?.billingAddress?.phoneNumber}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* billing information end here  */}
-          </div>
-          {/* order Item */}
-          <div className="mt-6 mb-6 rounded-md border border-border-muted bg-white p-6">
-            <div className="mb-[10px] flex w-full items-center justify-between">
-              <h2 className="text-xl font-semibold">Order Items</h2>
-              {currentStatus === "pending" ? (
-                <Button
-                  className={`${isEditMode ? "bg-danger text-white" : "bg-success text-white"}`}
-                  onClick={() => {
-                    if (isEditMode) {
-                      setOrderItemView(initialOrderItemView);
-                    }
-                    setIsEditMode(!isEditMode);
-                  }}
-                >
-                  {isEditMode ? "Cancel Edit" : "Edit Items"}
-                </Button>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="w-full space-y-4">
-              {orderItemView?.orderItems?.map((item, i) => {
-                return (
-                  <div
-                    onClick={() => productDetails(item?.product?.slug || "")}
-                    key={item?.product_id}
-                    className="flex w-full cursor-pointer items-center justify-between gap-[10px] rounded-md border border-border-muted bg-white p-[16px]"
-                  >
-                    <div className="flex items-center gap-[16px]">
-                      <div className="overflow-hidden rounded-md bg-slate-200">
-                        <Image
-                          src={item?.product?.image || "/images/avatar.jpg"}
-                          width={100}
-                          height={100}
-                          alt={`${item?.product?.name || "Product"} image`}
-                          className="h-16 w-16 object-contain object-center"
-                        />
-                      </div>
-                      <div>
-                        <p className="text-[14px]">
-                          <span className="font-semibold text-primary">Name: </span>
-                          {item?.product?.name}
-                        </p>
-                        <p className="text-[14px]">
-                          <span className="font-semibold text-primary">Quantity: </span>
-                          {item?.quantity}
-                        </p>
-                        {item?.color ? (
-                          <p className="text-[14px]">
-                            <span className="font-semibold text-primary">Color: </span>
-                            {item?.color}
-                          </p>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    </div>
-                    {isEditMode ? (
-                      <button
-                        className="shrink-0 cursor-pointer bg-danger/10 p-[5px] text-danger"
-                        onClick={() => handleRemoveOrderItem(i)}
-                      >
-                        <FaTrashAlt />
-                      </button>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                );
-              })}
-              {isEditMode ? (
-                <div className="flex w-full items-center justify-between gap-[10px]">
-                  <AddNewItemOnOrder
-                    onAddItem={(item) =>
-                      setOrderItemView({
-                        ...orderItemView,
-                        orderItems: [...orderItemView.orderItems, item],
-                      })
-                    }
-                  />
-                  <div className="flex items-center justify-start gap-[10px]">
-                    <button
-                      onClick={handleUpdate}
-                      disabled={isUpdating}
-                      className="flex cursor-pointer items-center gap-[5px] text-[14px] text-primary hover:underline disabled:cursor-not-allowed"
-                    >
-                      Save changes {isUpdating ? <ImSpinner11 className="animate-spin" /> : ""}
-                    </button>
-                    <button
-                      className="cursor-pointer text-[14px] text-primary hover:underline"
-                      onClick={() => setOrderItemView(initialOrderItemView)}
-                    >
-                      Undo changes
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-          </div>
-
-          {/* order summery */}
-          <div className="rounded-md border border-border-muted bg-white p-6">
-            <h2 className="mb-[16px] text-[20px] font-semibold">Order Summary</h2>
-            <div className="space-y-2">
-              <p>
-                <span className="text-[14px] font-[700] text-primary">Total Amount: </span>
-                {Math.round(orderItemView?.totalProductAmount || 0)} BDT
-              </p>
-              <p>
-                <span className="text-[14px] font-[700] text-primary">Payment Status: </span>
-                {/* {orderItemView?.paymentStatus || "COD"} */}
-                COD
-              </p>
-              <p>
-                <span className="text-[14px] font-[700] text-primary">Date: </span>
-                {orderItemView?.createdAt
-                  ? new Date(orderItemView.createdAt).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })
-                  : "N/A"}
-              </p>
-            </div>
+            <Button className="w-fit" onClick={handleStatusChange}>
+              Update
+            </Button>
           </div>
         </div>
       </div>
