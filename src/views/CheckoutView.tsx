@@ -101,7 +101,7 @@ const CheckoutView = () => {
     }
     const payload: Omit<
       IOrder,
-      "status" | "paymentStatus" | "totalProductAmount" | "user" | "_id"
+      "status" | "paymentStatus" | "totalProductAmount" | "user" | "_id" | "orderId"
     > = {
       ...values,
       billingAddress: !isSameBillingAddress
@@ -213,7 +213,7 @@ const CheckoutView = () => {
                       {locationId.district_id ? (
                         <div className="flex flex-col gap-[8px]">
                           <label className="text-[14px] font-[700] text-strong" htmlFor="name">
-                            Upazila/city *
+                            Upazila/City *
                           </label>
                           <div className="flex flex-col gap-[5px]">
                             <SelectionBox
@@ -392,7 +392,7 @@ const CheckoutView = () => {
                       ""
                     ) : (
                       <span className="font-[600] text-danger">
-                        * please fill all the required fields
+                        * Please fill all the required fields
                       </span>
                     )}
                     <div className="item-center flex w-full justify-center gap-[16px]">

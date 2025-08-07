@@ -44,7 +44,6 @@ const RestockRequestTable = () => {
   });
 
   const { data, isLoading } = useGetAllRestockRequestQuery({ ...query, searchTerm });
-  console.log(data, "all restock requests");
   const productData = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 

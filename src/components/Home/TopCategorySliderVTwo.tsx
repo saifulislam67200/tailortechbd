@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay } from "swiper/modules";
+import { ICategory } from "@/types/category";
 import Image from "next/image";
 import Link from "next/link";
-import { ICategory } from "@/types/category";
+import { Autoplay, Navigation } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -16,12 +15,12 @@ const TopCategorySliderVTwo = ({ categories }: { categories: ICategory[] }) => {
         slidesPerView="auto"
         spaceBetween={24}
         autoplay={{
-          delay: 5000,
+          delay: 0,
           disableOnInteraction: false,
           pauseOnMouseEnter: true,
         }}
+        speed={4000}
         loop={true}
-        navigation={true}
         modules={[Navigation, Autoplay]}
         className="top-category-version-two-swiper"
       >

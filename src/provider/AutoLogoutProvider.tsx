@@ -10,7 +10,6 @@ export const AutoLogoutProvider = ({ children }: { children: ReactNode }) => {
   const dispatch = useAppDispatch();
   const [logoutUser] = useLogoutUserMutation();
   const user = useAppSelector((state) => state.user);
-  console.log(user, "from auth login provider");
   const isLoggedIn = !!user?.token;
 
   const handleLogout = async () => {

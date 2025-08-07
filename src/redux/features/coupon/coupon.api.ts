@@ -24,7 +24,6 @@ const couponApi = api.injectEndpoints({
     getAllCoupons: builder.query({
       query: (query) => {
         const queryString = generateQueryParams(query);
-        console.log(queryString, "queryString coupon");
         return {
           url: `/coupon/get-all?${queryString}`,
           method: "GET",

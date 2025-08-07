@@ -37,16 +37,8 @@ export const admin: IDashboardNavLinks[] = [
         path: "/dashboard/restock-requests",
       },
       {
-        label: "In Stock",
-        path: "/dashboard/in-stock-products",
-      },
-      {
-        label: "Low Stock",
-        path: "/dashboard/low-stock-products",
-      },
-      {
-        label: "Out Of Stock",
-        path: "/dashboard/out-of-stock-products",
+        label: "Product Stock",
+        path: "/dashboard/product-stock",
       },
     ],
   },

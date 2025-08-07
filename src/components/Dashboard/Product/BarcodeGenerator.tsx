@@ -1,20 +1,18 @@
 "use client";
-import { useRef, useState, useEffect } from "react";
-import JsBarcode from "jsbarcode";
-import html2canvas from "html2canvas-pro";
-import { toast } from "sonner";
 import DialogProvider from "@/components/ui/DialogProvider";
+import html2canvas from "html2canvas-pro";
+import JsBarcode from "jsbarcode";
+import { useEffect, useRef, useState } from "react";
 import { PiBarcodeLight } from "react-icons/pi";
+import { useReactToPrint } from "react-to-print";
+import { toast } from "sonner";
 
 interface BarcodeGeneratorProps {
   barcodeValue?: string;
   price?: string | number;
   discount?: string | number;
   brandName?: string;
-  productName?: string;
   productCode?: string;
-  size?: string;
-  color?: string;
   autoDownload?: boolean;
   isOpen?: boolean;
   onClose?: () => void;
@@ -24,10 +22,7 @@ const BarcodeGenerator = ({
   price = "N/A",
   discount = "0",
   brandName = "Tailortech",
-  productName = "N/A",
   productCode = "N/A",
-  size = "N/A",
-  color = "N/A",
   autoDownload = false,
   isOpen = false,
   onClose,
@@ -127,6 +122,10 @@ const BarcodeGenerator = ({
     }
   };
 
+  const handlePrint = useReactToPrint({
+    contentRef: barcodeRef,
+  });
+
   useEffect(() => {
     if (modalOpen) {
       const timer = setTimeout(async () => {
@@ -156,23 +155,20 @@ const BarcodeGenerator = ({
       <DialogProvider
         setState={setModalOpen}
         state={modalOpen}
-        className="max-h-[100vh] w-fit overflow-auto bg-white lg:min-h-[50vh]"
+        className="h-full max-h-[95vh] w-fit overflow-auto bg-white lg:min-h-[50vh]"
       >
-        <h1 className="my-2 flex justify-center p-3 text-xl font-semibold text-primary lg:hidden">
-          Barcode Sheet
-        </h1>
         <div
           ref={barcodeRef}
-          className="mx-auto hidden min-h-[297mm] w-[210mm] grid-cols-4 gap-1 bg-white p-8 font-sans text-xs text-black lg:grid"
+          className="grid aspect-[2480/3508] h-full shrink-0 grid-cols-4 grid-rows-10 gap-1 bg-white p-[10px] font-sans text-xs text-black"
         >
-          {Array.from({ length: 28 }).map((_, index) => (
+          {Array.from({ length: 40 }).map((_, index) => (
             <div
               key={index}
-              className="flex min-h-[25mm] flex-col justify-between rounded-sm border border-gray-300 bg-white p-2 text-center text-black"
+              className="flex flex-col justify-between rounded-sm border border-gray-300 bg-white p-2 text-center text-black"
             >
-              <div className="mb-[1mm] text-[12px] leading-[1.1] font-bold">{brandName}</div>
+              <div className="text-[12px] leading-[1.1] font-bold">{brandName}</div>
 
-              <div className="my-[0.5mm] flex justify-center">
+              <div className="flex justify-center">
                 <canvas
                   ref={(el) => {
                     canvasRefs.current[index] = el;
@@ -183,9 +179,9 @@ const BarcodeGenerator = ({
                 />
               </div>
 
-              <div className="mb-[0.5mm] font-mono text-[8px]">{barcodeValue}</div>
+              <div className="font-mono text-[8px]">{barcodeValue}</div>
 
-              <div className="mb-[1mm]">
+              <div className="">
                 {discountValue > 0 && (
                   <>
                     <div className="text-[10px] font-bold text-primary line-through">
@@ -195,39 +191,18 @@ const BarcodeGenerator = ({
                   </>
                 )}
               </div>
-
-              <div className="border-t border-dashed border-slate-400 pt-[2mm] text-left text-[7px]">
-                <div className="mb-[1mm] text-center text-[8px] font-bold">PRODUCT DETAILS</div>
-                <div className="leading-[1.2]">
-                  <div>
-                    <strong>Brand:</strong> {brandName}
-                  </div>
-                  <div>
-                    <strong>Product:</strong> {productName}
-                  </div>
-                  <div>
-                    <strong>Code:</strong> {productCode}
-                  </div>
-                  <div>
-                    <strong>Size:</strong> {size}
-                  </div>
-                  <div>
-                    <strong>Color:</strong> {color}
-                  </div>
-                </div>
-              </div>
             </div>
           ))}
         </div>
 
         {!autoDownload && (
-          <div className="sticky bottom-0 mb-4 flex w-full justify-center bg-white p-4 lg:border-t">
+          <div className="sticky bottom-0 flex w-full justify-center bg-white p-4 lg:border-t">
             <button
               className="cursor-pointer rounded bg-primary px-6 py-3 font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
-              onClick={handleDownload}
+              onClick={handlePrint}
               disabled={isGenerating}
             >
-              {isGenerating ? "Generating..." : "Download PNG"}
+              {isGenerating ? "Generating..." : "Print"}
             </button>
           </div>
         )}
