@@ -29,9 +29,15 @@ const ForgotPasswordView = () => {
     values: { email: string; phoneNumber: string },
     { resetForm }: { resetForm: () => void }
   ) => {
+    if (!values.email && !values.phoneNumber) {
+      toast.error("Please fill the form before submitting");
+      return;
+    }
+
     try {
       const res = await forgotPassword({
         email: values.email,
+        phoneNumber: values.phoneNumber,
         mode,
       });
       const error = res.error as IQueruMutationErrorResponse;
@@ -59,8 +65,8 @@ const ForgotPasswordView = () => {
       {!isSent ? (
         <FormCard
           headerButtons={[
-            { title: "Forgot Password (email)", onClick: () => setMode("email") },
-            { title: "Forgot Password (phone)", onClick: () => setMode("phoneNumber") },
+            { title: "Forgot Password (Phone)", onClick: () => setMode("phoneNumber") },
+            { title: "Forgot Password (Email)", onClick: () => setMode("email") },
           ]}
           className="mt-[20px]"
         >

@@ -64,7 +64,7 @@ const ProductStockTable = () => {
     // category: "men",
     ...dateRange,
   });
-  const inStockProducts = stockData?.data || [];
+  const productStocks = stockData?.data || [];
   const stockMetaData = stockData?.meta || { totalDoc: 0, page: 1 };
 
   const handleSort = (field: string) => {
@@ -202,11 +202,11 @@ const ProductStockTable = () => {
             <tbody className="divide-y divide-dashboard/20">
               {isStockLoading ? (
                 <TableSkeleton columns={stockTableHeaders.length} />
-              ) : inStockProducts.length ? (
+              ) : productStocks.length ? (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 //@ts-ignore
-                inStockProducts.map((product, index) => (
-                  <tr key={product?._id} className="hover:bg-gray-50">
+                productStocks.map((product, index) => (
+                  <tr key={product?._id + index} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <span className="text-[14px]">{index + 1}</span>
                     </td>
@@ -214,7 +214,17 @@ const ProductStockTable = () => {
                       className="cursor-pointer px-6 py-4"
                       onClick={() => viewProductDetails(product.slug)}
                     >
-                      <span className="line-clamp-1 text-[14px]">{product.productName}</span>
+                      <span className="flex flex-col gap-[5px]">
+                        <span className="line-clamp-1 text-[14px] font-[700]">
+                          {product.productName}
+                        </span>
+                        <span className="line-clamp-1 text-[12px] font-[400]">
+                          Color: {product.color}
+                        </span>
+                        <span className="line-clamp-1 text-[14px] font-[400]">
+                          Size: {product.size}
+                        </span>
+                      </span>
                     </td>
 
                     <td className="px-6 py-4">
@@ -243,17 +253,17 @@ const ProductStockTable = () => {
 
                     <td className="px-6 py-4">
                       <span
-                        className={`text-[14px] ${
-                          product.status === "In Stock"
+                        className={`text-[14px] capitalize ${
+                          product.status === "in-stock"
                             ? "text-green-500"
-                            : product.status === "Low Stock"
+                            : product.status === "low-stock"
                               ? "text-yellow-500"
-                              : product.status === "Out of Stock"
+                              : product.status === "out-of-stock"
                                 ? "text-red-500"
                                 : ""
                         }`}
                       >
-                        {product.status || "N/A"}
+                        {product.status ? product.status?.replace(/-/g, " ") : "N/A"}
                       </span>
                     </td>
 
@@ -280,6 +290,7 @@ const ProductStockTable = () => {
         </div>
       </div>
       <Pagination
+        limit={stockMetaData.limit || 10}
         totalDocs={stockMetaData.totalDoc}
         page={stockMetaData.page}
         onPageChange={(page) => setStockQuery({ ...stockQuery, page })}

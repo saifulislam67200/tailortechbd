@@ -7,7 +7,7 @@ const orderApi = api.injectEndpoints({
   endpoints: (builder) => ({
     createOrder: builder.mutation<
       { data: IOrder },
-      Omit<IOrder, "status" | "paymentStatus" | "totalProductAmount" | "user" | "_id">
+      Omit<IOrder, "status" | "paymentStatus" | "totalProductAmount" | "user" | "_id" | "orderId">
     >({
       query: (payload) => ({
         url: `/order/create`,

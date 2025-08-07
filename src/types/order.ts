@@ -42,6 +42,7 @@ export interface IBillingAddress {
 export interface IOrder {
   _id: string;
   user: string;
+  orderId: string;
   shippingAddress: IShippingAddress;
   billingAddress?: IBillingAddress;
   orderItems: IOrderItem[];

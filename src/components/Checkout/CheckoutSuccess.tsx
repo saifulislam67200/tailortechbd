@@ -30,7 +30,7 @@ const CheckoutSuccess: React.FC<IProps> = ({ orderData }) => {
     <div className="min-h-screen bg-[#f4f4f4] px-4 py-10">
       <div className="mx-auto max-w-3xl bg-white p-6 shadow-md">
         <h2 className="mb-4 text-lg font-semibold">✅ Order Placed Successfully</h2>
-        <p className="mb-6 text-sm text-muted">Order ID: #{orderData?._id}</p>
+        <p className="mb-6 text-sm text-muted">ID: #{orderData?.orderId}</p>
 
         {orderData?.orderItems?.map((item, index) => {
           const price = item.product.price;

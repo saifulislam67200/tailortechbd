@@ -155,7 +155,7 @@ const BarcodeGenerator = ({
       <DialogProvider
         setState={setModalOpen}
         state={modalOpen}
-        className="max-h-[80vh] w-fit overflow-auto bg-white lg:min-h-[50vh]"
+        className="h-full max-h-[95vh] w-fit overflow-auto bg-white lg:min-h-[50vh]"
       >
         <div
           ref={barcodeRef}
