@@ -113,8 +113,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
   // orderItem.status[orderItem.status.length - 1].status
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orderItemView, setOrderItemView] = useState<IOrder>();
-  const checkCurrentStatus = orderItemView?.status[orderItemView.status.length - 1];
-  const [currentStatus, setCurrentStatus] = useState(checkCurrentStatus?.status);
+  const currentStatus = orderItemView?.status[orderItemView.status.length - 1];
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -153,7 +152,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
       });
     }
 
-    setCurrentStatus(selectedStatus);
+    setSelectedStatus(selectedStatus);
     setIsModalOpen(false);
     toast.success("Order status changed successfully!");
   };
@@ -304,7 +303,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
           <div className="flex flex-col gap-[10px]">
             <span>Change Status:</span>
             <select
-              defaultValue={currentStatus}
+              value={selectedStatus ? selectedStatus : ""}
               onChange={(e) => {
                 const status = statuses.find((s) => s.id === e.target.value);
                 if (status) {
@@ -318,6 +317,9 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
                   {status.label}
                 </option>
               ))}
+              <option value="" hidden>
+                Change Status
+              </option>
             </select>
 
             <Button className="w-fit" onClick={handleStatusChange}>
@@ -412,6 +414,9 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
                     SKU
                   </th>
                   <th className="border border-border-muted px-4 py-2 text-left font-semibold">
+                    Current Stock
+                  </th>
+                  <th className="border border-border-muted px-4 py-2 text-left font-semibold">
                     QTY
                   </th>
                   <th className="border border-border-muted px-4 py-2 text-left font-semibold">
@@ -445,6 +450,9 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
                     </td>
                     <td className="border border-border-muted px-4 py-2">
                       {item.product.sku || "N/A"}
+                    </td>
+                    <td className="border border-border-muted px-4 py-2">
+                      {item.product.currentStock || 0}
                     </td>
                     <td className="border border-border-muted px-4 py-2">{item.quantity}</td>
                     <td className="border border-border-muted px-4 py-2">

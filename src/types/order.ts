@@ -8,6 +8,7 @@ export interface IOrderItem {
     price: number;
     slug?: string;
     sku?: string;
+    currentStock?: number;
   };
   color: string;
   size: string;
