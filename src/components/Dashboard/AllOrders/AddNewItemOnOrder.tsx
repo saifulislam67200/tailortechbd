@@ -26,7 +26,11 @@ const AddNewItemOnOrder: React.FC<IProps> = ({ onAddItem }) => {
 
   const [searchValue, setSearchValue] = useDebounce("");
   const { data } = useGetAllProductsQuery(
-    { searchTerm: searchValue, limit: 20, fields: "name,price,images,colors,slug,price,discount" },
+    {
+      searchTerm: searchValue,
+      limit: 20,
+      fields: "name,price,images,colors,slug,price,discount,sku",
+    },
     { skip: !isOpen }
   );
 
@@ -51,6 +55,7 @@ const AddNewItemOnOrder: React.FC<IProps> = ({ onAddItem }) => {
       product: {
         image: selectedProduct.images[0],
         name: selectedProduct.name,
+        sku: selectedProduct.sku,
         price: getProductDiscountPrice(selectedProduct.price, selectedProduct.discount),
       },
       color: selectedColor.color,
@@ -67,7 +72,7 @@ const AddNewItemOnOrder: React.FC<IProps> = ({ onAddItem }) => {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex cursor-pointer items-center gap-[3px] rounded-[4px] bg-success/10 px-[8px] py-[4px] text-[12px] text-success"
+        className="flex w-fit cursor-pointer items-center gap-[3px] rounded-[4px] bg-success/20 px-[8px] py-[4px] text-[12px] font-[600] text-success"
       >
         <FaPlus /> Add Item
       </button>

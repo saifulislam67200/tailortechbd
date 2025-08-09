@@ -3,6 +3,7 @@
 import Button from "@/components/ui/Button";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import { useGetAllBannersQuery } from "@/redux/features/banner/banner.api";
+import dateUtils from "@/utils/date";
 import Image from "next/image";
 import { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
@@ -12,7 +13,7 @@ import BannerTableSkeleton from "./BannerTableSkeleton";
 import DeleteBanner from "./DeleteBanner";
 import ManageBannerPosition from "./ManageBannerPosition";
 import UpdateBanner from "./UpdateBanner";
-import dateUtils from "@/utils/date";
+import { profileFallBack } from "@/utils";
 
 const tableHead = [
   { label: "Order", field: "order" },
@@ -86,7 +87,7 @@ const BannerTable = () => {
                         <td className="px-[24px] py-[16px] whitespace-nowrap">
                           <span className="relative block h-12 w-20 overflow-hidden rounded-lg border border-border-muted bg-gray-100">
                             <Image
-                              src={banner.thumbnail || "/images/avatar.jpg"}
+                              src={banner.thumbnail || profileFallBack}
                               alt={banner.name}
                               fill
                               className="object-cover"

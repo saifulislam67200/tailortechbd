@@ -1,16 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import HorizontalLine from "@/components/ui/HorizontalLine";
-import { RxMagnifyingGlass } from "react-icons/rx";
+import Pagination from "@/components/ui/Pagination";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetAllQuestionAnswersQuery } from "@/redux/features/Q&A/questionAndAnswer.api";
-import Pagination from "@/components/ui/Pagination";
+import dateUtils from "@/utils/date";
+import Image from "next/image";
+import { useState } from "react";
+import { RxMagnifyingGlass } from "react-icons/rx";
 import AnswerModal from "./AnswerModal";
 import DeleteQna from "./DeleteQna";
 import QnaSkeleton from "./QnaSkeleton";
-import dateUtils from "@/utils/date";
+import { profileFallBack } from "@/utils";
 
 const tableHead = [
   { label: "Customer", field: "name" },
@@ -87,7 +88,7 @@ export default function QnaTable() {
                         <span className="flex max-w-[250px] items-center gap-3">
                           <span className="h-[48px] w-[48px] flex-shrink-0">
                             <Image
-                              src={item.product.image || "/images/avatar.jpg"}
+                              src={item.product.image || profileFallBack}
                               alt={item.product.name}
                               width={48}
                               height={48}

@@ -81,13 +81,14 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
   const handlePrints = useReactToPrint({
     contentRef: invoiceRef,
   });
+
   return (
     <>
       <button
-        className="cursor-pointer rounded bg-primary px-[10px] text-white"
+        className="cursor-pointer rounded border-[1px] border-border-main px-[10px] py-[4px] text-[16px] text-primary duration-[0.3s] hover:bg-primary hover:text-white"
         onClick={() => setIsOpen(true)}
       >
-        Invoice
+        🖨️ Show Invoice
       </button>
 
       <DialogProvider setState={setIsOpen} state={isOpen} className="max-w-[100vw] bg-white">
@@ -124,7 +125,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
                 </p>
                 <p>
                   <strong>Facebook:</strong>{" "}
-                  <a href="https://fb.com/tailortechbd">fb.com/tailortechbd</a>
+                  <Link href="https://fb.com/tailortechbd">fb.com/tailortechbd</Link>
                 </p>
               </div>
               <div className="text-right text-sm">
@@ -221,14 +222,16 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
 
             {/* Payment Info  */}
             <div className="mt-8 text-sm">
-              <p>
-                <strong>Payment Method:</strong> COD / Cash / Bkash / Card
+              <p className="capitalize">
+                <strong>Payment Method:</strong> {orderItem.paymentStatus}
               </p>
-              <p>
+              {/* Transaction ID will be displayed in future when online payment is added */}
+              {/* <p>
                 <strong>Transaction ID:</strong> — If Mobile Banking/Card Payment
-              </p>
+              </p> */}
               <p>
-                <strong>Order Status:</strong> Paid & Confirmed / Confirmed & Due
+                <strong>Order Status:</strong>{" "}
+                {orderItem?.paymentStatus === "paid" ? "Paid & Confirmed" : "Confirmed & Due"}
               </p>
             </div>
 

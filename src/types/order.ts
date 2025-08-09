@@ -1,3 +1,5 @@
+import { IUser } from "./user";
+
 export interface IOrderItem {
   product_id: string;
   product: {
@@ -42,7 +44,7 @@ export interface IBillingAddress {
 
 export interface IOrder {
   _id: string;
-  user: string;
+  user: string | IUser;
   orderId: string;
   shippingAddress: IShippingAddress;
   billingAddress?: IBillingAddress;

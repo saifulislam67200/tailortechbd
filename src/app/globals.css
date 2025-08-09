@@ -33,6 +33,7 @@
   --strong: #212529;
   --muted: #6f6f6f;
   --solid-slab: #e9ecef;
+  --flat: #212529;
   --success: #23c57a;
   /* --dashboard: #4154f1; */
   --dashboard: #101949;
@@ -46,6 +47,7 @@
   --color-secondary: var(--secondary);
   --color-tertiary: var(--tertiary);
   --color-quaternary: var(--quaternary);
+  --color-flat: var(--flat);
   --color-info: var(--info);
   --color-info-light: var(--info-light);
   --color-danger: var(--danger);

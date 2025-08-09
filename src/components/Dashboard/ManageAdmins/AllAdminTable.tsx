@@ -17,6 +17,7 @@ import Image from "next/image";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import CreateAdmin from "./CreateAdmin";
 import DeleteAdmin from "./DeleteAdmin";
+import { profileFallBack } from "@/utils";
 
 const tableHead = [
   { label: "Name", field: "name" },
@@ -123,7 +124,7 @@ const AllAdminTable = () => {
                       <div className="flex items-center gap-[5px]">
                         <span className="flex aspect-square max-h-[50px] w-[50px] items-center justify-start bg-white">
                           <Image
-                            src={user.avatar || "/images/avatar.jpg"}
+                            src={user.avatar || profileFallBack}
                             alt={`${user.fullName} image`}
                             width={80}
                             height={80}

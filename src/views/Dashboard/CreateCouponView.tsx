@@ -5,6 +5,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { useGetAllClientsQuery } from "@/redux/features/admin/admin.api";
 import { useCreateCouponMutation } from "@/redux/features/coupon/coupon.api";
 import { IQueruMutationErrorResponse } from "@/types";
+import { profileFallBack } from "@/utils";
 import dateUtils from "@/utils/date";
 import { ErrorMessage, Field, FieldArray, Form, Formik, FormikHelpers } from "formik";
 import Image from "next/image";
@@ -316,7 +317,7 @@ const CreateCouponView = () => {
                               <div className="flex items-center gap-[10px]">
                                 <span className="flex h-[40px] w-[40px] overflow-hidden">
                                   <Image
-                                    src={user.avatar || "/images/avatar.jpg"}
+                                    src={user.avatar || profileFallBack}
                                     alt="user"
                                     width={40}
                                     height={40}
@@ -407,7 +408,7 @@ const CreateCouponView = () => {
                           >
                             <span className="flex h-[40px] w-[40px] overflow-hidden">
                               <Image
-                                src={user.avatar || "/images/avatar.jpg"}
+                                src={user.avatar || profileFallBack}
                                 alt="user"
                                 width={40}
                                 height={40}

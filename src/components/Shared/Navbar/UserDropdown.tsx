@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { clearCart } from "@/redux/features/cart/cartSlice";
 import { useLogoutUserMutation } from "@/redux/features/user/user.api";
 import { logout as logoutAction } from "@/redux/features/user/user.slice";
+import { profileFallBack } from "@/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
@@ -103,7 +104,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
                 </div>
               ) : (
                 <Image
-                  src="/images/avatar.jpg"
+                  src={profileFallBack}
                   alt="user-icon"
                   width={40}
                   height={40}

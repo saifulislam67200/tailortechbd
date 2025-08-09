@@ -3,6 +3,7 @@ import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import { useUpdateAnswerByIdMutation } from "@/redux/features/Q&A/questionAndAnswer.api";
 import { IQuestionsAndAns } from "@/types/QuestionAndAns";
+import { profileFallBack } from "@/utils";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import Image from "next/image";
 import { cloneElement, isValidElement, ReactElement, useState } from "react";
@@ -94,7 +95,7 @@ const AnswerModal: React.FC<PropsType> = ({ item, children }) => {
               </h4>
               <div className="flex items-center gap-3">
                 <Image
-                  src={item?.product?.image || "/images/avatar.jpg"}
+                  src={item?.product?.image || profileFallBack}
                   alt={item?.product.name}
                   width={55}
                   height={55}

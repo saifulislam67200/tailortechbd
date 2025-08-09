@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import Image from "next/image";
-import { MdEdit } from "react-icons/md";
-import { IOrderItem } from "@/types/order";
 import { useUpdateOrderMutation } from "@/redux/features/order/order.api";
+import { IOrderItem } from "@/types/order";
+import Image from "next/image";
+import { useState } from "react";
+import { MdEdit } from "react-icons/md";
 import { toast } from "sonner";
 import EditModal from "./EditModal";
-import { useState } from "react";
+import { profileFallBack } from "@/utils";
 
 interface OrderItemsProps {
   orderItems: IOrderItem[];
@@ -52,7 +53,7 @@ export default function OrderItems({ orderItems }: OrderItemsProps) {
               <div className="flex items-center gap-[16px]">
                 <div className="overflow-hidden rounded-md bg-slate-200">
                   <Image
-                    src={item?.product?.image || "/images/avatar.jpg"}
+                    src={item?.product?.image || profileFallBack}
                     width={100}
                     height={100}
                     alt={`${item?.product?.name || "Product"} image`}

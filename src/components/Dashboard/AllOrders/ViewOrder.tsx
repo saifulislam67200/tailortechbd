@@ -1,17 +1,24 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
+import HorizontalLine from "@/components/ui/HorizontalLine";
+import Loader from "@/components/ui/Loader";
 import {
   useChangeOrderStatusMutation,
+  useGetOrderByIdQuery,
   useUpdateOrderMutation,
 } from "@/redux/features/order/order.api";
 import { IQueruMutationErrorResponse } from "@/types";
 import { IOrder, IOrderStatus } from "@/types/order";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { IUser } from "@/types/user";
+import { profileFallBack } from "@/utils";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { ImSpinner11 } from "react-icons/im";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
+import { LuPencil } from "react-icons/lu";
 import {
   MdCancel,
   MdCheckCircle,
@@ -22,6 +29,7 @@ import {
 import { PiKeyReturnFill } from "react-icons/pi";
 import { RiExchangeFill, RiRefundFill } from "react-icons/ri";
 import { toast } from "sonner";
+import AddNewItemOnOrder from "./AddNewItemOnOrder";
 import InvoiceModal from "./InvoiceModal/InvoiceModal";
 const statuses = [
   {
@@ -90,29 +98,29 @@ const statuses = [
 ];
 
 type ViewOrderProps = {
-  setIsViewOrder: React.Dispatch<React.SetStateAction<boolean>>;
-  orderItem: IOrder;
+  orderId: string;
 };
 
-export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps) {
-  const [initialOrderItemView, setInitialOrderItemView] = useState(orderItem);
-  const router = useRouter();
+export default function ViewOrder({ orderId }: ViewOrderProps) {
+  const { data, isLoading: isOrderLoading } = useGetOrderByIdQuery(orderId);
+  const hasRunRef = useRef(false);
+  const [initialOrderItemView, setInitialOrderItemView] = useState<IOrder>();
   const [changeOrderStatus, { isLoading }] = useChangeOrderStatusMutation();
 
   const [updateOrder, { isLoading: isUpdating }] = useUpdateOrderMutation();
 
-  const [selectedStatus, setSelectedStatus] = useState<IOrderStatus["status"]>(
-    orderItem.status[orderItem.status.length - 1].status
-  );
+  const [selectedStatus, setSelectedStatus] = useState<IOrderStatus["status"] | undefined>();
+  // orderItem.status[orderItem.status.length - 1].status
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [orderItemView, setOrderItemView] = useState(orderItem);
-  const checkCurrentStatus = orderItemView.status[orderItemView.status.length - 1];
+  const [orderItemView, setOrderItemView] = useState<IOrder>();
+  const checkCurrentStatus = orderItemView?.status[orderItemView.status.length - 1];
   const [currentStatus, setCurrentStatus] = useState(checkCurrentStatus?.status);
 
   const [isEditMode, setIsEditMode] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   const handleStatusChange = async () => {
-    if (selectedStatus === currentStatus) return;
+    if (selectedStatus === currentStatus || !selectedStatus) return;
 
     const result = await changeOrderStatus({
       id: orderItemView?._id || "",
@@ -138,10 +146,12 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
       createdAt: new Date().toISOString(),
     };
 
-    setOrderItemView((prev: IOrder) => ({
-      ...prev,
-      status: [...prev.status, newStatusEntry], // ========= add the new status at the beginning =======>
-    }));
+    if (orderItemView) {
+      setOrderItemView({
+        ...orderItemView,
+        status: [...orderItemView.status, newStatusEntry], // ========= add the new status at the beginning =======>
+      });
+    }
 
     setCurrentStatus(selectedStatus);
     setIsModalOpen(false);
@@ -153,12 +163,11 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
       year: "numeric",
       month: "short",
       day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
     });
   };
 
   const handleRemoveOrderItem = (OrderitemIndex: number) => {
+    if (!orderItemView) return;
     const updatedOrderItems = orderItemView.orderItems.filter(
       (_item, index) => index !== OrderitemIndex
     );
@@ -169,20 +178,21 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
     });
 
     setInitialOrderItemView({
-      ...initialOrderItemView,
+      ...orderItemView,
       orderItems: updatedOrderItems,
     });
   };
 
   const handleUpdate = async () => {
-    const totalAmount = orderItemView.orderItems.reduce(
+    if (!orderItemView) return;
+    const totalAmount = orderItemView?.orderItems.reduce(
       (total, item) => total + item.product.price * item.quantity,
       0
     );
 
     const updatedData = {
       ...orderItemView,
-      totalProductAmount: totalAmount,
+      totalProductAmount: totalAmount || 0,
     };
 
     const res = await updateOrder({
@@ -201,23 +211,69 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
     setOrderItemView(res.data?.data || updatedData);
     setInitialOrderItemView(res.data?.data || updatedData);
     toast.success("Order updated successfully");
+    setIsEditMode(false);
   };
 
-  const productDetails = (slug: string) => {
-    router.push(`/dashboard/product-details/${slug}`);
-  };
+  const shouldShowInvoice = orderItemView?.status.some((status) => status.status === "processing");
 
-  const shouldShowInvoice = orderItemView.status.some((status) => status.status === "processing");
+  const customer = orderItemView?.user as IUser;
+
+  const orderConfirmDate = new Date(
+    orderItemView?.status.find((status) => status.status === "cancelled")?.createdAt || new Date()
+  );
+  const estimatedDeliveryDate = new Date(orderConfirmDate);
+  estimatedDeliveryDate.setDate(estimatedDeliveryDate.getDate() + 3);
+
+  const filteredOrderItems = orderItemView?.orderItems.filter(
+    (item) =>
+      item.product.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+      item.product.sku?.toLowerCase().includes(searchValue.toLowerCase())
+  );
+
+  const subTotal =
+    orderItemView?.orderItems.reduce(
+      (total, item) => total + item.product.price * item.quantity,
+      0
+    ) || 0;
+
+  const shippingCharge = orderItemView?.deliveryFee;
+  const couponDiscount = orderItemView?.couponDiscount;
+
+  useEffect(() => {
+    if (data?.data && !hasRunRef.current) {
+      const order = data.data;
+      console.log(order);
+
+      setInitialOrderItemView(order);
+      setOrderItemView(order);
+      setSelectedStatus(order.status[order.status.length - 1].status);
+
+      hasRunRef.current = true; // prevent future runs
+    }
+  }, [data]);
+
+  if (isOrderLoading) {
+    return <Loader />;
+  }
+
+  if (!orderItemView)
+    return (
+      <div className="flex h-full w-full flex-col items-center justify-center">
+        <h4 className="text-[30px] font-[600]">Order Not Found</h4>
+        <p>The order you are looking for was not found</p>
+      </div>
+    );
+
   return (
     <div className="mb-32">
-      <button
-        onClick={() => setIsViewOrder(false)}
+      <Link
+        href="/dashboard/all-orders"
         className="mb-5 flex h-7 w-7 cursor-pointer items-center justify-center gap-2 rounded-full border border-slate-200 bg-white text-black shadow-md hover:bg-primary/90 hover:text-white"
       >
         <BsArrowLeft size={14} />
-      </button>
+      </Link>
 
-      <div>
+      <div className="w-full">
         <div className="flex w-full flex-wrap items-center justify-between gap-[10px]">
           <div className="flex flex-col gap-[16px]">
             <div className="flex flex-col gap-[0]">
@@ -270,7 +326,270 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
           </div>
         </div>
 
-        <InvoiceModal orderItem={orderItemView} />
+        <div className="mt-[48px] flex w-full flex-col items-start justify-between gap-[20px] lg:flex-row">
+          <div className="flex w-full flex-col gap-[15px] rounded-[6px] bg-white p-[15px]">
+            <div className="flex w-full flex-col gap-[5px]">
+              <h5 className="text-[20px] font-[500]">Customer Information</h5>
+              <HorizontalLine className="h-[2px]" />
+            </div>
+
+            <div className="flex flex-col gap-[10px]">
+              <div className="flex items-center gap-[8px]">
+                <span className="h-[50px] w-[50px] overflow-hidden rounded-full border-[1px] border-border-main">
+                  <img
+                    src={customer.avatar || profileFallBack}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                </span>
+                <span className="text-[16px] font-[600]">{customer.fullName}</span>
+              </div>
+
+              <p className="text-flat">
+                <span className="font-[700]">Phone:</span>{" "}
+                <Link
+                  href={`tel:${orderItemView.shippingAddress.phoneNumber}`}
+                  className="hover:underline"
+                >
+                  {orderItemView.shippingAddress.phoneNumber}
+                </Link>
+              </p>
+              <p className="text-flat">
+                <span className="font-[700]">Email:</span>{" "}
+                <Link href={`mailto:${customer.email}`} className="hover:underline">
+                  {customer.email || "N/A"}
+                </Link>
+              </p>
+            </div>
+          </div>
+          <div className="flex w-full flex-col gap-[15px] rounded-[6px] bg-white p-[15px]">
+            <div className="flex w-full flex-col gap-[5px]">
+              <h5 className="text-[20px] font-[500]">Shipping Information</h5>
+              <HorizontalLine className="h-[2px]" />
+            </div>
+
+            <div className="flex flex-col gap-[10px]">
+              <p className="text-flat">
+                <span className="font-[700]">Address:</span>{" "}
+                {orderItemView.shippingAddress.division},{orderItemView.shippingAddress.district},{" "}
+                {orderItemView.shippingAddress.upazila}
+              </p>
+              <p className="text-flat">
+                <span className="font-[700]">Shipping Method:</span> Regular Delivery
+              </p>
+              <p className="text-flat">
+                <span className="font-[700]">Estimated Delivery: </span>{" "}
+                {formatDate(estimatedDeliveryDate.toString())}
+              </p>
+              <p className="text-flat">
+                <span className="font-[700]">Shipping Address:</span>{" "}
+                <span>{orderItemView.shippingAddress.address}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-[24px] flex w-full flex-col gap-[15px] rounded-[6px] bg-white p-[15px]">
+          <div className="flex w-full flex-col gap-[5px]">
+            <h5 className="text-[20px] font-[500]">Shipping Information</h5>
+            <HorizontalLine className="h-[2px]" />
+          </div>
+          <input
+            type="text"
+            onChange={(e) => setSearchValue(e.target.value)}
+            className="w-full rounded-[4px] border-[1px] border-border-muted bg-white px-[0.75rem] py-[0.375rem] text-base leading-[1.5] font-normal transition duration-150 ease-in-out outline-none"
+            placeholder="Search items..."
+          />
+
+          <div className="w-full overflow-x-auto">
+            <table className="w-full border border-border-muted">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="min-w-[100px] border border-border-muted px-4 py-2 text-left font-semibold">
+                    Product
+                  </th>
+                  <th className="border border-border-muted px-4 py-2 text-left font-semibold">
+                    SKU
+                  </th>
+                  <th className="border border-border-muted px-4 py-2 text-left font-semibold">
+                    QTY
+                  </th>
+                  <th className="border border-border-muted px-4 py-2 text-left font-semibold">
+                    Variation
+                  </th>
+                  <th className="border border-border-muted px-4 py-2 text-left font-semibold">
+                    Unit Price
+                  </th>
+                  <th className="border border-border-muted px-4 py-2 text-left font-semibold">
+                    Total
+                  </th>
+                  {isEditMode ? (
+                    <th className="border border-border-muted px-4 py-2 text-left font-semibold">
+                      Action
+                    </th>
+                  ) : (
+                    ""
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                {filteredOrderItems?.map((item, i) => (
+                  <tr key={item.product_id + i}>
+                    <td className="min-w-[100px] border border-border-muted px-4 py-2">
+                      <Link
+                        href={`/dashboard/products/${item.product_id}`}
+                        className="hover:underline"
+                      >
+                        {item.product.name}
+                      </Link>
+                    </td>
+                    <td className="border border-border-muted px-4 py-2">
+                      {item.product.sku || "N/A"}
+                    </td>
+                    <td className="border border-border-muted px-4 py-2">{item.quantity}</td>
+                    <td className="border border-border-muted px-4 py-2">
+                      <span className="flex flex-col gap-[4px] text-[14px]">
+                        <span>
+                          <span className="font-[600]">Color:</span> {item.color}
+                        </span>
+                        <span>
+                          <span className="font-[600]">Size:</span>
+                          {item.size}
+                        </span>
+                      </span>
+                    </td>
+                    <td className="border border-border-muted px-4 py-2">
+                      {item.product.price} BDT
+                    </td>
+                    <td className="border border-border-muted px-4 py-2">
+                      {item.product.price * item.quantity} BDT
+                    </td>
+                    {isEditMode ? (
+                      <td className="border border-border-muted px-4 py-2">
+                        <button
+                          onClick={() => handleRemoveOrderItem(i)}
+                          className="mx-auto flex w-[100px] cursor-pointer items-center justify-center gap-[4px] rounded-[4px] bg-danger/10 px-[10px] py-[4px] text-danger duration-[0.3s] hover:bg-danger hover:text-white"
+                        >
+                          <FaRegTrashAlt /> Delete
+                        </button>
+                      </td>
+                    ) : (
+                      ""
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {isEditMode ? (
+            <div className="flex w-full flex-col items-start justify-start gap-[20px]">
+              <div className="flex items-center justify-start gap-[10px]">
+                <button
+                  onClick={handleUpdate}
+                  disabled={isUpdating}
+                  className="flex cursor-pointer items-center gap-[5px] text-[14px] text-primary hover:underline disabled:cursor-not-allowed"
+                >
+                  Save changes {isUpdating ? <ImSpinner11 className="animate-spin" /> : ""}
+                </button>
+                <button
+                  className="cursor-pointer text-[14px] text-primary hover:underline"
+                  onClick={() => setOrderItemView(initialOrderItemView)}
+                >
+                  Undo changes
+                </button>
+              </div>
+              <AddNewItemOnOrder
+                onAddItem={(item) =>
+                  setOrderItemView({
+                    ...orderItemView,
+                    orderItems: [...orderItemView.orderItems, item],
+                  })
+                }
+              />
+            </div>
+          ) : (
+            ""
+          )}
+
+          <div className="flex w-full justify-end">
+            {isEditMode ? (
+              <button
+                onClick={() => {
+                  setIsEditMode(false);
+                  setOrderItemView(initialOrderItemView);
+                }}
+                className="flex w-fit cursor-pointer items-center gap-[8px] rounded-[4px] px-[10px] py-[3px] text-danger"
+              >
+                <MdCancel /> Cancel Editing
+              </button>
+            ) : (
+              <button
+                onClick={() => setIsEditMode(true)}
+                className="flex w-fit cursor-pointer items-center gap-[8px] rounded-[4px] px-[10px] py-[3px] text-success"
+              >
+                <LuPencil /> Edit Items
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-[24px] flex w-full items-center justify-end">
+          <div className="flex w-[100%] flex-col gap-[15px] rounded-[6px] bg-white p-[15px] lg:w-[50%]">
+            <div className="flex w-full flex-col gap-[5px]">
+              <h5 className="text-[20px] font-[500]">Order Summary</h5>
+              <HorizontalLine className="h-[2px]" />
+            </div>
+            <div className="flex flex-col gap-[6px]">
+              <div className="flex w-full items-center justify-between text-[15px]">
+                <span>Subtotal:</span>
+                <span>{subTotal} BDT</span>
+              </div>
+              <div className="flex w-full items-center justify-between text-[15px]">
+                <span>Shipping Charge:</span>
+                <span>{shippingCharge} BDT</span>
+              </div>
+              {couponDiscount ? (
+                <div className="flex w-full items-center justify-between text-[15px]">
+                  <span>Discount:</span>
+                  <span>- {couponDiscount} BDT</span>
+                </div>
+              ) : (
+                ""
+              )}
+
+              <div className="flex w-full items-center justify-between text-[15px]">
+                <span className="font-[700]">Total:</span>
+                <span className="font-[700]">
+                  {subTotal + (shippingCharge || 0) - (couponDiscount || 0)} BDT
+                </span>
+              </div>
+            </div>
+            <HorizontalLine className="h-[2px]" />
+            <div className="flex flex-col gap-[6px]">
+              <span>
+                <span className="font-[700]">Payment Method: </span>
+                {orderItemView.paymentStatus === "COD" ? "Cash on Delivery (COD)" : "Online"}
+              </span>
+              <span>
+                <span className="font-[700]">Payment Status: </span>
+                {orderItemView.paymentStatus === "paid" ? "Paid" : "Unpaid"}
+              </span>
+              <span>
+                <span className="font-[700]">Transaction ID: </span>
+                N/A
+              </span>
+            </div>
+
+            {shouldShowInvoice ? (
+              <div className="mt-[20px] flex w-full items-center justify-end">
+                <InvoiceModal orderItem={orderItemView} />
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        </div>
       </div>
       <DialogProvider
         setState={setIsModalOpen}

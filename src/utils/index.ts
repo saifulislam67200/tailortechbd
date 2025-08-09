@@ -56,3 +56,5 @@ export const formatNumberWithSuffix = (value: number): string => {
   }
   return value.toString();
 };
+
+export const profileFallBack = "/images/avatar.jpg";
