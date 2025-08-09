@@ -5,6 +5,7 @@ export interface IOrderItem {
     name: string;
     price: number;
     slug?: string;
+    sku?: string;
   };
   color: string;
   size: string;

@@ -2,6 +2,7 @@ import DialogProvider from "@/components/ui/DialogProvider";
 import { IOrder } from "@/types/order";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
+import Link from "next/link";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
@@ -29,17 +30,22 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   // Generate current date and time
-  const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-  const formattedTime = currentDate.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
+  const formattedDate = (date?: Date | string) => {
+    const currentDate = date ? new Date(date) : new Date();
+    return currentDate.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+  const formattedTime = (date?: Date | string) => {
+    const currentDate = date ? new Date(date) : new Date();
+    return currentDate.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
 
   const invoiceNumber = generateInvoiceNumber(orderItem);
 
@@ -84,32 +90,15 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
         Invoice
       </button>
 
-      <DialogProvider
-        setState={setIsOpen}
-        state={isOpen}
-        className="max-h-[100vh] min-h-[95vh] w-full max-w-[1000px] bg-white"
-      >
-        <div className="mt-[20px] flex w-full items-center justify-center gap-[10px]">
-          <button
-            className="cursor-pointer rounded bg-primary px-[10] py-[3px] text-white"
-            onClick={handleDownloadPDF}
-            disabled={isGeneratingPDF}
-          >
-            {isGeneratingPDF ? "Generating PDF..." : "Download PDF"}
-          </button>
-          <button
-            className="cursor-pointer rounded bg-primary px-[10] py-[3px] text-white"
-            onClick={handlePrints}
-          >
-            Print
-          </button>
-        </div>
-
-        <div ref={invoiceRef}>
-          <div className="mx-auto my-10 max-w-4xl rounded-lg bg-white p-10 font-sans text-sm text-gray-800">
+      <DialogProvider setState={setIsOpen} state={isOpen} className="max-w-[100vw] bg-white">
+        <div
+          ref={invoiceRef}
+          className="mx-auto flex min-h-[1123px] max-w-full min-w-[794px] flex-col items-start justify-between bg-white p-5 font-sans text-sm text-gray-800"
+        >
+          <div className="w-full">
             {/* Header */}
             <div className="mb-6 flex items-start justify-between border-b pb-4">
-              <div className="space-y-1 text-sm">
+              <div className="text-sm">
                 <div className="mb-3">
                   <div className="mb-4 w-[230px]">
                     <img
@@ -130,24 +119,26 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
                   <strong>Email:</strong> support@tailortechbd.com
                 </p>
                 <p>
-                  <strong>Website:</strong> www.tailortechbd.com
+                  <strong>Website:</strong>{" "}
+                  <Link href="www.tailortechbd.com">www.tailortechbd.com</Link>
                 </p>
                 <p>
-                  <strong>Facebook:</strong> fb.com/tailortechbd
+                  <strong>Facebook:</strong>{" "}
+                  <a href="https://fb.com/tailortechbd">fb.com/tailortechbd</a>
                 </p>
               </div>
-              <div className="space-y-1 text-right text-sm">
+              <div className="text-right text-sm">
                 <p>
                   <strong>Invoice No:</strong> {invoiceNumber}
                 </p>
                 <p>
-                  <strong>Date:</strong> {formattedDate}
+                  <strong>Date:</strong> {formattedDate(orderItem.createdAt)}
                 </p>
                 <p>
-                  <strong>Time:</strong> {formattedTime}
+                  <strong>Time:</strong> {formattedTime(orderItem.createdAt)}
                 </p>
                 <p>
-                  <strong>Printed On:</strong> {formattedDate}
+                  <strong>Printed On:</strong> {formattedDate()}
                 </p>
               </div>
             </div>
@@ -180,7 +171,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
                 <thead className="bg-gray-100 text-black/700">
                   <tr>
                     <th className="border p-2">SL</th>
-                    <th className="border p-2">Product Name</th>
+                    <th className="border p-2">Product Name & Code</th>
                     <th className="border p-2">Color</th>
                     <th className="border p-2">Size</th>
                     <th className="border p-2">Qty</th>
@@ -192,7 +183,9 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
                   {orderItem?.orderItems?.map((orderItem, index) => (
                     <tr key={index} className="hover:bg-gray-50">
                       <td className="border p-2">{index + 1}</td>
-                      <td className="border p-2">{orderItem?.product?.name}</td>
+                      <td className="max-w-[300px] border p-2">
+                        {orderItem?.product?.name} ({orderItem.product.sku || "N/A"})
+                      </td>
                       <td className="border p-2">{orderItem?.color}</td>
                       <td className="border p-2">{orderItem?.size}</td>
                       <td className="border p-2">{orderItem?.quantity}</td>
@@ -210,7 +203,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
 
             {/* Summary */}
             <div className="mt-6 flex justify-end">
-              <div className="w-full max-w-sm space-y-2 text-right">
+              <div className="w-full max-w-sm text-right">
                 <p>
                   <strong>Subtotal:</strong> {subtotal}
                 </p>
@@ -227,7 +220,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
             </div>
 
             {/* Payment Info  */}
-            <div className="mt-8 space-y-1 text-sm">
+            <div className="mt-8 text-sm">
               <p>
                 <strong>Payment Method:</strong> COD / Cash / Bkash / Card
               </p>
@@ -247,9 +240,11 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
                 <li>Refund only applicable for defective or wrong items.</li>
               </ul>
             </div>
+          </div>
 
+          <div className="flex w-full flex-col gap-[24px]">
             {/* Signature */}
-            <div className="mt-10 flex items-end justify-between pt-6">
+            <div className="flex items-end justify-between pt-6">
               <div className="text-center">
                 <p className="mx-auto w-40 border-t border-gray-400 pt-1 text-gray-700">
                   Customer Sign
@@ -264,9 +259,26 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
             </div>
 
             {/* Footer */}
-            <div className="mt-6 text-center text-sm text-gray-500">
+            <div className="text-center text-sm text-gray-500">
               <p>Thank You For Shopping From Tailortech</p>
             </div>
+          </div>
+        </div>
+        <div className="sticky top-0 z-10 bg-white pt-[20px] pb-3">
+          <div className="flex w-full items-center justify-center gap-[10px]">
+            <button
+              className="cursor-pointer rounded bg-primary px-[10px] py-[3px] text-white"
+              onClick={handleDownloadPDF}
+              disabled={isGeneratingPDF}
+            >
+              {isGeneratingPDF ? "Generating PDF..." : "Download PDF"}
+            </button>
+            <button
+              className="cursor-pointer rounded bg-primary px-[10px] py-[3px] text-white"
+              onClick={handlePrints}
+            >
+              Print
+            </button>
           </div>
         </div>
       </DialogProvider>

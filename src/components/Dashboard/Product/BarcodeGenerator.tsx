@@ -8,23 +8,18 @@ import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
 
 interface BarcodeGeneratorProps {
-  barcodeValue?: string;
-  price?: string | number;
-  discount?: string | number;
-  brandName?: string;
-  productCode?: string;
+  productCode: string;
   autoDownload?: boolean;
   isOpen?: boolean;
   onClose?: () => void;
+  numberOfBarcodes?: number;
 }
 
 const BarcodeGenerator = ({
-  price = "N/A",
-  discount = "0",
-  brandName = "Tailortech",
   productCode = "N/A",
   autoDownload = false,
   isOpen = false,
+  numberOfBarcodes = 40,
   onClose,
 }: BarcodeGeneratorProps) => {
   const barcodeRef = useRef<HTMLDivElement>(null);
@@ -33,9 +28,6 @@ const BarcodeGenerator = ({
   const [isGenerating, setIsGenerating] = useState(false);
 
   // Calculate discounted price
-  const originalPrice = parseFloat(price.toString());
-  const discountValue = parseFloat(discount.toString());
-  const discountedPrice = (originalPrice - originalPrice * (discountValue / 100)).toFixed(2);
 
   const barcodeValue = `${productCode}`;
   const modalOpen = isOpen !== undefined ? isOpen : internalIsOpen;
@@ -45,7 +37,7 @@ const BarcodeGenerator = ({
   const generateBarcodes = () => {
     return new Promise<void>((resolve) => {
       let completed = 0;
-      for (let i = 0; i < 40; i++) {
+      for (let i = 0; i < numberOfBarcodes; i++) {
         const canvas = canvasRefs.current[i];
         if (canvas) {
           try {
@@ -157,17 +149,13 @@ const BarcodeGenerator = ({
         state={modalOpen}
         className="h-full max-h-[95vh] w-fit overflow-auto bg-white lg:min-h-[50vh]"
       >
-        <div
-          ref={barcodeRef}
-          className="grid aspect-[2480/3508] h-full shrink-0 grid-cols-4 grid-rows-10 gap-1 bg-white p-[10px] font-sans text-xs text-black"
-        >
-          {Array.from({ length: 40 }).map((_, index) => (
+        <div ref={barcodeRef} className="grid grid-cols-4">
+          {Array.from({ length: numberOfBarcodes }).map((_, index) => (
             <div
               key={index}
-              className="flex flex-col justify-between rounded-sm border border-gray-300 bg-white p-2 text-center text-black"
+              className="box-border flex aspect-[618/348.8] w-full flex-col justify-between border border-[1px] border-black p-[2mm]"
             >
-              <div className="text-[12px] leading-[1.1] font-bold">{brandName}</div>
-
+              <div className="text-center text-[3mm] font-bold">Tailortech</div>
               <div className="flex justify-center">
                 <canvas
                   ref={(el) => {
@@ -178,25 +166,13 @@ const BarcodeGenerator = ({
                   style={{ maxWidth: "100%" }}
                 />
               </div>
-
-              <div className="font-mono text-[8px]">{barcodeValue}</div>
-
-              <div className="">
-                {discountValue > 0 && (
-                  <>
-                    <div className="text-[10px] font-bold text-primary line-through">
-                      {discount}% OFF
-                    </div>
-                    <div className="text-[14px] font-bold text-black">BDT: {discountedPrice}</div>
-                  </>
-                )}
-              </div>
+              <span className="text-center font-mono text-[3mm]">{barcodeValue}</span>
             </div>
           ))}
         </div>
 
         {!autoDownload && (
-          <div className="sticky bottom-0 flex w-full justify-center bg-white p-4 lg:border-t">
+          <div className="sticky bottom-0 flex w-full justify-center bg-white p-4">
             <button
               className="cursor-pointer rounded bg-primary px-6 py-3 font-medium text-white disabled:cursor-not-allowed disabled:opacity-50"
               onClick={handlePrint}

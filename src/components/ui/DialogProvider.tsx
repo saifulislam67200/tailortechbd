@@ -13,10 +13,22 @@ const DialogProvider: React.FC<PropsType> = ({ children, state, setState, classN
   useEffect(() => {
     if (state) {
       document.body.style.overflow = "hidden";
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          setState(false);
+        }
+      };
+      document.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+      };
     } else {
       document.body.style.overflow = "unset";
     }
-  }, [state]);
+  }, [state, setState]);
 
   if (!state) return null;
 

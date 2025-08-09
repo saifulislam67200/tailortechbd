@@ -124,7 +124,7 @@ const VerificationView = () => {
             {isLoading ? "Verifying..." : "Verify"}
           </Button>
           <span className="text-[14px] text-strong">
-            didn&apos;t receive the code?{" "}
+            Didn&apos;t receive the code?{" "}
             {remainingTime > 0 ? (
               `Resend in ${dateUtils.formatSecondsToMMSS(remainingTime)}`
             ) : (

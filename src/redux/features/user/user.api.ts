@@ -6,7 +6,13 @@ const userApi = api.injectEndpoints({
     // Create blog post
     registerCustomer: builder.mutation<
       { data: { result: IUser; accessToken: string } },
-      Pick<IUser, "password" | "phoneNumber" | "fullName" | "geo_profile">
+      {
+        email?: string;
+        phoneNumber?: string;
+        fullName: string;
+        geo_profile: { country: string; phone_code: string };
+        password: string;
+      }
     >({
       query: (post) => ({
         url: "/user/signup",

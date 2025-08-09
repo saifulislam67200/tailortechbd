@@ -22,6 +22,7 @@ import {
 import { PiKeyReturnFill } from "react-icons/pi";
 import { RiExchangeFill, RiRefundFill } from "react-icons/ri";
 import { toast } from "sonner";
+import InvoiceModal from "./InvoiceModal/InvoiceModal";
 const statuses = [
   {
     id: "pending",
@@ -268,6 +269,8 @@ export default function ViewOrder({ setIsViewOrder, orderItem }: ViewOrderProps)
             </Button>
           </div>
         </div>
+
+        <InvoiceModal orderItem={orderItemView} />
       </div>
       <DialogProvider
         setState={setIsModalOpen}
