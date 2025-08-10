@@ -16,9 +16,9 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { HiOutlinePencil } from "react-icons/hi";
 import { ImSpinner11 } from "react-icons/im";
 import { IoCheckmarkDoneCircle } from "react-icons/io5";
-import { LuPencil } from "react-icons/lu";
 import {
   MdCancel,
   MdCheckCircle,
@@ -28,9 +28,13 @@ import {
 } from "react-icons/md";
 import { PiKeyReturnFill } from "react-icons/pi";
 import { RiExchangeFill, RiRefundFill } from "react-icons/ri";
+import { TbCancel } from "react-icons/tb";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 import { toast } from "sonner";
-import AddNewItemOnOrder from "./AddNewItemOnOrder";
-import InvoiceModal from "./InvoiceModal/InvoiceModal";
+import AddNewItemOnOrder from "../AllOrders/AddNewItemOnOrder";
+import InvoiceModal from "../AllOrders/InvoiceModal/InvoiceModal";
+import EditOrderShippingInfo from "./EditOrderShippingInfo";
 const statuses = [
   {
     id: "pending",
@@ -184,6 +188,17 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
 
   const handleUpdate = async () => {
     if (!orderItemView) return;
+    const isValidShippingAddress = Object.values(orderItemView.shippingAddress).every(
+      (value) => value
+    );
+
+    if (!isValidShippingAddress) {
+      toast.error("Please enter valid shipping Information", {
+        description: "Check shipping address and fill up all the required fields",
+      });
+      return;
+    }
+
     const totalAmount = orderItemView?.orderItems.reduce(
       (total, item) => total + item.product.price * item.quantity,
       0
@@ -278,10 +293,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
             <div className="flex flex-col gap-[0]">
               <h2 className="text-[32px] font-[600]">Order Details</h2>
               <span className="text-[14px] text-strong">
-                Order ID:{" "}
-                <span className="font-[600]">
-                  #ORD-{orderItemView?._id?.slice(-8).toUpperCase()}
-                </span>
+                Order ID: <span className="font-[600]">#{orderItemView?.orderId}</span>
               </span>
             </div>
             <div className="flex items-center justify-start gap-[10px]">
@@ -328,7 +340,53 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
           </div>
         </div>
 
-        <div className="mt-[48px] flex w-full flex-col items-start justify-between gap-[20px] lg:flex-row">
+        <div className="mt-[48px] flex w-full items-center justify-end gap-[10px]">
+          {isEditMode ? (
+            <>
+              <Button
+                onClick={handleUpdate}
+                disabled={isUpdating}
+                className="flex cursor-pointer items-center gap-[5px] bg-success text-white disabled:cursor-not-allowed"
+              >
+                Save changes {isUpdating ? <ImSpinner11 className="animate-spin" /> : ""}
+              </Button>
+              <Button
+                className="cursor-pointer"
+                onClick={() => setOrderItemView(initialOrderItemView)}
+              >
+                Undo changes
+              </Button>
+            </>
+          ) : (
+            ""
+          )}
+          {currentStatus?.status === "pending" ? (
+            <Button
+              title={isEditMode ? "Undo changes and cancel editing" : "Edit Order"}
+              className={`${isEditMode ? "bg-danger text-white" : "bg-success text-white"}`}
+              onClick={() => {
+                if (isEditMode) {
+                  setOrderItemView(initialOrderItemView);
+                }
+                setIsEditMode(!isEditMode);
+              }}
+            >
+              {isEditMode ? (
+                <>
+                  Cancel Edit <TbCancel />
+                </>
+              ) : (
+                <>
+                  Edit Order <HiOutlinePencil />
+                </>
+              )}
+            </Button>
+          ) : (
+            ""
+          )}
+        </div>
+
+        <div className="mt-[24px] flex w-full flex-col items-start justify-between gap-[20px] lg:flex-row">
           <div className="flex w-full flex-col gap-[15px] rounded-[6px] bg-white p-[15px]">
             <div className="flex w-full flex-col gap-[5px]">
               <h5 className="text-[20px] font-[500]">Customer Information</h5>
@@ -344,18 +402,38 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
                     className="h-full w-full object-cover"
                   />
                 </span>
-                <span className="text-[16px] font-[600]">{customer.fullName}</span>
+                <span className="text-[16px] font-[600]">{orderItemView.shippingAddress.name}</span>
               </div>
 
-              <p className="text-flat">
-                <span className="font-[700]">Phone:</span>{" "}
-                <Link
-                  href={`tel:${orderItemView.shippingAddress.phoneNumber}`}
-                  className="hover:underline"
-                >
-                  {orderItemView.shippingAddress.phoneNumber}
-                </Link>
-              </p>
+              {isEditMode ? (
+                <PhoneInput
+                  international
+                  defaultCountry="BD"
+                  placeholder="Enter phone number"
+                  countryCallingCodeEditable={false}
+                  className={`rounded-[5px] border-[1px] border-border-muted bg-white px-3 py-[12px] text-sm`}
+                  value={orderItemView.shippingAddress.phoneNumber}
+                  onChange={(value) =>
+                    setOrderItemView({
+                      ...orderItemView,
+                      shippingAddress: {
+                        ...orderItemView.shippingAddress,
+                        phoneNumber: value || "",
+                      },
+                    })
+                  }
+                />
+              ) : (
+                <p className="text-flat">
+                  <span className="font-[700]">Phone:</span>{" "}
+                  <Link
+                    href={`tel:${orderItemView.shippingAddress.phoneNumber}`}
+                    className="hover:underline"
+                  >
+                    {orderItemView.shippingAddress.phoneNumber}
+                  </Link>
+                </p>
+              )}
               <p className="text-flat">
                 <span className="font-[700]">Email:</span>{" "}
                 <Link href={`mailto:${customer.email}`} className="hover:underline">
@@ -364,31 +442,40 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
               </p>
             </div>
           </div>
-          <div className="flex w-full flex-col gap-[15px] rounded-[6px] bg-white p-[15px]">
-            <div className="flex w-full flex-col gap-[5px]">
-              <h5 className="text-[20px] font-[500]">Shipping Information</h5>
-              <HorizontalLine className="h-[2px]" />
-            </div>
+          {isEditMode ? (
+            <EditOrderShippingInfo
+              onChange={(shippingInfo) =>
+                setOrderItemView({ ...orderItemView, shippingAddress: shippingInfo })
+              }
+              shippingInfo={orderItemView.shippingAddress}
+            />
+          ) : (
+            <div className="flex w-full flex-col gap-[15px] rounded-[6px] bg-white p-[15px]">
+              <div className="flex w-full flex-col gap-[5px]">
+                <h5 className="text-[20px] font-[500]">Shipping Information</h5>
+                <HorizontalLine className="h-[2px]" />
+              </div>
 
-            <div className="flex flex-col gap-[10px]">
-              <p className="text-flat">
-                <span className="font-[700]">Address:</span>{" "}
-                {orderItemView.shippingAddress.division},{orderItemView.shippingAddress.district},{" "}
-                {orderItemView.shippingAddress.upazila}
-              </p>
-              <p className="text-flat">
-                <span className="font-[700]">Shipping Method:</span> Regular Delivery
-              </p>
-              <p className="text-flat">
-                <span className="font-[700]">Estimated Delivery: </span>{" "}
-                {formatDate(estimatedDeliveryDate.toString())}
-              </p>
-              <p className="text-flat">
-                <span className="font-[700]">Shipping Address:</span>{" "}
-                <span>{orderItemView.shippingAddress.address}</span>
-              </p>
+              <div className="flex flex-col gap-[10px]">
+                <p className="text-flat">
+                  <span className="font-[700]">Address:</span>{" "}
+                  {orderItemView.shippingAddress.division},{orderItemView.shippingAddress.district},{" "}
+                  {orderItemView.shippingAddress.upazila}
+                </p>
+                <p className="text-flat">
+                  <span className="font-[700]">Shipping Method:</span> Regular Delivery
+                </p>
+                <p className="text-flat">
+                  <span className="font-[700]">Estimated Delivery: </span>{" "}
+                  {formatDate(estimatedDeliveryDate.toString())}
+                </p>
+                <p className="text-flat">
+                  <span className="font-[700]">Shipping Address:</span>{" "}
+                  <span>{orderItemView.shippingAddress.address}</span>
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="mt-[24px] flex w-full flex-col gap-[15px] rounded-[6px] bg-white p-[15px]">
@@ -491,55 +578,17 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
           </div>
 
           {isEditMode ? (
-            <div className="flex w-full flex-col items-start justify-start gap-[20px]">
-              <div className="flex items-center justify-start gap-[10px]">
-                <button
-                  onClick={handleUpdate}
-                  disabled={isUpdating}
-                  className="flex cursor-pointer items-center gap-[5px] text-[14px] text-primary hover:underline disabled:cursor-not-allowed"
-                >
-                  Save changes {isUpdating ? <ImSpinner11 className="animate-spin" /> : ""}
-                </button>
-                <button
-                  className="cursor-pointer text-[14px] text-primary hover:underline"
-                  onClick={() => setOrderItemView(initialOrderItemView)}
-                >
-                  Undo changes
-                </button>
-              </div>
-              <AddNewItemOnOrder
-                onAddItem={(item) =>
-                  setOrderItemView({
-                    ...orderItemView,
-                    orderItems: [...orderItemView.orderItems, item],
-                  })
-                }
-              />
-            </div>
+            <AddNewItemOnOrder
+              onAddItem={(item) =>
+                setOrderItemView({
+                  ...orderItemView,
+                  orderItems: [...orderItemView.orderItems, item],
+                })
+              }
+            />
           ) : (
             ""
           )}
-
-          <div className="flex w-full justify-end">
-            {isEditMode ? (
-              <button
-                onClick={() => {
-                  setIsEditMode(false);
-                  setOrderItemView(initialOrderItemView);
-                }}
-                className="flex w-fit cursor-pointer items-center gap-[8px] rounded-[4px] px-[10px] py-[3px] text-danger"
-              >
-                <MdCancel /> Cancel Editing
-              </button>
-            ) : (
-              <button
-                onClick={() => setIsEditMode(true)}
-                className="flex w-fit cursor-pointer items-center gap-[8px] rounded-[4px] px-[10px] py-[3px] text-success"
-              >
-                <LuPencil /> Edit Items
-              </button>
-            )}
-          </div>
         </div>
 
         <div className="mt-[24px] flex w-full items-center justify-end">
