@@ -13,6 +13,7 @@ import type { Swiper as SwiperType } from "swiper/types";
 
 import Image from "next/image";
 import Link from "next/link";
+import { RiPlayLargeFill } from "react-icons/ri";
 
 interface ZoomableImageProps {
   src: string;
@@ -21,18 +22,10 @@ interface ZoomableImageProps {
   height?: number;
 }
 
-const ZoomableImage = ({
-  src,
-
-  width = 1200,
-  height = 1200,
-}: ZoomableImageProps) => {
-  const imageContainerRef = useRef<HTMLAnchorElement>(null);
-
+const ZoomableImage = ({ src, width = 1200, height = 1200 }: ZoomableImageProps) => {
   return (
     <Link
       href={src}
-      ref={imageContainerRef}
       data-pswp-width={width}
       data-pswp-height={height}
       className="group/zoomable relative aspect-square h-full max-h-[600px] w-full cursor-zoom-in border border-info-light p-[5px] lg:p-[0px]"
@@ -53,7 +46,7 @@ const ProductDetailsSlider = ({
   selectedColor,
   setSelectedColor,
 }: {
-  product: Pick<IProduct, "images" | "colors">;
+  product: Pick<IProduct, "images" | "colors" | "video">;
   selectedColor: IColor | undefined;
   setSelectedColor: (color: IColor | undefined) => void;
 }) => {
@@ -104,6 +97,19 @@ const ProductDetailsSlider = ({
             setSelectedColor(undefined);
           }}
         >
+          {product.video ? (
+            <SwiperSlide>
+              <div className="group flex w-full cursor-zoom-in flex-col items-center justify-center gap-4 lg:flex-row">
+                <video
+                  src={product.video}
+                  className="group/zoomable relative aspect-square h-full max-h-[600px] w-full cursor-zoom-in border border-info-light p-[5px] lg:p-[0px]"
+                  controls
+                />
+              </div>
+            </SwiperSlide>
+          ) : (
+            ""
+          )}
           {images.map((img, index) => (
             <SwiperSlide key={index}>
               <div className="group flex w-full cursor-zoom-in flex-col items-center justify-center gap-4 lg:flex-row">
@@ -123,6 +129,16 @@ const ProductDetailsSlider = ({
           modules={[FreeMode, Thumbs]}
           className="thumbnail-slider w-full overflow-x-scroll"
         >
+          {product.video ? (
+            <SwiperSlide className="!h-[90px] !w-[80px] border-[1px] border-transparent [&.swiper-slide-thumb-active>.thumb]:border-primary">
+              <div className="thumb relative h-[60px] w-[60px] cursor-pointer overflow-hidden border border-transparent p-[5px] transition-all duration-300 md:h-[80px] md:w-[80px]">
+                <video src={product.video} className="h-full w-full object-cover" />
+                <RiPlayLargeFill className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-[30px] text-white" />
+              </div>
+            </SwiperSlide>
+          ) : (
+            ""
+          )}
           {images.map((img, index) => (
             <SwiperSlide
               key={index}

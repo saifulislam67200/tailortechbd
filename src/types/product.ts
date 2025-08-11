@@ -28,6 +28,7 @@ export interface IProduct {
   discount: number;
   tag?: string;
   images: string[];
+  video?: string;
   createdAt: string;
   updatedAt?: string;
   chart: string[][];

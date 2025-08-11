@@ -12,6 +12,7 @@ import * as Yup from "yup";
 import CategorySelector from "./CategorySelector";
 import ImageUploader from "./ImageUploader";
 import ProductSizeInput from "./ProductSizeInput";
+import UploadProductVideo from "./UploadProductVideo";
 
 const initialValues: Omit<
   IProduct,
@@ -34,6 +35,7 @@ const initialValues: Omit<
   discount: 0,
   tag: "",
   category: "",
+  video: "",
   images: [],
   // specifications: [{ label: "", value: "" }],
   colors: [
@@ -56,7 +58,7 @@ const validationSchema = Yup.object().shape({
     .min(1, "At least one image is required")
     .of(Yup.string().url("Must be a valid URL")),
   category: Yup.string().required("Category is required"),
-
+  video: Yup.string().optional(),
   colors: Yup.array().of(
     Yup.object().shape({
       color: Yup.string().required("Please enter a color name"),
@@ -180,6 +182,16 @@ export default function ProductForm({
               />
               <ErrorMessage name="images" component="span" className="text-sm text-danger" />
             </div>
+          </div>
+
+          <div className="w-full bg-white p-[16px]">
+            <SectionTitle className="mb-[15px]">Product Video</SectionTitle>
+
+            <label className={labelClass}>Product Video</label>
+
+            <UploadProductVideo onChange={(video) => setFieldValue("video", video)} />
+
+            {touched.video && errors.video && <span className="text-danger">{errors.video}</span>}
           </div>
 
           <HorizontalLine className="my-[16px]" />

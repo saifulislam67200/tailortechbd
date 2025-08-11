@@ -1,11 +1,11 @@
 "use client";
 
 import { IColor, IProduct } from "@/types/product";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { BsArrowLeft } from "react-icons/bs";
 import ProductDetailsSlider from "./ProductDetailSlider";
 import ProductSizeChart from "./ProductSizeChart";
-import { BsArrowLeft } from "react-icons/bs";
-import { useRouter } from "next/navigation";
 
 const getColorsWithStock = (product: IProduct) => {
   if (!product || !product.colors) {
