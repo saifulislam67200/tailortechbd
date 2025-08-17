@@ -19,10 +19,13 @@ import BarcodeGeneratorProductSelect from "./BarcodeGeneratorProductSelect";
 const tableHead = [
   { label: "SL", field: "" },
   { label: "Product Id", field: "sku" },
+  { label: "Category", field: "" },
+  { label: "Sub Category", field: "" },
   { label: "Name", field: "name" },
+  { label: "Size", field: "" },
+  { label: "Color", field: "" },
   { label: "Price", field: "price" },
   { label: "Discount (%)", field: "discount" },
-  { label: "Category", field: "" },
   { label: "Date Created", field: "createdAt" },
   { label: "Actions", field: "" },
 ];
@@ -44,6 +47,7 @@ const AllProductsTable = ({
 
   const { data, isLoading } = useGetAllProductsQuery({ ...query, searchTerm });
   const productData = data?.data || [];
+  console.log(productData);
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 
   const handleSort = (field: string) => {
@@ -140,6 +144,7 @@ const AllProductsTable = ({
               ) : data?.data.length ? (
                 productData?.map((product, index) => (
                   <tr key={product?._id} className="hover:bg-gray-50">
+                    {/* index */}
                     <td
                       className="cursor-pointer px-6 py-4"
                       onClick={() => productDetails(product?.slug)}
@@ -147,6 +152,7 @@ const AllProductsTable = ({
                       <span className="text-[14px]"> {index + 1}</span>
                     </td>
 
+                    {/* id */}
                     <td
                       className="cursor-pointer px-6 py-4"
                       onClick={() => productDetails(product?.slug)}
@@ -154,6 +160,25 @@ const AllProductsTable = ({
                       <span className="text-[14px]"> {product?.sku ? product?.sku : "N/A"}</span>
                     </td>
 
+                    {/* category */}
+                    <td className="cursor-pointer px-6 py-4">
+                      {product?.category ? (
+                        <span className="text-[14px]">
+                          {typeof product.category === "string"
+                            ? product.category
+                            : product.category.label}
+                        </span>
+                      ) : (
+                        <span className="text-[14px]">N/A</span>
+                      )}
+                    </td>
+
+                    {/* sub category */}
+                    <td className="px-6 py-4">
+                      <span className="text-muted-foreground text-[14px]">—</span>
+                    </td>
+
+                    {/* name */}
                     <td
                       className="cursor-pointer px-6 py-4"
                       onClick={() => productDetails(product?.slug)}
@@ -172,24 +197,50 @@ const AllProductsTable = ({
                       </div>
                     </td>
 
+                    {/* size */}
+                    <td className="px-6 py-4">
+                      <div className="text-[14px]">
+                        {product.chart
+                          ? product.chart.slice(1).map((row, idx) => (
+                              <div key={idx} className="mr-2">
+                                {row[0]}
+                              </div>
+                            ))
+                          : "N/A"}
+                      </div>
+                    </td>
+
+                    {/* color */}
+                    <td className="px-6 py-4">
+                      <div className="text-[14px]">
+                        {product.colors && product.colors.length > 0
+                          ? product.colors.map((colorObj, idx) => (
+                              <div key={idx} className="mr-2">
+                                {colorObj.color}
+                              </div>
+                            ))
+                          : "N/A"}
+                      </div>
+                    </td>
+
+                    {/* price */}
                     <td className="px-6 py-4">
                       <span className="text-[14px]">৳ {product.price}</span>
                     </td>
-                    <td className="px-6 py-4">
+
+                    {/* discount */}
+                    <td className="px-8 py-4">
                       <span className="text-[14px]">{product.discount || "N/A"}</span>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">
-                        {typeof product.category === "string"
-                          ? product.category
-                          : product.category?.label || "N/A"}
-                      </span>
-                    </td>
+
+                    {/* created at */}
                     <td className="px-6 py-4">
                       <span className="text-[14px]">
                         {dateUtils.formateCreateOrUpdateDate(product.createdAt) || "N/A"}
                       </span>
                     </td>
+
+                    {/* actions */}
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-[8px]">
                         <BarcodeGeneratorProductSelect product={product} />
