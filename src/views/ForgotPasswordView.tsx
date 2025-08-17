@@ -22,7 +22,7 @@ const ForgotPasswordSchema = Yup.object().shape({
 const ForgotPasswordView = () => {
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
   const [country, setCountry] = useState<ICountry>();
-  const [mode, setMode] = useState<"email" | "phoneNumber">("email");
+  const [mode, setMode] = useState<"email" | "phoneNumber">("phoneNumber");
   const [isSent, setIsSent] = useState(false);
 
   const handleSubmit = async (

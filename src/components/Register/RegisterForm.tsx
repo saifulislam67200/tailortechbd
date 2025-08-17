@@ -6,7 +6,7 @@ import RegisterWithEmail from "./RegisterWithEmail";
 import RegisterWithMobile from "./RegisterWithMobile";
 
 const RegisterForm = () => {
-  const [mode, setMode] = useState<"email" | "phoneNumber">("email");
+  const [mode, setMode] = useState<"email" | "phoneNumber">("phoneNumber");
   return (
     <FormCard
       headerButtons={[
