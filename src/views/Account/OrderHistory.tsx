@@ -33,10 +33,6 @@ export default function OrderHistory() {
     return order.status[order.status.length - 1]?.status || "pending";
   };
 
-  const getOrderNumber = (order: IOrder) => {
-    return `ORD-${order._id.slice(-8).toUpperCase()}`;
-  };
-
   const getTotalAmount = (order: IOrder) => {
     return Math.round(order.totalProductAmount + (order.deliveryFee || 0));
   };
@@ -89,7 +85,7 @@ export default function OrderHistory() {
                   <div className="flex flex-col gap-[16px] lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex-1">
                       <div className="flex flex-col gap-[8px] sm:flex-row sm:items-center sm:gap-[16px]">
-                        <h3 className="font-semibold text-primary">{getOrderNumber(order)}</h3>
+                        <h3 className="font-semibold text-primary">{order.orderId}</h3>
                         <div className="flex items-center gap-[8px]">
                           <div
                             className={`inline-flex items-center gap-1 rounded-full px-[8px] py-[4px] text-[12px] font-medium ${bg} ${text}`}
@@ -250,9 +246,7 @@ export default function OrderHistory() {
                           <div className="mb-[24px] rounded-lg border border-border-muted bg-white p-[16px]">
                             <div className="sm:text-[14px]text-[12px] flex items-center justify-between border-b border-border-muted pb-[12px] text-[12px] md:text-[14px]">
                               <span className="font-medium text-info">Order Number:</span>
-                              <span className="font-semibold text-primary">
-                                {getOrderNumber(order)}
-                              </span>
+                              <span className="font-semibold text-primary">{order.orderId}</span>
                             </div>
                             <div className="sm:text-[14px]text-[12px] flex items-start justify-between border-b border-border-muted py-[12px] text-[12px] md:text-[14px]">
                               <span className="font-medium text-info">Customer:</span>
