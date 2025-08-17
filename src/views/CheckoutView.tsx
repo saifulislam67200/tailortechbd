@@ -299,7 +299,7 @@ const CheckoutView = () => {
                           id="same_billing"
                           onChange={(e) => setIsSameBillingAddress(!e.target.checked)}
                         />
-                        if the billing address is different
+                        If the billing address is different
                       </label>
 
                       {!isSameBillingAddress ? (
