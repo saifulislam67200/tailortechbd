@@ -6,29 +6,28 @@ import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetProductStockQuery } from "@/redux/features/product/product.api";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { GoPencil } from "react-icons/go";
 import { IoCalendarNumberOutline, IoPrintSharp } from "react-icons/io5";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import { useReactToPrint } from "react-to-print";
 import CategorySelector from "./CategorySelector";
 import "./index.css";
+
 const stockTableHeaders = [
   { label: "SL", field: "" },
-  { label: "Product Name", field: "" },
   { label: "Category", field: "" },
   { label: "Sub Category", field: "" },
-  { label: "SKU", field: "" },
-  { label: "Stock", field: "" },
+  { label: "Product Name", field: "" },
+  { label: "Size", field: "" },
+  { label: "Color", field: "" },
+  { label: "Current Stock", field: "" },
   { label: "Unit Price", field: "" },
-  { label: "Total Value", field: "" },
-  { label: "Status", field: "" },
-  { label: "Actions", field: "" },
+  { label: "Total Price", field: "" },
+  { label: "Stock Status", field: "" },
 ];
 
 // "in-stock", "low-stock", "out-of-stock"
@@ -43,7 +42,7 @@ const ProductStockTable = () => {
 
   const [stockQuery, setStockQuery] = useState<Record<string, string | number>>({
     page: 1,
-    fields: "name,category,createdAt,stock,status",
+    fields: "name,category,size,createdAt,stock,status",
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
     timeframe: "all",
     status: "",
@@ -65,6 +64,7 @@ const ProductStockTable = () => {
     ...dateRange,
   });
   const productStocks = stockData?.data || [];
+  console.log(productStocks);
   const stockMetaData = stockData?.meta || { totalDoc: 0, page: 1 };
 
   const handleSort = (field: string) => {
@@ -100,7 +100,7 @@ const ProductStockTable = () => {
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
-        <div className="flex items-center justify-start gap-[10px]">
+        <div className="flex flex-wrap items-center justify-start gap-[10px]">
           <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
             <input
               type="text"
@@ -143,14 +143,53 @@ const ProductStockTable = () => {
           </select>
         </div>{" "}
         <HorizontalLine className="mt-[10px]" />
-        <div className="flex w-full flex-col gap-[10px]">
-          <span>Select Category</span>
-          <div className="max-w-[290px]">
-            <CategorySelector
-              onSelect={(category) => {
-                setStockQuery({ ...stockQuery, categoryId: category.value || "" });
-              }}
-            />
+        <div className="mb-3 flex flex-wrap gap-4 lg:flex-nowrap">
+          {/* select category */}
+          <div className="flex w-full flex-col gap-[10px]">
+            <span>Select Category</span>
+            <div className="max-w-[290px]">
+              <CategorySelector
+                onSelect={(category) => {
+                  setStockQuery({ ...stockQuery, categoryId: category.value || "" });
+                }}
+              />
+            </div>
+          </div>
+
+          {/* select type */}
+          <div className="flex w-full flex-col gap-[10px]">
+            <span>Select Type</span>
+            <div className="max-w-[290px]">
+              <CategorySelector
+                onSelect={(category) => {
+                  setStockQuery({ ...stockQuery, categoryId: category.value || "" });
+                }}
+              />
+            </div>
+          </div>
+
+          {/* select size */}
+          <div className="flex w-full flex-col gap-[10px]">
+            <span>Select Size</span>
+            <div className="max-w-[290px]">
+              <CategorySelector
+                onSelect={(category) => {
+                  setStockQuery({ ...stockQuery, categoryId: category.value || "" });
+                }}
+              />
+            </div>
+          </div>
+
+          {/* select color */}
+          <div className="flex w-full flex-col gap-[10px]">
+            <span>Select Color</span>
+            <div className="max-w-[290px]">
+              <CategorySelector
+                onSelect={(category) => {
+                  setStockQuery({ ...stockQuery, categoryId: category.value || "" });
+                }}
+              />
+            </div>
           </div>
         </div>
         <div className="flex w-full items-center justify-end gap-0">
@@ -166,7 +205,7 @@ const ProductStockTable = () => {
                 {stockTableHeaders.map((header) => (
                   <th
                     key={header.field || header.label}
-                    className="px-6 py-3 text-left text-sm font-semibold text-dashboard uppercase"
+                    className="px-6 py-3 text-left text-sm font-semibold text-dashboard"
                   >
                     {header.field ? (
                       <button
@@ -207,9 +246,22 @@ const ProductStockTable = () => {
                 //@ts-ignore
                 productStocks.map((product, index) => (
                   <tr key={product?._id + index} className="hover:bg-gray-50">
+                    {/* index */}
                     <td className="px-6 py-4">
                       <span className="text-[14px]">{index + 1}</span>
                     </td>
+
+                    {/* category */}
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">{product?.category || "N/A"}</span>
+                    </td>
+
+                    {/* sub category */}
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">{product?.subCategory || "N/A"}</span>
+                    </td>
+
+                    {/* product name */}
                     <td
                       className="cursor-pointer px-6 py-4"
                       onClick={() => viewProductDetails(product.slug)}
@@ -218,64 +270,48 @@ const ProductStockTable = () => {
                         <span className="line-clamp-1 text-[14px] font-[700]">
                           {product.productName}
                         </span>
-                        <span className="line-clamp-1 text-[12px] font-[400]">
-                          Color: {product.color}
-                        </span>
-                        <span className="line-clamp-1 text-[14px] font-[400]">
-                          Size: {product.size}
-                        </span>
                       </span>
                     </td>
 
+                    {/* size */}
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">{product.category || "N/A"}</span>
+                      <span className="text-[14px]">{product.size || "N/A"}</span>
                     </td>
 
+                    {/* color */}
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">{product.subCategory || "N/A"}</span>
+                      <span className="text-[14px]">{product.color || "N/A"}</span>
                     </td>
-                    <td
-                      className="cursor-pointer px-6 py-4"
-                      onClick={() => viewProductDetails(product.slug)}
-                    >
-                      <span className="text-[14px]">{product?.productCode || "N/A"}</span>
-                    </td>
+
+                    {/* current stock */}
                     <td className="px-6 py-4">
                       <span className="text-[14px]">{product.stock || "0"}</span>
                     </td>
+
+                    {/* unit price */}
                     <td className="px-6 py-4">
                       <span className="text-[14px]">৳ {product.price}</span>
                     </td>
 
+                    {/* total price */}
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">৳ {product.value || "0"}</span>
+                      <span className="text-[14px]">৳ {product.value}</span>
                     </td>
 
                     <td className="px-6 py-4">
                       <span
                         className={`text-[14px] capitalize ${
-                          product.status === "in-stock"
+                          product.status === "In Stock"
                             ? "text-green-500"
-                            : product.status === "low-stock"
+                            : product.status === "Low Stock"
                               ? "text-yellow-500"
-                              : product.status === "out-of-stock"
+                              : product.status === "Out of Stock"
                                 ? "text-red-500"
                                 : ""
                         }`}
                       >
                         {product.status ? product.status?.replace(/-/g, " ") : "N/A"}
                       </span>
-                    </td>
-
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-[8px]">
-                        <Link
-                          href={`/dashboard/products/${product.slug}`}
-                          className="center aspect-square w-[30px] cursor-pointer rounded-full border-[1px] border-dashboard bg-dashboard/5 text-dashboard"
-                        >
-                          <GoPencil />
-                        </Link>
-                      </div>
                     </td>
                   </tr>
                 ))
