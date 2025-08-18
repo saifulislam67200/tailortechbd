@@ -40,6 +40,10 @@ export const admin: IDashboardNavLinks[] = [
         label: "Product Stock",
         path: "/dashboard/product-stock",
       },
+      {
+        label: "Damaged Product",
+        path: "/dashboard/damaged-product",
+      },
     ],
   },
   {
