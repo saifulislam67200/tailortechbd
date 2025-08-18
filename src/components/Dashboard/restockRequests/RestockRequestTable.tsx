@@ -5,33 +5,118 @@ import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetAllRestockRequestQuery } from "@/redux/features/restockRequest/restockRequest.api";
-import { IProduct } from "@/types/product";
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { RxMagnifyingGlass } from "react-icons/rx";
-import DeleteRestockRequestModal from "../Product/DeleteRestockRequestModal";
 
 const tableHead = [
-  { label: "Product", field: "" },
-  { label: "Color", field: "" },
+  { label: "SL", field: "" },
+  { label: "Product Id", field: "" },
+  { label: "Category", field: "" },
+  { label: "Sub-Category", field: "" },
+  { label: "Product Name", field: "" },
   { label: "Size", field: "" },
-  { label: "Name", field: "" },
-  { label: "Email", field: "" },
-  { label: "Phone", field: "" },
-  { label: "Details", field: "" },
-  { label: "Actions", field: "" },
+  { label: "Color", field: "" },
+  { label: "Requested Qty", field: "" },
+  { label: "Customer Details", field: "" },
+  { label: "Message", field: "" },
+  { label: "Action", field: "" },
 ];
 
-interface IRequest {
-  product: IProduct;
-  _id: string;
-  color: string;
-  size: string;
-  name: string;
-  email: string;
-  phone: string;
-  details: string;
-}
+const productData = [
+  {
+    _id: "1",
+    product: {
+      _id: "6835808066629c2062710ee6",
+      name: "Real Madrid Jersey",
+      slug: "real-madrid-official",
+      category: "Sports",
+      subCategory: "Jerseys",
+      createdAt: "2025-05-27T09:06:08.848Z",
+      updatedAt: "2025-07-03T12:45:19.113Z",
+      sku: "RSPO7183102",
+    },
+    color: "Science Blue",
+    size: "M",
+    name: "Sophia Webster",
+    email: "lahipuxiz@mailinator.com",
+    phone: "+1 (452) 351-9102",
+    address: "123 Main St, City, Country",
+    requestedQty: 5,
+    message: "Inventore id ad off",
+    createdAt: "2025-07-27T07:48:30.750Z",
+    updatedAt: "2025-07-27T07:48:30.750Z",
+  },
+  {
+    _id: "2",
+    product: {
+      _id: "6835808066629c2062710ee7",
+      name: "Barcelona Home Jersey",
+      slug: "barcelona-home-2025",
+      category: "Sports",
+      subCategory: "Jerseys",
+      createdAt: "2025-06-01T10:15:22.210Z",
+      updatedAt: "2025-07-12T08:55:41.000Z",
+      sku: "BCLNA8719203",
+    },
+    color: "Crimson Red",
+    size: "L",
+    name: "James Miller",
+    email: "james.miller@example.com",
+    phone: "+44 7123 456789",
+    address: "45 Elm Street, London, UK",
+    requestedQty: 2,
+    message: "Looking forward to fast delivery!",
+    createdAt: "2025-08-01T12:30:10.500Z",
+    updatedAt: "2025-08-01T12:30:10.500Z",
+  },
+  {
+    _id: "3",
+    product: {
+      _id: "6835808066629c2062710ee8",
+      name: "Juventus Away Jersey",
+      slug: "juventus-away-2025",
+      category: "Sports",
+      subCategory: "Jerseys",
+      createdAt: "2025-05-18T11:45:00.000Z",
+      updatedAt: "2025-07-25T14:20:33.000Z",
+      sku: "JUVNT5903844",
+    },
+    color: "Black & White",
+    size: "S",
+    name: "Maria Gonzales",
+    email: "maria.gonzales@example.com",
+    phone: "+34 612 345 678",
+    address: "Calle Mayor 10, Madrid, Spain",
+    requestedQty: 1,
+    message: "Please gift wrap this item.",
+    createdAt: "2025-08-10T09:22:47.800Z",
+    updatedAt: "2025-08-10T09:22:47.800Z",
+  },
+  {
+    _id: "4",
+    product: {
+      _id: "6835808066629c2062710ee9",
+      name: "Manchester United Jersey",
+      slug: "man-united-2025",
+      category: "Sports",
+      subCategory: "Jerseys",
+      createdAt: "2025-05-30T07:30:15.000Z",
+      updatedAt: "2025-07-15T16:44:55.000Z",
+      sku: "MNUTD2398477",
+    },
+    color: "Classic Red",
+    size: "XL",
+    name: "Daniel Wong",
+    email: "daniel.wong@example.com",
+    phone: "+1 (323) 456-7890",
+    address: "789 Sunset Blvd, Los Angeles, USA",
+    requestedQty: 3,
+    message: "Please confirm stock availability.",
+    createdAt: "2025-08-15T18:11:09.220Z",
+    updatedAt: "2025-08-15T18:11:09.220Z",
+  },
+];
 
 const RestockRequestTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
@@ -44,7 +129,7 @@ const RestockRequestTable = () => {
   });
 
   const { data, isLoading } = useGetAllRestockRequestQuery({ ...query, searchTerm });
-  const productData = data?.data || [];
+  // const productData = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 
   const handleSort = (field: string) => {
@@ -91,7 +176,7 @@ const RestockRequestTable = () => {
                 {tableHead.map((heading) => (
                   <th
                     key={heading.field || heading.label}
-                    className="px-6 py-3 text-left text-sm font-semibold text-dashboard uppercase"
+                    className="px-6 py-3 text-left text-sm font-semibold text-dashboard"
                   >
                     {heading.field ? (
                       <button
@@ -128,37 +213,71 @@ const RestockRequestTable = () => {
               {isLoading ? (
                 <TableSkeleton columns={tableHead.length} />
               ) : data?.data.length ? (
-                productData?.map((request: IRequest) => (
+                productData?.map((request, index) => (
                   <tr key={request?._id} className="hover:bg-gray-50">
+                    {/* index */}
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">{index + 1}</span>
+                    </td>
+
+                    {/* product id */}
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">{request?.product?.sku}</span>
+                    </td>
+
+                    {/* category */}
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">{request?.product?.category || "N/A"}</span>
+                    </td>
+
+                    {/* sub category */}
+                    <td className="px-6 py-4">
+                      <span className="text-[14px]">{request?.product?.subCategory || "N/A"}</span>
+                    </td>
+
+                    {/* product name */}
                     <td className="px-6 py-4">
                       <span className="line-clamp-1 text-[14px]">{request?.product?.name}</span>
-                      <span className="line-clamp-1 text-[14px]">
-                        Product Id: {request?.product?.sku}
-                      </span>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.color || "N/A"}</span>
-                    </td>
+
+                    {/* size */}
                     <td className="px-6 py-4">
                       <span className="text-[14px]">{request?.size || "N/A"}</span>
                     </td>
+
+                    {/* color */}
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.name || "N/A"}</span>
+                      <span className="text-[14px]">{request?.color || "N/A"}</span>
                     </td>
+
+                    {/* requested qty */}
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.email || "N/A"}</span>
+                      <span className="text-[14px]">{request?.requestedQty || "N/A"}</span>
                     </td>
+
+                    {/* requester details */}
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.phone || "N/A"}</span>
+                      <div className="text-[14px]">{request?.name || "N/A"}</div>
+                      <div className="text-[14px]">{request?.email || "N/A"}</div>
+                      <div className="text-[14px]">{request?.phone || "N/A"}</div>
+                      <div className="text-[14px]">{request?.address || "N/A"}</div>
                     </td>
+
+                    {/* message */}
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.details || "N/A"}</span>
+                      <span className="text-[14px]">{request?.message || "N/A"}</span>
                     </td>
+
+                    {/* action */}
                     <td className="px-6 py-4">
-                      <DeleteRestockRequestModal
-                        restockRequestId={request?._id}
-                        restockRequestName={request?.product?.name}
-                      />
+                      <div className="flex flex-col gap-1">
+                        <button className="cursor-pointer text-green-400 hover:text-green-500">
+                          Accept
+                        </button>
+                        <button className="cursor-pointer text-red-400 hover:text-red-500">
+                          Reject
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
