@@ -597,7 +597,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
             <div className="flex flex-col gap-[6px]">
               <div className="flex w-full items-center justify-between text-[15px]">
                 <span>Subtotal:</span>
-                <span>{subTotal} BDT</span>
+                <span>{Math.round(subTotal)} BDT</span>
               </div>
               <div className="flex w-full items-center justify-between text-[15px]">
                 <span>Shipping Charge:</span>
@@ -606,7 +606,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
               {couponDiscount ? (
                 <div className="flex w-full items-center justify-between text-[15px]">
                   <span>Discount:</span>
-                  <span>- {couponDiscount} BDT</span>
+                  <span>- {Math.round(couponDiscount)} BDT</span>
                 </div>
               ) : (
                 ""
@@ -615,7 +615,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
               <div className="flex w-full items-center justify-between text-[15px]">
                 <span className="font-[700]">Total:</span>
                 <span className="font-[700]">
-                  {subTotal + (shippingCharge || 0) - (couponDiscount || 0)} BDT
+                  {Math.round(subTotal + (shippingCharge || 0) - (couponDiscount || 0))} BDT
                 </span>
               </div>
             </div>
