@@ -50,10 +50,11 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
   const invoiceNumber = generateInvoiceNumber(orderItem);
 
   const handleDownloadPDF = async () => {
-    if (!invoiceRef.current) return;
-
     setIsGeneratingPDF(true);
+    if (!invoiceRef.current) return;
     try {
+      console.log(invoiceRef.current);
+
       const canvas = await html2canvas(invoiceRef.current, {
         scale: 2,
         useCORS: true,
@@ -70,11 +71,14 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
 
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
       pdf.save(`invoice-${invoiceNumber}.pdf`);
+      setIsOpen(false);
     } catch (error) {
       console.error("Failed to generate PDF:", error);
       toast.error("Failed to generate PDF. Please try again.");
+      setIsOpen(false);
     } finally {
       setIsGeneratingPDF(false);
+      setIsOpen(false);
     }
   };
 
@@ -84,12 +88,35 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
 
   return (
     <>
-      <button
-        className="cursor-pointer rounded border-[1px] border-border-main px-[10px] py-[4px] text-[16px] text-primary duration-[0.3s] hover:bg-primary hover:text-white"
-        onClick={() => setIsOpen(true)}
-      >
-        🖨️ Show Invoice
-      </button>
+      <div className="flex items-center gap-[10px]">
+        <button
+          className="cursor-pointer rounded border-[1px] border-border-main px-[10px] py-[4px] text-[16px] text-primary duration-[0.3s] hover:bg-primary hover:text-white"
+          onClick={() => {
+            setIsOpen(true);
+            const timer = setTimeout(() => {
+              handleDownloadPDF();
+            }, 500);
+
+            return () => clearTimeout(timer);
+          }}
+        >
+          🖨️ Download
+        </button>
+        <button
+          className="cursor-pointer rounded border-[1px] border-border-main px-[10px] py-[4px] text-[16px] text-primary duration-[0.3s] hover:bg-primary hover:text-white"
+          onClick={() => {
+            setIsOpen(true);
+            const timer = setTimeout(() => {
+              handlePrints();
+              setIsOpen(false);
+            }, 500);
+
+            return () => clearTimeout(timer);
+          }}
+        >
+          🖨️ Print
+        </button>
+      </div>
 
       <DialogProvider setState={setIsOpen} state={isOpen} className="max-w-[100vw] bg-white">
         <div

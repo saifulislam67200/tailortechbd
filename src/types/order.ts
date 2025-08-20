@@ -15,18 +15,20 @@ export interface IOrderItem {
   quantity: number;
 }
 
+export type OrderStatusType =
+  | "pending"
+  | "confirmed"
+  | "processing"
+  | "on-delivery"
+  | "delivered"
+  | "cancelled"
+  | "exchange"
+  | "returned"
+  | "refunded";
 export interface IOrderStatus {
-  status:
-    | "pending"
-    | "confirmed"
-    | "processing"
-    | "on-delivery"
-    | "delivered"
-    | "cancelled"
-    | "exchange"
-    | "returned"
-    | "refunded";
+  status: OrderStatusType;
   createdAt?: string;
+  note?: string;
 }
 
 export interface IShippingAddress {

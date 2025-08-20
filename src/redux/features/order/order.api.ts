@@ -46,23 +46,24 @@ const orderApi = api.injectEndpoints({
     getPendingOrderCount: builder.query<{ data: { pendingOrderCount: number } }, undefined>({
       query: () => {
         return {
-          url: `/order/pending-count`,
+          url: `/order/count/pending`,
           method: "GET",
         };
       },
       providesTags: ["order"],
     }),
 
-    changeOrderStatus: builder.mutation<{ data: IOrder }, { id: string; data: { status: string } }>(
-      {
-        query: ({ id, data }) => ({
-          url: `/order/update/status/${id}`,
-          method: "PUT",
-          body: data,
-        }),
-        invalidatesTags: ["order", "statistics"],
-      }
-    ),
+    changeOrderStatus: builder.mutation<
+      { data: IOrder },
+      { id: string; data: { status: string; note?: string } }
+    >({
+      query: ({ id, data }) => ({
+        url: `/order/update/status/${id}`,
+        method: "PUT",
+        body: data,
+      }),
+      invalidatesTags: ["order", "statistics"],
+    }),
     updateOrder: builder.mutation<{ data: IOrder }, { id: string; data: Partial<IOrder> }>({
       query: ({ id, data }) => ({
         url: `/order/update/${id}`,

@@ -1,5 +1,4 @@
 import { useAppDispatch } from "@/hooks/redux";
-import { ICountry } from "@/hooks/useCountries";
 import { useRegisterCustomerMutation } from "@/redux/features/user/user.api";
 import { setToken, setUser } from "@/redux/features/user/user.slice";
 import { IQueruMutationErrorResponse } from "@/types";
@@ -8,9 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CgSpinner } from "react-icons/cg";
 import { ImSpinner11 } from "react-icons/im";
-import { toast } from "sonner";
 import * as Yup from "yup";
-import CountrySelector from "../ui/CountrySelector";
 import FormMessage, { IFormMessage } from "../ui/FormMessage";
 import Input from "../ui/Input";
 
@@ -26,7 +23,6 @@ const initialValues = {
 };
 
 const RegisterWithEmail = () => {
-  const [country, setCountry] = useState<ICountry>();
   const [verificationCode, setVerificationCode] = useState<number>(generateVerificationCode());
 
   const [registerUser, { isLoading }] = useRegisterCustomerMutation();
@@ -38,16 +34,12 @@ const RegisterWithEmail = () => {
 
   const handleSubmit = async (values: typeof initialValues) => {
     setFormMessage(null);
-    if (!country) {
-      toast.error("Select a country");
-      return;
-    }
 
     const res = await registerUser({
       email: values.email,
       password: values.password,
       fullName: values.fullName,
-      geo_profile: { country: country.name, phone_code: country.dial_code },
+      geo_profile: { country: "Bangladesh", phone_code: "+880" },
     });
     const error = res.error as IQueruMutationErrorResponse;
 
@@ -94,19 +86,16 @@ const RegisterWithEmail = () => {
     >
       {({ errors, touched }) => (
         <Form className="flex flex-col gap-[16px]">
-          <CountrySelector onCountrySelect={(c) => setCountry(c)} />
-
-          <div className="flex flex-col gap-[5px]">
-            <Field type="text" name="email" placeholder="eg. myemail@example.com" as={Input} />
-            {touched.email && errors.email && (
-              <span className="text-[12px] text-danger">{errors.email}</span>
-            )}
-          </div>
-
           <div className="flex flex-col gap-[5px]">
             <Field type="text" name="fullName" placeholder="Enter Your full name" as={Input} />
             {touched.fullName && errors.fullName && (
               <span className="text-[12px] text-danger">{errors.fullName}</span>
+            )}
+          </div>
+          <div className="flex flex-col gap-[5px]">
+            <Field type="text" name="email" placeholder="eg. myemail@example.com" as={Input} />
+            {touched.email && errors.email && (
+              <span className="text-[12px] text-danger">{errors.email}</span>
             )}
           </div>
           <div className="flex flex-col gap-[5px]">

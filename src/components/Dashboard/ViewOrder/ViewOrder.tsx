@@ -1,6 +1,5 @@
 "use client";
 import Button from "@/components/ui/Button";
-import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Loader from "@/components/ui/Loader";
 import {
@@ -9,7 +8,7 @@ import {
   useUpdateOrderMutation,
 } from "@/redux/features/order/order.api";
 import { IQueruMutationErrorResponse } from "@/types";
-import { IOrder, IOrderStatus } from "@/types/order";
+import { IOrder, IOrderStatus, OrderStatusType } from "@/types/order";
 import { IUser } from "@/types/user";
 import { profileFallBack } from "@/utils";
 import Link from "next/link";
@@ -34,6 +33,7 @@ import "react-phone-number-input/style.css";
 import { toast } from "sonner";
 import AddNewItemOnOrder from "../AllOrders/AddNewItemOnOrder";
 import InvoiceModal from "../AllOrders/InvoiceModal/InvoiceModal";
+import ChangeOrderStatusModal from "./ChangeOrderStatusModal";
 import EditOrderShippingInfo from "./EditOrderShippingInfo";
 const statuses = [
   {
@@ -104,27 +104,32 @@ const statuses = [
 type ViewOrderProps = {
   orderId: string;
 };
+const negativeStatus = ["cancelled", "returned", "refunded"];
 
 export default function ViewOrder({ orderId }: ViewOrderProps) {
   const { data, isLoading: isOrderLoading } = useGetOrderByIdQuery(orderId);
   const hasRunRef = useRef(false);
   const [initialOrderItemView, setInitialOrderItemView] = useState<IOrder>();
-  const [changeOrderStatus, { isLoading }] = useChangeOrderStatusMutation();
+  const [changeOrderStatus] = useChangeOrderStatusMutation();
 
   const [updateOrder, { isLoading: isUpdating }] = useUpdateOrderMutation();
 
   const [selectedStatus, setSelectedStatus] = useState<IOrderStatus["status"] | undefined>();
   // orderItem.status[orderItem.status.length - 1].status
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isStatusChangeModalOpen, setIsStatusChangeModalOpen] = useState(false);
   const [orderItemView, setOrderItemView] = useState<IOrder>();
   const currentStatus = orderItemView?.status[orderItemView.status.length - 1];
 
   const [isEditMode, setIsEditMode] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
 
   const handleStatusChange = async () => {
     if (selectedStatus === currentStatus || !selectedStatus) return;
 
+    const statusObj = statuses.find((s) => s.id === selectedStatus);
+    if (statusObj && negativeStatus.includes(statusObj.id)) {
+      setIsStatusChangeModalOpen(true);
+      return;
+    }
     const result = await changeOrderStatus({
       id: orderItemView?._id || "",
       data: { status: selectedStatus },
@@ -157,7 +162,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
     }
 
     setSelectedStatus(selectedStatus);
-    setIsModalOpen(false);
+    setIsStatusChangeModalOpen(false);
     toast.success("Order status changed successfully!");
   };
 
@@ -238,11 +243,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
   const estimatedDeliveryDate = new Date(orderConfirmDate);
   estimatedDeliveryDate.setDate(estimatedDeliveryDate.getDate() + 3);
 
-  const filteredOrderItems = orderItemView?.orderItems.filter(
-    (item) =>
-      item.product.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-      item.product.sku?.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  const orderItems = orderItemView?.orderItems;
 
   const subTotal =
     orderItemView?.orderItems.reduce(
@@ -252,6 +253,16 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
 
   const shippingCharge = orderItemView?.deliveryFee;
   const couponDiscount = orderItemView?.couponDiscount;
+
+  const handleChangeOrderStatusOption = (newStatus: string) => {
+    const status = statuses.find((s) => s.id === newStatus);
+    if (status) {
+      setSelectedStatus(status.id as IOrderStatus["status"]);
+      if (negativeStatus.includes(status.id)) {
+        setIsStatusChangeModalOpen(true);
+      }
+    }
+  };
 
   useEffect(() => {
     if (data?.data && !hasRunRef.current) {
@@ -316,12 +327,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
             <span>Change Status:</span>
             <select
               value={selectedStatus ? selectedStatus : ""}
-              onChange={(e) => {
-                const status = statuses.find((s) => s.id === e.target.value);
-                if (status) {
-                  setSelectedStatus(status.id as IOrderStatus["status"]);
-                }
-              }}
+              onChange={(e) => handleChangeOrderStatusOption(e.target.value)}
               className="appearanc w-[150px] rounded-[4px] border-[1px] border-border-main bg-white px-[0.75rem] py-[0.375rem] pr-[2.25rem] text-base leading-[1.5] font-normal transition duration-150 ease-in-out outline-none"
             >
               {statuses.map((status) => (
@@ -339,7 +345,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
             </Button>
           </div>
         </div>
-
+        {currentStatus?.note ? <span>Note: {currentStatus?.note}</span> : ""}
         <div className="mt-[48px] flex w-full items-center justify-end gap-[10px]">
           {isEditMode ? (
             <>
@@ -385,7 +391,6 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
             ""
           )}
         </div>
-
         <div className="mt-[24px] flex w-full flex-col items-start justify-between gap-[20px] lg:flex-row">
           <div className="flex w-full flex-col gap-[15px] rounded-[6px] bg-white p-[15px]">
             <div className="flex w-full flex-col gap-[5px]">
@@ -477,18 +482,11 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
             </div>
           )}
         </div>
-
         <div className="mt-[24px] flex w-full flex-col gap-[15px] rounded-[6px] bg-white p-[15px]">
           <div className="flex w-full flex-col gap-[5px]">
-            <h5 className="text-[20px] font-[500]">Shipping Information</h5>
+            <h5 className="text-[20px] font-[500]">Order Items</h5>
             <HorizontalLine className="h-[2px]" />
           </div>
-          <input
-            type="text"
-            onChange={(e) => setSearchValue(e.target.value)}
-            className="w-full rounded-[4px] border-[1px] border-border-muted bg-white px-[0.75rem] py-[0.375rem] text-base leading-[1.5] font-normal transition duration-150 ease-in-out outline-none"
-            placeholder="Search items..."
-          />
 
           <div className="w-full overflow-x-auto">
             <table className="w-full border border-border-muted">
@@ -525,7 +523,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
                 </tr>
               </thead>
               <tbody>
-                {filteredOrderItems?.map((item, i) => (
+                {orderItems?.map((item, i) => (
                   <tr key={item.product_id + i}>
                     <td className="min-w-[100px] border border-border-muted px-4 py-2">
                       <Link
@@ -554,10 +552,10 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
                       </span>
                     </td>
                     <td className="border border-border-muted px-4 py-2">
-                      {item.product.price} BDT
+                      {Math.round(item.product.price)} BDT
                     </td>
                     <td className="border border-border-muted px-4 py-2">
-                      {item.product.price * item.quantity} BDT
+                      {Math.round(item.product.price * item.quantity)} BDT
                     </td>
                     {isEditMode ? (
                       <td className="border border-border-muted px-4 py-2">
@@ -590,7 +588,6 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
             ""
           )}
         </div>
-
         <div className="mt-[24px] flex w-full items-center justify-end">
           <div className="flex w-[100%] flex-col gap-[15px] rounded-[6px] bg-white p-[15px] lg:w-[50%]">
             <div className="flex w-full flex-col gap-[5px]">
@@ -648,33 +645,25 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
           </div>
         </div>
       </div>
-      <DialogProvider
-        setState={setIsModalOpen}
-        state={isModalOpen}
-        className="w-full max-w-[500px]"
-      >
-        <div className="flex w-full flex-col gap-[12px] rounded-[8px] bg-white p-[16px]">
-          <h1 className="mb-1 text-[22px] text-dashboard">Are you sure?</h1>
-          <p>
-            Want to change status to <span className="font-bold">{selectedStatus}</span>?
-          </p>
-          <div className="mt-10 flex items-center justify-between gap-10">
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="w-full cursor-pointer rounded bg-gray-300 px-4 py-2 text-gray-700"
-            >
-              No
-            </button>
-            <Button
-              isLoading={isLoading}
-              onClick={handleStatusChange}
-              className="w-full rounded bg-dashboard/80 px-4 py-2 text-white"
-            >
-              Confrim
-            </Button>
-          </div>
-        </div>
-      </DialogProvider>
+      <ChangeOrderStatusModal
+        orderId={orderId}
+        status={selectedStatus || ""}
+        setState={setIsStatusChangeModalOpen}
+        state={isStatusChangeModalOpen}
+        onChangeStatus={(status, note) => {
+          const newStatusEntry = {
+            status: status as OrderStatusType,
+            createdAt: new Date().toISOString(),
+            note,
+          };
+          if (orderItemView) {
+            setOrderItemView({
+              ...orderItemView,
+              status: [...orderItemView.status, newStatusEntry], // ========= add the new status at the beginning =======>
+            });
+          }
+        }}
+      />
     </div>
   );
 }

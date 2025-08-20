@@ -13,12 +13,14 @@ import { FaPlus } from "react-icons/fa";
 import { LuX } from "react-icons/lu";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import { toast } from "sonner";
+import { twMerge } from "tailwind-merge";
 
 interface IProps {
   onAddItem: (product: IOrderItem) => void;
+  className?: string;
 }
 
-const AddNewItemOnOrder: React.FC<IProps> = ({ onAddItem }) => {
+const AddNewItemOnOrder: React.FC<IProps> = ({ onAddItem, className }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>();
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
@@ -72,7 +74,10 @@ const AddNewItemOnOrder: React.FC<IProps> = ({ onAddItem }) => {
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="flex w-fit cursor-pointer items-center gap-[3px] rounded-[4px] bg-success/20 px-[8px] py-[4px] text-[12px] font-[600] text-success"
+        className={twMerge(
+          "flex w-fit cursor-pointer items-center gap-[3px] rounded-[4px] bg-success/20 px-[8px] py-[4px] text-[12px] font-[600] text-success",
+          className
+        )}
       >
         <FaPlus /> Add Item
       </button>
