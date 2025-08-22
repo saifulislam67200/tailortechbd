@@ -1,5 +1,7 @@
 "use client";
 import { useUploadSingleFileMutation } from "@/redux/features/upload/upload.api";
+import { base64ToFile } from "@/utils/base64ToFile";
+import { extractThumbnailsFromVideoInput } from "@/utils/getThumbnailsFromVideo";
 import { ChangeEvent, DragEvent, useEffect, useRef, useState } from "react";
 import { CgSpinnerTwo } from "react-icons/cg";
 import { MdOutlineFileUpload } from "react-icons/md";
@@ -7,7 +9,8 @@ import { toast } from "sonner";
 
 interface IProps {
   onFileUpload?: (file: File | null) => void;
-  onChange: (file: string | null) => void;
+  onChange: ({ videoUrl, thumbnailUrl }: { videoUrl: string; thumbnailUrl: string }) => void;
+  onThumbnailUpload?: (file: string | null) => void;
   defaultVideo?: string;
   children?: React.ReactNode;
   inputId?: string;
@@ -21,31 +24,56 @@ const VideoDisplay = ({
 }: {
   preview: string | File;
   onRemove: () => void;
-  onUploaded?: (url: string) => void;
+  onUploaded?: ({ videoUrl, thumbnailUrl }: { videoUrl: string; thumbnailUrl: string }) => void;
 }) => {
   const [uploadSingleFile, { isLoading }] = useUploadSingleFileMutation(undefined);
   const hasUploaded = useRef(false);
 
   useEffect(() => {
-    const handleSaveVideo = async () => {
-      if (typeof preview === "string" || hasUploaded.current) return;
+    // Only auto-upload when a File is provided (not when preview is already a URL)
+    if (typeof preview === "string" || hasUploaded.current) return;
+    hasUploaded.current = true;
 
-      hasUploaded.current = true; // prevent duplicate uploads
+    let objectUrl: string | null = null;
+    if (preview instanceof File) {
+      objectUrl = URL.createObjectURL(preview);
+    }
 
+    (async () => {
       try {
-        const formData = new FormData();
-        formData.append("file", preview);
+        // 1) Kick off video upload immediately
+        const videoForm = new FormData();
+        videoForm.append("file", preview as File);
 
-        const res = await uploadSingleFile(formData);
-        const url = res?.data?.data || "";
+        // If using RTK Query, .unwrap() gives you {data,...} or throws on error.
+        const videoUploadPromise = uploadSingleFile(videoForm)
+          .unwrap()
+          .then((res) => res?.data ?? "");
 
-        onUploaded?.(url);
+        // 2) In parallel, generate the thumbnail AND upload it
+        const thumbUploadPromise = (async () => {
+          const [frame] = await extractThumbnailsFromVideoInput(preview as File, 1);
+          const thumbForm = new FormData();
+          thumbForm.append("file", base64ToFile(frame, "thumbnail.jpg", "image/jpeg"));
+          const res = await uploadSingleFile(thumbForm).unwrap();
+          return res?.data ?? "";
+        })();
+
+        // 3) Wait for both to finish
+        const [videoUrl, thumbnailUrl] = await Promise.all([
+          videoUploadPromise,
+          thumbUploadPromise,
+        ]);
+
+        onUploaded?.({ videoUrl, thumbnailUrl });
       } catch {
-        toast.error("Something went wrong while uploading your images");
+        toast.error("Something went wrong while uploading your video");
+        // allow retry on next render if you want:
+        hasUploaded.current = false;
+      } finally {
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
       }
-    };
-
-    handleSaveVideo();
+    })();
   }, []);
 
   return (
@@ -126,7 +154,7 @@ const UploadProductVideo: React.FC<IProps> = ({
     setFile(undefined);
   };
 
-  const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleVideoChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
     if (files.length) {
       const isValidDuration = await checkVideoDuration(files[0]);
@@ -142,7 +170,7 @@ const UploadProductVideo: React.FC<IProps> = ({
 
   const handleRemoveSavedImage = () => {
     setSavedVideo("");
-    onChange("");
+    onChange({ videoUrl: "", thumbnailUrl: "" });
   };
 
   return (
@@ -171,7 +199,7 @@ const UploadProductVideo: React.FC<IProps> = ({
         type="file"
         className="hidden"
         accept="video/mp4, video/webm"
-        onChange={handleImageChange}
+        onChange={handleVideoChange}
       />
 
       <div className="mt-4 flex flex-wrap items-center justify-start gap-4">
@@ -181,7 +209,7 @@ const UploadProductVideo: React.FC<IProps> = ({
             onRemove={() => removeFile()}
             onUploaded={(url) => {
               removeFile();
-              setSavedVideo(url);
+              setSavedVideo(url.videoUrl);
               onChange(url);
             }}
           />

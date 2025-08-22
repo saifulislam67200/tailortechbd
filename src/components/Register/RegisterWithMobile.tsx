@@ -85,12 +85,12 @@ const RegisterWithMobile = () => {
 
   const validationSchema = Yup.object({
     phoneNumber: Yup.string()
-      .required("* phone number number is required")
+      .required("* Phone number number is required")
       .matches(/^\d{6,15}$/, "* Enter a valid phone number number"),
     password: Yup.string()
       .required("* Password is required")
       .min(6, "* Password must be at least 6 characters"),
-    fullName: Yup.string().required("* full Name is required"),
+    fullName: Yup.string().required("* Full Name is required"),
     userVerificationCode: Yup.string()
       .required("* Verification code is required")
       .test("match-code", "Verification code does not match", function (value) {

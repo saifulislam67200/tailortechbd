@@ -4,7 +4,7 @@ import ProductPrimaryCard from "../ui/Card/ProductCard/ProductPrimaryCard";
 import Title from "../ui/Title";
 const MostPopular = async ({ title }: { title?: string }) => {
   const res = await fetch(
-    `${baseUrl}/product/top-ordered?limit=20&fields=name,slug,images,price,discount,colors,description,sku`,
+    `${baseUrl}/product/top-ordered?limit=20&fields=name,slug,images,price,discount,colors,description,video,videoThumbnail,sku`,
     {
       next: { revalidate: 60 * 5 },
     }

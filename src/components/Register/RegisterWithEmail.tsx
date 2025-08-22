@@ -67,11 +67,11 @@ const RegisterWithEmail = () => {
   };
 
   const validationSchema = Yup.object({
-    email: Yup.string().required("* phone number number is required").email("* Invalid email"),
+    email: Yup.string().required("* Phone number number is required").email("* Invalid email"),
     password: Yup.string()
       .required("* Password is required")
       .min(6, "* Password must be at least 6 characters"),
-    fullName: Yup.string().required("* full Name is required"),
+    fullName: Yup.string().required("* Full Name is required"),
     userVerificationCode: Yup.string()
       .required("* Verification code is required")
       .test("match-code", "Verification code does not match", function (value) {

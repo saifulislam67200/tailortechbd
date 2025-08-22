@@ -28,14 +28,14 @@ const ZoomableImage = ({ src, width = 1200, height = 1200 }: ZoomableImageProps)
       href={src}
       data-pswp-width={width}
       data-pswp-height={height}
-      className="group/zoomable relative aspect-square h-full max-h-[600px] w-full cursor-zoom-in border border-info-light p-[5px] lg:p-[0px]"
+      className="group/zoomable relative w-full cursor-zoom-in border border-info-light p-[5px] lg:p-[0px]"
     >
       <Image
         src={src}
         width={831}
         height={598}
         alt="product image"
-        className="relative z-[1] aspect-[831/598] w-full object-contain"
+        className="relative z-[1] max-h-[778px] w-full object-contain"
       />
     </Link>
   );

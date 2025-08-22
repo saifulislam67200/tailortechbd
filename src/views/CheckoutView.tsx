@@ -30,7 +30,7 @@ import * as Yup from "yup";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Full name is required"),
-  phoneNumber: Yup.string().required("phone number is required"),
+  phoneNumber: Yup.string().required("Phone number is required"),
   address: Yup.string().required("Please Enter a describe delvery address"),
   division: Yup.string().required("Division is required"),
   district: Yup.string().required("District is required"),

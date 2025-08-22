@@ -37,6 +37,7 @@ const initialValues: Omit<
   category: "",
   video: "",
   images: [],
+  videoThumbnail: "",
   // specifications: [{ label: "", value: "" }],
   colors: [
     {
@@ -59,6 +60,7 @@ const validationSchema = Yup.object().shape({
     .of(Yup.string().url("Must be a valid URL")),
   category: Yup.string().required("Category is required"),
   video: Yup.string().optional(),
+  videoThumbnail: Yup.string().optional(),
   colors: Yup.array().of(
     Yup.object().shape({
       color: Yup.string().required("Please enter a color name"),
@@ -122,6 +124,7 @@ export default function ProductForm({
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched, isValid, submitCount }) => (
         <Form className="flex flex-col gap-[16px]">
+          {values.videoThumbnail}
           <div className="grid grid-cols-1 gap-[16px] lg:grid-cols-2">
             <div className="flex w-full flex-col gap-[16px] bg-white p-[16px]">
               <SectionTitle>Basic Information</SectionTitle>
@@ -189,7 +192,12 @@ export default function ProductForm({
 
             <label className={labelClass}>Product Video</label>
 
-            <UploadProductVideo onChange={(video) => setFieldValue("video", video)} />
+            <UploadProductVideo
+              onChange={(video) => {
+                setFieldValue("video", video.videoUrl);
+                setFieldValue("videoThumbnail", video.thumbnailUrl);
+              }}
+            />
 
             {touched.video && errors.video && <span className="text-danger">{errors.video}</span>}
           </div>

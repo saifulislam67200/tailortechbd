@@ -29,6 +29,7 @@ export interface IProduct {
   tag?: string;
   images: string[];
   video?: string;
+  videoThumbnail?: string;
   createdAt: string;
   updatedAt?: string;
   chart: string[][];
