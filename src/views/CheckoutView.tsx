@@ -101,7 +101,7 @@ const CheckoutView = () => {
     }
     const payload: Omit<
       IOrder,
-      "status" | "paymentStatus" | "totalProductAmount" | "user" | "_id" | "orderId"
+      "status" | "paymentStatus" | "totalProductAmount" | "user" | "_id" | "orderId" | "invoiceId"
     > = {
       ...values,
       billingAddress: !isSameBillingAddress

@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 const TopCategorySliderVTwo = ({ categories }: { categories: ICategory[] }) => {
   return (
     <div className="relative w-full overflow-hidden pt-[20px]">
-      <Marquee>
+      <Marquee pauseOnHover={true}>
         {categories?.map((category) => (
           <Link
             key={category._id}

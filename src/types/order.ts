@@ -59,4 +59,5 @@ export interface IOrder {
   paymentStatus: "COD" | "pending" | "paid" | "canceled";
   coupon?: string;
   couponDiscount?: number;
+  invoiceId: string;
 }

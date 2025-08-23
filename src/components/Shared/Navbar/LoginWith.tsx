@@ -58,14 +58,14 @@ const LoginWith = () => {
             className="btn btn-primary flex w-full items-center justify-between gap-[5px] px-[10px] py-[8px] hover:bg-primary/10 hover:text-primary"
             onClick={() => setIsOpen(false)}
           >
-            Login as User <MdKeyboardArrowRight />
+            Customer Login <MdKeyboardArrowRight />
           </Link>
           <Link
             href="/login-admin"
             className="btn btn-secondary flex w-full items-center justify-between gap-[5px] px-[10px] py-[8px] hover:bg-primary/10 hover:text-primary"
             onClick={() => setIsOpen(false)}
           >
-            Login as Admin <MdKeyboardArrowRight />
+            Admin Login <MdKeyboardArrowRight />
           </Link>
         </div>
       )}

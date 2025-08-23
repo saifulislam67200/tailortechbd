@@ -1,4 +1,5 @@
 import DialogProvider from "@/components/ui/DialogProvider";
+import { useGetOrGenerateOrderInvoiceIdQuery } from "@/redux/features/order/order.api";
 import { IOrder } from "@/types/order";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
@@ -7,19 +8,13 @@ import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
 import "./InvoiceModal.css";
-const generateInvoiceNumber = (orderItem: IOrder) => {
-  const orderIdPart = orderItem?._id?.slice(-8)?.toUpperCase() || "XXXXXX";
-
-  const phone = orderItem?.shippingAddress?.phoneNumber || "";
-  const mobilePart = phone.slice(-4).padStart(4, "0");
-  const now = new Date();
-  const datePart = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}`;
-
-  return `INV-${datePart}-${orderIdPart}-${mobilePart}`;
-};
 
 const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
   const invoiceRef = useRef<HTMLDivElement>(null);
+
+  const { data } = useGetOrGenerateOrderInvoiceIdQuery(orderItem._id, {
+    skip: !!orderItem.invoiceId,
+  });
 
   const [isOpen, setIsOpen] = useState(false);
   const isInsideDhaka = orderItem?.shippingAddress?.division?.toLowerCase() === "dhaka";
@@ -47,7 +42,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
     });
   };
 
-  const invoiceNumber = generateInvoiceNumber(orderItem);
+  const invoiceNumber = orderItem.invoiceId || data?.data?.invoiceId || "N/A";
 
   const handleDownloadPDF = async () => {
     setIsGeneratingPDF(true);

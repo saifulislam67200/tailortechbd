@@ -7,7 +7,10 @@ const orderApi = api.injectEndpoints({
   endpoints: (builder) => ({
     createOrder: builder.mutation<
       { data: IOrder },
-      Omit<IOrder, "status" | "paymentStatus" | "totalProductAmount" | "user" | "_id" | "orderId">
+      Omit<
+        IOrder,
+        "status" | "paymentStatus" | "totalProductAmount" | "user" | "_id" | "orderId" | "invoiceId"
+      >
     >({
       query: (payload) => ({
         url: `/order/create`,
@@ -52,6 +55,15 @@ const orderApi = api.injectEndpoints({
       },
       providesTags: ["order"],
     }),
+    getOrGenerateOrderInvoiceId: builder.query<{ data: { invoiceId: string } }, string>({
+      query: (orderId) => {
+        return {
+          url: `/order/get-invoiceId/${orderId}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["order"],
+    }),
 
     changeOrderStatus: builder.mutation<
       { data: IOrder },
@@ -82,4 +94,5 @@ export const {
   useUpdateOrderMutation,
   useGetOrderByIdQuery,
   useGetPendingOrderCountQuery,
+  useGetOrGenerateOrderInvoiceIdQuery,
 } = orderApi;

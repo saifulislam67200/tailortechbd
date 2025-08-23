@@ -60,7 +60,7 @@ const SelectionBox = ({
   }, []);
 
   return (
-    <div className={twMerge("relative h-fit w-full", className)} ref={dropdownRef}>
+    <div className={twMerge("relative h-fit w-full shrink-0", className)} ref={dropdownRef}>
       <button
         type="button"
         className="relative h-full w-full cursor-pointer rounded border border-border-main bg-white px-[12px] py-[6px] text-start text-[12px] font-normal"

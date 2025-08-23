@@ -28,7 +28,7 @@ const ZoomableImage = ({ src, width = 1200, height = 1200 }: ZoomableImageProps)
       href={src}
       data-pswp-width={width}
       data-pswp-height={height}
-      className="group/zoomable relative w-full cursor-zoom-in border border-info-light p-[5px] lg:p-[0px]"
+      className="group/zoomable relative w-full cursor-zoom-in p-[5px] lg:p-[0px]"
     >
       <Image
         src={src}
@@ -80,7 +80,7 @@ const ProductDetailsSlider = ({
   }, []);
 
   return (
-    <section className="bg-white px-[10px] py-[14px] md:px-[20px]">
+    <section className="bg-white px-[10px] md:px-[20px]">
       <div
         id="product-gallery"
         className="flex flex-col items-center lg:items-start lg:gap-[20px] xl:gap-[30px]"

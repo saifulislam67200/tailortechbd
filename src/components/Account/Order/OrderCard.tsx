@@ -2,7 +2,7 @@ import ReviewForm from "@/components/Account/review/ReviewForm";
 import AddNewItemOnOrder from "@/components/Dashboard/AllOrders/AddNewItemOnOrder";
 import { useUpdateOrderMutation } from "@/redux/features/order/order.api";
 import { IQueruMutationErrorResponse } from "@/types";
-import type { IShippingAddress } from "@/types/order";
+import type { IOrderStatus, IShippingAddress } from "@/types/order";
 import { IOrder } from "@/types/order";
 import { IProduct } from "@/types/product";
 import dateUtils from "@/utils/date";
@@ -12,6 +12,7 @@ import { useState } from "react";
 import { IoChevronDown, IoCube, IoEye } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { toast } from "sonner";
+import CancelOrder from "./CancelOrder";
 
 const OrderCard = ({ order }: { order: IOrder }) => {
   const [initOrder, setInitOrder] = useState(order); //
@@ -403,6 +404,28 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                       </p>
                     </div>
                   </div>
+                )}
+
+                {!isEditMode && currentStatus == "pending" ? (
+                  <CancelOrder
+                    onSuccess={() => {
+                      const newOrder = {
+                        ...orderView,
+                        status: [
+                          ...orderView.status,
+                          {
+                            status: "cancelled" as IOrderStatus["status"],
+                            note: "",
+                          },
+                        ],
+                      };
+                      setInitOrder(newOrder);
+                      setOrderView(newOrder);
+                    }}
+                    order={orderView}
+                  />
+                ) : (
+                  ""
                 )}
               </div>
             </div>

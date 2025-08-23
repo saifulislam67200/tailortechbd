@@ -2,6 +2,7 @@
 import Button from "@/components/ui/Button";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Pagination from "@/components/ui/Pagination";
+import SelectionBox from "@/components/ui/SelectionBox";
 import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import useDebounce from "@/hooks/useDebounce";
@@ -143,51 +144,53 @@ const ProductStockTable = () => {
           </select>
         </div>{" "}
         <HorizontalLine className="mt-[10px]" />
-        <div className="mb-3 flex flex-wrap gap-4 lg:flex-nowrap">
+        <div className="mb-3 flex flex-wrap justify-start gap-4 lg:flex-nowrap">
           {/* select category */}
-          <div className="flex w-full flex-col gap-[10px]">
-            <span>Select Category</span>
-            <div className="max-w-[290px]">
-              <CategorySelector
-                onSelect={(category) => {
-                  setStockQuery({ ...stockQuery, categoryId: category.value || "" });
-                }}
-              />
-            </div>
-          </div>
-
-          {/* select type */}
-          <div className="flex w-full flex-col gap-[10px]">
-            <span>Select Type</span>
-            <div className="max-w-[290px]">
-              <CategorySelector
-                onSelect={(category) => {
-                  setStockQuery({ ...stockQuery, categoryId: category.value || "" });
-                }}
-              />
-            </div>
+          <div className="min-w-[250px]">
+            <CategorySelector
+              heading={<span className="text-[14px] font-semibold">Select Category</span>}
+              className="flex-row items-start gap-[20px]"
+              subCategoryClassName="flex-row items-start min-w-[250px] gap-[20px]"
+              onSelect={(category) => {
+                setStockQuery({ ...stockQuery, categoryId: category.value || "" });
+              }}
+            />
           </div>
 
           {/* select size */}
-          <div className="flex w-full flex-col gap-[10px]">
-            <span>Select Size</span>
+          <div className="flex w-[250px] flex-col gap-[10px]">
+            <span className="text-[14px] font-semibold">Select Size</span>
             <div className="max-w-[290px]">
-              <CategorySelector
+              <SelectionBox
+                data={[
+                  { label: "XL", value: "XL" },
+                  { label: "L", value: "L" },
+                  { label: "M", value: "M" },
+                  { label: "S", value: "S" },
+                  { label: "XS", value: "XS" },
+                ]}
                 onSelect={(category) => {
-                  setStockQuery({ ...stockQuery, categoryId: category.value || "" });
+                  setStockQuery({ ...stockQuery, size: category.value || "" });
                 }}
+                className="max-w-[290px]"
               />
             </div>
           </div>
 
           {/* select color */}
-          <div className="flex w-full flex-col gap-[10px]">
-            <span>Select Color</span>
+          <div className="flex w-[250px] flex-col gap-[10px]">
+            <span className="text-[14px] font-semibold">Select Color</span>
             <div className="max-w-[290px]">
-              <CategorySelector
+              <SelectionBox
+                data={[
+                  { label: "L", value: "L" },
+                  { label: "S", value: "S" },
+                  { label: "XS", value: "XS" },
+                ]}
                 onSelect={(category) => {
-                  setStockQuery({ ...stockQuery, categoryId: category.value || "" });
+                  setStockQuery({ ...stockQuery, size: category.value || "" });
                 }}
+                className="max-w-[290px]"
               />
             </div>
           </div>
