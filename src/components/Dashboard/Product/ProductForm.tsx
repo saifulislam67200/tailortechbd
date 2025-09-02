@@ -124,7 +124,6 @@ export default function ProductForm({
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched, isValid, submitCount }) => (
         <Form className="flex flex-col gap-[16px]">
-          {values.videoThumbnail}
           <div className="grid grid-cols-1 gap-[16px] lg:grid-cols-2">
             <div className="flex w-full flex-col gap-[16px] bg-white p-[16px]">
               <SectionTitle>Basic Information</SectionTitle>
@@ -186,7 +185,6 @@ export default function ProductForm({
               <ErrorMessage name="images" component="span" className="text-sm text-danger" />
             </div>
           </div>
-
           <div className="w-full bg-white p-[16px]">
             <SectionTitle className="mb-[15px]">Product Video</SectionTitle>
 
@@ -201,9 +199,7 @@ export default function ProductForm({
 
             {touched.video && errors.video && <span className="text-danger">{errors.video}</span>}
           </div>
-
           <HorizontalLine className="my-[16px]" />
-
           <div className="w-full bg-white p-[16px]">
             <SectionTitle className="mb-[15px]">Product Description</SectionTitle>
 
@@ -223,7 +219,6 @@ export default function ProductForm({
             )}
           </div>
           <HorizontalLine className="my-[16px]" />
-
           <div className="w-full bg-white p-[16px]">
             <SectionTitle className="mb-[15px]">Quick Overview</SectionTitle>
 
@@ -241,7 +236,6 @@ export default function ProductForm({
             )}
           </div>
           <HorizontalLine className="my-[16px]" />
-
           <div className="flex w-full flex-col gap-[5px] bg-white p-[16px]">
             <SectionTitle>Product Chart (Size)</SectionTitle>
             <ProductSizeInput
