@@ -47,7 +47,6 @@ const AllProductsTable = ({
 
   const { data, isLoading } = useGetAllProductsQuery({ ...query, searchTerm });
   const productData = data?.data || [];
-  console.log(productData);
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 
   const handleSort = (field: string) => {
@@ -199,13 +198,11 @@ const AllProductsTable = ({
 
                     {/* size */}
                     <td className="px-6 py-4">
-                      <div className="text-[14px]">
-                        {product.chart
-                          ? product.chart.slice(1).map((row, idx) => (
-                              <div key={idx} className="mr-2">
-                                {row[0]}
-                              </div>
-                            ))
+                      <div className="flex flex-wrap gap-2 text-[14px]">
+                        {product?.colors?.length
+                          ? product.colors.flatMap((color) =>
+                              color.sizes.map((s) => <span key={s._id}>{s.size}</span>)
+                            )
                           : "N/A"}
                       </div>
                     </td>
@@ -215,7 +212,7 @@ const AllProductsTable = ({
                       <div className="text-[14px]">
                         {product.colors && product.colors.length > 0
                           ? product.colors.map((colorObj, idx) => (
-                              <div key={idx} className="mr-2">
+                              <div key={idx} className="font-medium">
                                 {colorObj.color}
                               </div>
                             ))
