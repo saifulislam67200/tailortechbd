@@ -125,7 +125,7 @@ export default function ProductForm({
       {({ values, errors, touched, setFieldValue, setFieldTouched, isValid, submitCount }) => (
         <Form className="flex flex-col gap-[16px]">
           {values.videoThumbnail}
-          <div className="grid grid-cols-1 gap-[16px] lg:grid-cols-2">
+          <div className="grid grid-cols-1 gap-[16px] xl:grid-cols-2">
             <div className="flex w-full flex-col gap-[16px] bg-white p-[16px]">
               <SectionTitle>Basic Information</SectionTitle>
               <div className="w-full">

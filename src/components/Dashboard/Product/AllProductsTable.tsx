@@ -80,7 +80,7 @@ const AllProductsTable = ({
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
             <input
               type="text"

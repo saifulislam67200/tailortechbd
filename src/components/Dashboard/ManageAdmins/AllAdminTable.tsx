@@ -62,7 +62,7 @@ const AllAdminTable = () => {
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
-        <div className="flex w-full items-center justify-between gap-[10px]">
+        <div className="flex w-full flex-wrap items-center justify-between gap-[10px]">
           <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
             <input
               type="text"
