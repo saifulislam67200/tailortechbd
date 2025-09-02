@@ -109,8 +109,8 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
           </Link>
         </div>
 
-        <div className="border-y border-quaternary/30">
-          <div className="h-[80dvh] overflow-y-auto">
+        <div className="border-t border-quaternary/30">
+          <div className="h-full overflow-y-auto">
             {categories?.map((category) => (
               <CategoryAccordionItem
                 key={category._id}
@@ -121,24 +121,37 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
           </div>
         </div>
       </div>
-      {user && user.phoneNumber ? (
-        <button
-          onClick={() => handleLogout()}
-          className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[14px] text-[14px] text-white"
-        >
-          <FiLogOut className="h-[16px] w-[16px]" />
-          <span>Logout</span>
-        </button>
-      ) : (
-        <Link
-          href="/login"
-          onClick={() => setIsOpen(false)}
-          className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[14px] text-[14px] text-white"
-        >
-          <FiLogIn className="h-[16px] w-[16px]" />
-          <span>Login</span>
-        </Link>
-      )}
+
+      <div className="mb-14 border-t border-quaternary/30">
+        {user && user.phoneNumber ? (
+          <button
+            onClick={() => handleLogout()}
+            className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[14px] text-[14px] text-white"
+          >
+            <FiLogOut className="h-[16px] w-[16px]" />
+            <span>Logout</span>
+          </button>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              onClick={() => setIsOpen(false)}
+              className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[14px] text-[14px] text-white"
+            >
+              <FiLogIn className="h-[16px] w-[16px]" />
+              <span>Customer Login</span>
+            </Link>
+            <Link
+              href="/login-admin"
+              onClick={() => setIsOpen(false)}
+              className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[14px] text-[14px] text-white"
+            >
+              <FiLogIn className="h-[16px] w-[16px]" />
+              <span>Admin Login</span>
+            </Link>
+          </>
+        )}
+      </div>
     </>
   );
 };

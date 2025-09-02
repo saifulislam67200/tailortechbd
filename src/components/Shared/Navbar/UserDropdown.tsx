@@ -42,10 +42,10 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
   };
 
   return (
-    <div className="relative hidden lg:block" ref={dropdownRef}>
+    <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex cursor-pointer items-center gap-[10px] text-primary"
+        className="flex cursor-pointer items-center gap-[5px] text-primary lg:gap-[10px]"
         aria-expanded={isOpen}
         aria-haspopup="true"
         onMouseOver={() => setIsMouseOver(true)}

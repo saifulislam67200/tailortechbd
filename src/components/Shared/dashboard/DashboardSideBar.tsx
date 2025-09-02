@@ -72,7 +72,7 @@ const NavBox = ({
               : "text-primary"
           }`}
           onClick={() => {
-            if (typeof window !== "undefined" && window.innerWidth <= 750) {
+            if (typeof window !== "undefined" && window.innerWidth <= 768) {
               setIsNavOpen(false);
             }
           }}
@@ -118,7 +118,7 @@ const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 750) {
+      if (window.innerWidth <= 768) {
         setIsNavOpen(false);
       } else {
         setIsNavOpen(true);
@@ -134,8 +134,8 @@ const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
   return (
     <>
       <div
-        className={`h-[calc(100dvh-60px)] shrink-0 overflow-x-hidden overflow-y-auto transition-[width] duration-[0.3s] ease-in-out ${
-          window.innerWidth <= 750 ? "absolute top-0 left-0 z-[10] min-h-screen" : ""
+        className={`h-[calc(100dvh-60px)] shrink-0 overflow-x-hidden overflow-y-auto bg-white transition-[width] duration-[0.3s] ease-in-out ${
+          window.innerWidth <= 768 ? "absolute top-0 left-0 z-[10] min-h-screen" : ""
         } ${isNavOpen ? "w-[300px]" : "w-0"}`}
       >
         <div className={`relative h-full w-full`}>

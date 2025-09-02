@@ -227,7 +227,7 @@ const Footer = () => {
       <div className="border-t border-border-main">
         <div className="main_container mx-auto px-[16px] py-[16px]">
           <p className="text-center text-[14px] text-white">
-            © {new Date().getFullYear()} TailorTech Limited. All rights reserved.
+            © {new Date().getFullYear()} Tailortech Bangladesh Limited. All rights reserved.
           </p>
         </div>
       </div>

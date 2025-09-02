@@ -47,10 +47,10 @@ export default function SearchBar({ onSearch }: { onSearch?: (value: string) => 
   }, []);
 
   return (
-    <div className="relative max-w-[410px]">
+    <div className="relative w-full lg:max-w-[410px]">
       <form
         onSubmit={handleSearch}
-        className="flex h-[38px] w-[410px] items-center justify-start gap-[0px] overflow-hidden rounded-[10px] border-[1px] border-border-main bg-white"
+        className="mx-4 flex h-[38px] items-center justify-start gap-[0px] overflow-hidden rounded-[10px] border-[1px] border-border-main bg-white lg:mx-0 lg:w-[410px]"
       >
         <input
           type="text"

@@ -23,7 +23,7 @@ const ChatWidget = () => {
             },
             mobile: {
               xOffset: 5, // Mobile chat widget position
-              yOffset: 55,
+              yOffset: 65,
             },
           },
         };

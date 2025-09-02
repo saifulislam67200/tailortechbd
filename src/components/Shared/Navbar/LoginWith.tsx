@@ -35,7 +35,7 @@ const LoginWith = () => {
   return (
     <div ref={dropdownRef}>
       <button
-        className="hidden cursor-pointer text-primary lg:block"
+        className="mt-2 cursor-pointer text-primary"
         onMouseOver={() => setIsMouseOver(true)}
         onMouseLeave={() => setIsMouseOver(false)}
         onClick={handleDrop}
