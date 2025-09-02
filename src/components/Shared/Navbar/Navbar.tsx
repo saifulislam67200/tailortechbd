@@ -51,7 +51,7 @@ export default function Navbar() {
           </div>
 
           {/* Search Bar - Desktop only */}
-          <div className="hidden lg:-ml-[102px] lg:block">
+          <div className="hidden lg:block">
             <SearchBar />
           </div>
 
