@@ -4,7 +4,6 @@ import dashboardNavLinks from "@/utils/dashboardNavLinks";
 import UserDropdown from "../Navbar/UserDropdown";
 import DashboardPathSearchBar from "./DashboardPathSearchBar";
 import { FiSearch } from "react-icons/fi";
-import MobileSearchBar from "../Navbar/MobileSearchBar";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -42,7 +41,7 @@ const DashboardHeader = () => {
           </div>
         </nav>
         {/* Mobile Search Bar - Toggled by search icon */}
-        {isSearchOpen && <MobileSearchBar setIsSearchOpen={setIsSearchOpen} />}
+        {isSearchOpen && <DashboardPathSearchBar className="max-w-full mt-4" navLinks={dashboardNavLinks.admin} />}
       </div>
     </>
   );

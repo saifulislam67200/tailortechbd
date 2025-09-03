@@ -7,13 +7,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { twMerge } from "tailwind-merge";
 
 export default function SearchBar({
   onSearch,
   formClassName,
+  className,
 }: {
   onSearch?: (value: string) => void;
   formClassName?: string;
+  className?: string;
 }) {
   const query = useSearchParams();
   const searchValue = query.get("searchTerm");
@@ -53,7 +56,7 @@ export default function SearchBar({
   }, []);
 
   return (
-    <div className="relative w-full lg:max-w-[410px]">
+    <div className={twMerge("relative w-full lg:max-w-[410px]", className)}>
       <form
         onSubmit={handleSearch}
         className={`mx-4 flex h-[38px] items-center justify-start gap-[0px] overflow-hidden rounded-[10px] border-[1px] border-border-main bg-white lg:mx-0 lg:w-[410px] ${formClassName}`}

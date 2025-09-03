@@ -201,7 +201,7 @@ const AllProductsTable = ({
                       <div className="flex flex-wrap gap-2 text-[14px]">
                         {product?.colors?.length
                           ? product.colors.flatMap((color) =>
-                              color.sizes.map((s) => <span key={s._id}>{s.size}</span>)
+                              color.sizes.map((s) => <span key={s._id} className="bg-dashboard/5 px-2 py-1 rounded-md inline-block">{s.size}</span>)
                             )
                           : "N/A"}
                       </div>
@@ -212,9 +212,9 @@ const AllProductsTable = ({
                       <div className="text-[14px]">
                         {product.colors && product.colors.length > 0
                           ? product.colors.map((colorObj, idx) => (
-                              <div key={idx} className="font-medium">
+                              <span key={idx} className="bg-dashboard/5 px-2 py-1 rounded-md inline-block">
                                 {colorObj.color}
-                              </div>
+                              </span>
                             ))
                           : "N/A"}
                       </div>

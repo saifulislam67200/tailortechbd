@@ -6,13 +6,14 @@ import { BsSearch } from "react-icons/bs";
 import Input from "@/components/ui/Input";
 import { IDashboardNavLinks } from "@/utils/dashboardNavLinks"; // adjust path if needed
 import { HiChevronRight } from "react-icons/hi";
+import { twMerge } from "tailwind-merge";
 
 interface SearchableLink {
   label: string;
   path: string | undefined;
   breadcrumb: string;
 }
-const DashboardPathSearchBar = ({ navLinks }: { navLinks: IDashboardNavLinks[] }) => {
+const DashboardPathSearchBar = ({ navLinks, className }: { navLinks: IDashboardNavLinks[], className?: string }) => {
   const [query, setQuery] = useState("");
   const router = useRouter();
 
@@ -56,7 +57,7 @@ const DashboardPathSearchBar = ({ navLinks }: { navLinks: IDashboardNavLinks[] }
     };
   }, []);
   return (
-    <div className="relative flex w-full max-w-[400px] items-center">
+    <div className={twMerge("relative flex w-full max-w-[400px] items-center", className)}>
       <div className="flex w-full items-center rounded border border-muted/50 pr-2">
         <Input
           className="border-none bg-transparent py-2"
