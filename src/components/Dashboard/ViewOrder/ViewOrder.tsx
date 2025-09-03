@@ -267,7 +267,6 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
   useEffect(() => {
     if (data?.data && !hasRunRef.current) {
       const order = data.data;
-      console.log(order);
 
       setInitialOrderItemView(order);
       setOrderItemView(order);

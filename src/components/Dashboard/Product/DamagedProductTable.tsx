@@ -82,7 +82,7 @@ const DamagedProductTable = () => {
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
-        <div className="mb-3 flex md:flex-nowrap flex-wrap gap-3">
+        <div className="mb-3 flex flex-wrap gap-3 md:flex-nowrap">
           <div className="flex w-full items-center rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none sm:justify-between md:max-w-[300px]">
             <input
               type="text"

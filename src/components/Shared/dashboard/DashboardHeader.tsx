@@ -41,7 +41,9 @@ const DashboardHeader = () => {
           </div>
         </nav>
         {/* Mobile Search Bar - Toggled by search icon */}
-        {isSearchOpen && <DashboardPathSearchBar className="max-w-full mt-4" navLinks={dashboardNavLinks.admin} />}
+        {isSearchOpen && (
+          <DashboardPathSearchBar className="mt-4 max-w-full" navLinks={dashboardNavLinks.admin} />
+        )}
       </div>
     </>
   );

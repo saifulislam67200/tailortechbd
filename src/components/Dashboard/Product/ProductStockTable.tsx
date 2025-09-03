@@ -7,7 +7,6 @@ import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetProductStockQuery } from "@/redux/features/product/product.api";
-import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -15,20 +14,42 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoCalendarNumberOutline, IoPrintSharp } from "react-icons/io5";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import { useReactToPrint } from "react-to-print";
+import { twMerge } from "tailwind-merge";
 import CategorySelector from "./CategorySelector";
 import "./index.css";
 
+interface IProductStock {
+  _id: string;
+  productName: string;
+  slug: string;
+  color: string;
+  size: string;
+  stock: number;
+  status: string;
+  sku: string;
+  price: number;
+  value: number;
+  category: string;
+  subCategory: string;
+  parentCategory: string | null;
+}
+type TGroupedProduct = Omit<IProductStock, "size" | "stock"> & {
+  sizeStock: { size: string; stock: number }[];
+};
+
+const sizeKeys = ["S", "M", "L", "XL", "2XL"] as const;
 const stockTableHeaders = [
-  { label: "SL", field: "" },
-  { label: "Category", field: "" },
-  { label: "Sub Category", field: "" },
-  { label: "Product Name", field: "" },
-  { label: "Size", field: "" },
-  { label: "Color", field: "" },
-  { label: "Current Stock", field: "" },
-  { label: "Unit Price", field: "" },
-  { label: "Total Price", field: "" },
-  { label: "Stock Status", field: "" },
+  { label: "SL", field: "", rowSpan: 2 },
+  { label: "Category", field: "", rowSpan: 2 },
+  { label: "Sub Category", field: "", rowSpan: 2 },
+  { label: "Color", field: "", rowSpan: 2 },
+  { label: "Style Code", field: "", rowSpan: 2 },
+  { label: "Product", field: "", colSpan: sizeKeys.length, className: "text-center" },
+
+  { label: "Current Stock", field: "", rowSpan: 2 },
+  { label: "Unit Price", field: "", rowSpan: 2 },
+  { label: "Total Price", field: "", rowSpan: 2 },
+  { label: "Stock Status", field: "", rowSpan: 2 },
 ];
 
 // "in-stock", "low-stock", "out-of-stock"
@@ -37,7 +58,6 @@ const ProductStockTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
 
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
-  const router = useRouter();
 
   const tableRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +85,6 @@ const ProductStockTable = () => {
     ...dateRange,
   });
   const productStocks = stockData?.data || [];
-  console.log(productStocks);
   const stockMetaData = stockData?.meta || { totalDoc: 0, page: 1 };
 
   const handleSort = (field: string) => {
@@ -80,8 +99,40 @@ const ProductStockTable = () => {
   const handlePrint = useReactToPrint({
     contentRef: tableRef,
   });
-  const viewProductDetails = (slug: string) => {
-    router.push(`/dashboard/product-details/${slug}`);
+
+  const groupProductsByName = () => {
+    const products = productStocks as IProductStock[];
+    const groupedMap = new Map<string, TGroupedProduct>();
+
+    for (const product of products) {
+      const key = `${product.productName}-${product.color}`; // unique per name+color
+
+      if (stockQuery.color) {
+        if (product.color.toLowerCase() !== (stockQuery.color as string).toLowerCase()) {
+          continue;
+        }
+      }
+
+      if (stockQuery.size) {
+        if (product.size.toLowerCase() !== (stockQuery.size as string).toLowerCase()) {
+          continue;
+        }
+      }
+
+      if (!groupedMap.has(key)) {
+        groupedMap.set(key, {
+          ...product,
+          sizeStock: [{ size: product.size, stock: product.stock }],
+        });
+      } else {
+        const existing = groupedMap.get(key)!;
+        existing.sizeStock.push({ size: product.size, stock: product.stock });
+      }
+    }
+
+    const data = Array.from(groupedMap.values());
+
+    return data;
   };
 
   return (
@@ -163,11 +214,8 @@ const ProductStockTable = () => {
             <div className="max-w-[290px]">
               <SelectionBox
                 data={[
-                  { label: "XL", value: "XL" },
-                  { label: "L", value: "L" },
-                  { label: "M", value: "M" },
-                  { label: "S", value: "S" },
-                  { label: "XS", value: "XS" },
+                  { label: "ALL", value: "" },
+                  ...sizeKeys.map((size) => ({ label: size, value: size })),
                 ]}
                 onSelect={(category) => {
                   setStockQuery({ ...stockQuery, size: category.value || "" });
@@ -183,12 +231,21 @@ const ProductStockTable = () => {
             <div className="max-w-[290px]">
               <SelectionBox
                 data={[
-                  { label: "L", value: "L" },
-                  { label: "S", value: "S" },
-                  { label: "XS", value: "XS" },
+                  { label: "ALL", value: "" },
+                  { label: "RED", value: "red" },
+                  { label: "BLUE", value: "blue" },
+                  { label: "GREEN", value: "green" },
+                  { label: "YELLOW", value: "yellow" },
+                  { label: "BLACK", value: "black" },
+                  { label: "WHITE", value: "white" },
+                  { label: "GRAY", value: "gray" },
+                  { label: "BROWN", value: "brown" },
+                  { label: "ORANGE", value: "orange" },
+                  { label: "PINK", value: "pink" },
+                  { label: "PURPLE", value: "purple" },
                 ]}
                 onSelect={(category) => {
-                  setStockQuery({ ...stockQuery, size: category.value || "" });
+                  setStockQuery({ ...stockQuery, color: category.value || "" });
                 }}
                 className="max-w-[290px]"
               />
@@ -202,13 +259,18 @@ const ProductStockTable = () => {
           </Button>
         </div>
         <div className="overflow-x-auto" ref={tableRef}>
-          <table className="w-full divide-y divide-dashboard/20">
-            <thead className="bg-dashboard/10">
+          <table className="w-full border border-border-main">
+            <thead>
               <tr>
                 {stockTableHeaders.map((header) => (
                   <th
+                    colSpan={header.colSpan}
+                    rowSpan={header.rowSpan}
                     key={header.field || header.label}
-                    className="px-6 py-3 text-left text-sm font-semibold text-dashboard"
+                    className={twMerge(
+                      "border border-border-main px-6 py-3 text-left text-sm font-semibold text-dashboard",
+                      header.className
+                    )}
                   >
                     {header.field ? (
                       <button
@@ -239,85 +301,86 @@ const ProductStockTable = () => {
                   </th>
                 ))}
               </tr>
+              <tr>
+                {sizeKeys.map((key) => (
+                  <th
+                    key={key}
+                    className="border border-border-main px-6 py-3 text-left text-sm font-semibold text-dashboard"
+                  >
+                    {key}
+                  </th>
+                ))}
+              </tr>
             </thead>
 
-            <tbody className="divide-y divide-dashboard/20">
+            <tbody>
               {isStockLoading ? (
                 <TableSkeleton columns={stockTableHeaders.length} />
-              ) : productStocks.length ? (
+              ) : groupProductsByName().length ? (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 //@ts-ignore
-                productStocks.map((product, index) => (
-                  <tr key={product?._id + index} className="hover:bg-gray-50">
-                    {/* index */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{index + 1}</span>
-                    </td>
+                groupProductsByName().map((product, index) => {
+                  const getSizeStock = (size: string) => {
+                    return product.sizeStock.find((s) => s.size === size);
+                  };
 
-                    {/* category */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{product?.category || "N/A"}</span>
-                    </td>
+                  const totalStock = product.sizeStock.reduce(
+                    (total, size) => total + size.stock,
+                    0
+                  );
+                  return (
+                    <tr key={product?._id + index} className="">
+                      <td className="border border-border-main px-6 py-4">
+                        <span className="text-[14px]">{index + 1}</span>
+                      </td>
+                      <td className="border border-border-main px-6 py-4">
+                        <span className="text-[14px]">{product?.category || "N/A"}</span>
+                      </td>
+                      <td className="border border-border-main px-6 py-4">
+                        <span className="text-[14px]">{product?.subCategory || "N/A"}</span>
+                      </td>
 
-                    {/* sub category */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{product?.subCategory || "N/A"}</span>
-                    </td>
+                      <td className="border border-border-main px-6 py-4">
+                        <span className="text-[14px]">{product.color || "N/A"}</span>
+                      </td>
+                      <td className="border border-border-main px-6 py-4">
+                        <span className="line-clamp-1 text-[14px] font-[700]">{product.sku} </span>
+                      </td>
+                      {sizeKeys.map((s) => (
+                        <td className="border border-border-main px-6 py-4" key={s}>
+                          {getSizeStock(s)?.stock || 0}
+                        </td>
+                      ))}
 
-                    {/* product name */}
-                    <td
-                      className="cursor-pointer px-6 py-4"
-                      onClick={() => viewProductDetails(product.slug)}
-                    >
-                      <span className="flex flex-col gap-[5px]">
-                        <span className="line-clamp-1 text-[14px] font-[700]">
-                          {product.productName}
+                      <td className="border border-border-main px-6 py-4">
+                        <span className="text-[14px]">{totalStock || "0"}</span>
+                      </td>
+                      <td className="border border-border-main px-6 py-4">
+                        <span className="text-[14px]">৳ {product.price}</span>
+                      </td>
+                      <td className="border border-border-main px-6 py-4">
+                        <span className="text-[14px]">
+                          ৳ {Math.round(product.price * totalStock)}
                         </span>
-                      </span>
-                    </td>
-
-                    {/* size */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{product.size || "N/A"}</span>
-                    </td>
-
-                    {/* color */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{product.color || "N/A"}</span>
-                    </td>
-
-                    {/* current stock */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{product.stock || "0"}</span>
-                    </td>
-
-                    {/* unit price */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">৳ {product.price}</span>
-                    </td>
-
-                    {/* total price */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">৳ {product.value}</span>
-                    </td>
-
-                    <td className="px-6 py-4">
-                      <span
-                        className={`text-[14px] capitalize ${
-                          product.status === "In Stock"
-                            ? "text-green-500"
-                            : product.status === "Low Stock"
-                              ? "text-yellow-500"
-                              : product.status === "Out of Stock"
-                                ? "text-red-500"
-                                : ""
-                        }`}
-                      >
-                        {product.status ? product.status?.replace(/-/g, " ") : "N/A"}
-                      </span>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                      <td className="border border-border-main px-6 py-4">
+                        <span
+                          className={`text-[14px] capitalize ${
+                            product.status === "in-stock"
+                              ? "text-green-500"
+                              : product.status === "low-stock"
+                                ? "text-yellow-500"
+                                : product.status === "out-of-stock"
+                                  ? "text-red-500"
+                                  : ""
+                          }`}
+                        >
+                          {product.status ? product.status?.replace(/-/g, " ") : "N/A"}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <TableDataNotFound
                   span={stockTableHeaders.length}
@@ -329,6 +392,7 @@ const ProductStockTable = () => {
         </div>
       </div>
       <Pagination
+        showText={false}
         limit={stockMetaData.limit || 10}
         totalDocs={stockMetaData.totalDoc}
         page={stockMetaData.page}

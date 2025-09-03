@@ -48,8 +48,6 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
     setIsGeneratingPDF(true);
     if (!invoiceRef.current) return;
     try {
-      console.log(invoiceRef.current);
-
       const canvas = await html2canvas(invoiceRef.current, {
         scale: 2,
         useCORS: true,

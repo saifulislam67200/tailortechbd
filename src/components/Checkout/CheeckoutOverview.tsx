@@ -68,8 +68,6 @@ const CheeckoutOverview = ({
       products,
     };
 
-    console.log(payload);
-
     const result = await applyCoupon(payload);
 
     const couponSuccessResponse: IAppliedCouponResponse = result?.data?.data;

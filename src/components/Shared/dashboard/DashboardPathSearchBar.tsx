@@ -13,7 +13,13 @@ interface SearchableLink {
   path: string | undefined;
   breadcrumb: string;
 }
-const DashboardPathSearchBar = ({ navLinks, className }: { navLinks: IDashboardNavLinks[], className?: string }) => {
+const DashboardPathSearchBar = ({
+  navLinks,
+  className,
+}: {
+  navLinks: IDashboardNavLinks[];
+  className?: string;
+}) => {
   const [query, setQuery] = useState("");
   const router = useRouter();
 

@@ -56,6 +56,8 @@ const ProductDetailsSlider = ({
   const colorImages: string[] = product.colors?.flatMap((c) => c?.images || []) || [];
   const images = [...product.images, ...colorImages];
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   useEffect(() => {
     if (selectedColor?.images?.length) {
       const firstColorImage = selectedColor.images[0];
@@ -101,6 +103,7 @@ const ProductDetailsSlider = ({
             <SwiperSlide>
               <div className="group flex w-full cursor-zoom-in flex-col items-center justify-center gap-4 lg:flex-row">
                 <video
+                  ref={videoRef}
                   src={product.video}
                   className="group/zoomable relative aspect-square h-full max-h-[600px] w-full cursor-zoom-in border border-info-light p-[5px] lg:p-[0px]"
                   controls
@@ -141,6 +144,7 @@ const ProductDetailsSlider = ({
           )}
           {images.map((img, index) => (
             <SwiperSlide
+              onClick={() => videoRef.current?.pause()}
               key={index}
               className="!h-[90px] !w-[80px] border-[1px] border-transparent [&.swiper-slide-thumb-active>.thumb]:border-primary"
             >

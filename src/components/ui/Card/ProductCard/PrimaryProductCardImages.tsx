@@ -2,8 +2,6 @@
 import { IProduct } from "@/types/product";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { FaPlay } from "react-icons/fa";
 const PrimaryProductCardImages = ({
   product,
   isAllStockOut,
@@ -11,7 +9,6 @@ const PrimaryProductCardImages = ({
   product: IProduct;
   isAllStockOut?: boolean;
 }) => {
-  const [isVideoNeedToShow, setIsVideoNeedToShow] = useState(false);
   return (
     <Link
       href={`/product/${product?.slug}`}
@@ -28,28 +25,7 @@ const PrimaryProductCardImages = ({
           Out of Stock
         </span>
       )}
-      {product.video ? (
-        <div
-          id="product-video"
-          onClick={() => setIsVideoNeedToShow(true)}
-          className="relative z-[1] mx-auto h-full w-auto max-w-full"
-        >
-          {isVideoNeedToShow ? (
-            <video src={product.video} className="h-full w-full object-contain" controls />
-          ) : (
-            <>
-              <Image
-                src={product.videoThumbnail || product.images[0]}
-                alt={product.name}
-                width={200}
-                height={200}
-                className="mx-auto h-full w-auto max-w-full object-contain transition-transform duration-300 group-hover:scale-105"
-              />
-              <FaPlay className="absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 text-[30px] text-white" />
-            </>
-          )}
-        </div>
-      ) : product.images[1] ? (
+      {product.images[1] ? (
         <>
           <Image
             src={product.images?.[0] || "/images/category_blank.png"}
