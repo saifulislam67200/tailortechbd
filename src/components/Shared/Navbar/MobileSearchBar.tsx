@@ -8,7 +8,7 @@ interface MobileSearchBarProps {
 
 export default function MobileSearchBar({ setIsSearchOpen }: MobileSearchBarProps) {
   return (
-    <div className="z-50 mt-4 lg:hidden">
+    <div className="z-50 mt-4 w-full lg:hidden">
       <SearchBar onSearch={() => setIsSearchOpen(false)} />
     </div>
   );

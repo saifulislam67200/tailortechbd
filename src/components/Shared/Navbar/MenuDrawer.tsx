@@ -37,7 +37,7 @@ export default function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
           </button>
         </div>
 
-        <div className="h-screen px-[16px]">
+        <div className="flex h-full flex-col justify-between px-[16px]">
           {/* Menu Items */}
           <CategoryAccordion setIsOpen={setIsOpen} />
         </div>

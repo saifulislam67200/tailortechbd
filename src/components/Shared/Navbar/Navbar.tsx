@@ -48,11 +48,11 @@ export default function Navbar() {
 
             {/* Logo */}
             <Logo />
-          </div>
 
-          {/* Search Bar - Desktop only */}
-          <div className="hidden lg:-ml-[102px] lg:block">
-            <SearchBar />
+            {/* Search Bar - Desktop only */}
+            <div className="hidden lg:block">
+              <SearchBar formClassName="lg:w-[500px]" />
+            </div>
           </div>
 
           {/* Icons */}

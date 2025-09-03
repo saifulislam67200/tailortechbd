@@ -11,7 +11,7 @@ const openSans = Open_Sans({
   subsets: ["latin"],
 });
 
-const layout = ({ children }: { children: ReactNode }) => {
+const Layout = ({ children }: { children: ReactNode }) => {
   return (
     <Protectedroute role="admin">
       <div
@@ -27,4 +27,4 @@ const layout = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default layout;
+export default Layout;

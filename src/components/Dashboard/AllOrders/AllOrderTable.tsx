@@ -96,9 +96,9 @@ const AllOrderTable = () => {
           </div>
           <HorizontalLine className="my-[10px]" />
 
-          <div className="flex flex-col justify-between gap-[16] md:flex-row md:items-center md:gap-[8px]">
+          <div className="flex flex-col-reverse justify-between gap-[16] md:items-center md:gap-[8px] xl:flex-row">
             {/* Search */}
-            <div className="flex w-full max-w-[300px] items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none">
+            <div className="flex w-full items-center justify-between rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none xl:max-w-[300px]">
               <input
                 type="text"
                 className="w-full bg-transparent outline-none"
