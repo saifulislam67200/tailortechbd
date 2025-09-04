@@ -84,7 +84,7 @@ const OrderCard = ({ order }: { order: IOrder }) => {
 
     const updatedData = {
       ...orderView,
-      totalProductAmount: totalAmount || 0,
+      totalProductAmount: (totalAmount || 0) - (orderView.couponDiscount || 0),
     };
 
     const res = await updateOrder({

@@ -1,16 +1,17 @@
 "use client";
+import ProductDetailsSlider from "@/components/productDetails/ProductDetailSlider";
+import RestockRequestModal from "@/components/productDetails/RestockRequestModal";
+import DialogProvider from "@/components/ui/DialogProvider";
+import HorizontalLine from "@/components/ui/HorizontalLine";
 import { useAppDispatch } from "@/hooks/redux";
 import { addItemsOnCheckout } from "@/redux/features/checkout/checkout.slice";
 import { IColor, IProduct, ISize } from "@/types/product";
 import { useRouter } from "next/navigation";
-import { IoBagCheckOutline } from "react-icons/io5";
 import { useState } from "react";
-import { toast } from "sonner";
-import DialogProvider from "@/components/ui/DialogProvider";
-import HorizontalLine from "@/components/ui/HorizontalLine";
-import ProductDetailsSlider from "@/components/productDetails/ProductDetailSlider";
+import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
+import { IoBagCheckOutline } from "react-icons/io5";
 import { LuX } from "react-icons/lu";
-import RestockRequestModal from "@/components/productDetails/RestockRequestModal";
+import { toast } from "sonner";
 
 interface Props {
   product: IProduct;
@@ -26,6 +27,7 @@ const ProductCheckoutModal = ({ product, btnStyle, children }: Props) => {
   const [activeColor, setActiveColor] = useState<IColor | undefined>(product?.colors?.[0]);
   const [activeSize, setActiveSize] = useState<ISize | undefined>(activeColor?.sizes?.[0]);
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
+  const [activeQuantity, setActiveQuantity] = useState(1);
 
   const getColorVariantImage = (color: IColor): string => {
     return color?.images?.[0] || product?.images?.[0] || "";
@@ -53,7 +55,7 @@ const ProductCheckoutModal = ({ product, btnStyle, children }: Props) => {
         {
           color: activeColor.color || "",
           product_id: product?._id || "",
-          quantity: 1,
+          quantity: activeQuantity,
           size: activeSize.size || "",
           product: {
             name: product?.name || "",
@@ -71,7 +73,26 @@ const ProductCheckoutModal = ({ product, btnStyle, children }: Props) => {
   const handleOpenModal = () => {
     setIsOpen(true);
   };
-
+  const handleQuantityChange = (type: "inc" | "dec") => {
+    setActiveQuantity((prev) => {
+      const stock = activeSize?.stock;
+      if (!stock) return prev;
+      if (type === "inc") {
+        if (prev < stock) {
+          return prev + 1;
+        } else {
+          toast.error("You have reached the maximum stock available.", {
+            id: "productStockToastId",
+          });
+          return prev;
+        }
+      }
+      if (type === "dec" && prev > 1) {
+        return prev - 1;
+      }
+      return prev;
+    });
+  };
   return (
     <>
       {children ? (
@@ -170,6 +191,29 @@ const ProductCheckoutModal = ({ product, btnStyle, children }: Props) => {
                       {size.size}
                     </button>
                   ))}
+                </div>
+
+                <h1 className="mt-[10px] text-[16px]">Quantity:</h1>
+                <div className="mt-[15px] flex h-[30px] w-[80px] items-center border border-quaternary px-[7px]">
+                  <button
+                    disabled={activeQuantity <= 1}
+                    onClick={() => handleQuantityChange("dec")}
+                    className={`cursor-pointer text-info ${activeQuantity <= 1 ? "cursor-event-none" : ""}`}
+                  >
+                    {activeQuantity > 1 ? (
+                      <AiOutlineMinus size={14} />
+                    ) : (
+                      <AiOutlineMinus size={14} className="text-gray-300" />
+                    )}
+                  </button>
+                  <p className="w-full text-center text-[14px]">{activeQuantity}</p>
+                  <button
+                    disabled={activeSize?.stock === 0 || activeSize?.stock === activeQuantity}
+                    onClick={() => handleQuantityChange("inc")}
+                    className="cursor-pointer text-info disabled:cursor-not-allowed disabled:opacity-[0.5]"
+                  >
+                    <AiOutlinePlus size={14} />
+                  </button>
                 </div>
               </div>
 

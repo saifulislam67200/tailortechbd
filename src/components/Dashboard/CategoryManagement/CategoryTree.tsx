@@ -1,13 +1,13 @@
 "use client";
 
 import { TCategoryWithSubcategories } from "@/types/category";
+import Image from "next/image";
 import { useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { MdEdit } from "react-icons/md";
 import CreateCategory from "./CreateCategory";
 import DeleteCategory from "./DeleteCategory";
 import UpdateCategory from "./UpdateCategory";
-import Image from "next/image";
 
 interface CategoryTreeProps {
   categories: TCategoryWithSubcategories[];
@@ -84,7 +84,7 @@ const RenderCategory: React.FC<SubcategoryItemProps> = ({
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <span className="truncate font-medium text-gray-900">{category.label}</span>
-            {!category.display && level === 0 && (
+            {!category.display && (
               <span className="rounded-full bg-red-100 px-2 py-1 text-xs text-red-600">Hidden</span>
             )}
             {hasChildren && (

@@ -1,5 +1,6 @@
 import { api } from "@/redux/api/api";
 import { ICategory } from "@/types/category";
+import { IDamageProduct } from "@/types/damageProduct";
 import { IMeta } from "@/types/meta";
 import { IProduct } from "@/types/product";
 import { generateQueryParams } from "@/utils";
@@ -87,6 +88,30 @@ const productApi = api.injectEndpoints({
       }),
       invalidatesTags: ["product"],
     }),
+    createDamagedProduct: builder.mutation<
+      { data: IProduct },
+      Pick<IDamageProduct, "causeOfDamage" | "color" | "price" | "quantity" | "productId" | "size">
+    >({
+      query: (payload) => ({
+        url: `/product/damage-product`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["product"],
+    }),
+    getDamagedProduct: builder.query<
+      { data: IDamageProduct[]; meta: IMeta },
+      Record<string, string | number>
+    >({
+      query: (query) => {
+        const queryString = generateQueryParams(query);
+        return {
+          url: `/product/damage-product?${queryString}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["product"],
+    }),
   }),
 });
 export const {
@@ -98,4 +123,6 @@ export const {
   useGetTopProuctsQuery,
   useDeleteProductByIdMutation,
   useGetProductStockQuery,
+  useCreateDamagedProductMutation,
+  useGetDamagedProductQuery,
 } = productApi;

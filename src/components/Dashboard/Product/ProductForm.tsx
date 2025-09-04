@@ -4,10 +4,10 @@ import Button from "@/components/ui/Button";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Input from "@/components/ui/Input";
 import RichTextArea from "@/components/ui/RichTextArea";
+import SectionTitle from "@/components/ui/SectionTitle";
 import { IProduct } from "@/types/product";
 import { ErrorMessage, Field, FieldArray, Form, Formik, FormikHelpers } from "formik";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { twMerge } from "tailwind-merge";
 import * as Yup from "yup";
 import CategorySelector from "./CategorySelector";
 import ImageUploader from "./ImageUploader";
@@ -78,20 +78,6 @@ const validationSchema = Yup.object().shape({
 });
 
 const labelClass = "text-[10px] md:text-[14px] font-[600] text-black";
-
-const SectionTitle = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => {
-  return (
-    <div className={twMerge("w-full bg-dashboard/10 px-[16px] py-[8px]", className)}>
-      <span className="text-[16px] font-[700] text-dashboard">{children}</span>
-    </div>
-  );
-};
 
 export default function ProductForm({
   onSubmit,

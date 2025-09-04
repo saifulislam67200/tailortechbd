@@ -20,102 +20,6 @@ const tableHead = [
   { label: "Requested Qty", field: "" },
   { label: "Customer Details", field: "" },
   { label: "Message", field: "" },
-  { label: "Action", field: "" },
-];
-
-const productData = [
-  {
-    _id: "1",
-    product: {
-      _id: "6835808066629c2062710ee6",
-      name: "Real Madrid Jersey",
-      slug: "real-madrid-official",
-      category: "Sports",
-      subCategory: "Jerseys",
-      createdAt: "2025-05-27T09:06:08.848Z",
-      updatedAt: "2025-07-03T12:45:19.113Z",
-      sku: "RSPO7183102",
-    },
-    color: "Science Blue",
-    size: "M",
-    name: "Sophia Webster",
-    email: "lahipuxiz@mailinator.com",
-    phone: "+1 (452) 351-9102",
-    address: "123 Main St, City, Country",
-    requestedQty: 5,
-    message: "Inventore id ad off",
-    createdAt: "2025-07-27T07:48:30.750Z",
-    updatedAt: "2025-07-27T07:48:30.750Z",
-  },
-  {
-    _id: "2",
-    product: {
-      _id: "6835808066629c2062710ee7",
-      name: "Barcelona Home Jersey",
-      slug: "barcelona-home-2025",
-      category: "Sports",
-      subCategory: "Jerseys",
-      createdAt: "2025-06-01T10:15:22.210Z",
-      updatedAt: "2025-07-12T08:55:41.000Z",
-      sku: "BCLNA8719203",
-    },
-    color: "Crimson Red",
-    size: "L",
-    name: "James Miller",
-    email: "james.miller@example.com",
-    phone: "+44 7123 456789",
-    address: "45 Elm Street, London, UK",
-    requestedQty: 2,
-    message: "Looking forward to fast delivery!",
-    createdAt: "2025-08-01T12:30:10.500Z",
-    updatedAt: "2025-08-01T12:30:10.500Z",
-  },
-  {
-    _id: "3",
-    product: {
-      _id: "6835808066629c2062710ee8",
-      name: "Juventus Away Jersey",
-      slug: "juventus-away-2025",
-      category: "Sports",
-      subCategory: "Jerseys",
-      createdAt: "2025-05-18T11:45:00.000Z",
-      updatedAt: "2025-07-25T14:20:33.000Z",
-      sku: "JUVNT5903844",
-    },
-    color: "Black & White",
-    size: "S",
-    name: "Maria Gonzales",
-    email: "maria.gonzales@example.com",
-    phone: "+34 612 345 678",
-    address: "Calle Mayor 10, Madrid, Spain",
-    requestedQty: 1,
-    message: "Please gift wrap this item.",
-    createdAt: "2025-08-10T09:22:47.800Z",
-    updatedAt: "2025-08-10T09:22:47.800Z",
-  },
-  {
-    _id: "4",
-    product: {
-      _id: "6835808066629c2062710ee9",
-      name: "Manchester United Jersey",
-      slug: "man-united-2025",
-      category: "Sports",
-      subCategory: "Jerseys",
-      createdAt: "2025-05-30T07:30:15.000Z",
-      updatedAt: "2025-07-15T16:44:55.000Z",
-      sku: "MNUTD2398477",
-    },
-    color: "Classic Red",
-    size: "XL",
-    name: "Daniel Wong",
-    email: "daniel.wong@example.com",
-    phone: "+1 (323) 456-7890",
-    address: "789 Sunset Blvd, Los Angeles, USA",
-    requestedQty: 3,
-    message: "Please confirm stock availability.",
-    createdAt: "2025-08-15T18:11:09.220Z",
-    updatedAt: "2025-08-15T18:11:09.220Z",
-  },
 ];
 
 const RestockRequestTable = () => {
@@ -129,7 +33,8 @@ const RestockRequestTable = () => {
   });
 
   const { data, isLoading } = useGetAllRestockRequestQuery({ ...query, searchTerm });
-  // const productData = data?.data || [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const productData: Record<string, any>[] = data?.data || [];
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 
   const handleSort = (field: string) => {
@@ -265,19 +170,7 @@ const RestockRequestTable = () => {
 
                     {/* message */}
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.message || "N/A"}</span>
-                    </td>
-
-                    {/* action */}
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col gap-1">
-                        <button className="cursor-pointer text-green-400 hover:text-green-500">
-                          Accept
-                        </button>
-                        <button className="cursor-pointer text-red-400 hover:text-red-500">
-                          Reject
-                        </button>
-                      </div>
+                      <span className="text-[14px]">{request?.details || "N/A"}</span>
                     </td>
                   </tr>
                 ))

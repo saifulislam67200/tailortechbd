@@ -211,7 +211,8 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
 
     const updatedData = {
       ...orderItemView,
-      totalProductAmount: totalAmount || 0,
+      totalProductAmount: (totalAmount || 0) - (orderItemView.couponDiscount || 0),
+      deliveryFee: orderItemView.shippingAddress?.district?.toLowerCase() === "dhaka" ? 70 : 120,
     };
 
     const res = await updateOrder({
