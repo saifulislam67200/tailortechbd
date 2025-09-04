@@ -25,7 +25,7 @@ export default function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
       {/* Drawer */}
       <div
         ref={drawerRef}
-        className={`fixed top-0 left-0 z-50 h-full w-full transform bg-primary-foreground shadow-lg transition-transform duration-300 ease-in-out sm:max-w-[334px] ${
+        className={`fixed top-0 left-0 z-[9999999999] h-full w-full transform bg-primary-foreground shadow-lg transition-transform duration-300 ease-in-out sm:max-w-[334px] ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         onClick={(e) => e.stopPropagation()}
