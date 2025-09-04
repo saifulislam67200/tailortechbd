@@ -3,8 +3,8 @@
 import { baseUrl } from "@/redux/api/api";
 import { IProduct } from "@/types/product";
 import { notFound } from "next/navigation";
-import ProductClientProviderAdmin from "./ProductClientProviderAdmin";
 import DashboardPageHeadingTitle from "../Dashboard/DashboardPageHeadingTitle";
+import ProductClientProviderAdmin from "./ProductClientProviderAdmin";
 
 interface IProps {
   params: Promise<{ slug: string }>;
@@ -34,6 +34,7 @@ const ProductDetailsAdmin: React.FC<IProps> = async ({ params }) => {
           <h1 className="line-clamp-1 text-[14px] font-semibold text-strong sm:text-[25px]">
             {product?.name}
           </h1>
+
           {product.discount ? (
             <div className="flex items-center gap-[10px]">
               <span className="text-[18px] font-semibold">
@@ -49,8 +50,12 @@ const ProductDetailsAdmin: React.FC<IProps> = async ({ params }) => {
           ) : (
             <span className="text-[18px] font-semibold">৳ {product?.price}</span>
           )}
-          <h5 className="tex-info text-[12px] font-light">Product Id: {product?.sku}</h5>
-          <h5 className="tex-info text-[12px] font-light">Color: {product?.sku}</h5>
+          <span className="mt-2 block w-fit rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
+            SKU: {product.sku}
+          </span>
+          <span className="text-sm text-gray-500">
+            Last Updated: {new Date(product.updatedAt || 0).toLocaleString()}
+          </span>
         </ProductClientProviderAdmin>
       </div>
     </>

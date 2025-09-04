@@ -1,4 +1,5 @@
 import { api } from "@/redux/api/api";
+import { ICategory } from "@/types/category";
 import { IMeta } from "@/types/meta";
 import { IProduct } from "@/types/product";
 import { generateQueryParams } from "@/utils";
@@ -41,7 +42,7 @@ const productApi = api.injectEndpoints({
       providesTags: ["product"],
     }),
     getAllProducts: builder.query<
-      { data: IProduct[]; meta: IMeta },
+      { data: (IProduct & { subCategory?: string | ICategory })[]; meta: IMeta },
       Record<string, string | number>
     >({
       query: (query) => {

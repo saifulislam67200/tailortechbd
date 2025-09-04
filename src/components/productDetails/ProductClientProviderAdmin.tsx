@@ -61,75 +61,67 @@ const ProductClientProviderAdmin = ({
             <ProductSizeChart chart={product?.chart} className="w-full 2xl:max-w-[800px]" />
 
             <div className="mt-5 w-full bg-white">
-              <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-gray-800">Stock Info</h2>
-                <div className="flex items-center space-x-4">
-                  <span className="text-sm text-gray-500">
-                    Last Updated: {new Date(product.updatedAt || 0).toLocaleString()}
-                  </span>
-                  <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
-                    SKU: {product.sku}
-                  </span>
-                </div>
-              </div>
+              <h2 className="text-2xl font-bold text-gray-800">Stock Info</h2>
 
-              <div className="grid grid-cols-1 gap-[20px] xl:grid-cols-2 2xl:grid-cols-3">
-                {colorsWithStock.map((colorData, index) => {
-                  const totalStock = colorData.sizes.reduce((sum, size) => sum + size.stock, 0);
-                  const hasStock = totalStock > 0;
+              <table className="w-full border border-slate-300">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="border border-slate-300 px-4 py-2 text-left text-sm font-semibold text-gray-700">
+                      Color
+                    </th>
+                    <th className="border border-slate-300 px-4 py-2 text-left text-sm font-semibold text-gray-700">
+                      Total Stock
+                    </th>
+                    <th className="border border-slate-300 px-4 py-2 text-left text-sm font-semibold text-gray-700">
+                      Sizes
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {colorsWithStock.map((colorData, index) => {
+                    const totalStock = colorData.sizes.reduce((sum, size) => sum + size.stock, 0);
+                    const hasStock = totalStock > 0;
 
-                  return (
-                    <div
-                      key={index}
-                      className={`relative overflow-hidden border border-slate-300 p-4 transition-all`}
-                    >
-                      {/* Stock status badge */}
-                      <div
-                        className={`absolute top-0 right-0 rounded-bl-lg px-2 py-1 text-xs font-medium ${
-                          hasStock ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {hasStock ? `${totalStock} in stock` : "Out of stock"}
-                      </div>
+                    return (
+                      <tr key={index} className="hover:bg-gray-50">
+                        {/* Color */}
+                        <td className="border border-slate-300 px-4 py-2">
+                          <span className="capitalize">{colorData.color}</span>
+                        </td>
 
-                      <div className="flex items-start gap-4">
-                        <div
-                          className="h-8 w-8 rounded-full border-2 border-white shadow"
-                          title={colorData.color}
-                        ></div>
+                        {/* Total Stock */}
+                        <td className="border border-slate-300 px-4 py-2">
+                          <span
+                            className={`rounded px-2 py-1 text-xs font-medium ${
+                              hasStock ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+                            }`}
+                          >
+                            {hasStock ? `${totalStock} in stock` : "Out of stock"}
+                          </span>
+                        </td>
 
-                        <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-gray-800 capitalize">
-                            {colorData.color}
-                          </h3>
-
-                          {/* Size availability */}
-                          <div className="mt-3">
-                            <h4 className="mb-2 text-xs font-semibold tracking-wider text-gray-500 uppercase">
-                              Size Availability
-                            </h4>
-                            <div className="grid grid-cols-2 gap-2">
-                              {colorData.sizes.map((size, sizeIndex) => (
-                                <div
-                                  key={sizeIndex}
-                                  className={`rounded px-2 py-1 text-center text-xs font-medium ${
-                                    size.stock > 0
-                                      ? "border border-green-100 bg-green-50 text-green-700"
-                                      : "border border-gray-100 bg-gray-50 text-gray-500"
-                                  }`}
-                                >
-                                  <span className="font-bold">{size.size.toUpperCase()}</span>
-                                  <span className="block text-xs">{size.stock} available</span>
-                                </div>
-                              ))}
-                            </div>
+                        {/* Sizes */}
+                        <td className="border border-slate-300 px-4 py-2">
+                          <div className="flex flex-wrap gap-2">
+                            {colorData.sizes.map((size, sizeIndex) => (
+                              <span
+                                key={sizeIndex}
+                                className={`rounded px-2 py-1 text-xs font-medium ${
+                                  size.stock > 0
+                                    ? "border border-green-200 bg-green-50 text-green-700"
+                                    : "border border-gray-200 bg-gray-50 text-gray-500"
+                                }`}
+                              >
+                                {size.size.toUpperCase()} ({size.stock})
+                              </span>
+                            ))}
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
 
               {/* Summary footer */}
               <div className="mt-8 flex flex-wrap items-center justify-between border-t border-gray-200 pt-4">
