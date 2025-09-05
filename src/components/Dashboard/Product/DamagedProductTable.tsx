@@ -6,6 +6,7 @@ import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetDamagedProductQuery } from "@/redux/features/product/product.api";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -71,18 +72,27 @@ const DamagedProductTable = () => {
   return (
     <div className="flex flex-col gap-[10px]">
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
-        <div className="flex flex-col gap-[5px]">
-          <h1 className="text-[16px] font-[600]">Damaged Products</h1>
-          <p className="text-[12px] text-muted md:text-[14px]">
-            Displaying all damaged products in your store. Total{" "}
-            <span className="font-bold text-dashboard">{stockMetaData.totalDoc}</span> products.
-            Divided into{" "}
-            <span className="font-bold text-dashboard">
-              {Math.ceil(stockMetaData.totalDoc / 10)} pages
-            </span>{" "}
-            & currently showing page{" "}
-            <span className="font-bold text-dashboard">{stockMetaData.page}.</span>
-          </p>
+        <div className="flex w-full flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-col gap-[5px]">
+            <h1 className="text-[16px] font-[600]">Damaged Products</h1>
+            <p className="text-[12px] text-muted md:text-[14px]">
+              Displaying all damaged products in your store. Total{" "}
+              <span className="font-bold text-dashboard">{stockMetaData.totalDoc}</span> products.
+              Divided into{" "}
+              <span className="font-bold text-dashboard">
+                {Math.ceil(stockMetaData.totalDoc / 10)} pages
+              </span>{" "}
+              & currently showing page{" "}
+              <span className="font-bold text-dashboard">{stockMetaData.page}.</span>
+            </p>
+          </div>
+
+          <Link
+            href="/dashboard/damaged-product/create"
+            className="rounded-[4px] bg-primary px-[18px] py-1 text-white"
+          >
+            Create Damage
+          </Link>
         </div>
         <HorizontalLine className="my-[10px]" />
         <div className="mb-3 flex flex-wrap gap-3 lg:flex-nowrap">
