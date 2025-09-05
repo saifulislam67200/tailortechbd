@@ -7,10 +7,8 @@ import RelatedProducts from "./RelatedProducts";
 const DetailsAndInformation = ({ product, slug }: { product: IProduct; slug: string }) => {
   return (
     <section>
-      <p className="mt-[15px] text-[14px]">
-        <span className="font-bold">NB:</span>The actual color of the physical product may slightly
-        variation due to the deviation of lighting sources, photography or your device
-        display settings. September 6, 2025
+      <p className="text-[14px] mt-[15px]"><span className="font-bold">NB:</span>The actual color of the physical product may slightly variation due to the deviation of lighting sources, photography or your device display settings.
+        September 6, 2025
       </p>
       <div className="mt-[15px] flex flex-col gap-[13px] md:flex-row">
         <div className="w-full">
