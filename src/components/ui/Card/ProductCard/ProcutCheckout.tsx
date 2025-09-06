@@ -142,6 +142,7 @@ const ProductCheckoutModal = ({
           color: activeColor.color || "",
           product_id: product?._id || "",
           quantity: qty, // use the resolved quantity
+          discount:product.discount,
           size: activeSize.size || "",
           product: {
             name: product?.name || "",
