@@ -28,7 +28,18 @@ const validationSchema = Yup.object().shape({
     .when("discountType", {
       is: "percentage",
       then: (schema) => schema.max(100, "Cannot exceed 100%"),
-    }),
+    })
+    .test(
+      "discount-vs-minOrderValue",
+      "Discount must be less than Minimum Order Value",
+      function (value) {
+        const { minOrderValue } = this.parent;
+        if (value != null && minOrderValue != null) {
+          return value < minOrderValue;
+        }
+        return true;
+      }
+    ),
   discountType: Yup.string().oneOf(["percentage", "amount"]).required("Type is required"),
   minOrderValue: Yup.number().min(0, "Cannot be negative").required("Required"),
   expiresAt: Yup.date().required("Required").min(new Date(), "Must be in the future"),

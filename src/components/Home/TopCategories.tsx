@@ -6,11 +6,7 @@ import Title from "../ui/Title";
 import TopCategorySliderVTwo from "./TopCategorySliderVTwo";
 
 const TopCategories: FC = async () => {
-  const res = await fetch(`${baseUrl}/category/get?display=true`, {
-    next: {
-      revalidate: 60 * 5,
-    },
-  });
+  const res = await fetch(`${baseUrl}/category/get?display=true`, { cache: "no-store" });
 
   const data = (await res.json()) as { data: ICategory[] };
 

@@ -65,7 +65,7 @@ const CategoryShopProductView: React.FC<IProps> = async ({ searchParams, params 
   return (
     <div className="main_container py-[20px]">
       <Breadcrumb />
-      {categoryData?.data?.banner && (
+      {categoryData?.data?.banner && categoryData?.data?.bannerDisplay && (
         <div className="relative mt-[10px] aspect-[16/6] w-full overflow-hidden sm:mt-0">
           <Image
             src={categoryData.data.banner}
