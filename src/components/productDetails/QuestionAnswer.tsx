@@ -18,7 +18,7 @@ const QuestionAnswer = ({ productId }: { productId: string }) => {
   const { data } = useGetQuestionsByProductIdQuery(productId);
 
   return (
-    <section id="question-answer-form">
+    <section id="question-answer-form w-full">
       {/* // Q&A */}
       <Title title="QUESTION & ANSWER" className="mt-[10px] !text-[14px]" />
 
