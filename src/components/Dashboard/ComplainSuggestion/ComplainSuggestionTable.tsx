@@ -3,7 +3,6 @@
 import React, { useMemo, useRef } from "react";
 import Button from "@/components/ui/Button";
 import { IoPrintSharp } from "react-icons/io5";
-import { useReactToPrint } from "react-to-print";
 
 type Complaint = {
   id: string;
@@ -97,17 +96,17 @@ export default function ComplainSuggestionTable({ data = [] as Complaint[] }) {
   const rows = data.length ? data : fallbackData;
 
   // Print setup
-  const handlePrint = useReactToPrint({
-    onBeforeGetContent: () => {},
-    documentTitle: "complaint-list",
-    print: () => tableRef.current,
-  });
+  // const handlePrint = useReactToPrint({
+  //   onBeforeGetContent: () => {},
+  //   documentTitle: "complaint-list",
+  //   print: () => tableRef,
+  // });
 
   return (
     <div>
       {/* Print button (hidden during print) */}
       <div className="no-print mb-2 flex w-full items-center justify-end">
-        <Button type="button" onClick={handlePrint}>
+        <Button type="button">
           <IoPrintSharp className="mr-2" />
           Print
         </Button>
