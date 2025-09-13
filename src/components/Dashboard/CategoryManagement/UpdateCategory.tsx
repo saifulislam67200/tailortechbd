@@ -34,6 +34,14 @@ const UpdateCategory: React.FC<IProps> = ({ children, onSuccess, defaultValue, c
       }),
     display: Yup.boolean(),
     parent: Yup.string().optional(),
+    banner: Yup.string()
+      .url("Invalid URL")
+      .when("display", {
+        is: true,
+        then: (schema) => schema.required("Banner URL is required when visibility is enabled"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
+    bannerDisplay: Yup.boolean(),
   });
 
   const initialValues = {
@@ -41,6 +49,8 @@ const UpdateCategory: React.FC<IProps> = ({ children, onSuccess, defaultValue, c
     thumbnail: defaultValue.thumbnail || "",
     display: defaultValue.display || false,
     parent: defaultValue.parent || undefined,
+    banner: defaultValue.banner || "",
+    bannerDisplay: defaultValue.bannerDisplay || false,
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -80,7 +90,7 @@ const UpdateCategory: React.FC<IProps> = ({ children, onSuccess, defaultValue, c
           <div className="flex items-center justify-between border-b border-gray-200 p-6">
             <div>
               <h3 className="text-lg font-semibold text-gray-900">Update Category</h3>
-              <p className="text-sm text-gray-500">Updaet category your existing category</p>
+              <p className="text-sm text-gray-500">Update category your existing category</p>
             </div>
             <button
               onClick={() => setOpen(false)}
@@ -131,14 +141,12 @@ const UpdateCategory: React.FC<IProps> = ({ children, onSuccess, defaultValue, c
                     <button
                       type="button"
                       onClick={() => setFieldValue("display", !values.display)}
-                      className={`relative inline-flex h-6 w-11 cursor-pointer items-center rounded-full transition-colors ${
-                        values.display ? "bg-success" : "bg-muted"
-                      }`}
+                      className={`relative inline-flex h-6 w-11 cursor-pointer items-center rounded-full transition-colors ${values.display ? "bg-success" : "bg-muted"
+                        }`}
                     >
                       <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                          values.display ? "translate-x-6" : "translate-x-1"
-                        }`}
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${values.display ? "translate-x-6" : "translate-x-1"
+                          }`}
                       />
                     </button>
                     <div className="flex items-center space-x-2">
@@ -155,6 +163,56 @@ const UpdateCategory: React.FC<IProps> = ({ children, onSuccess, defaultValue, c
                   <p className="text-xs text-gray-500">
                     Toggle whether this category should be displayed to users on the homepage bellow
                     the banner is top categories section.
+                  </p>
+                </div>
+
+                {/* banner  */}
+
+                <div className="mt-10 space-y-2 border-t border-slate-200 pt-10">
+                  <ImageUploader
+                    defaultImages={values.banner ? [values.banner] : undefined}
+                    inputId="banner-uploader"
+                    onChange={(images) => {
+                      const lastImage = images ? images[images.length - 1] : "";
+                      setFieldValue("banner", lastImage);
+                    }}
+                  >
+                    <label htmlFor="banner" className="block text-sm font-[700] text-primary">
+                      Banner URL <span className="text-muted">(optional)</span>
+                    </label>
+                  </ImageUploader>
+                  <ErrorMessage name="banner" component="p" className="text-sm text-danger" />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-primary">
+                    Banner Visibility
+                  </label>
+                  <div className="flex items-center space-x-3">
+                    <button
+                      type="button"
+                      onClick={() => setFieldValue("bannerDisplay", !values.bannerDisplay)}
+                      className={`relative inline-flex h-6 w-11 cursor-pointer items-center rounded-full transition-colors ${values.bannerDisplay ? "bg-success" : "bg-muted"
+                        }`}
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${values.bannerDisplay ? "translate-x-6" : "translate-x-1"
+                          }`}
+                      />
+                    </button>
+                    <div className="flex items-center space-x-2">
+                      {values.bannerDisplay ? (
+                        <>
+                          <BsEye className="h-4 w-4 text-success" />
+                          <span className="text-sm text-primary">Visible on Category Page</span>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    Toggle to show or hide this category banner on the category page.
                   </p>
                 </div>
 

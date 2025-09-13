@@ -17,6 +17,9 @@ interface IProps {
 const DeleteCategory: React.FC<IProps> = ({ category, parentCategory, onDelete }) => {
   const [open, setOpen] = useState(false);
   const [deleteCategory, { isLoading }] = useDeleteCategoryByIdMutation();
+
+  const [inputValue, setInputValue] = useState("");
+
   const handleDelete = async () => {
     if (isLoading) return;
     const res = await deleteCategory(category._id);
@@ -95,6 +98,8 @@ const DeleteCategory: React.FC<IProps> = ({ category, parentCategory, onDelete }
               <input
                 id="confirm-input"
                 type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
                 placeholder={`${category.label}`}
                 className="w-full rounded-md border border-border-muted px-3 py-2 placeholder-gray-400 shadow-sm transition-colors focus:border-danger focus:ring-2 focus:ring-danger/10 focus:outline-none"
               />
@@ -110,6 +115,7 @@ const DeleteCategory: React.FC<IProps> = ({ category, parentCategory, onDelete }
               Cancel
             </button>
             <Button
+              disabled={inputValue !== category.label}
               onClick={handleDelete}
               isLoading={isLoading}
               className="flex-1 cursor-pointer rounded-md border border-transparent bg-danger/90 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-danger disabled:cursor-not-allowed disabled:opacity-50"

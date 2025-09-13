@@ -5,26 +5,29 @@ import Pagination from "@/components/ui/Pagination";
 import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import useDebounce from "@/hooks/useDebounce";
-import { useGetProductStockQuery } from "@/redux/features/product/product.api";
+import { useGetDamagedProductQuery } from "@/redux/features/product/product.api";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { RxMagnifyingGlass } from "react-icons/rx";
+import { useReactToPrint } from "react-to-print";
+import CategorySelector from "./CategorySelector";
 import "./index.css";
 
 const stockTableHeaders = [
-  { label: "SL", field: "" },
-  { label: "Product Code", field: "" },
-  { label: "Category", field: "" },
-  { label: "Sub Category", field: "" },
-  { label: "Product Name", field: "" },
-  { label: "Size", field: "" },
-  { label: "Color", field: "" },
-  { label: "Price", field: "" },
-  { label: "Product Status", field: "" },
-  { label: "Damaged Qty", field: "" },
-  { label: "Cause of Damaged", field: "" },
+  { label: "SL", field: "", shouldPrint: true },
+  { label: "Product Code", field: "", shouldPrint: true },
+  { label: "Category", field: "", shouldPrint: true },
+  { label: "Sub Category", field: "", shouldPrint: false },
+  { label: "Product Name", field: "", shouldPrint: true },
+  { label: "Size", field: "", shouldPrint: true },
+  { label: "Color", field: "", shouldPrint: true },
+  { label: "Price", field: "", shouldPrint: true },
+  { label: "Product Status", field: "", shouldPrint: false },
+  { label: "Damaged Qty", field: "", shouldPrint: true },
+  { label: "Cause of Damaged", field: "", shouldPrint: true },
 ];
 
 const DamagedProductTable = () => {
@@ -33,24 +36,25 @@ const DamagedProductTable = () => {
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
   const router = useRouter();
 
+  const [isPrintMode, setIsPrintMode] = useState(false);
+
   const tableRef = useRef<HTMLDivElement>(null);
+  const handlePrint = useReactToPrint({
+    contentRef: tableRef,
+  });
 
   const [stockQuery, setStockQuery] = useState<Record<string, string | number>>({
     page: 1,
-    fields: "name,category,size,createdAt,stock,status",
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
-    timeframe: "all",
-    status: "",
   });
 
-  const { data: stockData, isLoading: isStockLoading } = useGetProductStockQuery({
+  const { data, isLoading: isStockLoading } = useGetDamagedProductQuery({
     ...stockQuery,
-    search: searchTerm,
+    searchTerm: searchTerm,
     limit: 10,
   });
-  const productStocks = stockData?.data || [];
-  console.log(productStocks);
-  const stockMetaData = stockData?.meta || { totalDoc: 0, page: 1 };
+  const productStocks = data?.data || [];
+  const stockMetaData = data?.meta || { totalDoc: 0, page: 1 };
 
   const handleSort = (field: string) => {
     const newOrder = sort.field === field && sort.order === "asc" ? "desc" : "asc";
@@ -68,33 +72,63 @@ const DamagedProductTable = () => {
   return (
     <div className="flex flex-col gap-[10px]">
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
-        <div className="flex flex-col gap-[5px]">
-          <h1 className="text-[16px] font-[600]">Damaged Products</h1>
-          <p className="text-[12px] text-muted md:text-[14px]">
-            Displaying all damaged products in your store. Total{" "}
-            <span className="font-bold text-dashboard">{stockMetaData.totalDoc}</span> products.
-            Divided into{" "}
-            <span className="font-bold text-dashboard">
-              {Math.ceil(stockMetaData.totalDoc / 10)} pages
-            </span>{" "}
-            & currently showing page{" "}
-            <span className="font-bold text-dashboard">{stockMetaData.page}.</span>
-          </p>
-        </div>
-        <HorizontalLine className="my-[10px]" />
-        <div className="mb-3 flex flex-wrap gap-3 md:flex-nowrap">
-          <div className="flex w-full items-center rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none sm:justify-between md:max-w-[300px]">
-            <input
-              type="text"
-              className="w-full bg-transparent outline-none"
-              placeholder="Search damaged products"
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <RxMagnifyingGlass />
+        <div className="flex w-full flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-col gap-[5px]">
+            <h1 className="text-[16px] font-[600]">Damaged Products</h1>
+            <p className="text-[12px] text-muted md:text-[14px]">
+              Displaying all damaged products in your store. Total{" "}
+              <span className="font-bold text-dashboard">{stockMetaData.totalDoc}</span> products.
+              Divided into{" "}
+              <span className="font-bold text-dashboard">
+                {Math.ceil(stockMetaData.totalDoc / 10)} pages
+              </span>{" "}
+              & currently showing page{" "}
+              <span className="font-bold text-dashboard">{stockMetaData.page}.</span>
+            </p>
           </div>
 
+          <Link
+            href="/dashboard/damaged-product/create"
+            className="rounded-[4px] bg-primary px-[18px] py-1 text-white"
+          >
+            Create Damage
+          </Link>
+        </div>
+        <HorizontalLine className="my-[10px]" />
+        <div className="mb-3 flex flex-wrap gap-3 lg:flex-nowrap">
+          <div className="flex flex-col items-end gap-3 xl:flex-row">
+            <div className="flex w-full shrink-0 items-center rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none sm:justify-between xl:max-w-[300px]">
+              <input
+                type="text"
+                className="w-full bg-transparent outline-none"
+                placeholder="Search damaged products"
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <RxMagnifyingGlass />
+            </div>
+            <div className="w-full min-w-[250px]">
+              <CategorySelector
+                heading={<span className="text-[14px] font-semibold">Select Category</span>}
+                className="w-full flex-col items-start gap-[20px] lg:flex-row"
+                subCategoryClassName="flex-row items-start min-w-[250px] gap-[20px]"
+                onSelect={(category) => {
+                  setStockQuery({ ...stockQuery, category: category.value || "" });
+                }}
+              />
+            </div>
+          </div>
           <div className="flex w-full items-center justify-start gap-0 md:justify-end">
-            <Button>Show Report</Button>
+            <Button
+              onClick={async () => {
+                setIsPrintMode(true);
+                setTimeout(() => {
+                  handlePrint();
+                  setIsPrintMode(false);
+                }, 500);
+              }}
+            >
+              Show Report
+            </Button>
           </div>
         </div>
 
@@ -102,39 +136,43 @@ const DamagedProductTable = () => {
           <table className="w-full divide-y divide-dashboard/20">
             <thead className="bg-dashboard/10">
               <tr>
-                {stockTableHeaders.map((header) => (
-                  <th
-                    key={header.field || header.label}
-                    className="px-6 py-3 text-left text-sm font-semibold text-dashboard"
-                  >
-                    {header.field ? (
-                      <button
-                        className="flex cursor-pointer items-center gap-1"
-                        onClick={() => handleSort(header.field)}
-                      >
-                        <span>{header.label}</span>
-                        <span className="flex flex-col text-[10px] leading-[10px]">
-                          <FaChevronUp
-                            className={`${
-                              sort.field === header.field && sort.order === "asc"
-                                ? "font-bold text-dashboard"
-                                : "text-dashboard/30"
-                            }`}
-                          />
-                          <FaChevronDown
-                            className={`${
-                              sort.field === header.field && sort.order === "desc"
-                                ? "font-bold text-dashboard"
-                                : "text-dashboard/30"
-                            }`}
-                          />
-                        </span>
-                      </button>
-                    ) : (
-                      header.label
-                    )}
-                  </th>
-                ))}
+                {stockTableHeaders.map((header) =>
+                  isPrintMode && !header.shouldPrint ? (
+                    <></>
+                  ) : (
+                    <th
+                      key={header.field || header.label}
+                      className="px-6 py-3 text-left text-sm font-semibold text-dashboard"
+                    >
+                      {header.field ? (
+                        <button
+                          className="flex cursor-pointer items-center gap-1"
+                          onClick={() => handleSort(header.field)}
+                        >
+                          <span>{header.label}</span>
+                          <span className="flex flex-col text-[10px] leading-[10px]">
+                            <FaChevronUp
+                              className={`${
+                                sort.field === header.field && sort.order === "asc"
+                                  ? "font-bold text-dashboard"
+                                  : "text-dashboard/30"
+                              }`}
+                            />
+                            <FaChevronDown
+                              className={`${
+                                sort.field === header.field && sort.order === "desc"
+                                  ? "font-bold text-dashboard"
+                                  : "text-dashboard/30"
+                              }`}
+                            />
+                          </span>
+                        </button>
+                      ) : (
+                        header.label
+                      )}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
 
@@ -158,13 +196,20 @@ const DamagedProductTable = () => {
 
                     {/* category */}
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">{product?.category || "N/A"}</span>
+                      <span className="text-[14px]">
+                        {typeof product?.category === "string"
+                          ? product?.category
+                          : product?.category?.label || "N/A"}
+                      </span>
                     </td>
 
-                    {/* sub category */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{product?.subCategory || "N/A"}</span>
-                    </td>
+                    {isPrintMode ? (
+                      <></>
+                    ) : (
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{product?.subCategory?.label || "N/A"}</span>
+                      </td>
+                    )}
 
                     {/* product name */}
                     <td
@@ -194,18 +239,22 @@ const DamagedProductTable = () => {
                     </td>
 
                     {/* status */}
-                    <td className="px-6 py-4">
-                      <span className="text-red-400">Damaged</span>
-                    </td>
+                    {isPrintMode ? (
+                      <></>
+                    ) : (
+                      <td className="px-6 py-4">
+                        <span className="text-red-400">Damaged</span>
+                      </td>
+                    )}
 
                     {/* damaged qty */}
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">{product.damagedQty || "N/A"}</span>
+                      <span className="text-[14px]">{product.quantity || "N/A"}</span>
                     </td>
 
                     {/* cause of damaged */}
                     <td className="px-6 py-4">
-                      <span className="text-[14px]">N/A</span>
+                      <span className="text-[14px]">{product.causeOfDamage || "N/A"}</span>
                     </td>
                   </tr>
                 ))
@@ -220,7 +269,6 @@ const DamagedProductTable = () => {
         </div>
       </div>
       <Pagination
-        limit={stockMetaData.limit || 10}
         totalDocs={stockMetaData.totalDoc}
         page={stockMetaData.page}
         onPageChange={(page) => setStockQuery({ ...stockQuery, page })}

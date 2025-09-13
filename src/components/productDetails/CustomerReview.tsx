@@ -9,6 +9,7 @@ export interface IReview {
   starRating: 1 | 2 | 3 | 4 | 5;
   name: string;
   reviewText: string;
+  images?: string[];
   createdAt: string;
   updatedAt: string;
   _id: string;

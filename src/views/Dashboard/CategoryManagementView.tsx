@@ -15,21 +15,25 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaPlus } from "react-icons/fa";
 
 function CategoryManagementView() {
-  const [searchQuery, setSearchQuery] = useState({ mode: "tree", searchTerm: "", page: 1 });
+  const [searchQuery, setSearchQuery] = useState({
+    mode: "tree",
+    searchTerm: "",
+    page: 1,
+  });
 
-  const { data, isLoading, refetch } = useGetAllCategoriesQuery(searchQuery);
+  const { data, isFetching, refetch, isLoading } = useGetAllCategoriesQuery(searchQuery);
   const [activeTab, setActiveTab] = useState("tree");
   const [categories, setCategories] = useState<TCategoryWithSubcategories[]>([]);
 
   useEffect(() => {
-    if (!isLoading) {
+    if (!isFetching) {
       const categoryData = data?.data || [];
       setCategories((prevCategories) => [...prevCategories, ...categoryData]);
     }
-    return () => {
-      setCategories([]);
-    };
-  }, [isLoading]);
+    // return () => {
+    //   setCategories([]);
+    // };
+  }, [isFetching, data]);
 
   // Flatten categories for easier manipulation
 
@@ -106,7 +110,7 @@ function CategoryManagementView() {
           {activeTab === "tree" && (
             <div className="rounded-lg border border-border-main bg-white">
               <div className="border-b border-border-main p-6">
-                <h2 className="text-lg font-semibold">Category Hierarchy</h2>
+                <h2 className="text-lg font-semibold">Category Tree</h2>
                 <p className="mt-1 text-sm text-info">
                   View and manage your categories in a tree structure
                 </p>

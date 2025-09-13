@@ -8,13 +8,13 @@ import { useGetAllProductsQuery } from "@/redux/features/product/product.api";
 import dateUtils from "@/utils/date";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { GoPencil } from "react-icons/go";
 import { RxMagnifyingGlass } from "react-icons/rx";
-import DeleteProductById from "./DeleteProductById";
-import { useRouter } from "next/navigation";
 import BarcodeGeneratorProductSelect from "./BarcodeGeneratorProductSelect";
+import DeleteProductById from "./DeleteProductById";
 
 const tableHead = [
   { label: "SL", field: "" },
@@ -43,6 +43,7 @@ const AllProductsTable = ({
     page: 1,
     fields: "name,slug,price,images,discount,category,createdAt",
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
+    subCategory: "true",
   });
 
   const { data, isLoading } = useGetAllProductsQuery({ ...query, searchTerm });
@@ -173,8 +174,16 @@ const AllProductsTable = ({
                     </td>
 
                     {/* sub category */}
-                    <td className="px-4 md:px-6 py-4">
-                      <span className="text-muted-foreground text-[14px]">—</span>
+                    <td className="px-6 py-4">
+                      {product?.subCategory ? (
+                        <span className="text-[14px]">
+                          {typeof product.subCategory === "string"
+                            ? product.subCategory
+                            : product.subCategory.label}
+                        </span>
+                      ) : (
+                        <span className="text-[14px]">N/A</span>
+                      )}
                     </td>
 
                     {/* name */}
@@ -185,7 +194,7 @@ const AllProductsTable = ({
                       <div className="flex items-center gap-[5px]">
                         <span className="flex aspect-square max-h-[50px] w-[50px] items-center justify-start bg-white">
                           <Image
-                            src={product.images[0]}
+                            src={product.images?.[0]}
                             alt={`${product.name} image`}
                             width={80}
                             height={80}

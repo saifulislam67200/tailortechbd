@@ -1,5 +1,6 @@
 import dateUtils from "@/utils/date";
 import { IReview } from "./CustomerReview";
+import Image from "next/image";
 
 interface CustomerReviewCardProps extends IReview {
   createdAt: string;
@@ -7,6 +8,7 @@ interface CustomerReviewCardProps extends IReview {
 
 const CustomerReviewCard = ({
   starRating,
+  images,
   name,
   reviewText,
   createdAt,
@@ -27,6 +29,14 @@ const CustomerReviewCard = ({
 
       <div className="text-xs text-gray-500">
         By {name} · {dateUtils.formateCreateOrUpdateDate(createdAt)}
+        {
+          images && images.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {images.map((imgUrl, index) => (
+                <Image key={index} src={imgUrl} alt={name} width={100} height={100} className="mt-2" />
+              ))}
+            </div>
+          )}
       </div>
     </div>
   );

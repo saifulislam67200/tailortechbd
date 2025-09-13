@@ -39,15 +39,21 @@ type TGroupedProduct = Omit<IProductStock, "size" | "stock"> & {
 
 const sizeKeys = ["S", "M", "L", "XL", "2XL"] as const;
 const stockTableHeaders = [
-  { label: "SL", field: "", rowSpan: 2 },
-  { label: "Category", field: "", rowSpan: 2 },
+  { label: "SL", field: "", rowSpan: 2, shouldPint: true },
+  { label: "Category", field: "", rowSpan: 2, shouldPint: true },
   { label: "Sub Category", field: "", rowSpan: 2 },
-  { label: "Color", field: "", rowSpan: 2 },
-  { label: "Style Code", field: "", rowSpan: 2 },
-  { label: "Product", field: "", colSpan: sizeKeys.length, className: "text-center" },
+  { label: "Color", field: "", rowSpan: 2, shouldPint: true },
+  { label: "Style Code", field: "", rowSpan: 2, shouldPint: true },
+  {
+    label: "Product",
+    field: "",
+    colSpan: sizeKeys.length,
+    className: "text-center",
+    shouldPint: true,
+  },
 
-  { label: "Current Stock", field: "", rowSpan: 2 },
-  { label: "Unit Price", field: "", rowSpan: 2 },
+  { label: "Current Stock", field: "", rowSpan: 2, shouldPint: true },
+  { label: "Unit Price", field: "", rowSpan: 2, shouldPint: true },
   { label: "Total Price", field: "", rowSpan: 2 },
   { label: "Stock Status", field: "", rowSpan: 2 },
 ];
@@ -56,10 +62,9 @@ const stockTableHeaders = [
 
 const ProductStockTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
-
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
-
   const tableRef = useRef<HTMLDivElement>(null);
+  const [isPrintMode, setIsPrintMode] = useState(false);
 
   const [stockQuery, setStockQuery] = useState<Record<string, string | number>>({
     page: 1,
@@ -253,7 +258,15 @@ const ProductStockTable = () => {
           </div>
         </div>
         <div className="flex w-full items-center justify-end gap-0">
-          <Button onClick={handlePrint}>
+          <Button
+            onClick={async () => {
+              setIsPrintMode(true);
+              setTimeout(() => {
+                handlePrint();
+                setIsPrintMode(false);
+              }, 500);
+            }}
+          >
             <IoPrintSharp />
             print
           </Button>
@@ -262,44 +275,48 @@ const ProductStockTable = () => {
           <table className="w-full border border-border-main">
             <thead>
               <tr>
-                {stockTableHeaders.map((header) => (
-                  <th
-                    colSpan={header.colSpan}
-                    rowSpan={header.rowSpan}
-                    key={header.field || header.label}
-                    className={twMerge(
-                      "border border-border-main px-6 py-3 text-left text-sm font-semibold text-dashboard",
-                      header.className
-                    )}
-                  >
-                    {header.field ? (
-                      <button
-                        className="flex cursor-pointer items-center gap-1"
-                        onClick={() => handleSort(header.field)}
-                      >
-                        <span>{header.label}</span>
-                        <span className="flex flex-col text-[10px] leading-[10px]">
-                          <FaChevronUp
-                            className={`${
-                              sort.field === header.field && sort.order === "asc"
-                                ? "font-bold text-dashboard"
-                                : "text-dashboard/30"
-                            }`}
-                          />
-                          <FaChevronDown
-                            className={`${
-                              sort.field === header.field && sort.order === "desc"
-                                ? "font-bold text-dashboard"
-                                : "text-dashboard/30"
-                            }`}
-                          />
-                        </span>
-                      </button>
-                    ) : (
-                      header.label
-                    )}
-                  </th>
-                ))}
+                {stockTableHeaders.map((header) =>
+                  isPrintMode && !header.shouldPint ? (
+                    ""
+                  ) : (
+                    <th
+                      colSpan={header.colSpan}
+                      rowSpan={header.rowSpan}
+                      key={header.field || header.label}
+                      className={twMerge(
+                        "border border-border-main px-6 py-3 text-left text-sm font-semibold text-dashboard",
+                        header.className
+                      )}
+                    >
+                      {header.field ? (
+                        <button
+                          className="flex cursor-pointer items-center gap-1"
+                          onClick={() => handleSort(header.field)}
+                        >
+                          <span>{header.label}</span>
+                          <span className="flex flex-col text-[10px] leading-[10px]">
+                            <FaChevronUp
+                              className={`${
+                                sort.field === header.field && sort.order === "asc"
+                                  ? "font-bold text-dashboard"
+                                  : "text-dashboard/30"
+                              }`}
+                            />
+                            <FaChevronDown
+                              className={`${
+                                sort.field === header.field && sort.order === "desc"
+                                  ? "font-bold text-dashboard"
+                                  : "text-dashboard/30"
+                              }`}
+                            />
+                          </span>
+                        </button>
+                      ) : (
+                        header.label
+                      )}
+                    </th>
+                  )
+                )}
               </tr>
               <tr>
                 {sizeKeys.map((key) => (
@@ -336,9 +353,13 @@ const ProductStockTable = () => {
                       <td className="border border-border-main px-6 py-4">
                         <span className="text-[14px]">{product?.category || "N/A"}</span>
                       </td>
-                      <td className="border border-border-main px-6 py-4">
-                        <span className="text-[14px]">{product?.subCategory || "N/A"}</span>
-                      </td>
+                      {isPrintMode ? (
+                        <></>
+                      ) : (
+                        <td className="border border-border-main px-6 py-4">
+                          <span className="text-[14px]">{product?.subCategory || "N/A"}</span>
+                        </td>
+                      )}
 
                       <td className="border border-border-main px-6 py-4">
                         <span className="text-[14px]">{product.color || "N/A"}</span>
@@ -358,26 +379,32 @@ const ProductStockTable = () => {
                       <td className="border border-border-main px-6 py-4">
                         <span className="text-[14px]">৳ {product.price}</span>
                       </td>
-                      <td className="border border-border-main px-6 py-4">
-                        <span className="text-[14px]">
-                          ৳ {Math.round(product.price * totalStock)}
-                        </span>
-                      </td>
-                      <td className="border border-border-main px-6 py-4">
-                        <span
-                          className={`text-[14px] capitalize ${
-                            product.status === "in-stock"
-                              ? "text-green-500"
-                              : product.status === "low-stock"
-                                ? "text-yellow-500"
-                                : product.status === "out-of-stock"
-                                  ? "text-red-500"
-                                  : ""
-                          }`}
-                        >
-                          {product.status ? product.status?.replace(/-/g, " ") : "N/A"}
-                        </span>
-                      </td>
+                      {isPrintMode ? (
+                        <></>
+                      ) : (
+                        <>
+                          <td className="border border-border-main px-6 py-4">
+                            <span className="text-[14px]">
+                              ৳ {Math.round(product.price * totalStock)}
+                            </span>
+                          </td>
+                          <td className="border border-border-main px-6 py-4">
+                            <span
+                              className={`text-[14px] capitalize ${
+                                product.status === "in-stock"
+                                  ? "text-green-500"
+                                  : product.status === "low-stock"
+                                    ? "text-yellow-500"
+                                    : product.status === "out-of-stock"
+                                      ? "text-red-500"
+                                      : ""
+                              }`}
+                            >
+                              {product.status ? product.status?.replace(/-/g, " ") : "N/A"}
+                            </span>
+                          </td>
+                        </>
+                      )}
                     </tr>
                   );
                 })

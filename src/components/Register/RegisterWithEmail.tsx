@@ -67,7 +67,7 @@ const RegisterWithEmail = () => {
   };
 
   const validationSchema = Yup.object({
-    email: Yup.string().required("* Phone number number is required").email("* Invalid email"),
+    email: Yup.string().required("* Email is required").email("* Invalid email"),
     password: Yup.string()
       .required("* Password is required")
       .min(6, "* Password must be at least 6 characters"),
