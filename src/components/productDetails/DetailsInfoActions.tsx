@@ -101,10 +101,11 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
               key={color._id}
               type="button"
               aria-label={`Select color ${color.color}`}
-              className={`flex h-[20px] w-fit cursor-pointer items-center rounded-full border-[1px] border-primary px-[8px] text-[12px] transition-all duration-200 ${activeColor?.color === color.color
+              className={`flex h-[20px] w-fit cursor-pointer items-center rounded-full border-[1px] border-primary px-[8px] text-[12px] transition-all duration-200 ${
+                activeColor?.color === color.color
                   ? "bg-primary text-white"
                   : "bg-white text-primary"
-                }`}
+              }`}
               onClick={() => handleColorChange(color)}
             >
               {color.color}
@@ -120,10 +121,11 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
             key={size._id}
             type="button"
             aria-label={`Select size ${size.size}`}
-            className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${activeSize?.size === size.size
+            className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+              activeSize?.size === size.size
                 ? "bg-primary text-white shadow-none"
                 : "bg-white text-black shadow"
-              } border border-gray-200 hover:bg-primary hover:text-white`}
+            } border border-gray-200 hover:bg-primary hover:text-white`}
             onClick={() => handleSizeChange(size)}
           >
             {size.size}

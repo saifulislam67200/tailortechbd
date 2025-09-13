@@ -35,12 +35,8 @@ const ProductCheckoutModal = ({
   const [isOpen, setIsOpen] = useState(false);
 
   /** Active color/size selection (default to first color/size if available) */
-  const [activeColor, setActiveColor] = useState<IColor | undefined>(
-    product?.colors?.[0]
-  );
-  const [activeSize, setActiveSize] = useState<ISize | undefined>(
-    product?.colors?.[0]?.sizes?.[0]
-  );
+  const [activeColor, setActiveColor] = useState<IColor | undefined>(product?.colors?.[0]);
+  const [activeSize, setActiveSize] = useState<ISize | undefined>(product?.colors?.[0]?.sizes?.[0]);
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
 
   /** ---------------- Quantity: controlled + uncontrolled ----------------
@@ -51,8 +47,7 @@ const ProductCheckoutModal = ({
    * - If only `onQuantityChange` provided → uncontrolled but still notify parent
    */
   const [internalQty, setInternalQty] = useState<number>(quantity ?? 1);
-  const isControlled =
-    quantity !== undefined && typeof onQuantityChange === "function";
+  const isControlled = quantity !== undefined && typeof onQuantityChange === "function";
   const qty = isControlled ? (quantity as number) : internalQty;
 
   /** Helper to set quantity safely from anywhere */
@@ -142,7 +137,7 @@ const ProductCheckoutModal = ({
           color: activeColor.color || "",
           product_id: product?._id || "",
           quantity: qty, // use the resolved quantity
-          discount:product.discount,
+          discount: product.discount,
           size: activeSize.size || "",
           product: {
             name: product?.name || "",
@@ -272,9 +267,7 @@ const ProductCheckoutModal = ({
                   <button
                     disabled={qty <= 1}
                     onClick={() => handleQuantityChange("dec")}
-                    className={`cursor-pointer text-info ${
-                      qty <= 1 ? "cursor-event-none" : ""
-                    }`}
+                    className={`cursor-pointer text-info ${qty <= 1 ? "cursor-event-none" : ""}`}
                     aria-label="Decrease quantity"
                   >
                     {qty > 1 ? (
@@ -287,10 +280,7 @@ const ProductCheckoutModal = ({
                   <p className="w-full text-center text-[14px]">{qty}</p>
 
                   <button
-                    disabled={
-                      activeSize?.stock === 0 ||
-                      (activeSize?.stock ?? 0) === qty
-                    }
+                    disabled={activeSize?.stock === 0 || (activeSize?.stock ?? 0) === qty}
                     onClick={() => handleQuantityChange("inc")}
                     className="cursor-pointer text-info disabled:cursor-not-allowed disabled:opacity-[0.5]"
                     aria-label="Increase quantity"

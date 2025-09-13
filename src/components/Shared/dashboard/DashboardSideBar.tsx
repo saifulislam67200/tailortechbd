@@ -139,8 +139,8 @@ const DashboardSideBar = ({ navlinks }: { navlinks: IDashboardNavLinks[] }) => {
         } ${isNavOpen ? "w-[300px]" : "w-0"}`}
       >
         <div className={`relative h-full w-full`}>
-          <div className="h-full w-full flex-col justify-between border-r-[1px] border-border-muted bg-white p-[20px] lg:flex ">
-            <div className="flex flex-col gap-[0] ">
+          <div className="h-full w-full flex-col justify-between border-r-[1px] border-border-muted bg-white p-[20px] lg:flex">
+            <div className="flex flex-col gap-[0]">
               {navlinks?.map((link, index) => (
                 <NavBox
                   navlink={link}

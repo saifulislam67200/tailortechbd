@@ -6,7 +6,7 @@ export interface ICategory {
   subCount: number;
   parent?: string;
   display?: boolean;
-  banner?:string;
+  banner?: string;
   bannerDisplay?: boolean;
   subcategories?: ICategory[];
 }

@@ -105,7 +105,7 @@ const AllProductsTable = ({
                 {tableHead.map((heading) => (
                   <th
                     key={heading.field || heading.label}
-                    className="px-4 md:px-6 py-3 text-left text-sm font-semibold text-dashboard uppercase"
+                    className="px-4 py-3 text-left text-sm font-semibold text-dashboard uppercase md:px-6"
                   >
                     {heading.field ? (
                       <button
@@ -146,7 +146,7 @@ const AllProductsTable = ({
                   <tr key={product?._id} className="hover:bg-gray-50">
                     {/* index */}
                     <td
-                      className="cursor-pointer px-4 md:px-6 py-4"
+                      className="cursor-pointer px-4 py-4 md:px-6"
                       onClick={() => productDetails(product?.slug)}
                     >
                       <span className="text-[14px]"> {index + 1}</span>
@@ -154,14 +154,14 @@ const AllProductsTable = ({
 
                     {/* id */}
                     <td
-                      className="cursor-pointer px-4 md:px-6 py-4"
+                      className="cursor-pointer px-4 py-4 md:px-6"
                       onClick={() => productDetails(product?.slug)}
                     >
                       <span className="text-[14px]"> {product?.sku ? product?.sku : "N/A"}</span>
                     </td>
 
                     {/* category */}
-                    <td className="cursor-pointer px-4 md:px-6 py-4">
+                    <td className="cursor-pointer px-4 py-4 md:px-6">
                       {product?.category ? (
                         <span className="text-[14px]">
                           {typeof product.category === "string"
@@ -188,7 +188,7 @@ const AllProductsTable = ({
 
                     {/* name */}
                     <td
-                      className="cursor-pointer px-4 md:px-6 py-4"
+                      className="cursor-pointer px-4 py-4 md:px-6"
                       onClick={() => productDetails(product?.slug)}
                     >
                       <div className="flex items-center gap-[5px]">
@@ -206,7 +206,7 @@ const AllProductsTable = ({
                     </td>
 
                     {/* size */}
-                    <td className="px-4 md:px-6 py-4">
+                    <td className="px-4 py-4 md:px-6">
                       <div className="flex flex-wrap gap-2 text-[14px]">
                         {product?.colors?.length
                           ? product.colors.flatMap((color) =>
@@ -224,7 +224,7 @@ const AllProductsTable = ({
                     </td>
 
                     {/* color */}
-                    <td className="px-4 md:px-6 py-4">
+                    <td className="px-4 py-4 md:px-6">
                       <div className="flex flex-wrap gap-2 text-[14px]">
                         {product.colors && product.colors.length > 0
                           ? product.colors.map((colorObj, idx) => (
@@ -240,24 +240,24 @@ const AllProductsTable = ({
                     </td>
 
                     {/* price */}
-                    <td className="px-4 md:px-6 py-4">
+                    <td className="px-4 py-4 md:px-6">
                       <span className="text-[14px]">৳ {product.price}</span>
                     </td>
 
                     {/* discount */}
-                    <td className="px-4 md:px-8 py-4">
+                    <td className="px-4 py-4 md:px-8">
                       <span className="text-[14px]">{product.discount || "N/A"}</span>
                     </td>
 
                     {/* created at */}
-                    <td className="px-4 md:px-6 py-4">
+                    <td className="px-4 py-4 md:px-6">
                       <span className="text-[14px]">
                         {dateUtils.formateCreateOrUpdateDate(product.createdAt) || "N/A"}
                       </span>
                     </td>
 
                     {/* actions */}
-                    <td className="px-4 md:px-6 py-4">
+                    <td className="px-4 py-4 md:px-6">
                       <div className="flex items-center gap-[8px]">
                         <BarcodeGeneratorProductSelect product={product} />
                         <Link

@@ -1,4 +1,5 @@
 import { api } from "@/redux/api/api";
+import { IComplaint } from "@/types/complaint";
 import { IMeta } from "@/types/meta";
 import { IOrder } from "@/types/order";
 import { generateQueryParams } from "@/utils";
@@ -84,6 +85,31 @@ const orderApi = api.injectEndpoints({
       }),
       invalidatesTags: ["order"],
     }),
+    createComplaintSuggestion: builder.mutation<
+      { data: IComplaint },
+      Omit<IComplaint, "_id" | "createdAt" | "updatedAt" | "resolutionDate">
+    >({
+      query: (payload) => ({
+        url: "/order/create-complain-suggestion",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["order"],
+    }),
+    getComplaintSuggestionByUser: builder.query<{ data: IComplaint[] }, void>({
+      query: () => ({
+        url: "/order/get-complain-suggestion",
+        method: "GET",
+      }),
+      providesTags: ["order"],
+    }),
+    getAllComplaintSuggestion: builder.query<{ data: IComplaint[] }, void>({
+      query: () => ({
+        url: "/order/get-all/complain-suggestion",
+        method: "GET",
+      }),
+      providesTags: ["order"],
+    }),
   }),
 });
 export const {
@@ -95,4 +121,7 @@ export const {
   useGetOrderByIdQuery,
   useGetPendingOrderCountQuery,
   useGetOrGenerateOrderInvoiceIdQuery,
+  useCreateComplaintSuggestionMutation,
+  useGetComplaintSuggestionByUserQuery,
+  useGetAllComplaintSuggestionQuery,
 } = orderApi;

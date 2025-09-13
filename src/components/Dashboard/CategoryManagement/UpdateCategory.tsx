@@ -141,12 +141,14 @@ const UpdateCategory: React.FC<IProps> = ({ children, onSuccess, defaultValue, c
                     <button
                       type="button"
                       onClick={() => setFieldValue("display", !values.display)}
-                      className={`relative inline-flex h-6 w-11 cursor-pointer items-center rounded-full transition-colors ${values.display ? "bg-success" : "bg-muted"
-                        }`}
+                      className={`relative inline-flex h-6 w-11 cursor-pointer items-center rounded-full transition-colors ${
+                        values.display ? "bg-success" : "bg-muted"
+                      }`}
                     >
                       <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${values.display ? "translate-x-6" : "translate-x-1"
-                          }`}
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          values.display ? "translate-x-6" : "translate-x-1"
+                        }`}
                       />
                     </button>
                     <div className="flex items-center space-x-2">
@@ -192,12 +194,14 @@ const UpdateCategory: React.FC<IProps> = ({ children, onSuccess, defaultValue, c
                     <button
                       type="button"
                       onClick={() => setFieldValue("bannerDisplay", !values.bannerDisplay)}
-                      className={`relative inline-flex h-6 w-11 cursor-pointer items-center rounded-full transition-colors ${values.bannerDisplay ? "bg-success" : "bg-muted"
-                        }`}
+                      className={`relative inline-flex h-6 w-11 cursor-pointer items-center rounded-full transition-colors ${
+                        values.bannerDisplay ? "bg-success" : "bg-muted"
+                      }`}
                     >
                       <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${values.bannerDisplay ? "translate-x-6" : "translate-x-1"
-                          }`}
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          values.bannerDisplay ? "translate-x-6" : "translate-x-1"
+                        }`}
                       />
                     </button>
                     <div className="flex items-center space-x-2">

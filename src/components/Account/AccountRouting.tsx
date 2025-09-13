@@ -22,7 +22,7 @@ export const routes = [
     name: "Complain & Suggestion Box",
     path: "/account/complain-suggestion",
     role: "user",
-  }
+  },
 ];
 const AccountRouting = () => {
   const path = usePathname();

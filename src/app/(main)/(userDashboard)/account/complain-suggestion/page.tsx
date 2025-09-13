@@ -7,6 +7,13 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { FiSend } from "react-icons/fi";
 import * as Yup from "yup";
 import { useMemo, useState } from "react";
+import {
+  useCreateComplaintSuggestionMutation,
+  useGetComplaintSuggestionByUserQuery,
+} from "@/redux/features/order/order.api";
+import { toast } from "sonner";
+import { IQueruMutationErrorResponse } from "@/types";
+import TableSkeleton from "@/components/ui/TableSkeleton";
 
 // dropdown options
 const FEEDBACK_TYPES = ["Complaint", "Suggestion", "Both", "Other"];
@@ -24,19 +31,6 @@ const CS_CATEGORIES = [
   "Others",
 ];
 const PRIORITIES = ["Low", "Medium", "High", "Urgent"];
-
-type Complaint = {
-  id: string;
-  timestamp: string;
-  customerName: string;
-  orderId: string;
-  feedbackType: string;
-  csCategory: string;
-  priority: string;
-  satisfaction: number;
-  status: "Pending" | "In Progress" | "Resolved" | "Implemented" | "Refused" | "Closed";
-  actionTaken: string;
-};
 
 type FormValues = {
   customerName: string;
@@ -64,13 +58,12 @@ const validationSchema = Yup.object({
 
 export default function Page() {
   const { user } = useAppSelector((state) => state.user);
-
-  // Toggle view: "table" or "form"
+  const [createComplaint, { isLoading }] = useCreateComplaintSuggestionMutation();
   const [view, setView] = useState<"table" | "form">("table");
-  // Collected complaints (local state for now)
-  const [complaints, setComplaints] = useState<Complaint[]>([]);
+  const { data, isLoading: isLoadingComplaints } = useGetComplaintSuggestionByUserQuery();
+  console.log(data);
+  const complaints = data?.data || [];
 
-  // Initial form values (reinit if user changes)
   const initialValues: FormValues = useMemo(
     () => ({
       customerName: user?.fullName || "",
@@ -84,9 +77,34 @@ export default function Page() {
     [user?.fullName]
   );
 
+  const handleComplain = async (values: FormValues, { resetForm }: { resetForm: () => void }) => {
+    if (isLoading) return;
+    const payload = {
+      customerName: values.customerName,
+      orderId: values.orderId,
+      feedbackType: values.feedbackType,
+      csCategory: values.csCategory,
+      priority: values.priority,
+      satisfaction: Number(values.satisfaction),
+      status: "pending" as const,
+      actionTaken: values.actionTaken,
+    };
+
+    const response = await createComplaint(payload);
+    const error = response.error as IQueruMutationErrorResponse;
+    if (error) {
+      toast.error(error.data?.message || "Something went wrong");
+      return;
+    }
+
+    toast.success("Complaint/Suggestion sent successfully");
+    resetForm();
+    setView("table");
+  };
+
   return (
     <div className="rounded-md border border-border-main bg-white p-[18px] md:p-[32px]">
-      <h2 className="text-[20px] mb-[15px] font-bold text-primary md:mb-[24px] md:text-[30px]">
+      <h2 className="mb-[15px] text-[20px] font-bold text-primary md:mb-[24px] md:text-[30px]">
         Complain & Suggestion Box
       </h2>
 
@@ -97,16 +115,16 @@ export default function Page() {
             <h3 className="text-[16px] font-semibold text-strong">Complaint List</h3>
             <button
               onClick={() => setView("form")}
-              className="rounded-lg bg-primary px-4 py-2 text-white font-semibold hover:opacity-90"
+              className="rounded-lg bg-primary px-4 py-2 font-semibold text-white hover:opacity-90"
             >
               Complain
             </button>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="min-w-[900px] w-full border-collapse">
+            <table className="w-full min-w-[900px] border-collapse">
               <thead>
-                <tr className="[&>th]:px-3 [&>th]:py-2 [&>th]:text-left bg-solid-slab text-strong">
+                <tr className="bg-solid-slab text-strong [&>th]:px-3 [&>th]:py-2 [&>th]:text-left">
                   {/* <th>Timestamp</th>
                   <th>Customer Name</th> */}
                   <th>Order ID</th>
@@ -119,24 +137,25 @@ export default function Page() {
                 </tr>
               </thead>
               <tbody>
-                {complaints.length === 0 ? (
+                {isLoadingComplaints ? (
+                  <TableSkeleton row={4} columns={7} />
+                ) : complaints.length === 0 ? (
                   <tr>
                     <td colSpan={9} className="px-3 py-6 text-center text-muted">
-                      No complaints yet. Click <span className="font-semibold">Complain</span> to add one.
+                      No complaints yet. Click <span className="font-semibold">Complain</span> to
+                      add one.
                     </td>
                   </tr>
                 ) : (
                   complaints.map((c) => (
-                    <tr key={c.id} className="border-t border-border-main align-top">
-                      {/* <td className="px-3 py-2">{c.timestamp}</td>
-                      <td className="px-3 py-2">{c.customerName}</td> */}
+                    <tr key={c._id} className="border-t border-border-main align-top">
                       <td className="px-3 py-2">{c.orderId}</td>
                       <td className="px-3 py-2">{c.feedbackType}</td>
                       <td className="px-3 py-2">{c.csCategory}</td>
                       <td className="px-3 py-2">{c.priority}</td>
                       <td className="px-3 py-2">{c.satisfaction}</td>
                       <td className="px-3 py-2">{c.status}</td>
-                      <td className="px-3 py-2 max-w-[360px]">
+                      <td className="max-w-[360px] px-3 py-2">
                         <div className="whitespace-pre-wrap">{c.actionTaken}</div>
                       </td>
                     </tr>
@@ -150,30 +169,12 @@ export default function Page() {
 
       {/* FORM VIEW */}
       {view === "form" && (
-        <Formik<FormValues>
-          enableReinitialize
+        <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={(values, { resetForm }) => {
-            const now = new Date();
-            const complaint: Complaint = {
-              id: `${now.getTime()}`,
-              timestamp: now.toLocaleString(),
-              customerName: values.customerName,
-              orderId: values.orderId,
-              feedbackType: values.feedbackType,
-              csCategory: values.csCategory,
-              priority: values.priority,
-              satisfaction: Number(values.satisfaction),
-              status: "Pending",
-              actionTaken: values.actionTaken,
-            };
-            setComplaints((prev) => [complaint, ...prev]);
-            resetForm();
-            setView("table"); // submit -> show table
-          }}
+          onSubmit={handleComplain}
         >
-          {({ }) => (
+          {({ isSubmitting }) => (
             <Form className="space-y-[16px] md:space-y-[24px]">
               {/* Row 1: Customer Name, Order ID */}
               <div className="grid grid-cols-1 gap-[12px] md:grid-cols-2 md:gap-[24px]">
@@ -185,7 +186,11 @@ export default function Page() {
                     placeholder="Enter customer name"
                     className="rounded-md border border-border-main bg-white px-3 text-[14px] outline-none"
                   />
-                  <ErrorMessage name="customerName" component="span" className="text-[12px] text-danger" />
+                  <ErrorMessage
+                    name="customerName"
+                    component="span"
+                    className="text-[12px] text-danger"
+                  />
                 </div>
 
                 <div className="flex w-full flex-col gap-[6px]">
@@ -196,7 +201,11 @@ export default function Page() {
                     placeholder="Enter order ID"
                     className="rounded-md border border-border-main bg-white px-3 text-[14px] outline-none"
                   />
-                  <ErrorMessage name="orderId" component="span" className="text-[12px] text-danger" />
+                  <ErrorMessage
+                    name="orderId"
+                    component="span"
+                    className="text-[12px] text-danger"
+                  />
                 </div>
               </div>
 
@@ -218,7 +227,11 @@ export default function Page() {
                       </option>
                     ))}
                   </Field>
-                  <ErrorMessage name="csCategory" component="span" className="text-[12px] text-danger" />
+                  <ErrorMessage
+                    name="csCategory"
+                    component="span"
+                    className="text-[12px] text-danger"
+                  />
                 </div>
 
                 <div className="flex w-full flex-col gap-[6px]">
@@ -237,7 +250,11 @@ export default function Page() {
                       </option>
                     ))}
                   </Field>
-                  <ErrorMessage name="feedbackType" component="span" className="text-[12px] text-danger" />
+                  <ErrorMessage
+                    name="feedbackType"
+                    component="span"
+                    className="text-[12px] text-danger"
+                  />
                 </div>
               </div>
 
@@ -259,7 +276,11 @@ export default function Page() {
                       </option>
                     ))}
                   </Field>
-                  <ErrorMessage name="priority" component="span" className="text-[12px] text-danger" />
+                  <ErrorMessage
+                    name="priority"
+                    component="span"
+                    className="text-[12px] text-danger"
+                  />
                 </div>
 
                 <div className="flex w-full flex-col gap-[6px]">
@@ -278,7 +299,11 @@ export default function Page() {
                       </option>
                     ))}
                   </Field>
-                  <ErrorMessage name="satisfaction" component="span" className="text-[12px] text-danger" />
+                  <ErrorMessage
+                    name="satisfaction"
+                    component="span"
+                    className="text-[12px] text-danger"
+                  />
                 </div>
               </div>
 
@@ -291,17 +316,28 @@ export default function Page() {
                   rows={5}
                   placeholder="Describe what action was taken..."
                 />
-                <ErrorMessage name="actionTaken" component="span" className="text-[12px] text-danger" />
+                <ErrorMessage
+                  name="actionTaken"
+                  component="span"
+                  className="text-[12px] text-danger"
+                />
               </div>
 
               {/* Submit */}
               <div className="flex items-center gap-3">
                 <button
                   type="submit"
+                  disabled={isSubmitting || isLoading}
                   className="flex w-full cursor-pointer items-center justify-center space-x-2 rounded-lg bg-primary px-6 py-3 font-semibold text-white transition-all duration-200 hover:opacity-90"
                 >
-                  <FiSend className="h-[20px] w-[20px]" />
-                  <span>Submit</span>
+                  <span className="relative">
+                    {isSubmitting || isLoading ? (
+                      <span className="mr-2 inline-block h-5 w-5 animate-spin rounded-full border-2 border-white border-r-transparent align-[-2px]" />
+                    ) : (
+                      <FiSend className="mr-2 h-[20px] w-[20px]" />
+                    )}
+                  </span>
+                  {isSubmitting || isLoading ? "Submitting..." : "Submit"}
                 </button>
 
                 <button

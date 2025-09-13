@@ -182,7 +182,7 @@ const ProductStockIndicatorTable = ({
                 {tableHead.map((heading) => (
                   <th
                     key={heading.field || heading.label}
-                    className="md:px-6 px-4 py-3 text-left text-sm font-semibold text-dashboard uppercase"
+                    className="px-4 py-3 text-left text-sm font-semibold text-dashboard uppercase md:px-6"
                   >
                     {heading.field ? (
                       <button
@@ -219,16 +219,14 @@ const ProductStockIndicatorTable = ({
               {paginatedData.length ? (
                 paginatedData.map((item, index) => (
                   <tr key={index} className="hover:bg-gray-50">
-                    <td className="line-clamp-1 max-w-[200px] px-4 md:px-6 py-4 text-sm text-ellipsis whitespace-nowrap">
+                    <td className="line-clamp-1 max-w-[200px] px-4 py-4 text-sm text-ellipsis whitespace-nowrap md:px-6">
                       {item.productName}
                     </td>
-                    <td className="px-4 md:px-6 py-4 text-sm whitespace-nowrap">{item.color}</td>
-                    <td className="px-4 md:px-6 py-4 text-sm whitespace-nowrap">{item.size}</td>
-                    <td className="px-4 md:px-6 py-4 text-sm whitespace-nowrap">
-                      {item.stockQty}
-                    </td>
+                    <td className="px-4 py-4 text-sm whitespace-nowrap md:px-6">{item.color}</td>
+                    <td className="px-4 py-4 text-sm whitespace-nowrap md:px-6">{item.size}</td>
+                    <td className="px-4 py-4 text-sm whitespace-nowrap md:px-6">{item.stockQty}</td>
                     <td
-                      className={`px-4 md:px-6 py-4 text-sm whitespace-nowrap ${
+                      className={`px-4 py-4 text-sm whitespace-nowrap md:px-6 ${
                         item.stockStatus.includes("Stock Out")
                           ? "text-danger"
                           : item.stockStatus.includes("Low")
@@ -238,10 +236,10 @@ const ProductStockIndicatorTable = ({
                     >
                       {item.stockStatus}
                     </td>
-                    <td className="px-4 md:px-6 py-4 text-sm whitespace-nowrap">
+                    <td className="px-4 py-4 text-sm whitespace-nowrap md:px-6">
                       {item.lastUpdated}
                     </td>
-                    <td className="px-4 md:px-6 py-4 text-sm whitespace-nowrap">
+                    <td className="px-4 py-4 text-sm whitespace-nowrap md:px-6">
                       <Link
                         href={`/dashboard/products/${item.slug}`}
                         className="flex h-[35px] w-[35px] cursor-pointer items-center justify-center rounded-full bg-quaternary/20 hover:bg-primary hover:text-white"
