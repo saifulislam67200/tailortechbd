@@ -173,7 +173,7 @@ export default function Page() {
             setView("table"); // submit -> show table
           }}
         >
-          {({ errors, touched }) => (
+          {({ }) => (
             <Form className="space-y-[16px] md:space-y-[24px]">
               {/* Row 1: Customer Name, Order ID */}
               <div className="grid grid-cols-1 gap-[12px] md:grid-cols-2 md:gap-[24px]">
