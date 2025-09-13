@@ -112,7 +112,7 @@ export const admin: IDashboardNavLinks[] = [
     path: "/dashboard/contact-support",
     element: SidebarElement.UnReadContactMessageCount,
   },
-    {
+  {
     icon: MdSettingsSuggest,
     label: "Complain & Suggestion Box",
     path: "/dashboard/complain-suggestion",

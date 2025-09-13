@@ -18,7 +18,7 @@ const ScrollDetailsSection = () => {
             setCurrentTab(index);
           }}
           key={index + "tab"}
-          className={`flex h-[35px] cursor-pointer items-center justify-center border border-quaternary px-[20px] text-[14px] md:text-[15px] font-bold ${index == currentTab ? "bg-primary text-white" : "bg-white text-primary"} `}
+          className={`flex h-[35px] cursor-pointer items-center justify-center border border-quaternary px-[20px] text-[14px] font-bold md:text-[15px] ${index == currentTab ? "bg-primary text-white" : "bg-white text-primary"} `}
         >
           {item.label}
         </button>

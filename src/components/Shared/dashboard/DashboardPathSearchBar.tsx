@@ -63,7 +63,7 @@ const DashboardPathSearchBar = ({
     };
   }, []);
   return (
-    <div className={twMerge("relative flex w-full max-w-[400px] items-center", className)}>
+    <div className={twMerge("relative flex w-full max-w-[500px] items-center", className)}>
       <div className="flex w-full items-center rounded border border-muted/50 pr-2">
         <Input
           className="border-none bg-transparent py-2"

@@ -13,7 +13,7 @@ export interface IOrderItem {
   color: string;
   size: string;
   quantity: number;
-  discount?:number;
+  discount?: number;
 }
 
 export type OrderStatusType =
