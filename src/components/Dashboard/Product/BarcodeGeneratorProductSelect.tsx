@@ -3,11 +3,13 @@ import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Input from "@/components/ui/Input";
-import { IProduct } from "@/types/product";
+import SelectionBox from "@/components/ui/SelectionBox";
+import { IColor, IProduct } from "@/types/product";
 import Image from "next/image";
 import { useState } from "react";
 import { LuX } from "react-icons/lu";
 import { PiBarcodeLight } from "react-icons/pi";
+import { toast } from "sonner";
 import BarcodeGenerator from "./BarcodeGenerator";
 
 interface BarcodeGeneratorProductSelectProps {
@@ -20,10 +22,17 @@ interface BarcodeGeneratorProductSelectProps {
 const BarcodeGeneratorProductSelect = ({ product }: BarcodeGeneratorProductSelectProps) => {
   const [isSelectionModalOpen, setIsSelectionModalOpen] = useState(false);
   const [isBarcodeModalOpen, setIsBarcodeModalOpen] = useState(false);
-
-  const [numberOfBarcodes, setNumberOfBarcodes] = useState<number | undefined>(40);
+  const [numberOfBarcodes, setNumberOfBarcodes] = useState<number | undefined>(5);
+  const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
+  const [selectedSize, setSelectedSize] = useState<string | undefined>();
 
   const handleGenerateBarcode = () => {
+    if (!selectedColor) {
+      return toast.error("Please select a valid color");
+    }
+    if (!selectedSize) {
+      return toast.error("Please select a valid size");
+    }
     setIsSelectionModalOpen(false);
     setIsBarcodeModalOpen(true);
   };
@@ -70,22 +79,53 @@ const BarcodeGeneratorProductSelect = ({ product }: BarcodeGeneratorProductSelec
 
               {/* Color Selection */}
               <div className="flex flex-col gap-[5px]">
-                <span className="font-[700]">Number Of Barcode:</span>
-                <Input
-                  type="number"
-                  placeholder="Number of barcodes"
-                  className="w-full"
-                  defaultValue={numberOfBarcodes}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setNumberOfBarcodes(value === "" ? undefined : Number(value));
-                  }}
-                />{" "}
-                <span className="text-[12px] text-primary/80">
-                  Each A4 page holds a maximum of 40 barcodes (Avery 3651 layout – 4 columns × 100
-                  rows). If more than 40 barcodes are provided, the extra barcodes will
-                  automatically continue on a new page
-                </span>
+                <div className="flex flex-col gap-[5px]">
+                  <span className="font-[700]">Color:</span>
+                  <SelectionBox
+                    data={
+                      product?.colors?.map((color) => ({
+                        label: color.color,
+                        value: color.color,
+                      })) || []
+                    }
+                    onSelect={(e) => {
+                      const color = product?.colors?.find((color) => color.color === e.value);
+                      setSelectedSize(undefined);
+                      setSelectedColor(color);
+                    }}
+                    showSearch={false}
+                  />
+                </div>
+                {selectedColor ? (
+                  <div className="flex flex-col gap-[5px]">
+                    <span className="font-[700]">Size:</span>
+                    <SelectionBox
+                      data={selectedColor?.sizes?.map((size) => ({
+                        label: size.size,
+                        value: size.size,
+                      }))}
+                      onSelect={(e) => setSelectedSize(e.value)}
+                      showSearch={false}
+                      displayValue={selectedSize || "Select size"}
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
+
+                <div className="flex flex-col gap-[5px]">
+                  <span className="font-[700]">Number Of Barcode:</span>
+                  <Input
+                    type="number"
+                    placeholder="Number of barcodes"
+                    className="w-full"
+                    defaultValue={numberOfBarcodes}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setNumberOfBarcodes(value === "" ? undefined : Number(value));
+                    }}
+                  />
+                </div>
               </div>
 
               <Button onClick={handleGenerateBarcode} className="mt-5 w-full py-3 text-base">
@@ -98,9 +138,11 @@ const BarcodeGeneratorProductSelect = ({ product }: BarcodeGeneratorProductSelec
 
       {/* Barcode Generator Modal */}
       <BarcodeGenerator
-        productCode={product.sku || "N/A"}
-        isOpen={isBarcodeModalOpen}
+        product={product}
+        color={selectedColor?.color || ""}
         numberOfBarcodes={numberOfBarcodes}
+        size={selectedSize || ""}
+        isOpen={isBarcodeModalOpen}
         onClose={() => setIsBarcodeModalOpen(false)}
       />
     </>

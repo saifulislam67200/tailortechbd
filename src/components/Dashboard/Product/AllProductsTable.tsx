@@ -41,7 +41,7 @@ const AllProductsTable = ({
 
   const [query, setQuery] = useState<Record<string, string | number>>({
     page: 1,
-    fields: "name,slug,price,images,discount,category,createdAt",
+    fields: "name,slug,price,images,discount,category,createdAt,name",
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
     subCategory: "true",
   });
