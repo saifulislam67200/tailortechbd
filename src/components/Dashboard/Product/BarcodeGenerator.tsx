@@ -169,7 +169,7 @@ const BarcodeGenerator = ({
                   </span>
                   <span className="block">Colour: {color}</span>
                   <span className="block">Size: {size}</span>
-                  <span className="block">Price: {priceText}</span>
+                  <span className="block">Price: {priceText} TK.</span>
                 </div>
 
                 {/* BARCODE */}
