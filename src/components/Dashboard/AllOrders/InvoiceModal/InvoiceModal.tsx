@@ -201,12 +201,20 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
                 return (
                   <tr key={idx}>
                     <td className="max-w-[1.4in] px-1 py-1 text-left">
-                      {it?.product?.name} {it?.color ? `- ${it.color}` : ""}
-                      {it?.size ? ` - ${it.size}` : ""}
+                      <strong>
+                        {it?.product?.name} {it?.color ? `- ${it.color}` : ""}
+                        {it?.size ? ` - ${it.size}` : ""}
+                      </strong>
                     </td>
-                    <td className="px-1 py-1">{it?.quantity}</td>
-                    <td className="px-1 py-1">{uPrice}</td>
-                    <td className="px-1 py-1">{tPrice}</td>
+                    <td className="px-1 py-1">
+                      <strong>{it?.quantity}</strong>
+                    </td>
+                    <td className="px-1 py-1">
+                      <strong>{uPrice}</strong>
+                    </td>
+                    <td className="px-1 py-1">
+                      <strong>{tPrice}</strong>
+                    </td>
                   </tr>
                 );
               })}
