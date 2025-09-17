@@ -151,7 +151,7 @@ const BarcodeGenerator = ({
 
         {/* MULTIPLE LABELS SUPPORTED */}
         <div className="max-h-[300px] overflow-auto p-6">
-          <div className="flex flex-col justify-center gap-[2px]" ref={barcodeRef}>
+          <div className="flex flex-col justify-center gap-[3mm]" ref={barcodeRef}>
             {Array.from({ length: numberOfBarcodes }).map((_, index) => (
               <div
                 key={`barcode-${index}`}
