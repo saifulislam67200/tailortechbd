@@ -143,7 +143,7 @@ const BarcodeGenerator = ({
             __html: `
               @media print {
                 .label { break-inside: avoid; }
-                body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                body { -webkit-print-color-adjust: exact; print-color-adjust: exact;margin: 0; }
               }
             `,
           }}
@@ -155,26 +155,24 @@ const BarcodeGenerator = ({
             {Array.from({ length: numberOfBarcodes }).map((_, index) => (
               <div
                 key={`barcode-${index}`}
-                className="label box-border flex h-[38mm] w-[50mm] flex-col justify-between overflow-hidden rounded-[1mm] border border-gray-300 p-[1mm]"
+                className="label box-border flex h-[38mm] w-[50mm] flex-col justify-center gap-[0.2cm] overflow-hidden rounded-[1mm] p-[1mm]"
               >
                 {/* BRAND */}
-                <div className="text-center text-[3.4mm] leading-none font-semibold">
-                  Tailor Tech
-                </div>
+                <p className="text-center text-[3.4mm] leading-none font-bold">TailorTech</p>
 
                 {/* DETAILS */}
                 <div className="mt-[1mm] space-y-[0.2mm] text-[2.8mm] leading-tight">
-                  <span className="block max-h-[calc(1em*2.4)] overflow-hidden leading-tight">
+                  <span className="block max-h-[calc(1em*2.4)] overflow-hidden leading-tight font-bold">
                     Item: {product.name}
                   </span>
-                  <span className="block">Colour: {color}</span>
-                  <span className="block">Size: {size}</span>
-                  <span className="block">Price: {priceText} TK.</span>
+                  <span className="block font-bold">Colour: {color}</span>
+                  <span className="block font-bold">Size: {size}</span>
+                  <span className="block font-bold">Price: {priceText} TK.</span>
                 </div>
 
                 {/* BARCODE */}
-                <div className="mt-[0.6mm] flex flex-col items-center">
-                  <span className="flex h-[8mm] w-full items-center justify-center overflow-hidden">
+                <div className="flex flex-col items-center">
+                  <span className="flex h-[6mm] w-full items-center justify-center overflow-hidden">
                     <svg
                       // ⬇️ store each svg in the refs array by index
                       ref={(el) => {
@@ -184,7 +182,7 @@ const BarcodeGenerator = ({
                       preserveAspectRatio="xMidYMid meet"
                     />
                   </span>
-                  <span className="mt-[0.6mm] w-full truncate text-center font-mono text-[2.6mm] leading-none tracking-wider">
+                  <span className="mt-[0.6mm] w-full truncate text-center font-mono text-[2.6mm] leading-none font-bold tracking-wider">
                     {barcodeValue}
                   </span>
                 </div>

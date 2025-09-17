@@ -1,5 +1,6 @@
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
+import { paymentMethodOptions } from "@/const/order";
 import { useGetOrGenerateOrderInvoiceIdQuery } from "@/redux/features/order/order.api";
 import { IOrder } from "@/types/order";
 import { numberToWords } from "@/utils/numberToWord";
@@ -177,10 +178,10 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
           </div>
           <div className="mb-2 flex justify-between text-[12px]">
             <p>
-              <strong>Date: {formattedDate(orderItem.createdAt)}</strong>
+              <strong>Date: {formattedDate(new Date())}</strong>
             </p>
             <p>
-              <strong>Time:</strong> {formattedTime(orderItem.createdAt)}
+              <strong>Time:</strong> {formattedTime(new Date())}
             </p>
           </div>
           {/* Products Table */}
@@ -237,7 +238,9 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
           {/* Payment Method */}
           <div className="mt-2 text-[12px]">
             <p>
-              <strong>Payment Method: COD/ Cash/ Bkash/ Rocket/ Nagad/ Card</strong>
+              <strong>
+                Payment Method: {paymentMethodOptions[orderItem.paymentMethod]?.label}
+              </strong>
             </p>
             <p className="mt-[10px] text-[11px]">
               <strong>

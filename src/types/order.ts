@@ -46,6 +46,8 @@ export interface IBillingAddress {
   phoneNumber: string;
 }
 
+export type TPaymentMethod = "cod" | "card" | "bkash" | "nagad" | "rocket" | "cash";
+
 export interface IOrder {
   _id: string;
   user: string | IUser;
@@ -57,6 +59,7 @@ export interface IOrder {
   createdAt?: string;
   deliveryFee?: number;
   status: IOrderStatus[];
+  paymentMethod: TPaymentMethod;
   paymentStatus: "COD" | "pending" | "paid" | "canceled";
   coupon?: string;
   couponDiscount?: number;
