@@ -155,7 +155,7 @@ const BarcodeGenerator = ({
             {Array.from({ length: numberOfBarcodes }).map((_, index) => (
               <div
                 key={`barcode-${index}`}
-                className="label box-border flex h-[38mm] w-[50mm] flex-col justify-between overflow-hidden rounded-[1mm] border border-gray-300 p-[1mm] shadow-sm"
+                className="label box-border flex h-[38mm] w-[50mm] flex-col justify-between overflow-hidden rounded-[1mm] border border-gray-300 p-[1mm]"
               >
                 {/* BRAND */}
                 <div className="text-center text-[3.4mm] leading-none font-semibold">
