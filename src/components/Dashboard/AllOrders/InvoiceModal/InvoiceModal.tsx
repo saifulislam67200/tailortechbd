@@ -181,7 +181,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
               <strong>Date: {formattedDate(new Date())}</strong>
             </p>
             <p>
-              <strong>Time:</strong> {formattedTime(new Date())}
+              <strong>Time: {formattedTime(new Date())}</strong>
             </p>
           </div>
           {/* Products Table */}
