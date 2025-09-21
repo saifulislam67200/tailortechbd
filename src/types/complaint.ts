@@ -7,7 +7,8 @@ export interface IComplaint {
   priority: string;
   satisfaction: number;
   status: "pending" | "in-progress" | "resolved" | "implemented" | "refused" | "closed";
-  actionTaken: string;
+  actionTaken?: string;
+  message: string;
   createdAt?: string;
   updatedAt?: string;
   resolutionDate: string;

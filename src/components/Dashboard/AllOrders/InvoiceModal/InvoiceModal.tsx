@@ -1,9 +1,11 @@
 import DialogProvider from "@/components/ui/DialogProvider";
+import HorizontalLine from "@/components/ui/HorizontalLine";
+import { paymentMethodOptions } from "@/const/order";
 import { useGetOrGenerateOrderInvoiceIdQuery } from "@/redux/features/order/order.api";
 import { IOrder } from "@/types/order";
+import { numberToWords } from "@/utils/numberToWord";
 import html2canvas from "html2canvas-pro";
 import jsPDF from "jspdf";
-import Link from "next/link";
 import { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
@@ -29,7 +31,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
     const currentDate = date ? new Date(date) : new Date();
     return currentDate.toLocaleDateString("en-GB", {
       day: "numeric",
-      month: "long",
+      month: "short",
       year: "numeric",
     });
   };
@@ -46,23 +48,39 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
 
   const handleDownloadPDF = async () => {
     setIsGeneratingPDF(true);
-    if (!invoiceRef.current) return;
+    const el = invoiceRef.current;
+    if (!el) return;
+
     try {
-      const canvas = await html2canvas(invoiceRef.current, {
+      // Render the full invoice element
+      const canvas = await html2canvas(el, {
         scale: 2,
         useCORS: true,
         allowTaint: true,
         backgroundColor: "#ffffff",
         logging: false,
+        width: el.scrollWidth,
+        height: el.scrollHeight,
+        windowWidth: el.scrollWidth,
+        windowHeight: el.scrollHeight,
       });
 
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
+      const imgData = canvas.toDataURL("image/jpeg", 1.0);
 
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      // Fixed width = 3 inch → 76.2 mm
+      const pdfWidth = 76.2; // mm
+      // Auto height based on aspect ratio
+      const pdfHeight = pdfWidth * (canvas.height / canvas.width);
 
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      // Create PDF with custom size
+      const pdf = new jsPDF({
+        orientation: "p",
+        unit: "mm",
+        format: [pdfWidth, pdfHeight], // custom receipt size
+      });
+
+      pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight);
+
       pdf.save(`invoice-${invoiceNumber}.pdf`);
       setIsOpen(false);
     } catch (error) {
@@ -111,182 +129,146 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
         </button>
       </div>
 
-      <DialogProvider setState={setIsOpen} state={isOpen} className="max-w-[100vw] bg-white">
+      <DialogProvider setState={setIsOpen} state={isOpen} className="w-full max-w-[300px] bg-white">
         <div
           ref={invoiceRef}
-          className="mx-auto flex min-h-[1123px] max-w-full min-w-[794px] flex-col items-start justify-between bg-white p-5 font-sans text-sm text-gray-800"
+          className="flex h-auto w-[3in] flex-col px-3 py-3 font-sans text-[12px] text-black"
         >
-          <div className="w-full">
-            {/* Header */}
-            <div className="mb-6 flex items-start justify-between border-b pb-4">
-              <div className="text-sm">
-                <div className="mb-3">
-                  <div className="mb-4 w-[230px]">
-                    <img
-                      src="/images/logos/logo.png"
-                      width={228}
-                      height={38}
-                      className="h-[38px] w-full"
-                    />
-                  </div>
-                </div>
-                <p>
-                  <strong>Address:</strong> Kalshi Road, Mirpur-11, Dhaka-1216
-                </p>
-                <p>
-                  <strong>Mobile:</strong> +880 01711 923276
-                </p>
-                <p>
-                  <strong>Email:</strong> support@tailortechbd.com
-                </p>
-                <p>
-                  <strong>Website:</strong>{" "}
-                  <Link href="www.tailortechbd.com">www.tailortechbd.com</Link>
-                </p>
-                <p>
-                  <strong>Facebook:</strong>{" "}
-                  <Link href="https://fb.com/tailortechbd">fb.com/tailortechbd</Link>
-                </p>
-              </div>
-              <div className="text-right text-sm">
-                <p>
-                  <strong>Invoice No:</strong> {invoiceNumber}
-                </p>
-                <p>
-                  <strong>Date:</strong> {formattedDate(orderItem.createdAt)}
-                </p>
-                <p>
-                  <strong>Time:</strong> {formattedTime(orderItem.createdAt)}
-                </p>
-                <p>
-                  <strong>Printed On:</strong> {formattedDate()}
-                </p>
-              </div>
+          {/* Header */}
+          <div className="text-left">
+            <div className="mb-2">
+              <img
+                src="/images/logos/logo.png"
+                width={200}
+                height={40}
+                className="mx-auto h-[38px]"
+              />
             </div>
-
-            {/* Bill To */}
-            <div className="mb-6">
-              <h2 className="mb-1 text-2xl font-semibold text-gray-700">Bill To:</h2>
-              <p>
-                <strong>Name:</strong> {orderItem?.shippingAddress?.name}
-              </p>
-              <p>
-                <strong>Address:</strong> {orderItem?.shippingAddress?.address}
-              </p>
-              <p>
-                <strong>Email:</strong>
-                {
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  //@ts-ignore
-                  orderItem?.shippingAddress?.email || "N/A"
-                }
-              </p>
-              <p>
-                <strong>Mobile:</strong> {orderItem?.shippingAddress?.phoneNumber}
-              </p>
-            </div>
-
-            {/* Products Table */}
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse border text-center text-sm">
-                <thead className="bg-gray-100 text-black/700">
-                  <tr>
-                    <th className="border p-2">SL</th>
-                    <th className="border p-2">Product Name & Code</th>
-                    <th className="border p-2">Color</th>
-                    <th className="border p-2">Size</th>
-                    <th className="border p-2">Qty</th>
-                    <th className="border p-2">Unit Price</th>
-                    <th className="border p-2">Total Price</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orderItem?.orderItems?.map((orderItem, index) => (
-                    <tr key={index} className="hover:bg-gray-50">
-                      <td className="border p-2">{index + 1}</td>
-                      <td className="max-w-[300px] border p-2">
-                        {orderItem?.product?.name} ({orderItem.product.sku || "N/A"})
-                      </td>
-                      <td className="border p-2">{orderItem?.color}</td>
-                      <td className="border p-2">{orderItem?.size}</td>
-                      <td className="border p-2">{orderItem?.quantity}</td>
-                      <td className="border p-2">{orderItem?.product?.price}</td>
-                      <td className="border p-2">
-                        {orderItem?.product?.price && orderItem?.quantity
-                          ? Math.floor(orderItem.product.price * orderItem.quantity)
-                          : "N/A"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Summary */}
-            <div className="mt-6 flex justify-end">
-              <div className="w-full max-w-sm text-right">
-                <p>
-                  <strong>Subtotal:</strong> {subtotal}
-                </p>
-                <p>
-                  <strong>Discount:</strong> ৳{discount}
-                </p>
-                <p>
-                  <strong>Delivery Charge:</strong> ৳{deliveryFee}
-                </p>
-                <p className="text-lg font-bold text-black/700">
-                  <span>Grand Total:</span> ৳{total}
-                </p>
-              </div>
-            </div>
-
-            {/* Payment Info  */}
-            <div className="mt-8 text-sm">
-              <p className="capitalize">
-                <strong>Payment Method:</strong> {orderItem.paymentStatus}
-              </p>
-              {/* Transaction ID will be displayed in future when online payment is added */}
-              {/* <p>
-                <strong>Transaction ID:</strong> — If Mobile Banking/Card Payment
-              </p> */}
-              <p>
-                <strong>Order Status:</strong>{" "}
-                {orderItem?.paymentStatus === "paid" ? "Paid & Confirmed" : "Confirmed & Due"}
-              </p>
-            </div>
-
-            {/* Exchange Policy */}
-            <div className="mt-6">
-              <h3 className="font-semibold">Exchange & Refund Policy:</h3>
-              <ul className="list-inside list-disc text-gray-600">
-                <li>Products can be exchanged within 3 days of delivery.</li>
-                <li>Refund only applicable for defective or wrong items.</li>
-              </ul>
-            </div>
+            <p>
+              <strong>Address: Kalshi Road, Mirpur-11, Dhaka-1216.</strong>
+            </p>
+            <p>
+              <strong>Mobile: +880 1711 923276, +880 1911 696556</strong>
+            </p>
+            <p>
+              <strong>E-mail: support@tailortechbd.com</strong>
+            </p>
+            <p>
+              <strong>Website: www.tailortechbd.com</strong>
+            </p>
           </div>
-
-          <div className="flex w-full flex-col gap-[24px]">
-            {/* Signature */}
-            <div className="flex items-end justify-between pt-6">
-              <div className="text-center">
-                <p className="mx-auto w-40 border-t border-gray-400 pt-1 text-gray-700">
-                  Customer Sign
-                </p>
-              </div>
-              <div className="flex flex-col items-center justify-center text-center">
-                <img src={"/images/authorized_sign.png"} className="w-[80px]" />
-                <p className="mx-auto w-40 border-t border-gray-400 pt-1 text-gray-700">
-                  Authorized Sign
-                </p>
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="text-center text-sm text-gray-500">
-              <p>Thank You For Shopping From Tailortech</p>
-            </div>
+          {/* Invoice Info */}
+          <strong className="my-2 text-center text-[12px]">
+            -------------------INVOICE-------------------
+          </strong>
+          <p className="mb-2 flex w-full justify-between text-[12px] font-bold">
+            Invoice No: <span>{invoiceNumber}</span>
+          </p>
+          {/* Bill To */}
+          <div className="mb-2 text-[12px]">
+            <strong>
+              <u>Bill to:</u>
+            </strong>
+            <p>
+              <strong>Name: {orderItem?.shippingAddress?.name}</strong>
+            </p>
+            <p>
+              <strong>Cell: {orderItem?.shippingAddress?.phoneNumber || "N/A"}</strong>
+            </p>
+          </div>
+          <div className="mb-2 flex justify-between text-[12px]">
+            <p>
+              <strong>Date: {formattedDate(new Date())}</strong>
+            </p>
+            <p>
+              <strong>Time: {formattedTime(new Date())}</strong>
+            </p>
+          </div>
+          {/* Products Table */}
+          <table className="w-full text-left text-[12px]">
+            <thead>
+              <tr style={{ border: "1px solid #000" }}>
+                <th className="px-1 py-1">Description</th>
+                <th className="px-1 py-1">Qty</th>
+                <th className="px-1 py-1">U. Price</th>
+                <th className="px-1 py-1">T. Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orderItem?.orderItems?.map((it, idx) => {
+                const uPrice = Math.floor(it?.product?.price ?? 0);
+                const tPrice = it?.quantity ? Math.floor(uPrice * it.quantity) : 0;
+                return (
+                  <tr key={idx}>
+                    <td className="max-w-[1.4in] px-1 py-1 text-left">
+                      <strong>
+                        {it?.product?.name} {it?.color ? `- ${it.color}` : ""}
+                        {it?.size ? ` - ${it.size}` : ""}
+                      </strong>
+                    </td>
+                    <td className="px-1 py-1">
+                      <strong>{it?.quantity}</strong>
+                    </td>
+                    <td className="px-1 py-1">
+                      <strong>{uPrice}</strong>
+                    </td>
+                    <td className="px-1 py-1">
+                      <strong>{tPrice}</strong>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <HorizontalLine className="my-[1mm] bg-black" />
+          {/* Totals */}
+          <div className="mt-2 text-right text-[12px]">
+            <p>
+              <strong>Subtotal = {subtotal}</strong>
+            </p>
+            <p>
+              <strong>General Discount = 0</strong>
+            </p>
+            <p>
+              <strong>Coupon Discount = {discount}</strong>
+            </p>
+            <p>
+              <strong>Delivery Charge = {deliveryFee}</strong>
+            </p>
+            <p className="mt-1 text-[13px] font-bold">
+              <strong>Grand Total = {total}</strong>
+            </p>
+          </div>
+          {/* In Words */}
+          <p className="mt-2 text-[12px]">
+            <strong>In word: {numberToWords(total)} taka only</strong>
+          </p>
+          {/* Payment Method */}
+          <div className="mt-2 text-[12px]">
+            <p>
+              <strong>
+                Payment Method: {paymentMethodOptions[orderItem.paymentMethod]?.label}
+              </strong>
+            </p>
+            <p className="mt-[10px] text-[11px]">
+              <strong>
+                <span className="underline">For exchange & refund:</span> Please Visit our website
+              </strong>
+            </p>
+          </div>
+          {/* Thank You */}
+          <div className="mt-3 border border-black p-2 text-center text-[13px] font-bold">
+            Thank you for shopping from
+            <br />
+            “Tailortech”
+          </div>
+          {/* Footer */}
+          <div className="mt-2 text-center text-[13px]">
+            <p>This is an electronic generated bill.</p>
+            <p>No signature is required.</p>
           </div>
         </div>
+
         <div className="sticky top-0 z-10 bg-white pt-[20px] pb-3">
           <div className="flex w-full items-center justify-center gap-[10px]">
             <button

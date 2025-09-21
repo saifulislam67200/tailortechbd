@@ -183,3 +183,11 @@ input[type="number"] {
   box-shadow: inset 0px 0px 0px var(--primary);
   color: var(--primary);
 }
+
+.truncate-2lines-no-ellipsis {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important; /* max lines */
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: clip !important; /* <- removes the "..." */
+}

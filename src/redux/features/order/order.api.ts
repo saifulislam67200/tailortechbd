@@ -10,7 +10,14 @@ const orderApi = api.injectEndpoints({
       { data: IOrder },
       Omit<
         IOrder,
-        "status" | "paymentStatus" | "totalProductAmount" | "user" | "_id" | "orderId" | "invoiceId"
+        | "status"
+        | "paymentStatus"
+        | "totalProductAmount"
+        | "user"
+        | "_id"
+        | "orderId"
+        | "invoiceId"
+        | "paymentMethod"
       >
     >({
       query: (payload) => ({
@@ -90,25 +97,42 @@ const orderApi = api.injectEndpoints({
       Omit<IComplaint, "_id" | "createdAt" | "updatedAt" | "resolutionDate">
     >({
       query: (payload) => ({
-        url: "/order/create-complain-suggestion",
+        url: "/order/complain-suggestion",
         method: "POST",
         body: payload,
       }),
       invalidatesTags: ["order"],
     }),
-    getComplaintSuggestionByUser: builder.query<{ data: IComplaint[] }, void>({
-      query: () => ({
-        url: "/order/get-complain-suggestion",
-        method: "GET",
-      }),
+    getAllComplaintSuggestion: builder.query<
+      { data: IComplaint[]; meta: IMeta },
+      Record<string, string | number>
+    >({
+      query: (query) => {
+        const queryString = generateQueryParams(query);
+        return {
+          url: `/order/complain-suggestion?${queryString}`,
+          method: "GET",
+        };
+      },
       providesTags: ["order"],
     }),
-    getAllComplaintSuggestion: builder.query<{ data: IComplaint[] }, void>({
-      query: () => ({
-        url: "/order/get-all/complain-suggestion",
-        method: "GET",
+    deleteComplaintSuggestionById: builder.mutation<{ data: IComplaint }, string>({
+      query: (id) => ({
+        url: `/order/complain-suggestion/${id}`,
+        method: "DELETE",
       }),
-      providesTags: ["order"],
+      invalidatesTags: ["order"],
+    }),
+    updateComplaintSuggestionById: builder.mutation<
+      { data: IComplaint },
+      { id: string; payload: Partial<IComplaint> }
+    >({
+      query: ({ id, payload }) => ({
+        url: `/order/complain-suggestion/${id}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: ["order"],
     }),
   }),
 });
@@ -122,6 +146,7 @@ export const {
   useGetPendingOrderCountQuery,
   useGetOrGenerateOrderInvoiceIdQuery,
   useCreateComplaintSuggestionMutation,
-  useGetComplaintSuggestionByUserQuery,
   useGetAllComplaintSuggestionQuery,
+  useDeleteComplaintSuggestionByIdMutation,
+  useUpdateComplaintSuggestionByIdMutation,
 } = orderApi;
