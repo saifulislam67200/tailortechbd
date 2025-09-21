@@ -30,8 +30,8 @@ const PrimaryProductCardImages = ({
           <Image
             src={product.images?.[0] || "/images/category_blank.png"}
             alt={product.name}
-            width={200}
-            height={200}
+            width={1000}
+            height={1000}
             className="relative z-[1] mx-auto h-full w-auto max-w-full object-cover transition-transform duration-300"
           />
           <Image

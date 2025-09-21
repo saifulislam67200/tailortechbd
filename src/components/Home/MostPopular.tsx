@@ -31,7 +31,7 @@ const MostPopular = async ({ title }: { title?: string }) => {
     <section className="w-full py-[16px]">
       <Title title={title || "Most Popular"} />
 
-      <div className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-4">
+      <div className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-4">
         {collections?.map((item) => <ProductPrimaryCard key={item._id} product={item} />)}
       </div>
     </section>
