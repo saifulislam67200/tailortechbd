@@ -30,7 +30,7 @@ const Collections = async () => {
     <section className="w-full py-[16px]">
       <Title title="Latest Collections" />
 
-      <div className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-4">
+      <div className="mt-4 grid grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-4">
         {collections?.map((item) => (
           <ProductPrimaryCard className="h-full" key={item._id} product={item} />
         ))}
