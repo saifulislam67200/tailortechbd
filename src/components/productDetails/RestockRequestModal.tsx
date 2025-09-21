@@ -71,7 +71,7 @@ const RestockRequestModal = ({
     <>
       <button
         onClick={() => setIsOpen(true)}
-        className="h-[40px] w-full cursor-pointer bg-primary text-white transition-all duration-300 hover:bg-info disabled:cursor-not-allowed disabled:opacity-[50] sm:max-w-[230px]"
+        className="checkoutBtn w-full cursor-pointer py-[8px] text-white transition-all duration-300 hover:bg-info disabled:cursor-not-allowed disabled:opacity-[50] sm:max-w-[230px]"
       >
         Request Restock
       </button>

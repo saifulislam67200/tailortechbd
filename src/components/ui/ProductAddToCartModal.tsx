@@ -93,7 +93,7 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
         <button
           onClick={handleClick}
           disabled={isAllStockOut}
-          className={`specialBtn mt-1 w-full border border-[#c5c5c5] bg-transparent py-[6px] text-sm font-bold ${isAllStockOut ? "cursor-not-allowed opacity-70" : "cursor-pointer opacity-100"}`}
+          className={`specialBtn mt-1 w-full border border-[#c5c5c5] bg-transparent py-[8px] text-sm font-bold ${isAllStockOut ? "cursor-not-allowed opacity-70" : "cursor-pointer opacity-100"}`}
         >
           Add to Cart
         </button>
