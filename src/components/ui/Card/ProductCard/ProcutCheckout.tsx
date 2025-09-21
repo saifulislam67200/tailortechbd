@@ -162,7 +162,7 @@ const ProductCheckoutModal = ({
       ) : (
         <button
           onClick={handleOpenModal}
-          className={`checkoutBtn center mt-1 w-full cursor-pointer gap-[3px] border border-[#c5c5c5] py-[6px] text-sm font-bold ${btnStyle}`}
+          className={`checkoutBtn center mt-1 w-full cursor-pointer gap-[3px] border border-[#c5c5c5] py-[8px] text-sm font-bold ${btnStyle}`}
         >
           Buy Now <IoBagCheckOutline />
         </button>

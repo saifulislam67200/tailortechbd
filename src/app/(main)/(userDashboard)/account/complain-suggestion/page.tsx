@@ -43,17 +43,19 @@ type FormValues = {
 };
 
 const validationSchema = Yup.object({
-  customerName: Yup.string().required("* Customer name is required"),
-  orderId: Yup.string().required("* Order ID is required"),
-  feedbackType: Yup.string().required("* Feedback type is required"),
-  csCategory: Yup.string().required("* Category is required"),
-  priority: Yup.string().required("* Priority is required"),
+  customerName: Yup.string().required("Customer name is required"),
+  orderId: Yup.string()
+    .matches(/^ORD-\d{8}-\d{3,}$/, "Order ID must be in the format ORD-XXXXXXXX-XXX")
+    .required("Order ID is required"),
+  feedbackType: Yup.string().required("Feedback type is required"),
+  csCategory: Yup.string().required("Category is required"),
+  priority: Yup.string().required("Priority is required"),
   satisfaction: Yup.number()
     .typeError("Satisfaction must be 1–5")
     .min(1, "Min 1")
     .max(5, "Max 5")
-    .required("* Satisfaction is required"),
-  actionTaken: Yup.string().required("* Action taken is required"),
+    .required("Satisfaction is required"),
+  actionTaken: Yup.string().required("Action taken is required"),
 });
 
 export default function Page() {

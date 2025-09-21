@@ -119,6 +119,7 @@ export default function ComplainSuggestionTable() {
                   <th>Status</th>
                   <th>Action Taken (Details)</th>
                   <th>Resolution Date</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -147,6 +148,11 @@ export default function ComplainSuggestionTable() {
                         <div className="whitespace-pre-wrap">{c.actionTaken}</div>
                       </td>
                       <td className="px-3 py-2">{c.resolutionDate || "-"}</td>
+                      <td className="px-3 py-2">
+                        <button className="rounded-lg bg-primary px-4 py-2 font-semibold text-white hover:opacity-90">
+                          View
+                        </button>
+                      </td>
                     </tr>
                   ))
                 )}

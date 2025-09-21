@@ -109,7 +109,7 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
       ) : isAllStockOut ? (
         <button
           onClick={handleClick}
-          className="-mb-[4px] h-[33px] w-full cursor-pointer bg-primary text-[14px] text-white transition-all duration-300 hover:bg-info disabled:cursor-not-allowed disabled:opacity-[50]"
+          className="checkoutBtn -mb-[4px] w-full cursor-pointer border border-border-muted py-[8px] text-[14px] font-bold text-white transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-[50]"
         >
           Request Restock
         </button>
