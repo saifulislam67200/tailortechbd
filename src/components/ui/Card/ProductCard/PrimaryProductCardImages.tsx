@@ -18,7 +18,7 @@ const PrimaryProductCardImages = ({
           e.preventDefault();
         }
       }}
-      className="relative flex aspect-[360/450] w-full shrink-0 items-center justify-start overflow-hidden bg-white"
+      className="relative flex aspect-square w-full shrink-0 items-center justify-start overflow-hidden bg-white"
     >
       {isAllStockOut && (
         <span className="absolute inset-0 z-10 flex items-center justify-center bg-black/50 text-lg font-semibold text-white">
@@ -30,9 +30,9 @@ const PrimaryProductCardImages = ({
           <Image
             src={product.images?.[0] || "/images/category_blank.png"}
             alt={product.name}
-            width={1000}
-            height={1000}
-            className="relative z-[1] mx-auto h-full w-auto max-w-full object-cover transition-transform duration-300"
+            width={200}
+            height={200}
+            className="relative z-[1] mx-auto h-full w-auto max-w-full object-contain transition-transform duration-300"
           />
           <Image
             src={product.images?.[1] || "/images/category_blank.png"}
