@@ -34,4 +34,5 @@ export interface IProduct {
   updatedAt?: string;
   chart: string[][];
   sku?: string;
+  fabric?: string;
 }
