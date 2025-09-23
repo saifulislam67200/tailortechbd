@@ -123,6 +123,7 @@ export const {
   useGetTopProuctsQuery,
   useDeleteProductByIdMutation,
   useGetProductStockQuery,
+  useLazyGetProductStockQuery,
   useCreateDamagedProductMutation,
   useGetDamagedProductQuery,
 } = productApi;

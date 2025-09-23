@@ -2681,6 +2681,7 @@ __metadata:
     react-fast-marquee: "npm:^1.6.5"
     react-icons: "npm:^5.5.0"
     react-image-magnify: "npm:^2.7.4"
+    react-multi-date-picker: "npm:^4.5.2"
     react-phone-number-input: "npm:^3.4.12"
     react-quill-new: "npm:^3.4.6"
     react-redux: "npm:^9.2.0"
@@ -4547,6 +4548,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-date-object@npm:^2.1.8":
+  version: 2.1.9
+  resolution: "react-date-object@npm:2.1.9"
+  checksum: 10c0/bcf39a1120c09b10ad9294ec5300c106ff9bdaf21f33584f22876ee1b1615efab894e69dd5317cfaa469b8b61b50d2178afd6baf496b6dd8a446337a9fbba3a8
+  languageName: node
+  linkType: hard
+
 "react-datepicker@npm:^8.4.0":
   version: 8.4.0
   resolution: "react-datepicker@npm:8.4.0"
@@ -4569,6 +4577,16 @@ __metadata:
   peerDependencies:
     react: ^19.1.1
   checksum: 10c0/8c91198510521299c56e4e8d5e3a4508b2734fb5e52f29eeac33811de64e76fe586ad32c32182e2e84e070d98df67125da346c3360013357228172dbcd20bcdd
+  languageName: node
+  linkType: hard
+
+"react-element-popper@npm:^2.1.6":
+  version: 2.1.7
+  resolution: "react-element-popper@npm:2.1.7"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10c0/da840daaf8829516b7c1646a76d92dd64e5f4dc73bf29afea00d6bd665235e7480305dae75572bc7b17802bccb1434166711b828e5c90a7d172160520ea61fcb
   languageName: node
   linkType: hard
 
@@ -4626,6 +4644,19 @@ __metadata:
   version: 18.3.1
   resolution: "react-is@npm:18.3.1"
   checksum: 10c0/f2f1e60010c683479e74c63f96b09fb41603527cd131a9959e2aee1e5a8b0caf270b365e5ca77d4a6b18aae659b60a86150bb3979073528877029b35aecd2072
+  languageName: node
+  linkType: hard
+
+"react-multi-date-picker@npm:^4.5.2":
+  version: 4.5.2
+  resolution: "react-multi-date-picker@npm:4.5.2"
+  dependencies:
+    react-date-object: "npm:^2.1.8"
+    react-element-popper: "npm:^2.1.6"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10c0/cb860dcb1b621bd33546b7e6fada6431b72ad3a0992916c39edac769fcde5fb6f8c541f6d8975b5768286b2fa43929a29659ad802852e31ef22ed2b16c164133
   languageName: node
   linkType: hard
 

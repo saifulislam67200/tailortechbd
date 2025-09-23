@@ -22,8 +22,15 @@ const formateCreateOrUpdateDate = (
   });
 };
 
+const formatDate = (dateString?: string | Date | undefined) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", { month: "short", year: "numeric", day: "numeric" });
+};
+
 const dateUtils = {
   formatSecondsToMMSS,
   formateCreateOrUpdateDate,
+  formatDate,
 };
 export default dateUtils;

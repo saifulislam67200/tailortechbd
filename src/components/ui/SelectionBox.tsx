@@ -18,6 +18,7 @@ interface SelectionBoxProps {
   defaultSearch?: boolean;
   showSearch?: boolean;
   className?: string;
+  dropdownClassName?: string;
 }
 
 const SelectionBox = ({
@@ -29,6 +30,7 @@ const SelectionBox = ({
   showSearch = true,
   className,
   onSeachInputChange,
+  dropdownClassName,
 }: SelectionBoxProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -75,7 +77,12 @@ const SelectionBox = ({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded border border-gray-300 bg-white shadow">
+        <div
+          className={twMerge(
+            "absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded border border-gray-300 bg-white shadow",
+            dropdownClassName
+          )}
+        >
           {showSearch ? (
             <input
               type="text"

@@ -20,6 +20,7 @@ const tableHead = [
   { label: "Requested Qty", field: "" },
   { label: "Customer Details", field: "" },
   { label: "Message", field: "" },
+  { label: "Actions", field: "" },
 ];
 
 const RestockRequestTable = () => {
@@ -171,6 +172,16 @@ const RestockRequestTable = () => {
                     {/* message */}
                     <td className="px-6 py-4">
                       <span className="text-[14px]">{request?.details || "N/A"}</span>
+                    </td>
+
+                    {/* actions */}
+                    <td className="px-6 py-4">
+                      <div className="text-[14px]">
+                        <button className="cursor-pointer text-success hover:text-success/80">
+                          Accept
+                        </button>
+                        <button className="hover cursor-pointer text-red-400">Reject</button>
+                      </div>
                     </td>
                   </tr>
                 ))
