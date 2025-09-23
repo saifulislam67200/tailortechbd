@@ -1,5 +1,4 @@
 "use client";
-import Button from "@/components/ui/Button";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Pagination from "@/components/ui/Pagination";
 import SelectionBox from "@/components/ui/SelectionBox";
@@ -7,71 +6,45 @@ import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetProductStockQuery } from "@/redux/features/product/product.api";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { IoCalendarNumberOutline, IoPrintSharp } from "react-icons/io5";
+import { IoCalendarNumberOutline } from "react-icons/io5";
 import { RxMagnifyingGlass } from "react-icons/rx";
-import { useReactToPrint } from "react-to-print";
 import { twMerge } from "tailwind-merge";
 import CategorySelector from "./CategorySelector";
 import "./index.css";
+import { IProductStock } from "@/types/product";
+import DownloadStockReport from "./DownloadStockReport";
 
-interface IProductStock {
-  _id: string;
-  productName: string;
-  slug: string;
-  color: string;
-  size: string;
-  stock: number;
-  status: string;
-  sku: string;
-  price: number;
-  value: number;
-  category: string;
-  subCategory: string;
-  parentCategory: string | null;
-}
-type TGroupedProduct = Omit<IProductStock, "size" | "stock"> & {
-  sizeStock: { size: string; stock: number }[];
-};
-
-const sizeKeys = ["S", "M", "L", "XL", "2XL"] as const;
 const stockTableHeaders = [
-  { label: "SL", field: "", rowSpan: 2, shouldPint: true },
-  { label: "Category", field: "", rowSpan: 2, shouldPint: true },
+  { label: "Category", field: "", rowSpan: 2 },
   { label: "Sub Category", field: "", rowSpan: 2 },
-  { label: "Color", field: "", rowSpan: 2, shouldPint: true },
-  { label: "Style Code", field: "", rowSpan: 2, shouldPint: true },
-  {
-    label: "Product",
-    field: "",
-    colSpan: sizeKeys.length,
-    className: "text-center",
-    shouldPint: true,
-  },
-
-  { label: "Current Stock", field: "", rowSpan: 2, shouldPint: true },
-  { label: "Unit Price", field: "", rowSpan: 2, shouldPint: true },
+  { label: "Product Name  ", field: "", rowSpan: 2 },
+  { label: "Size", field: "", rowSpan: 2 },
+  { label: "Color", field: "", rowSpan: 2 },
+  { label: "Current Stock", field: "", rowSpan: 2 },
+  { label: "Unit Price", field: "", rowSpan: 2 },
   { label: "Total Price", field: "", rowSpan: 2 },
   { label: "Stock Status", field: "", rowSpan: 2 },
 ];
-
-// "in-stock", "low-stock", "out-of-stock"
 
 const ProductStockTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
   const tableRef = useRef<HTMLDivElement>(null);
-  const [isPrintMode, setIsPrintMode] = useState(false);
 
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [resetKey, setResetKey] = useState(0);
   const [stockQuery, setStockQuery] = useState<Record<string, string | number>>({
     page: 1,
-    fields: "name,category,size,createdAt,stock,status",
+    fields: "name,category,subCategory,size,color,price,createdAt,stock,status",
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
     timeframe: "all",
     status: "",
+    size: "",
+    color: "",
   });
 
   const [dateRange, setDateRange] = useState<{
@@ -86,11 +59,11 @@ const ProductStockTable = () => {
     ...stockQuery,
     search: searchTerm,
     limit: 10,
-    // category: "men",
     ...dateRange,
   });
-  const productStocks = stockData?.data || [];
-  const stockMetaData = stockData?.meta || { totalDoc: 0, page: 1 };
+
+  const products: IProductStock[] = stockData?.data || [];
+  const stockMetaData = stockData?.meta || { totalDoc: 0, page: 1, limit: 10 };
 
   const handleSort = (field: string) => {
     const newOrder = sort.field === field && sort.order === "asc" ? "desc" : "asc";
@@ -101,44 +74,31 @@ const ProductStockTable = () => {
     }));
   };
 
-  const handlePrint = useReactToPrint({
-    contentRef: tableRef,
-  });
+  const unique = (arr: Array<string | undefined | null>) =>
+    Array.from(new Set(arr.filter(Boolean))) as string[];
 
-  const groupProductsByName = () => {
-    const products = productStocks as IProductStock[];
-    const groupedMap = new Map<string, TGroupedProduct>();
+  const sizeOptions = useMemo(() => {
+    const allSizes = unique(products.map((p) => p.size));
+    return [{ label: "ALL", value: "" }, ...allSizes.map((s) => ({ label: s, value: s }))];
+  }, [products]);
 
-    for (const product of products) {
-      const key = `${product.productName}-${product.color}`; // unique per name+color
+  const colorOptions = useMemo(() => {
+    const allColors = unique(products.map((p) => p.color));
+    return [{ label: "ALL", value: "" }, ...allColors.map((c) => ({ label: c, value: c }))];
+  }, [products]);
 
-      if (stockQuery.color) {
-        if (product.color.toLowerCase() !== (stockQuery.color as string).toLowerCase()) {
-          continue;
-        }
-      }
+  const displayedProducts = useMemo(() => {
+    return products.filter((p) => {
+      const okSize = !selectedSize || p.size === selectedSize;
+      const okColor =
+        !selectedColor || (p.color || "").toLowerCase() === selectedColor.toLowerCase();
+      return okSize && okColor;
+    });
+  }, [products, selectedSize, selectedColor]);
 
-      if (stockQuery.size) {
-        if (product.size.toLowerCase() !== (stockQuery.size as string).toLowerCase()) {
-          continue;
-        }
-      }
-
-      if (!groupedMap.has(key)) {
-        groupedMap.set(key, {
-          ...product,
-          sizeStock: [{ size: product.size, stock: product.stock }],
-        });
-      } else {
-        const existing = groupedMap.get(key)!;
-        existing.sizeStock.push({ size: product.size, stock: product.stock });
-      }
-    }
-
-    const data = Array.from(groupedMap.values());
-
-    return data;
-  };
+  const totalDocs =
+    selectedSize || selectedColor ? displayedProducts.length : stockMetaData.totalDoc;
+  const totalPages = Math.max(1, Math.ceil(totalDocs / (stockMetaData.limit || 10)));
 
   return (
     <div className="flex flex-col gap-[10px]">
@@ -147,13 +107,9 @@ const ProductStockTable = () => {
           <h1 className="text-[16px] font-[600]">In-Stock Products</h1>
           <p className="text-[12px] text-muted md:text-[14px]">
             Displaying all in-stock products in your store. Total{" "}
-            <span className="font-bold text-dashboard">{stockMetaData.totalDoc}</span> products.
-            Divided into{" "}
-            <span className="font-bold text-dashboard">
-              {Math.ceil(stockMetaData.totalDoc / 10)} pages
-            </span>{" "}
-            & currently showing page{" "}
-            <span className="font-bold text-dashboard">{stockMetaData.page}.</span>
+            <span className="font-bold text-dashboard">{totalDocs}</span> products. Divided into{" "}
+            <span className="font-bold text-dashboard">{totalPages} pages</span> & currently showing
+            page <span className="font-bold text-dashboard">{stockMetaData.page}.</span>
           </p>
         </div>
         <HorizontalLine className="my-[10px]" />
@@ -189,7 +145,7 @@ const ProductStockTable = () => {
           </div>
 
           <select
-            value={stockQuery.status}
+            value={stockQuery.status as string}
             onChange={(e) => setStockQuery({ ...stockQuery, status: e.target.value })}
             className="h-[33px] border border-quaternary px-2 text-sm focus:outline-none"
           >
@@ -200,7 +156,7 @@ const ProductStockTable = () => {
           </select>
         </div>{" "}
         <HorizontalLine className="mt-[10px]" />
-        <div className="mb-3 flex flex-wrap justify-start gap-4 lg:flex-nowrap">
+        <div className="mb-3 flex flex-wrap items-end justify-start gap-4 lg:flex-nowrap">
           {/* select category */}
           <div className="min-w-[250px]">
             <CategorySelector
@@ -218,12 +174,14 @@ const ProductStockTable = () => {
             <span className="text-[14px] font-semibold">Select Size</span>
             <div className="max-w-[290px]">
               <SelectionBox
-                data={[
-                  { label: "ALL", value: "" },
-                  ...sizeKeys.map((size) => ({ label: size, value: size })),
-                ]}
-                onSelect={(category) => {
-                  setStockQuery({ ...stockQuery, size: category.value || "" });
+                key={`size-${resetKey}`}
+                data={sizeOptions}
+                dropdownClassName="z-[99999999]"
+                onSelect={(opt) => {
+                  const val = (opt?.value as string) || "";
+                  setSelectedSize(val);
+                  // keep API query in sync (server-side filtering)
+                  setStockQuery({ ...stockQuery, size: val, page: 1 });
                 }}
                 className="max-w-[290px]"
               />
@@ -235,96 +193,58 @@ const ProductStockTable = () => {
             <span className="text-[14px] font-semibold">Select Color</span>
             <div className="max-w-[290px]">
               <SelectionBox
-                data={[
-                  { label: "ALL", value: "" },
-                  { label: "RED", value: "red" },
-                  { label: "BLUE", value: "blue" },
-                  { label: "GREEN", value: "green" },
-                  { label: "YELLOW", value: "yellow" },
-                  { label: "BLACK", value: "black" },
-                  { label: "WHITE", value: "white" },
-                  { label: "GRAY", value: "gray" },
-                  { label: "BROWN", value: "brown" },
-                  { label: "ORANGE", value: "orange" },
-                  { label: "PINK", value: "pink" },
-                  { label: "PURPLE", value: "purple" },
-                ]}
-                onSelect={(category) => {
-                  setStockQuery({ ...stockQuery, color: category.value || "" });
+                key={`color-${resetKey}`}
+                data={colorOptions}
+                dropdownClassName="z-[99999999]"
+                onSelect={(opt) => {
+                  const val = (opt?.value as string) || "";
+                  setSelectedColor(val);
+                  // keep API query in sync (server-side filtering)
+                  setStockQuery({ ...stockQuery, color: val, page: 1 });
                 }}
                 className="max-w-[290px]"
               />
             </div>
           </div>
-        </div>
-        <div className="flex w-full items-center justify-end gap-0">
-          <Button
-            onClick={async () => {
-              setIsPrintMode(true);
-              setTimeout(() => {
-                handlePrint();
-                setIsPrintMode(false);
-              }, 500);
+
+          <button
+            className="cursor-pointer rounded-sm border border-dashboard/20 px-4 py-1"
+            onClick={() => {
+              setSelectedSize("");
+              setSelectedColor("");
+              setResetKey((k) => k + 1);
+              setStockQuery({ ...stockQuery, size: "", color: "", page: 1 });
             }}
           >
-            <IoPrintSharp />
-            print
-          </Button>
+            Clear Filters
+          </button>
         </div>
+        <div className="flex w-full items-center justify-end gap-0">
+          <DownloadStockReport />
+        </div>
+        {/* table */}
         <div className="overflow-x-auto" ref={tableRef}>
           <table className="w-full border border-border-main">
             <thead>
-              <tr>
-                {stockTableHeaders.map((header) =>
-                  isPrintMode && !header.shouldPint ? (
-                    ""
-                  ) : (
-                    <th
-                      colSpan={header.colSpan}
-                      rowSpan={header.rowSpan}
-                      key={header.field || header.label}
-                      className={twMerge(
-                        "border border-border-main px-6 py-3 text-left text-sm font-semibold text-dashboard",
-                        header.className
-                      )}
-                    >
-                      {header.field ? (
-                        <button
-                          className="flex cursor-pointer items-center gap-1"
-                          onClick={() => handleSort(header.field)}
-                        >
-                          <span>{header.label}</span>
-                          <span className="flex flex-col text-[10px] leading-[10px]">
-                            <FaChevronUp
-                              className={`${
-                                sort.field === header.field && sort.order === "asc"
-                                  ? "font-bold text-dashboard"
-                                  : "text-dashboard/30"
-                              }`}
-                            />
-                            <FaChevronDown
-                              className={`${
-                                sort.field === header.field && sort.order === "desc"
-                                  ? "font-bold text-dashboard"
-                                  : "text-dashboard/30"
-                              }`}
-                            />
-                          </span>
-                        </button>
-                      ) : (
-                        header.label
-                      )}
-                    </th>
-                  )
-                )}
-              </tr>
-              <tr>
-                {sizeKeys.map((key) => (
+              <tr className="bg-dashboard/10">
+                {stockTableHeaders.map((header) => (
                   <th
-                    key={key}
-                    className="border border-border-main px-6 py-3 text-left text-sm font-semibold text-dashboard"
+                    rowSpan={header.rowSpan}
+                    key={header.field || header.label}
+                    className={twMerge(
+                      "border border-border-main px-6 py-3 text-left text-sm font-semibold text-dashboard"
+                    )}
                   >
-                    {key}
+                    {header.field ? (
+                      <button
+                        className="flex cursor-pointer items-center gap-1"
+                        onClick={() => handleSort(header.field)}
+                      >
+                        <span>{header.label}</span>
+                      </button>
+                    ) : (
+                      header.label
+                    )}
                   </th>
                 ))}
               </tr>
@@ -333,81 +253,60 @@ const ProductStockTable = () => {
             <tbody>
               {isStockLoading ? (
                 <TableSkeleton columns={stockTableHeaders.length} />
-              ) : groupProductsByName().length ? (
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                //@ts-ignore
-                groupProductsByName().map((product, index) => {
-                  const getSizeStock = (size: string) => {
-                    return product.sizeStock.find((s) => s.size === size);
-                  };
+              ) : displayedProducts.length ? (
+                displayedProducts.map((product: IProductStock, index: number) => (
+                  <tr key={product?._id + index} className="">
+                    <td className="border border-border-main px-6 py-3">
+                      <span className="text-[14px]">{product?.category || "N/A"}</span>
+                    </td>
 
-                  const totalStock = product.sizeStock.reduce(
-                    (total, size) => total + size.stock,
-                    0
-                  );
-                  return (
-                    <tr key={product?._id + index} className="">
-                      <td className="border border-border-main px-6 py-4">
-                        <span className="text-[14px]">{index + 1}</span>
-                      </td>
-                      <td className="border border-border-main px-6 py-4">
-                        <span className="text-[14px]">{product?.category || "N/A"}</span>
-                      </td>
-                      {isPrintMode ? (
-                        <></>
-                      ) : (
-                        <td className="border border-border-main px-6 py-4">
-                          <span className="text-[14px]">{product?.subCategory || "N/A"}</span>
-                        </td>
-                      )}
+                    <td className="border border-border-main px-6 py-3">
+                      <span className="text-[14px]">{product?.subCategory || "N/A"}</span>
+                    </td>
 
-                      <td className="border border-border-main px-6 py-4">
-                        <span className="text-[14px]">{product.color || "N/A"}</span>
-                      </td>
-                      <td className="border border-border-main px-6 py-4">
-                        <span className="line-clamp-1 text-[14px] font-[700]">{product.sku} </span>
-                      </td>
-                      {sizeKeys.map((s) => (
-                        <td className="border border-border-main px-6 py-4" key={s}>
-                          {getSizeStock(s)?.stock || 0}
-                        </td>
-                      ))}
+                    {/* product name */}
+                    <td className="border border-border-main px-6 py-3">
+                      <span title={product.productName} className="line-clamp-1 text-[14px]">
+                        {product.productName}{" "}
+                      </span>
+                    </td>
 
-                      <td className="border border-border-main px-6 py-4">
-                        <span className="text-[14px]">{totalStock || "0"}</span>
-                      </td>
-                      <td className="border border-border-main px-6 py-4">
-                        <span className="text-[14px]">৳ {product.price}</span>
-                      </td>
-                      {isPrintMode ? (
-                        <></>
-                      ) : (
-                        <>
-                          <td className="border border-border-main px-6 py-4">
-                            <span className="text-[14px]">
-                              ৳ {Math.round(product.price * totalStock)}
-                            </span>
-                          </td>
-                          <td className="border border-border-main px-6 py-4">
-                            <span
-                              className={`text-[14px] capitalize ${
-                                product.status === "in-stock"
-                                  ? "text-green-500"
-                                  : product.status === "low-stock"
-                                    ? "text-yellow-500"
-                                    : product.status === "out-of-stock"
-                                      ? "text-red-500"
-                                      : ""
-                              }`}
-                            >
-                              {product.status ? product.status?.replace(/-/g, " ") : "N/A"}
-                            </span>
-                          </td>
-                        </>
-                      )}
-                    </tr>
-                  );
-                })
+                    <td className="border border-border-main px-6 py-3">
+                      <span className="text-[14px]">{product.size || "N/A"}</span>
+                    </td>
+
+                    <td className="border border-border-main px-6 py-3">
+                      <span className="text-[14px]">{product.color || "N/A"}</span>
+                    </td>
+
+                    <td className="border border-border-main px-6 py-3">
+                      <span className="text-[14px]">{product.stock || "0"}</span>
+                    </td>
+                    <td className="border border-border-main px-6 py-3">
+                      <span className="text-[14px]">৳ {product.price}</span>
+                    </td>
+                    <td className="border border-border-main px-6 py-3">
+                      <span className="text-[14px}">
+                        ৳ {Math.round((product.price || 0) * (product.stock || 0))}
+                      </span>
+                    </td>
+                    <td className="border border-border-main px-6 py-3">
+                      <span
+                        className={`text-[14px] capitalize ${
+                          product.status === "in-stock"
+                            ? "text-green-500"
+                            : product.status === "low-stock"
+                              ? "text-yellow-500"
+                              : product.status === "out-of-stock"
+                                ? "text-red-500"
+                                : ""
+                        }`}
+                      >
+                        {product.status ? product.status?.replace(/-/g, " ") : "N/A"}
+                      </span>
+                    </td>
+                  </tr>
+                ))
               ) : (
                 <TableDataNotFound
                   span={stockTableHeaders.length}
@@ -421,7 +320,7 @@ const ProductStockTable = () => {
       <Pagination
         showText={false}
         limit={stockMetaData.limit || 10}
-        totalDocs={stockMetaData.totalDoc}
+        totalDocs={totalDocs}
         page={stockMetaData.page}
         onPageChange={(page) => setStockQuery({ ...stockQuery, page })}
       />

@@ -36,3 +36,21 @@ export interface IProduct {
   sku?: string;
   fabric?: string;
 }
+
+export interface IProductStock {
+  _id: string;
+  productName: string;
+  slug: string;
+  color: string;
+  size: string;
+  stock: number;
+  status: string;
+  sku: string;
+  price: number;
+  value: number;
+  category: string;
+  subCategory: string;
+  parentCategory: string | null;
+  createdAt: string;
+  updatedAt: string;
+}

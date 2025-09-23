@@ -101,6 +101,7 @@ const CategorySelector: React.FC<IProps> = ({
       <div className="flex min-w-[250px] flex-col gap-[10px]">
         {heading}
         <SelectionBox
+          dropdownClassName="z-[9999999]"
           defaultSearch={false}
           onSeachInputChange={setSearchTerm}
           className={selectionBoxClassName}
