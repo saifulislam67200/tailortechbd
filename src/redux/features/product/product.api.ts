@@ -114,6 +114,7 @@ const productApi = api.injectEndpoints({
     }),
   }),
 });
+
 export const {
   useCreateProductMutation,
   useGetProductByProductSlugQuery,
