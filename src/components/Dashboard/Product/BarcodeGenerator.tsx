@@ -9,7 +9,7 @@ import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
 
 interface BarcodeGeneratorProps {
-  product: Pick<IProduct, "_id" | "name" | "price" | "sku">;
+  product: Pick<IProduct, "_id" | "name" | "price" | "sku" | "fabric">;
   color: string;
   size: string;
   autoDownload?: boolean;
@@ -155,16 +155,17 @@ const BarcodeGenerator = ({
             {Array.from({ length: numberOfBarcodes }).map((_, index) => (
               <div
                 key={`barcode-${index}`}
-                className="label box-border flex h-[38mm] w-[50mm] flex-col justify-center gap-[0.2cm] overflow-hidden rounded-[1mm] p-[1mm]"
+                className="label box-border flex h-[38mm] w-[50mm] flex-col justify-center gap-[0.1cm] overflow-hidden rounded-[1mm] p-[1mm]"
               >
                 {/* BRAND */}
                 <p className="text-center text-[3.4mm] leading-none font-bold">TailorTech</p>
 
                 {/* DETAILS */}
-                <div className="mt-[1mm] space-y-[0.2mm] text-[2.8mm] leading-tight">
+                <div className="space-y-[0.2mm] text-[2.8mm] leading-tight">
                   <span className="block max-h-[calc(1em*2.4)] overflow-hidden leading-tight font-bold">
                     Item: {product.name}
                   </span>
+                  <span className="block font-bold">Fabric: {product.fabric}</span>
                   <span className="block font-bold">Colour: {color}</span>
                   <span className="block font-bold">Size: {size}</span>
                   <span className="block font-bold">MRP: {priceText} TK.</span>

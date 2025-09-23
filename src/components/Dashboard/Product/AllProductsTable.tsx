@@ -41,13 +41,14 @@ const AllProductsTable = ({
 
   const [query, setQuery] = useState<Record<string, string | number>>({
     page: 1,
-    fields: "name,slug,price,images,discount,category,createdAt,name",
+    fields: "name,slug,price,images,discount,category,createdAt,name,fabric",
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
     subCategory: "true",
   });
 
   const { data, isLoading } = useGetAllProductsQuery({ ...query, searchTerm });
   const productData = data?.data || [];
+  console.log(productData);
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 
   const handleSort = (field: string) => {

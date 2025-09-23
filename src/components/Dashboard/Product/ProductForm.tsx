@@ -55,6 +55,7 @@ const validationSchema = Yup.object().shape({
   price: Yup.number().required("Price is required").min(0, "Price must be >= 0"),
   discount: Yup.number().min(0).max(100),
   tag: Yup.string(),
+  fabric: Yup.string().required("Fabric is required"),
   images: Yup.array()
     .min(1, "At least one image is required")
     .of(Yup.string().url("Must be a valid URL")),
@@ -157,6 +158,16 @@ export default function ProductForm({
                   />
 
                   <ErrorMessage name="category" component="span" className="text-sm text-danger" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-[16px]">
+                <div className="flex w-full flex-col gap-[5px]">
+                  <label className={labelClass}>Fabric</label>
+                  <Field as={Input} name="fabric" placeholder="Fabric" />
+                  {touched.fabric && errors.fabric && (
+                    <span className="text-danger">{errors.fabric}</span>
+                  )}
                 </div>
               </div>
             </div>
