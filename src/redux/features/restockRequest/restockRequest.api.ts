@@ -30,6 +30,17 @@ const restockRequestApi = api.injectEndpoints({
       }),
       invalidatesTags: ["restockRequest"],
     }),
+    chageStockStatus: builder.mutation<
+      { data: string },
+      { id: string; payload: { status: string; message: string } }
+    >({
+      query: ({ id, payload }) => ({
+        url: `/restock-request/status/${id}`,
+        method: "PUT",
+        body: payload,
+      }),
+      invalidatesTags: ["restockRequest"],
+    }),
   }),
 });
 
@@ -37,4 +48,5 @@ export const {
   useGetAllRestockRequestQuery,
   useCreateRestockRequestMutation,
   useDeleteRestockRequestMutation,
+  useChageStockStatusMutation,
 } = restockRequestApi;
