@@ -5,6 +5,7 @@ import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetAllRestockRequestQuery } from "@/redux/features/restockRequest/restockRequest.api";
+import Link from "next/link";
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { RxMagnifyingGlass } from "react-icons/rx";
@@ -159,7 +160,12 @@ const RestockRequestTable = () => {
 
                       {/* product name */}
                       <td className="px-6 py-4">
-                        <span className="line-clamp-1 text-[14px]">{request?.product?.name}</span>
+                        <Link
+                          href={`/dashboard/product-details/${request?.product?.slug}`}
+                          className="line-clamp-1 cursor-pointer text-[14px] hover:underline"
+                        >
+                          {request?.product?.name}
+                        </Link>
                       </td>
 
                       {/* size */}
