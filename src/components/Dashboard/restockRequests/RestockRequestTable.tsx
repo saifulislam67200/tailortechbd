@@ -22,7 +22,7 @@ const tableHead = [
   { label: "Requested Qty", field: "" },
   { label: "Customer Details", field: "" },
   { label: "Message", field: "" },
-  { label: "Status", field: "" },
+  // { label: "Status", field: "" },
   { label: "Actions", field: "" },
 ];
 
@@ -59,9 +59,9 @@ const RestockRequestTable = () => {
     <div className="flex flex-col gap-[10px]">
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
         <div className="flex flex-col gap-[5px]">
-          <h1 className="text-[16px] font-[600]">All Restock Requests</h1>
+          <h1 className="text-[16px] font-[600]">Requested Stock List</h1>
           <p className="text-[12px] text-muted md:text-[14px]">
-            Displaying All Restock Requests in your store. There is total{" "}
+            Displaying all Requested Stock in your store. There is total{" "}
             <span className="font-bold text-dashboard">{metaData.totalDoc}</span> products. Data is
             Devided into{" "}
             <span className="font-bold text-dashboard">
@@ -195,13 +195,13 @@ const RestockRequestTable = () => {
                       <td className="px-6 py-4">
                         <span className="text-[14px]">{request?.details || "N/A"}</span>
                       </td>
-                      <td className="px-6 py-4">
+                      {/* <td className="px-6 py-4">
                         <span
                           className={`rounded-[4px] px-2 py-[3px] text-[14px] capitalize ${request?.status === "approved" ? "bg-success/10 text-success" : request.status == "rejected" ? "bg-red-500/10 text-red-500" : ""}`}
                         >
                           {request?.status || "pending"}
                         </span>
-                      </td>
+                      </td> */}
 
                       {/* actions */}
                       <td className="px-6 py-4">
