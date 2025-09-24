@@ -15,7 +15,7 @@ const AllProductsView = () => {
     <div className="flex flex-col gap-[10px]">
       <DashboardPageHeadingTitle title="All Products" />
       {!isCheckStock ? (
-        <AllProductsTable handleCheckProductStocks={handleCheckProductStocks} />
+        <AllProductsTable />
       ) : (
         <ProductStockIndicatorTable handleCheckProductStocks={handleCheckProductStocks} />
       )}

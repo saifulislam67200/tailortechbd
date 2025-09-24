@@ -106,9 +106,9 @@ const ProductStockTable = () => {
     <div className="flex flex-col gap-[10px]">
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
         <div className="flex flex-col gap-[5px]">
-          <h1 className="text-[16px] font-[600]">In-Stock Products</h1>
+          <h1 className="text-[16px] font-[600]">All Product Stock</h1>
           <p className="text-[12px] text-muted md:text-[14px]">
-            Displaying all in-stock products in your store. Total{" "}
+            Displaying all product stock in your store. Total{" "}
             <span className="font-bold text-dashboard">{totalDocs}</span> products. Divided into{" "}
             <span className="font-bold text-dashboard">{totalPages} pages</span> & currently showing
             page <span className="font-bold text-dashboard">{stockMetaData.page}.</span>
@@ -172,25 +172,6 @@ const ProductStockTable = () => {
             />
           </div>
 
-          {/* select size */}
-          <div className="flex w-[250px] flex-col gap-[10px]">
-            <span className="text-[14px] font-semibold">Select Size</span>
-            <div className="max-w-[290px]">
-              <SelectionBox
-                key={`size-${resetKey}`}
-                data={sizeOptions}
-                dropdownClassName="z-[99999999]"
-                onSelect={(opt) => {
-                  const val = (opt?.value as string) || "";
-                  setSelectedSize(val);
-                  // keep API query in sync (server-side filtering)
-                  setStockQuery({ ...stockQuery, size: val, page: 1 });
-                }}
-                className="max-w-[290px]"
-              />
-            </div>
-          </div>
-
           {/* select color */}
           <div className="flex w-[250px] flex-col gap-[10px]">
             <span className="text-[14px] font-semibold">Select Color</span>
@@ -204,6 +185,25 @@ const ProductStockTable = () => {
                   setSelectedColor(val);
                   // keep API query in sync (server-side filtering)
                   setStockQuery({ ...stockQuery, color: val, page: 1 });
+                }}
+                className="max-w-[290px]"
+              />
+            </div>
+          </div>
+
+          {/* select size */}
+          <div className="flex w-[250px] flex-col gap-[10px]">
+            <span className="text-[14px] font-semibold">Select Size</span>
+            <div className="max-w-[290px]">
+              <SelectionBox
+                key={`size-${resetKey}`}
+                data={sizeOptions}
+                dropdownClassName="z-[99999999]"
+                onSelect={(opt) => {
+                  const val = (opt?.value as string) || "";
+                  setSelectedSize(val);
+                  // keep API query in sync (server-side filtering)
+                  setStockQuery({ ...stockQuery, size: val, page: 1 });
                 }}
                 className="max-w-[290px]"
               />

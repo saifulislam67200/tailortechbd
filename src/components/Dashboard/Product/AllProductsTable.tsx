@@ -18,10 +18,10 @@ import DeleteProductById from "./DeleteProductById";
 
 const tableHead = [
   { label: "SL", field: "" },
-  { label: "Product Id", field: "sku" },
+  { label: "Product Code", field: "" },
   { label: "Category", field: "" },
   { label: "Sub Category", field: "" },
-  { label: "Name", field: "name" },
+  { label: "Name", field: "" },
   { label: "Size", field: "" },
   { label: "Color", field: "" },
   { label: "Price", field: "price" },
@@ -30,11 +30,7 @@ const tableHead = [
   { label: "Actions", field: "" },
 ];
 
-const AllProductsTable = ({
-  handleCheckProductStocks,
-}: {
-  handleCheckProductStocks: () => void;
-}) => {
+const AllProductsTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
   const router = useRouter();
@@ -48,7 +44,6 @@ const AllProductsTable = ({
 
   const { data, isLoading } = useGetAllProductsQuery({ ...query, searchTerm });
   const productData = data?.data || [];
-  console.log(productData);
   const metaData = data?.meta || { totalDoc: 0, page: 1 };
 
   const handleSort = (field: string) => {
@@ -68,7 +63,7 @@ const AllProductsTable = ({
     <div className="flex flex-col gap-[10px]">
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
         <div className="flex flex-col gap-[5px]">
-          <h1 className="text-[16px] font-[600]">Product List</h1>
+          <h1 className="text-[16px] font-[600]">All Product List</h1>
           <p className="text-[12px] text-muted md:text-[14px]">
             Displaying All the available products in your store. There is total{" "}
             <span className="font-bold text-dashboard">{metaData.totalDoc}</span> products. Data is
@@ -92,12 +87,12 @@ const AllProductsTable = ({
             <RxMagnifyingGlass />
           </div>
 
-          <button
+          {/* <button
             onClick={handleCheckProductStocks}
             className="text- flex w-[120px] cursor-pointer items-center justify-center bg-primary/80 py-[4px] text-white transition-colors duration-100 hover:bg-primary"
           >
             Check Stocks
-          </button>
+          </button> */}
         </div>
         <div className="overflow-x-auto">
           <table className="w-full divide-y divide-dashboard/20">

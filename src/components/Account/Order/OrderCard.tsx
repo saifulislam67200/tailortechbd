@@ -229,7 +229,7 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                               )}
                             </div>
                             <p className="mb-[4px] text-[14px] text-info">
-                              Product Id:{" "}
+                              Product Code:{" "}
                               {
                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                 (item as any)?.product?.sku

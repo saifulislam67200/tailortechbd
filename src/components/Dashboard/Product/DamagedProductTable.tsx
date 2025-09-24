@@ -74,7 +74,7 @@ const DamagedProductTable = () => {
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
         <div className="flex w-full flex-wrap items-center justify-between gap-2">
           <div className="flex flex-col gap-[5px]">
-            <h1 className="text-[16px] font-[600]">Damaged Products</h1>
+            <h1 className="text-[16px] font-[600]">All Damaged Products</h1>
             <p className="text-[12px] text-muted md:text-[14px]">
               Displaying all damaged products in your store. Total{" "}
               <span className="font-bold text-dashboard">{stockMetaData.totalDoc}</span> products.

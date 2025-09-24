@@ -23,7 +23,7 @@ const TopProductCard = ({ product }: { product: IProduct }) => {
       <div>
         <Link href={`/product/${product?.slug}`}>
           <h1 className="line-clamp-1 text-[13px] font-bold">{product?.name}</h1>
-          <h5 className="text-light text-[12px] text-info">Product Id: {product.sku}</h5>
+          <h5 className="text-light text-[12px] text-info">Product Code: {product.sku}</h5>
           <p className="text-14px font-semibold text-strong">TK: {product?.price}</p>
         </Link>
         <div className="mt-[10px] flex items-center gap-[8px]">
