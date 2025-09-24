@@ -18,6 +18,8 @@ import { toast } from "sonner";
 import CategorySelector from "./CategorySelector";
 
 const stockTableHeaders = [
+  { label: "SL" },
+  { label: "Product Code" },
   { label: "Category" },
   { label: "Sub Category" },
   { label: "Product Name" },
@@ -38,7 +40,6 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
   const [showReport, setShowReport] = useState(false);
   const [resetKey, setResetKey] = useState(0);
 
-  // NEW: filter state
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
@@ -48,7 +49,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
     new DateObject().add(6, "days"),
   ]);
 
-  const [trigger, { data, isFetching, isError }] = useLazyGetProductStockQuery({});
+  const [trigger, { data, isFetching, isError }] = useLazyGetProductStockQuery();
   const { data: stockData } = useGetProductStockQuery({});
   const products: IProductStock[] = stockData?.data || [];
 
@@ -64,7 +65,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
       // fields
       fields:
         reportFilters?.fields ||
-        "name,category,subCategory,size,color,price,createdAt,stock,status,productName",
+        "sku,category,subCategory,productName,size,color,price,createdAt,stock,status",
     });
 
     if (!res.data?.data?.length) {
@@ -92,7 +93,6 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
 
   const displayedStocks = useMemo(() => {
     return stocks.filter((p) => {
-      //   const okCat = !selectedCategoryId || p.category === selectedCategoryId;
       const okSize = !selectedSize || p.size === selectedSize;
       const okColor =
         !selectedColor || (p.color || "").toLowerCase() === selectedColor.toLowerCase();
@@ -268,26 +268,6 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                   )}
                 </div>
 
-                {/* Totals */}
-                <div className="mb-4 grid grid-cols-3 gap-3">
-                  <div className="rounded-md border border-primary/20 p-3">
-                    <div className="text-xs opacity-70">Total Entries</div>
-                    <div className="text-lg font-semibold text-primary">
-                      {displayedStocks.length}
-                    </div>
-                  </div>
-                  <div className="rounded-md border border-primary/20 p-3">
-                    <div className="text-xs opacity-70">Total Units</div>
-                    <div className="text-lg font-semibold text-primary">{totalUnits}</div>
-                  </div>
-                  <div className="rounded-md border border-primary/20 p-3">
-                    <div className="text-xs opacity-70">Grand Total</div>
-                    <div className="text-lg font-semibold text-primary">
-                      {formatCurrency(totalAmount)}
-                    </div>
-                  </div>
-                </div>
-
                 {/* TABLE */}
                 <div className="overflow-x-auto rounded-md border border-gray-200">
                   <table className="w-full min-w-[900px] text-sm">
@@ -301,8 +281,10 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                       </tr>
                     </thead>
                     <tbody>
-                      {displayedStocks.map((p) => (
+                      {displayedStocks.map((p, index) => (
                         <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{index + 1}</td>
+                          <td className="px-3 py-2">{p.sku || "N/A"}</td>
                           <td className="px-3 py-2">{p.category || "N/A"}</td>
                           <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
                           <td className="px-3 py-2">
@@ -1063,7 +1045,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                     </tbody>
                     <tfoot>
                       <tr className="bg-primary/10 font-semibold text-primary">
-                        <td className="px-3 py-2" colSpan={5}>
+                        <td className="px-3 py-2" colSpan={7}>
                           Totals
                         </td>
                         <td className="px-3 py-2">{totalUnits}</td>

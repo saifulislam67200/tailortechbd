@@ -51,6 +51,7 @@ const SubCategorySelector = ({
             : ""}
         </span>
         <SelectionBox
+          dropdownClassName="z-[9999999]"
           className={selectionBoxClassName}
           defaultSearch={false}
           onSeachInputChange={setSearchTerm}
