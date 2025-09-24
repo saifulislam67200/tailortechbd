@@ -1,20 +1,20 @@
 "use client";
+import Button from "@/components/ui/Button";
+import DialogProvider from "@/components/ui/DialogProvider";
+import HorizontalLine from "@/components/ui/HorizontalLine";
+import SelectionBox from "@/components/ui/SelectionBox";
 import {
   useGetProductStockQuery,
   useLazyGetProductStockQuery,
 } from "@/redux/features/product/product.api";
+import { IProductStock } from "@/types/product";
+import { formatCurrency } from "@/utils/currency";
 import dateUtils from "@/utils/date";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { PiPrinterFill } from "react-icons/pi";
 import { Calendar, DateObject } from "react-multi-date-picker";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
-import Button from "@/components/ui/Button";
-import DialogProvider from "@/components/ui/DialogProvider";
-import HorizontalLine from "@/components/ui/HorizontalLine";
-import { formatCurrency } from "@/utils/currency";
-import { IProductStock } from "@/types/product";
-import SelectionBox from "@/components/ui/SelectionBox";
 import CategorySelector from "./CategorySelector";
 
 const stockTableHeaders = [
@@ -289,7 +289,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                 </div>
 
                 {/* TABLE */}
-                <div className="overflow-x-auto rounded-md border border-gray-200 print:break-inside-avoid">
+                <div className="overflow-x-auto rounded-md border border-gray-200">
                   <table className="w-full min-w-[900px] text-sm">
                     <thead className="bg-primary/10 text-primary">
                       <tr>
@@ -301,6 +301,742 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                       </tr>
                     </thead>
                     <tbody>
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
+                      {displayedStocks.map((p) => (
+                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            <span title={p.productName} className="line-clamp-1">
+                              {p.productName || "-"}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">{p.size || "N/A"}</td>
+                          <td className="px-3 py-2">{p.color || "N/A"}</td>
+                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0))}
+                          </td>
+                          <td className="px-3 py-2 text-right">
+                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          </td>
+                          <td className="px-3 py-2 capitalize">
+                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
+                          </td>
+                        </tr>
+                      ))}
                       {displayedStocks.map((p) => (
                         <tr key={p._id} className="odd:bg-white even:bg-gray-50">
                           <td className="px-3 py-2">{p.category || "N/A"}</td>

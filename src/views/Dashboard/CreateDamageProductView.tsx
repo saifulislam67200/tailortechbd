@@ -85,6 +85,7 @@ const CreateDamageProductView = () => {
     toast.success("Damage product created successfully");
 
     helper.resetForm();
+    router.push("/dashboard/damaged-product");
   };
 
   return (
