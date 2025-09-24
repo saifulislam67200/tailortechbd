@@ -11,7 +11,7 @@ import { RxMagnifyingGlass } from "react-icons/rx";
 
 const tableHead = [
   { label: "SL", field: "" },
-  { label: "Product Id", field: "" },
+  { label: "Product Code", field: "" },
   { label: "Category", field: "" },
   { label: "Sub-Category", field: "" },
   { label: "Product Name", field: "" },
@@ -51,9 +51,9 @@ const RestockRequestTable = () => {
     <div className="flex flex-col gap-[10px]">
       <div className="flex flex-col gap-[15px] bg-white p-[16px]">
         <div className="flex flex-col gap-[5px]">
-          <h1 className="text-[16px] font-[600]">Product List</h1>
+          <h1 className="text-[16px] font-[600]">All Restock Requests</h1>
           <p className="text-[12px] text-muted md:text-[14px]">
-            Displaying All the available products in your store. There is total{" "}
+            Displaying All Restock Requests in your store. There is total{" "}
             <span className="font-bold text-dashboard">{metaData.totalDoc}</span> products. Data is
             Devided into{" "}
             <span className="font-bold text-dashboard">
@@ -126,7 +126,7 @@ const RestockRequestTable = () => {
                       <span className="text-[14px]">{index + 1}</span>
                     </td>
 
-                    {/* product id */}
+                    {/* product code */}
                     <td className="px-6 py-4">
                       <span className="text-[14px]">{request?.product?.sku}</span>
                     </td>

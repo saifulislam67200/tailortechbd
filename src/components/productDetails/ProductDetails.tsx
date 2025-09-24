@@ -45,7 +45,7 @@ const ProductDetails: React.FC<IProps> = async ({ params }) => {
         ) : (
           <span className="text-[18px] font-semibold">৳ {product?.price}</span>
         )}
-        <h5 className="tex-info text-[12px] font-light">Product Id: {product?.sku}</h5>
+        <h5 className="tex-info text-[12px] font-light">Product Code: {product?.sku}</h5>
       </ProductClientProvier>
     </>
   );

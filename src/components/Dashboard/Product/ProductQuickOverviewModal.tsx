@@ -109,7 +109,7 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
       ) : isAllStockOut ? (
         <button
           onClick={handleClick}
-          className="checkoutBtn -mb-[4px] w-full cursor-pointer border border-border-muted py-[8px] text-[14px] font-bold text-white transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-[50]"
+          className="checkoutBtn mt-1 w-full cursor-pointer border border-border-muted py-[8px] text-[14px] font-bold text-white transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-[50]"
         >
           Request Restock
         </button>
@@ -194,7 +194,7 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
                     </div>
                     <span className="text-[12px]">reviews({productReviews?.data?.length})</span>
                   </span>
-                  <span className="text-[12px]">Product Id: {product?.sku}</span>
+                  <span className="text-[12px]">Product Code: {product?.sku}</span>
                 </span>
 
                 <span className="h-[55px] w-[150px] bg-quaternary/30 px-[8px] py-[5px] font-bold text-primary">
