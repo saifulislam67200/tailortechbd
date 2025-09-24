@@ -18,6 +18,8 @@ import DownloadStockReport from "./DownloadStockReport";
 import "./index.css";
 
 const stockTableHeaders = [
+  { label: "SL", field: "", rowSpan: 2 },
+  { label: "Product Code", field: "", rowSpan: 2 },
   { label: "Category", field: "", rowSpan: 2 },
   { label: "Sub Category", field: "", rowSpan: 2 },
   { label: "Product Name  ", field: "", rowSpan: 2 },
@@ -160,6 +162,7 @@ const ProductStockTable = () => {
           {/* select category */}
           <div className="min-w-[250px]">
             <CategorySelector
+              key={`category-${resetKey}`}
               heading={<span className="text-[14px] font-semibold">Select Category</span>}
               className="flex-row items-start gap-[20px]"
               subCategoryClassName="flex-row items-start min-w-[250px] gap-[20px]"
@@ -208,12 +211,12 @@ const ProductStockTable = () => {
           </div>
 
           <button
-            className="cursor-pointer rounded-sm border border-dashboard/20 px-4 py-1"
+            className="cursor-pointer rounded-sm border border-dashboard/20 px-4 py-1 text-sm"
             onClick={() => {
               setSelectedSize("");
               setSelectedColor("");
               setResetKey((k) => k + 1);
-              setStockQuery({ ...stockQuery, size: "", color: "", page: 1 });
+              setStockQuery({ ...stockQuery, size: "", color: "", page: 1, categoryId: "" });
             }}
           >
             Clear Filters
@@ -256,6 +259,14 @@ const ProductStockTable = () => {
               ) : displayedProducts.length ? (
                 displayedProducts.map((product: IProductStock, index: number) => (
                   <tr key={product?._id + index} className="">
+                    <td className="border border-border-main px-6 py-3">
+                      <span className="text-[14px]">{index + 1}</span>
+                    </td>
+
+                    <td className="border border-border-main px-6 py-3">
+                      <span className="text-[14px]">{product?.sku || "N/A"}</span>
+                    </td>
+
                     <td className="border border-border-main px-6 py-3">
                       <span className="text-[14px]">{product?.category || "N/A"}</span>
                     </td>
