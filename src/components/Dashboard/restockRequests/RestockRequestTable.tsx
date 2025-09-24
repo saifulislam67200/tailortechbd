@@ -5,9 +5,11 @@ import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetAllRestockRequestQuery } from "@/redux/features/restockRequest/restockRequest.api";
+import Link from "next/link";
 import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { RxMagnifyingGlass } from "react-icons/rx";
+import ChangeStockRequestStatus from "./ChangeStockRequestStatus";
 
 const tableHead = [
   { label: "SL", field: "" },
@@ -20,12 +22,18 @@ const tableHead = [
   { label: "Requested Qty", field: "" },
   { label: "Customer Details", field: "" },
   { label: "Message", field: "" },
+  { label: "Status", field: "" },
   { label: "Actions", field: "" },
 ];
 
 const RestockRequestTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
+
+  const [changeStockRequest, setChangeStockRequest] = useState<{
+    _id: string;
+    status: "approved" | "rejected";
+  } | null>(null);
 
   const [query, setQuery] = useState<Record<string, string | number>>({
     page: 1,
@@ -119,72 +127,110 @@ const RestockRequestTable = () => {
               {isLoading ? (
                 <TableSkeleton columns={tableHead.length} />
               ) : data?.data.length ? (
-                productData?.map((request, index) => (
-                  <tr key={request?._id} className="hover:bg-gray-50">
-                    {/* index */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{index + 1}</span>
-                    </td>
+                productData?.map((request, index) => {
+                  const parentCategory = request?.product?.category?.parent?.label;
 
-                    {/* product code */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.product?.sku}</span>
-                    </td>
+                  return (
+                    <tr key={request?._id} className="hover:bg-gray-50">
+                      {/* index */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{index + 1}</span>
+                      </td>
 
-                    {/* category */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.product?.category || "N/A"}</span>
-                    </td>
+                      {/* product code */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{request?.product?.sku}</span>
+                      </td>
 
-                    {/* sub category */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.product?.subCategory || "N/A"}</span>
-                    </td>
+                      {/* category */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">
+                          {parentCategory
+                            ? parentCategory
+                            : request?.product?.category?.label || "N/A"}
+                        </span>
+                      </td>
 
-                    {/* product name */}
-                    <td className="px-6 py-4">
-                      <span className="line-clamp-1 text-[14px]">{request?.product?.name}</span>
-                    </td>
+                      {/* sub category */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">
+                          {parentCategory ? request.product?.category?.label : "N/A"}
+                        </span>
+                      </td>
 
-                    {/* size */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.size || "N/A"}</span>
-                    </td>
+                      {/* product name */}
+                      <td className="px-6 py-4">
+                        <Link
+                          href={`/dashboard/product-details/${request?.product?.slug}`}
+                          className="line-clamp-1 cursor-pointer text-[14px] hover:underline"
+                        >
+                          {request?.product?.name}
+                        </Link>
+                      </td>
 
-                    {/* color */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.color || "N/A"}</span>
-                    </td>
+                      {/* size */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{request?.size || "N/A"}</span>
+                      </td>
 
-                    {/* requested qty */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.requestedQty || "N/A"}</span>
-                    </td>
+                      {/* color */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{request?.color || "N/A"}</span>
+                      </td>
 
-                    {/* requester details */}
-                    <td className="px-6 py-4">
-                      <div className="text-[14px]">{request?.name || "N/A"}</div>
-                      <div className="text-[14px]">{request?.email || "N/A"}</div>
-                      <div className="text-[14px]">{request?.phone || "N/A"}</div>
-                      <div className="text-[14px]">{request?.address || "N/A"}</div>
-                    </td>
+                      {/* requested qty */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{request?.requestedQty || "0"}</span>
+                      </td>
 
-                    {/* message */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{request?.details || "N/A"}</span>
-                    </td>
+                      {/* requester details */}
+                      <td className="px-6 py-4">
+                        <div className="text-[14px]">{request?.name || "N/A"}</div>
+                        <div className="text-[14px]">{request?.email || "N/A"}</div>
+                        <div className="text-[14px]">{request?.phone || "N/A"}</div>
+                        <div className="text-[14px]">{request?.address || "N/A"}</div>
+                      </td>
 
-                    {/* actions */}
-                    <td className="px-6 py-4">
-                      <div className="text-[14px]">
-                        <button className="cursor-pointer text-success hover:text-success/80">
-                          Accept
-                        </button>
-                        <button className="hover cursor-pointer text-red-400">Reject</button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                      {/* message */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{request?.details || "N/A"}</span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span
+                          className={`rounded-[4px] px-2 py-[3px] text-[14px] capitalize ${request?.status === "approved" ? "bg-success/10 text-success" : request.status == "rejected" ? "bg-red-500/10 text-red-500" : ""}`}
+                        >
+                          {request?.status || "pending"}
+                        </span>
+                      </td>
+
+                      {/* actions */}
+                      <td className="px-6 py-4">
+                        {request.status === "pending" ? (
+                          <div className="flex items-center gap-1">
+                            <button
+                              onClick={() =>
+                                setChangeStockRequest({ _id: request?._id, status: "approved" })
+                              }
+                              className="cursor-pointer rounded-[4px] bg-success px-2 py-[3px] text-[14px] text-white hover:bg-success/80"
+                            >
+                              Accept
+                            </button>
+                            <button
+                              onClick={() =>
+                                setChangeStockRequest({ _id: request?._id, status: "rejected" })
+                              }
+                              className="hover cursor-pointer rounded-[4px] bg-red-500 px-2 py-[3px] text-[14px] text-white hover:bg-red-500/80"
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <TableDataNotFound span={tableHead.length} message="No Restock Request Found" />
               )}
@@ -192,6 +238,17 @@ const RestockRequestTable = () => {
           </table>
         </div>
       </div>
+
+      {changeStockRequest ? (
+        <ChangeStockRequestStatus
+          requestId={changeStockRequest?._id}
+          isOpen={Boolean(changeStockRequest)}
+          setIsOpen={() => setChangeStockRequest(null)}
+          newStatus={changeStockRequest?.status}
+        />
+      ) : (
+        ""
+      )}
       <Pagination
         totalDocs={metaData.totalDoc}
         onPageChange={(page) => setQuery({ ...query, page })}

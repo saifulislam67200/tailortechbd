@@ -6,6 +6,7 @@ import TableDataNotFound from "@/components/ui/TableDataNotFound";
 import TableSkeleton from "@/components/ui/TableSkeleton";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetProductStockQuery } from "@/redux/features/product/product.api";
+import { IProductStock } from "@/types/product";
 import { useMemo, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -13,9 +14,8 @@ import { IoCalendarNumberOutline } from "react-icons/io5";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import { twMerge } from "tailwind-merge";
 import CategorySelector from "./CategorySelector";
-import "./index.css";
-import { IProductStock } from "@/types/product";
 import DownloadStockReport from "./DownloadStockReport";
+import "./index.css";
 
 const stockTableHeaders = [
   { label: "SL", field: "", rowSpan: 2 },

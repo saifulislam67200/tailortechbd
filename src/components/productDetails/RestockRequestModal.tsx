@@ -1,16 +1,17 @@
-import React, { useState } from "react";
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import { useCreateRestockRequestMutation } from "@/redux/features/restockRequest/restockRequest.api";
 import { IQueruMutationErrorResponse } from "@/types";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useState } from "react";
 import { toast } from "sonner";
+import * as Yup from "yup";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Name is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
   phone: Yup.string().required("Phone is required"),
+  requestedQty: Yup.number().min(1, "Quantity must be at least 1").required("Quantity is required"),
   details: Yup.string().optional(),
 });
 
@@ -19,6 +20,7 @@ const initialValues = {
   email: "",
   phone: "",
   details: "",
+  requestedQty: 0,
 };
 
 const RestockRequestModal = ({
@@ -119,6 +121,22 @@ const RestockRequestModal = ({
                     className="w-full rounded-md border border-gray-200 px-3 py-2 outline-none"
                   />
                   <ErrorMessage name="phone" component="div" className="text-xs text-red-500" />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-primary">
+                    Requested Quantity
+                  </label>
+                  <Field
+                    as="input"
+                    type="number"
+                    name="requestedQty"
+                    className="w-full resize-none rounded-md border border-gray-200 px-3 py-2 outline-none"
+                  />
+                  <ErrorMessage
+                    name="requestedQty"
+                    component="div"
+                    className="text-xs text-red-500"
+                  />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-primary">
