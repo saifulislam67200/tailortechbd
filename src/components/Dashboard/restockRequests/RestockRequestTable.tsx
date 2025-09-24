@@ -147,7 +147,7 @@ const RestockRequestTable = () => {
                         <span className="text-[14px]">
                           {parentCategory
                             ? parentCategory
-                            : request.product.category?.label || "N/A"}
+                            : request?.product?.category?.label || "N/A"}
                         </span>
                       </td>
 
