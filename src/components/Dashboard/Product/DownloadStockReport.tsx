@@ -39,6 +39,19 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
   const [openModal, setOpenModal] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [resetKey, setResetKey] = useState(0);
+  const [stockQuery, setStockQuery] = useState<Record<string, string | number>>({
+    fields: "name,category,subCategory,size,color,price,createdAt,stock,status",
+    timeframe: "all",
+    status: "",
+    size: "",
+    color: "",
+  });
+
+  const { data: stockData } = useGetProductStockQuery({
+    ...stockQuery,
+    limit: 999,
+  });
+  const products: IProductStock[] = stockData?.data || [];
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
@@ -49,9 +62,8 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
     new DateObject().add(6, "days"),
   ]);
 
-  const [trigger, { data, isFetching, isError }] = useLazyGetProductStockQuery();
-  const { data: stockData } = useGetProductStockQuery({});
-  const products: IProductStock[] = stockData?.data || [];
+  const [trigger, { data, isFetching, isError }] = useLazyGetProductStockQuery({ ...stockQuery });
+  const stocks: IProductStock[] = data?.data || [];
 
   const handleFetch = async () => {
     const res = await trigger({
@@ -75,9 +87,6 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
       setShowReport(true);
     }
   };
-
-  const stocks: IProductStock[] = data?.data || [];
-
   const unique = (arr: Array<string | undefined | null>) =>
     Array.from(new Set(arr.filter(Boolean))) as string[];
 
@@ -128,6 +137,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
     setSelectedSize("");
     setSelectedColor("");
     setResetKey((k) => k + 1);
+    setValues([new DateObject().subtract(1, "days"), new DateObject().add(6, "days")]);
   };
 
   return (
@@ -153,7 +163,10 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                     heading={<span className="text-[14px] font-semibold">Select Category</span>}
                     className="flex-row items-start gap-[16px]"
                     subCategoryClassName="flex-row items-start min-w-[250px] gap-[16px]"
-                    onSelect={(category) => setSelectedCategoryId(category.value || "")}
+                    onSelect={(category) => {
+                      setStockQuery({ ...stockQuery, categoryId: category.value || "" });
+                      setSelectedCategoryId(category.value || "");
+                    }}
                   />
                 </div>
 
@@ -285,7 +298,15 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                         <tr key={p._id} className="odd:bg-white even:bg-gray-50">
                           <td className="px-3 py-2">{index + 1}</td>
                           <td className="px-3 py-2">{p.sku || "N/A"}</td>
-                          <td className="px-3 py-2">{p.category || "N/A"}</td>
+                          <td className="px-3 py-2">
+                            {typeof p.category === "object" &&
+                            p.category !== null &&
+                            "label" in p.category
+                              ? (p.category as { label: string }).label
+                              : typeof p.category === "string"
+                                ? p.category
+                                : "N/A"}
+                          </td>
                           <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
                           <td className="px-3 py-2">
                             <span title={p.productName} className="line-clamp-1">

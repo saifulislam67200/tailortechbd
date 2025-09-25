@@ -268,7 +268,15 @@ const ProductStockTable = () => {
                     </td>
 
                     <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">{product?.category || "N/A"}</span>
+                      <span className="text-[14px]">
+                        {typeof product?.category === "object" &&
+                        product?.category !== null &&
+                        "label" in product.category
+                          ? (product.category as { label?: string }).label || "N/A"
+                          : typeof product?.category === "string"
+                            ? product.category
+                            : "N/A"}
+                      </span>
                     </td>
 
                     <td className="border border-border-main px-6 py-3">

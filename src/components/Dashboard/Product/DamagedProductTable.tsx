@@ -132,140 +132,151 @@ const DamagedProductTable = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto" ref={tableRef}>
-          <table className="w-full divide-y divide-dashboard/20">
-            <thead className="bg-dashboard/10">
-              <tr>
-                {stockTableHeaders.map((header) =>
-                  isPrintMode && !header.shouldPrint ? (
-                    <></>
-                  ) : (
-                    <th
-                      key={header.field || header.label}
-                      className="px-6 py-3 text-left text-sm font-semibold text-dashboard"
-                    >
-                      {header.field ? (
-                        <button
-                          className="flex cursor-pointer items-center gap-1"
-                          onClick={() => handleSort(header.field)}
-                        >
-                          <span>{header.label}</span>
-                          <span className="flex flex-col text-[10px] leading-[10px]">
-                            <FaChevronUp
-                              className={`${
-                                sort.field === header.field && sort.order === "asc"
-                                  ? "font-bold text-dashboard"
-                                  : "text-dashboard/30"
-                              }`}
-                            />
-                            <FaChevronDown
-                              className={`${
-                                sort.field === header.field && sort.order === "desc"
-                                  ? "font-bold text-dashboard"
-                                  : "text-dashboard/30"
-                              }`}
-                            />
-                          </span>
-                        </button>
-                      ) : (
-                        header.label
-                      )}
-                    </th>
-                  )
-                )}
-              </tr>
-            </thead>
+        <div ref={tableRef}>
+          {isPrintMode && (
+            <div className="mb-4 text-center">
+              <img className="mx-auto mb-3 w-[150px]" src="/images/logos/logo.png" alt="logo" />
+              <h2 className="text-[22px] font-bold text-primary">Damaged Product Report</h2>
+            </div>
+          )}
 
-            <tbody className="divide-y divide-dashboard/20">
-              {isStockLoading ? (
-                <TableSkeleton columns={stockTableHeaders.length} />
-              ) : productStocks.length ? (
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                //@ts-ignore
-                productStocks.map((product, index) => (
-                  <tr key={product?._id + index} className="hover:bg-gray-50">
-                    {/* index */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{index + 1}</span>
-                    </td>
-
-                    {/* product code */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{product?.productCode || "N/A"}</span>
-                    </td>
-
-                    {/* category */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">
-                        {typeof product?.category === "string"
-                          ? product?.category
-                          : product?.category?.label || "N/A"}
-                      </span>
-                    </td>
-
-                    {isPrintMode ? (
+          <div className="overflow-x-auto">
+            <table className="w-full divide-y divide-dashboard/20">
+              <thead className="bg-dashboard/10">
+                <tr>
+                  {stockTableHeaders.map((header) =>
+                    isPrintMode && !header.shouldPrint ? (
                       <></>
                     ) : (
-                      <td className="px-6 py-4">
-                        <span className="text-[14px]">{product?.subCategory?.label || "N/A"}</span>
-                      </td>
-                    )}
+                      <th
+                        key={header.field || header.label}
+                        className="px-6 py-3 text-left text-sm font-semibold text-dashboard"
+                      >
+                        {header.field ? (
+                          <button
+                            className="flex cursor-pointer items-center gap-1"
+                            onClick={() => handleSort(header.field)}
+                          >
+                            <span>{header.label}</span>
+                            <span className="flex flex-col text-[10px] leading-[10px]">
+                              <FaChevronUp
+                                className={`${
+                                  sort.field === header.field && sort.order === "asc"
+                                    ? "font-bold text-dashboard"
+                                    : "text-dashboard/30"
+                                }`}
+                              />
+                              <FaChevronDown
+                                className={`${
+                                  sort.field === header.field && sort.order === "desc"
+                                    ? "font-bold text-dashboard"
+                                    : "text-dashboard/30"
+                                }`}
+                              />
+                            </span>
+                          </button>
+                        ) : (
+                          header.label
+                        )}
+                      </th>
+                    )
+                  )}
+                </tr>
+              </thead>
 
-                    {/* product name */}
-                    <td
-                      className="cursor-pointer px-6 py-4"
-                      onClick={() => viewProductDetails(product.slug)}
-                    >
-                      <span className="flex flex-col gap-[5px]">
-                        <span className="line-clamp-1 text-[14px] font-[700]">
-                          {product.productName}
+              <tbody className="divide-y divide-dashboard/20">
+                {isStockLoading ? (
+                  <TableSkeleton columns={stockTableHeaders.length} />
+                ) : productStocks.length ? (
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  //@ts-ignore
+                  productStocks.map((product, index) => (
+                    <tr key={product?._id + index} className="hover:bg-gray-50">
+                      {/* index */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{index + 1}</span>
+                      </td>
+
+                      {/* product code */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{product?.productCode || "N/A"}</span>
+                      </td>
+
+                      {/* category */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">
+                          {typeof product?.category === "string"
+                            ? product?.category
+                            : product?.category?.label || "N/A"}
                         </span>
-                      </span>
-                    </td>
-
-                    {/* size */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{product.size || "N/A"}</span>
-                    </td>
-
-                    {/* color */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{product.color || "N/A"}</span>
-                    </td>
-
-                    {/* price */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">৳ {product.price}</span>
-                    </td>
-
-                    {/* status */}
-                    {isPrintMode ? (
-                      <></>
-                    ) : (
-                      <td className="px-6 py-4">
-                        <span className="text-red-400">Damaged</span>
                       </td>
-                    )}
 
-                    {/* damaged qty */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{product.quantity || "N/A"}</span>
-                    </td>
+                      {isPrintMode ? (
+                        <></>
+                      ) : (
+                        <td className="px-6 py-4">
+                          <span className="text-[14px]">
+                            {product?.subCategory?.label || "N/A"}
+                          </span>
+                        </td>
+                      )}
 
-                    {/* cause of damaged */}
-                    <td className="px-6 py-4">
-                      <span className="text-[14px]">{product.causeOfDamage || "N/A"}</span>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <TableDataNotFound
-                  span={stockTableHeaders.length}
-                  message="No In-Stock Products Found"
-                />
-              )}
-            </tbody>
-          </table>
+                      {/* product name */}
+                      <td
+                        className="cursor-pointer px-6 py-4"
+                        onClick={() => viewProductDetails(product.slug)}
+                      >
+                        <span className="flex flex-col gap-[5px]">
+                          <span className="line-clamp-1 text-[14px] font-[700]">
+                            {product.productName}
+                          </span>
+                        </span>
+                      </td>
+
+                      {/* size */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{product.size || "N/A"}</span>
+                      </td>
+
+                      {/* color */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{product.color || "N/A"}</span>
+                      </td>
+
+                      {/* price */}
+                      <td className="px-6 py-4">
+                        <span className="text-[13px]">৳ {product.price}</span>
+                      </td>
+
+                      {/* status */}
+                      {isPrintMode ? (
+                        <></>
+                      ) : (
+                        <td className="px-6 py-4">
+                          <span className="text-red-400">Damaged</span>
+                        </td>
+                      )}
+
+                      {/* damaged qty */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{product.quantity || "N/A"}</span>
+                      </td>
+
+                      {/* cause of damaged */}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{product.causeOfDamage || "N/A"}</span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <TableDataNotFound
+                    span={stockTableHeaders.length}
+                    message="No In-Stock Products Found"
+                  />
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <Pagination

@@ -48,7 +48,7 @@ export interface IProductStock {
   sku: string;
   price: number;
   value: number;
-  category: string;
+  category: string | ICategory;
   subCategory: string;
   parentCategory: string | null;
   createdAt: string;
