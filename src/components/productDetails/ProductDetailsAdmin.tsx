@@ -51,7 +51,7 @@ const ProductDetailsAdmin: React.FC<IProps> = async ({ params }) => {
             <span className="text-[18px] font-semibold">৳ {product?.price}</span>
           )}
           <span className="mt-2 block w-fit rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
-            SKU: {product.sku}
+            Product Id: {product.sku}
           </span>
           <span className="text-sm text-gray-500">
             Last Updated: {new Date(product.updatedAt || 0).toLocaleString()}

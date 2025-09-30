@@ -496,7 +496,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
                     Product
                   </th>
                   <th className="border border-border-muted px-4 py-2 text-left font-semibold">
-                    SKU
+                    Product Id
                   </th>
                   <th className="border border-border-muted px-4 py-2 text-left font-semibold">
                     Current Stock
