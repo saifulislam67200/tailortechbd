@@ -158,7 +158,7 @@ const BarcodeGenerator = ({
                 className="label box-border flex h-[38mm] w-[50mm] flex-col justify-center gap-[0.1cm] overflow-hidden rounded-[1mm] p-[1mm]"
               >
                 {/* BRAND */}
-                <p className="text-center text-[3.4mm] leading-none font-bold">TailorTech</p>
+                <p className="text-center text-[3.4mm] leading-none font-bold">Tailortech</p>
 
                 {/* DETAILS */}
                 <div className="space-y-[0.2mm] text-[2.8mm] leading-tight">

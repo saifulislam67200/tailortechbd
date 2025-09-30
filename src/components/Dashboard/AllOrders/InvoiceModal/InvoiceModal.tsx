@@ -202,7 +202,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
                   <tr key={idx}>
                     <td className="max-w-[1.4in] px-1 py-1 text-left">
                       <strong>
-                        {it?.product?.name} {it?.color ? `- ${it.color}` : ""}
+                        {idx + 1}. {it?.product?.name} {it?.color ? `- ${it.color}` : ""}
                         {it?.size ? ` - ${it.size}` : ""}
                       </strong>
                     </td>

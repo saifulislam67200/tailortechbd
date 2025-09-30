@@ -327,7 +327,6 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                           </td>
                         </tr>
                       ))}
-               
                     </tbody>
                     <tfoot>
                       <tr className="bg-primary/10 font-semibold text-primary">
