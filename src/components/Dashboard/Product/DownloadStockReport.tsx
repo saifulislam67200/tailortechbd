@@ -5,7 +5,7 @@ import {
 } from "@/redux/features/product/product.api";
 import dateUtils from "@/utils/date";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { PiPrinterFill } from "react-icons/pi";
+import { PiPrinterFill, PiDownloadSimple } from "react-icons/pi";
 import { Calendar, DateObject } from "react-multi-date-picker";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
@@ -16,6 +16,8 @@ import { formatCurrency } from "@/utils/currency";
 import { IProductStock } from "@/types/product";
 import SelectionBox from "@/components/ui/SelectionBox";
 import CategorySelector from "./CategorySelector";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas-pro";
 
 const stockTableHeaders = [
   { label: "SL" },
@@ -51,6 +53,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
     ...stockQuery,
     limit: 999,
   });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const products: IProductStock[] = stockData?.data || [];
 
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
@@ -63,6 +66,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
   ]);
 
   const [trigger, { data, isFetching, isError }] = useLazyGetProductStockQuery({ ...stockQuery });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const stocks: IProductStock[] = data?.data || [];
 
   const handleFetch = async () => {
@@ -130,6 +134,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openModal, showReport]);
 
   const clearFilters = () => {
@@ -138,6 +143,102 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
     setSelectedColor("");
     setResetKey((k) => k + 1);
     setValues([new DateObject().subtract(1, "days"), new DateObject().add(6, "days")]);
+  };
+
+  const handleDownloadPdf = async () => {
+    try {
+      const el = printRef.current;
+      if (!el) return;
+
+      // Render the entire report area to a canvas
+      const canvas = await html2canvas(el, {
+        scale: 2, // crisp text
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#ffffff",
+        windowWidth: document.documentElement.scrollWidth,
+      });
+
+      // PDF settings
+      const orientation: "p" | "l" = "p"; // change to "l" for landscape if you prefer
+      const pdf = new jsPDF(orientation, "mm", "a4");
+
+      const pageWidthMM = pdf.internal.pageSize.getWidth();
+      const pageHeightMM = pdf.internal.pageSize.getHeight();
+      const marginMM = 8; // left/right/top/bottom
+
+      // Drawable area inside margins
+      const contentWidthMM = pageWidthMM - marginMM * 2;
+      const contentHeightMM = pageHeightMM - marginMM * 2;
+
+      // Canvas sizes (px)
+      const canvasWidthPX = canvas.width;
+      const canvasHeightPX = canvas.height;
+
+      // How many canvas pixels fit into 1mm at the chosen scale?
+      // We will scale the image so its width fits contentWidthMM
+      const pxPerMM = canvasWidthPX / contentWidthMM;
+
+      // Height of one PDF page in canvas pixels (inside margins)
+      const pageHeightPX = contentHeightMM * pxPerMM;
+
+      // A helper canvas we’ll reuse to crop page slices
+      const pageCanvas = document.createElement("canvas");
+      const pageCtx = pageCanvas.getContext("2d")!;
+      pageCanvas.width = canvasWidthPX;
+      pageCanvas.height = Math.min(pageHeightPX, canvasHeightPX);
+
+      let rendered = 0;
+      let pageIndex = 0;
+
+      while (rendered < canvasHeightPX) {
+        // Height for this slice (last slice may be shorter)
+        const sliceHeightPX = Math.min(pageHeightPX, canvasHeightPX - rendered);
+
+        // Resize helper canvas if last slice is shorter
+        if (pageCanvas.height !== sliceHeightPX) {
+          pageCanvas.height = sliceHeightPX;
+        }
+
+        // Clear and draw slice from the big canvas
+        pageCtx.clearRect(0, 0, pageCanvas.width, pageCanvas.height);
+        pageCtx.drawImage(
+          canvas,
+          /* sx, sy, sw, sh */ 0,
+          rendered,
+          canvasWidthPX,
+          sliceHeightPX,
+          /* dx, dy, dw, dh */ 0,
+          0,
+          canvasWidthPX,
+          sliceHeightPX
+        );
+
+        const imgData = pageCanvas.toDataURL("image/png");
+
+        if (pageIndex > 0) pdf.addPage();
+
+        // Add the slice as an image that fits the content box
+        pdf.addImage(
+          imgData,
+          "PNG",
+          marginMM,
+          marginMM,
+          contentWidthMM,
+          sliceHeightPX / pxPerMM // convert px back to mm for height
+        );
+
+        rendered += sliceHeightPX;
+        pageIndex += 1;
+      }
+
+      const start = values[0].format("YYYYMMDD");
+      const end = values[1].format("YYYYMMDD");
+      pdf.save(`Product_Stock_Report_${start}-${end}.pdf`);
+    } catch (e) {
+      toast.error("Failed to generate PDF");
+      console.error(e);
+    }
   };
 
   return (
@@ -230,6 +331,9 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                 <Button onClick={handlePrint} className="bg-primary text-white">
                   Print <PiPrinterFill />
                 </Button>
+                <Button onClick={handleDownloadPdf} className="bg-primary text-white">
+                  Download <PiDownloadSimple />
+                </Button>
                 <Button onClick={() => setShowReport(false)}>Change Date / Filters</Button>
 
                 {/* Active filter pills (read-only) */}
@@ -255,6 +359,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
               {/* Printable Area */}
               <div ref={printRef} className="p-3">
                 {/* Header */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img className="mx-auto mb-3 w-[150px]" src="/images/logos/logo.png" alt="logo" />
                 <div className="mb-4 text-center">
                   <h2 className="text-[22px] font-bold text-primary">Product Stock Report</h2>
@@ -282,7 +387,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                 </div>
 
                 {/* TABLE */}
-                <div className="overflow-x-auto rounded-md border border-gray-200 print:break-inside-avoid">
+                <div className="overflow-x-auto rounded-md border border-gray-200">
                   <table className="w-full min-w-[900px] text-sm">
                     <thead className="bg-primary/10 text-primary">
                       <tr>
@@ -368,7 +473,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
             display: table-header-group;
           }
           table tfoot {
-            display: table-footer-group;
+            display: table-row-group;
           }
         }
       `}</style>
