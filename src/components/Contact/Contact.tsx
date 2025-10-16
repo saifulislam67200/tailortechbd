@@ -21,7 +21,7 @@ export default function Contact() {
     {
       icon: FiMail,
       title: "Email",
-      details: ["tailortechbd2025@gmail.com"],
+      details: ["support@tailortechbd.com"],
     },
     {
       icon: FiClock,

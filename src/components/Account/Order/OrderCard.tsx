@@ -6,13 +6,14 @@ import type { IOrderStatus, IShippingAddress } from "@/types/order";
 import { IOrder } from "@/types/order";
 import { IProduct } from "@/types/product";
 import dateUtils from "@/utils/date";
-import getStatusStyleAndIcon from "@/utils/GetStatusStyleAndIcon";
+import GetStatusStyleAndIcon from "@/utils/GetStatusStyleAndIcon";
 import Image from "next/image";
 import { useState } from "react";
 import { IoChevronDown, IoCube, IoEye } from "react-icons/io5";
 import { MdDelete } from "react-icons/md";
 import { toast } from "sonner";
 import CancelOrder from "./CancelOrder";
+import { BsArrowRight } from "react-icons/bs";
 
 const OrderCard = ({ order }: { order: IOrder }) => {
   const [initOrder, setInitOrder] = useState(order); //
@@ -36,10 +37,6 @@ const OrderCard = ({ order }: { order: IOrder }) => {
     setIsExpanded(isExpanded === orderId ? null : orderId);
   };
 
-  const getCurrentStatus = () => {
-    return orderView.status[order.status.length - 1]?.status || "pending";
-  };
-
   const getTotalAmount = () => {
     return Math.round(orderView.totalProductAmount + (order.deliveryFee || 0));
   };
@@ -54,9 +51,6 @@ const OrderCard = ({ order }: { order: IOrder }) => {
     setProductToReview({ item: item, orderId: order._id });
     setIsReviewOpen(true);
   };
-
-  const currentStatus = getCurrentStatus();
-  const { bg, text, icon, label } = getStatusStyleAndIcon(currentStatus);
 
   const handleRemoveOrderItem = (OrderitemIndex: number) => {
     const updatedOrderItems = orderView.orderItems.filter(
@@ -112,24 +106,38 @@ const OrderCard = ({ order }: { order: IOrder }) => {
       <div className="p-[8px] sm:p-[16px]">
         <div className="flex flex-col gap-[16px] lg:flex-row lg:items-center lg:justify-between">
           <div className="flex-1">
-            <div className="flex flex-col gap-[8px] sm:flex-row sm:items-center sm:gap-[16px]">
-              <h3 className="font-semibold text-primary">{order.orderId}</h3>
-              <div className="flex items-center gap-[8px]">
-                <div
-                  className={`inline-flex items-center gap-1 rounded-full px-[8px] py-[4px] text-[12px] font-medium ${bg} ${text}`}
-                >
-                  {icon}
-                  {label}
-                </div>
-              </div>
-            </div>
-            <div className="mt-[8px] flex flex-col gap-1 text-[14px] text-muted sm:flex-row sm:items-center sm:gap-[16px]">
-              <span>Order Date: {dateUtils.formateCreateOrUpdateDate(order.createdAt)}</span>
+            <h3 className="font-semibold text-primary">{order.orderId}</h3>
+            <div className="mt-[8px] mb-[12px] flex flex-col gap-1 border-b border-border-muted pb-[12px] text-[14px] text-muted sm:flex-row sm:items-center sm:gap-[16px]">
+              <span>
+                Order Date: <strong>{dateUtils.formatDateTime(order.createdAt)}</strong>
+              </span>
               <span>Customer: {order.shippingAddress.name}</span>
               <span className="hidden sm:inline">•</span>
               <span>Total: ৳ {getTotalAmount()}</span>
               <span className="hidden sm:inline">•</span>
               <span>{order.orderItems.length} items</span>
+            </div>
+
+            <div className="flex flex-wrap gap-[10px]">
+              {orderView.status.map((status, index) => (
+                <div className="flex gap-[6px]" key={status.status}>
+                  <div className="flex flex-col gap-[4px]">
+                    <div
+                      className={`inline-flex items-center justify-center gap-1 rounded-full px-[8px] py-[4px] text-[12px] font-medium ${GetStatusStyleAndIcon(status.status)?.bg} ${GetStatusStyleAndIcon(status.status)?.text}`}
+                    >
+                      {GetStatusStyleAndIcon(status.status).icon}
+                      {GetStatusStyleAndIcon(status.status).label}
+                    </div>
+                    {status.createdAt && (
+                      <span className="text-[12px] text-muted">
+                        {dateUtils.formatDateTime(status.createdAt)}
+                      </span>
+                    )}
+                  </div>
+
+                  {index !== orderView.status.length - 1 && <BsArrowRight className="mt-[6px]" />}
+                </div>
+              ))}
             </div>
           </div>
 
@@ -258,15 +266,16 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                             </div>
                           </div>
                           {/* // review button */}
-                          {currentStatus == "delivered" && (
-                            <button
-                              onClick={() => handleReviewClick(item)}
-                              className="absolute top-2 right-2 z-10 flex cursor-pointer items-center justify-center rounded-[3px] border border-quaternary bg-white px-2 text-[10px] text-info transition-colors duration-200 hover:border-primary hover:text-primary sm:h-[30px] sm:w-[70px] sm:rounded-[5px] sm:text-[14px]"
-                              aria-label="Give Review"
-                            >
-                              Review
-                            </button>
-                          )}
+                          {orderView.status.some((status) => status.status == "delivered") &&
+                            !isEditMode && (
+                              <button
+                                onClick={() => handleReviewClick(item)}
+                                className="absolute top-2 right-2 z-10 flex cursor-pointer items-center justify-center rounded-[3px] border border-quaternary bg-white px-2 text-[10px] text-info transition-colors duration-200 hover:border-primary hover:text-primary sm:h-[30px] sm:w-[70px] sm:rounded-[5px] sm:text-[14px]"
+                                aria-label="Give Review"
+                              >
+                                Review
+                              </button>
+                            )}
                         </div>
                       ))}
                     </div>
@@ -283,7 +292,7 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                     ) : (
                       ""
                     )}
-                    {getCurrentStatus() == "pending" ? (
+                    {orderView.status.some((status) => status.status == "pending") ? (
                       <div className="mt-[10px] flex flex-wrap items-center gap-[10px]">
                         <button
                           className={`cursor-pointer rounded-[4px] px-[10px] py-[5px] text-white ${isEditMode ? "bg-danger" : "bg-primary"}`}
@@ -406,7 +415,7 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                   </div>
                 )}
 
-                {!isEditMode && currentStatus == "pending" ? (
+                {!isEditMode && orderView.status.some((status) => status.status == "pending") ? (
                   <CancelOrder
                     onSuccess={() => {
                       const newOrder = {

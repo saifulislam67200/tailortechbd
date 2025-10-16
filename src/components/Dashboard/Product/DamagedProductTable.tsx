@@ -1,5 +1,5 @@
 "use client";
-import Button from "@/components/ui/Button";
+
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Pagination from "@/components/ui/Pagination";
 import TableDataNotFound from "@/components/ui/TableDataNotFound";
@@ -12,9 +12,9 @@ import { useRef, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { RxMagnifyingGlass } from "react-icons/rx";
-import { useReactToPrint } from "react-to-print";
 import CategorySelector from "./CategorySelector";
 import "./index.css";
+import DownloadDamagedProductReport from "./DownloadDamagedProductReport";
 
 const stockTableHeaders = [
   { label: "SL", field: "", shouldPrint: true },
@@ -32,22 +32,15 @@ const stockTableHeaders = [
 
 const DamagedProductTable = () => {
   const [searchTerm, setSearchTerm] = useDebounce("");
-
   const [sort, setSort] = useState({ field: "createdAt", order: "desc" });
   const router = useRouter();
 
-  const [isPrintMode, setIsPrintMode] = useState(false);
-
   const tableRef = useRef<HTMLDivElement>(null);
-  const handlePrint = useReactToPrint({
-    contentRef: tableRef,
-  });
 
   const [stockQuery, setStockQuery] = useState<Record<string, string | number>>({
     page: 1,
     sort: `${sort.order === "desc" ? "-" : ""}${sort.field}`,
   });
-
   const { data, isLoading: isStockLoading } = useGetDamagedProductQuery({
     ...stockQuery,
     searchTerm: searchTerm,
@@ -95,7 +88,7 @@ const DamagedProductTable = () => {
           </Link>
         </div>
         <HorizontalLine className="my-[10px]" />
-        <div className="mb-3 flex flex-wrap gap-3 lg:flex-nowrap">
+        <div className="mb-3 flex flex-wrap items-end justify-between gap-3 lg:flex-nowrap">
           <div className="flex flex-col items-end gap-3 xl:flex-row">
             <div className="flex w-full shrink-0 items-center rounded-[5px] border-[1px] border-dashboard/20 p-[5px] outline-none sm:justify-between xl:max-w-[300px]">
               <input
@@ -117,70 +110,48 @@ const DamagedProductTable = () => {
               />
             </div>
           </div>
-          <div className="flex w-full items-center justify-start gap-0 md:justify-end">
-            <Button
-              onClick={async () => {
-                setIsPrintMode(true);
-                setTimeout(() => {
-                  handlePrint();
-                  setIsPrintMode(false);
-                }, 500);
-              }}
-            >
-              Show Report
-            </Button>
-          </div>
+
+          <DownloadDamagedProductReport />
         </div>
 
         <div ref={tableRef}>
-          {isPrintMode && (
-            <div className="mb-4 text-center">
-              <img className="mx-auto mb-3 w-[150px]" src="/images/logos/logo.png" alt="logo" />
-              <h2 className="text-[22px] font-bold text-primary">Damaged Product Report</h2>
-            </div>
-          )}
-
           <div className="overflow-x-auto">
             <table className="w-full divide-y divide-dashboard/20">
               <thead className="bg-dashboard/10">
                 <tr>
-                  {stockTableHeaders.map((header) =>
-                    isPrintMode && !header.shouldPrint ? (
-                      <></>
-                    ) : (
-                      <th
-                        key={header.field || header.label}
-                        className="px-6 py-3 text-left text-sm font-semibold text-dashboard"
-                      >
-                        {header.field ? (
-                          <button
-                            className="flex cursor-pointer items-center gap-1"
-                            onClick={() => handleSort(header.field)}
-                          >
-                            <span>{header.label}</span>
-                            <span className="flex flex-col text-[10px] leading-[10px]">
-                              <FaChevronUp
-                                className={`${
-                                  sort.field === header.field && sort.order === "asc"
-                                    ? "font-bold text-dashboard"
-                                    : "text-dashboard/30"
-                                }`}
-                              />
-                              <FaChevronDown
-                                className={`${
-                                  sort.field === header.field && sort.order === "desc"
-                                    ? "font-bold text-dashboard"
-                                    : "text-dashboard/30"
-                                }`}
-                              />
-                            </span>
-                          </button>
-                        ) : (
-                          header.label
-                        )}
-                      </th>
-                    )
-                  )}
+                  {stockTableHeaders.map((header) => (
+                    <th
+                      key={header.field || header.label}
+                      className="px-6 py-3 text-left text-sm font-semibold text-dashboard"
+                    >
+                      {header.field ? (
+                        <button
+                          className="flex cursor-pointer items-center gap-1"
+                          onClick={() => handleSort(header.field)}
+                        >
+                          <span>{header.label}</span>
+                          <span className="flex flex-col text-[10px] leading-[10px]">
+                            <FaChevronUp
+                              className={`${
+                                sort.field === header.field && sort.order === "asc"
+                                  ? "font-bold text-dashboard"
+                                  : "text-dashboard/30"
+                              }`}
+                            />
+                            <FaChevronDown
+                              className={`${
+                                sort.field === header.field && sort.order === "desc"
+                                  ? "font-bold text-dashboard"
+                                  : "text-dashboard/30"
+                              }`}
+                            />
+                          </span>
+                        </button>
+                      ) : (
+                        header.label
+                      )}
+                    </th>
+                  ))}
                 </tr>
               </thead>
 
@@ -211,15 +182,9 @@ const DamagedProductTable = () => {
                         </span>
                       </td>
 
-                      {isPrintMode ? (
-                        <></>
-                      ) : (
-                        <td className="px-6 py-4">
-                          <span className="text-[14px]">
-                            {product?.subCategory?.label || "N/A"}
-                          </span>
-                        </td>
-                      )}
+                      <td className="px-6 py-4">
+                        <span className="text-[14px]">{product?.subCategory?.label || "N/A"}</span>
+                      </td>
 
                       {/* product name */}
                       <td
@@ -249,13 +214,9 @@ const DamagedProductTable = () => {
                       </td>
 
                       {/* status */}
-                      {isPrintMode ? (
-                        <></>
-                      ) : (
-                        <td className="px-6 py-4">
-                          <span className="text-red-400">Damaged</span>
-                        </td>
-                      )}
+                      <td className="px-6 py-4">
+                        <span className="text-red-400">Damaged</span>
+                      </td>
 
                       {/* damaged qty */}
                       <td className="px-6 py-4">

@@ -160,7 +160,10 @@ export default function ComplainSuggestionTable() {
                     <td className="px-[18px] py-[16px] text-[12px] font-semibold tracking-wider text-dashboard capitalize lg:text-[14px]">
                       {c.status}
                     </td>
-                    <td className="max-w-[420px] px-[18px] py-[16px] text-[12px] font-semibold tracking-wider text-dashboard capitalize lg:text-[14px]">
+                    <td
+                      title={c.actionTaken}
+                      className="max-w-[420px] px-[18px] py-[16px] text-[12px] font-semibold tracking-wider text-dashboard capitalize lg:text-[14px]"
+                    >
                       <span className="line-clamp-3 whitespace-pre-wrap">{c.actionTaken}</span>
                     </td>
                     <td className="px-[18px] py-[16px] text-[12px] font-semibold tracking-wider text-dashboard capitalize lg:text-[14px]">

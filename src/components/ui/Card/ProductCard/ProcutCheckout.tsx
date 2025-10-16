@@ -1,6 +1,7 @@
 "use client";
 import ProductDetailsSlider from "@/components/productDetails/ProductDetailSlider";
 import RestockRequestModal from "@/components/productDetails/RestockRequestModal";
+import AddToCartErrorMessage from "@/components/Shared/AddToCartErrorMessage";
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import { useAppDispatch } from "@/hooks/redux";
@@ -28,6 +29,7 @@ const ProductCheckoutModal = ({
   btnStyle,
   children,
 }: Props) => {
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -35,8 +37,8 @@ const ProductCheckoutModal = ({
   const [isOpen, setIsOpen] = useState(false);
 
   /** Active color/size selection (default to first color/size if available) */
-  const [activeColor, setActiveColor] = useState<IColor | undefined>(product?.colors?.[0]);
-  const [activeSize, setActiveSize] = useState<ISize | undefined>(product?.colors?.[0]?.sizes?.[0]);
+  const [activeColor, setActiveColor] = useState<IColor | undefined>();
+  const [activeSize, setActiveSize] = useState<ISize | undefined>();
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
 
   /** ---------------- Quantity: controlled + uncontrolled ----------------
@@ -98,7 +100,6 @@ const ProductCheckoutModal = ({
   const handleColorChange = (color: IColor) => {
     setActiveColor(color);
     setSelectedColor(color);
-    setActiveSize(color.sizes?.[0]);
   };
   const handleSizeChange = (size: ISize) => setActiveSize(size);
 
@@ -123,12 +124,30 @@ const ProductCheckoutModal = ({
     }
   };
 
+  useEffect(() => {
+    if (activeColor && !activeSize) {
+      setErrorMessage("Please select a size.");
+    }
+    if (activeColor && activeSize) {
+      setErrorMessage("");
+    }
+  }, [activeColor, activeSize]);
+
   /** Checkout action */
   const handleCheckoutClick = () => {
-    if (!activeColor || !activeSize) {
-      return toast.error("Please select a color and size.", {
-        id: "productSelectionToastId",
-      });
+    if (!activeColor && !activeSize) {
+      setErrorMessage("Please select a color and size.");
+      return;
+    }
+
+    if (!activeColor) {
+      setErrorMessage("Please select a color.");
+      return;
+    }
+
+    if (!activeSize) {
+      setErrorMessage("Please select a size.");
+      return;
     }
 
     dispatch(
@@ -290,6 +309,10 @@ const ProductCheckoutModal = ({
                 </div>
               </div>
 
+              {errorMessage && (
+                <AddToCartErrorMessage className="mt-[10px]" errorMessage={errorMessage} />
+              )}
+
               {/* Stock & Checkout */}
               {activeSize && activeSize.stock === 0 && (
                 <p className="mt-[10px] mb-[5px] text-[15px] font-[600] text-danger">
@@ -297,7 +320,7 @@ const ProductCheckoutModal = ({
                 </p>
               )}
 
-              {activeSize && !activeSize.stock ? (
+              {activeColor && activeSize && !activeSize.stock ? (
                 <RestockRequestModal
                   color={activeColor?.color ?? ""}
                   size={activeSize.size}
@@ -306,7 +329,9 @@ const ProductCheckoutModal = ({
               ) : (
                 <button
                   onClick={handleCheckoutClick}
-                  disabled={!activeColor || !activeSize || activeSize.stock === 0}
+                  disabled={
+                    activeColor?.sizes?.find((s) => s?.size === activeSize?.size)?.stock === 0
+                  }
                   className="mt-[10px] h-[40px] w-full bg-primary text-white disabled:cursor-not-allowed disabled:bg-gray-300"
                 >
                   Proceed to Checkout

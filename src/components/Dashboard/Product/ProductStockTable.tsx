@@ -25,8 +25,12 @@ const stockTableHeaders = [
   { label: "Product Name  ", field: "", rowSpan: 2 },
   { label: "Size", field: "", rowSpan: 2 },
   { label: "Color", field: "", rowSpan: 2 },
+  { label: "Opening Stock", field: "", rowSpan: 2 },
+  { label: "Sales Qty", field: "", rowSpan: 2 },
+  { label: "Damaged Qty", field: "", rowSpan: 2 },
   { label: "Current Stock", field: "", rowSpan: 2 },
   { label: "Unit Price", field: "", rowSpan: 2 },
+  { label: "Offer Price", field: "", rowSpan: 2 },
   { label: "Total Price", field: "", rowSpan: 2 },
   { label: "Stock Status", field: "", rowSpan: 2 },
 ];
@@ -298,12 +302,32 @@ const ProductStockTable = () => {
                       <span className="text-[14px]">{product.color || "N/A"}</span>
                     </td>
 
+                    {/* opening stock */}
                     <td className="border border-border-main px-6 py-3">
                       <span className="text-[14px]">{product.stock || "0"}</span>
                     </td>
+
+                    {/* sales qty */}
+                    <td className="border border-border-main px-6 py-3">
+                      <span className="text-[14px]">sales qty</span>
+                    </td>
+                    {/* damaged qty */}
+                    <td className="border border-border-main px-6 py-3">
+                      <span className="text-[14px]">damaged qty</span>
+                    </td>
+                    {/* current stock */}
+                    <td className="border border-border-main px-6 py-3">
+                      <span className="text-[14px]"></span>
+                    </td>
+                    {/* unit price */}
                     <td className="border border-border-main px-6 py-3">
                       <span className="text-[14px]">৳ {product.price}</span>
                     </td>
+                    {/* discount price */}
+                    <td className="border border-border-main px-6 py-3">
+                      {/* <span className="text-[14px]">৳ {product.price - product.price * (product.discount / 100)}</span> */}
+                    </td>
+                    {/* total price */}
                     <td className="border border-border-main px-6 py-3">
                       <span className="text-[14px}">
                         ৳ {Math.round((product.price || 0) * (product.stock || 0))}

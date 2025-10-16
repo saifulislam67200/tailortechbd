@@ -51,15 +51,15 @@ const ExchangeAndReturnPolicy = () => {
                   <p>
                     If payment is made in advance and you decide to return the item, our team will
                     inspect it upon receipt and process your refund. Refunds will be issued to the
-                    original payment method. For MFS payments, the refund process may take 15-20
-                    working days, and for bank payments, it may take 20-25 working days.
+                    original payment method. For MFS payments, the refund process may take 7 working
+                    days, and for bank payments, it may take 10 working days.
                   </p>
                 </div>
 
                 <div>
                   <p>
                     To request an exchange, please contact our Customer Service at 01911 696556,
-                    01711 923276 or email us at tailortechbd2025@gmail.com. Exchanges are subject to
+                    01711 923276 or email us at support@tailortechbd.com. Exchanges are subject to
                     stock availability.
                   </p>
                 </div>

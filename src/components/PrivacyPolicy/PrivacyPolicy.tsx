@@ -95,7 +95,7 @@ const PrivacyPolicy = () => {
               <br />
               TailorTech
               <br />
-              Email: tailortechbd2025@gmail.com
+              Email: support@tailortechbd.com
               <br />
               Phone: +880 01911 696556, +880 01711 923276
               <br />

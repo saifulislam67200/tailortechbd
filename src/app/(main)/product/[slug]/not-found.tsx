@@ -15,7 +15,7 @@ const NotFound = () => {
   const products = data?.data || [];
 
   useEffect(() => {
-    document.title = "PRODUCT NOT FOUND | TailorTech";
+    document.title = "PRODUCT NOT FOUND | Tailortech";
   }, []);
 
   return (

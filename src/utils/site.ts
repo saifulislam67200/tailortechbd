@@ -39,7 +39,7 @@ export const socialLinks = [
 
 export const footerLinks = [
   {
-    label: "TailorTech",
+    label: "Tailortech",
     contents: [
       {
         label: "About Us",
