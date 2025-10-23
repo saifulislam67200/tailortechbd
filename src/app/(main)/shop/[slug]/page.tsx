@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const data = (await res.json()) as { data: ICategory };
 
   return {
-    title: data?.data?.label || "Shop | TailorTech",
+    title: data?.data?.label || "Shop | Tailortech",
   };
 }
 

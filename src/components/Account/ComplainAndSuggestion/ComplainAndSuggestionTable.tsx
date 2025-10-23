@@ -38,6 +38,7 @@ const ComplainAndSuggestionTable = ({
               <th>Satisfaction</th>
               <th>Status</th>
               <th>Message</th>
+              <th>Feedback</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -60,8 +61,11 @@ const ComplainAndSuggestionTable = ({
                   <td className="px-3 py-2">{c.priority}</td>
                   <td className="px-3 py-2">{c.satisfaction}</td>
                   <td className="px-3 py-2">{c.status}</td>
-                  <td className="max-w-[360px] px-3 py-2">
+                  <td title={c.message} className="max-w-[360px] px-3 py-2">
                     <span className="line-clamp-3 whitespace-pre-wrap">{c.message}</span>
+                  </td>
+                  <td title={c.actionTaken} className="max-w-[360px] px-3 py-2">
+                    <span className="line-clamp-3 whitespace-pre-wrap">{c.actionTaken}</span>
                   </td>
                   <td className="px-3 py-2">
                     <span className="flex items-center gap-2">

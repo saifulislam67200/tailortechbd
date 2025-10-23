@@ -180,11 +180,11 @@ const TakeActionOnComplainSuggestion = ({ complaint }: Props) => {
               </dl>
             </div>
 
-            <div className="rounded-lg border border-border-main p-3">
+            <div className="overflow-x-hidden rounded-lg border border-border-main p-3">
               <div className="mb-1 text-sm text-gray-500">Customer Message</div>
-              <span className="mt-2 block rounded-md border border-border-main bg-gray-50 p-3 text-sm text-gray-900">
+              <p className="mt-2 rounded-md border border-border-main bg-gray-50 p-3 text-sm break-words whitespace-pre-wrap text-gray-900">
                 {complaint.message}
-              </span>
+              </p>
             </div>
           </div>
 

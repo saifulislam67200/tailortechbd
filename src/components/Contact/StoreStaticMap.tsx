@@ -22,10 +22,10 @@ const StoreStaticMap = () => {
           marginWidth={0}
           id="gmap_canvas"
           src={mapSrc}
-          title="TailorTech Location Map"
+          title="Tailortech Location Map"
           loading="lazy"
           allowFullScreen
-          aria-label="Google Maps showing TailorTech location at Kalshi Road, Mirpur-11, Dhaka-1216"
+          aria-label="Google Maps showing Tailortech location at Kalshi Road, Mirpur-11, Dhaka-1216"
         />
       </div>
 
@@ -37,7 +37,7 @@ const StoreStaticMap = () => {
           rel="noopener noreferrer"
           className="text-primary/90 hover:text-primary hover:underline"
         >
-          View TailorTech location on Google Maps
+          View Tailortech location on Google Maps
         </a>
       </div>
     </div>

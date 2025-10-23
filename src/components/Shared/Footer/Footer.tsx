@@ -20,7 +20,7 @@ const Footer = () => {
               />
             </div>
             <p className="w-full text-justify text-[14px] leading-relaxed md:max-w-[550px] lg:max-w-[301px] lg:text-justify">
-              TailorTech – Where tradition meets innovation. We combine expert tailoring with modern
+              Tailortech – Where tradition meets innovation. We combine expert tailoring with modern
               fashion technology to deliver stylish, high-quality apparel designed for comfort,
               confidence, and individuality.
             </p>

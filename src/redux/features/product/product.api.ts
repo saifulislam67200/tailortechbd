@@ -127,4 +127,5 @@ export const {
   useLazyGetProductStockQuery,
   useCreateDamagedProductMutation,
   useGetDamagedProductQuery,
+  useLazyGetDamagedProductQuery,
 } = productApi;

@@ -1,3 +1,4 @@
+import AddToCartErrorMessage from "@/components/Shared/AddToCartErrorMessage";
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
@@ -8,11 +9,10 @@ import { IOrderItem } from "@/types/order";
 import { IColor, IProduct, ISize } from "@/types/product";
 import { getProductDiscountPrice } from "@/utils";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { LuX } from "react-icons/lu";
 import { RxMagnifyingGlass } from "react-icons/rx";
-import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 
 interface IProps {
@@ -21,6 +21,7 @@ interface IProps {
 }
 
 const AddNewItemOnOrder: React.FC<IProps> = ({ onAddItem, className }) => {
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<IProduct | undefined>();
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
@@ -36,19 +37,34 @@ const AddNewItemOnOrder: React.FC<IProps> = ({ onAddItem, className }) => {
     { skip: !isOpen }
   );
 
+  useEffect(() => {
+    if (selectedColor && !selectedSize) {
+      setErrorMessage("Please select a size");
+    }
+
+    if (selectedColor && selectedSize) {
+      setErrorMessage("");
+    }
+  }, [selectedProduct, selectedColor, selectedSize]);
+
   const handleAddItem = () => {
     if (!selectedProduct) {
-      toast.error("Please select a product");
+      setErrorMessage("Please select a product");
+      return;
+    }
+
+    if (selectedProduct && !selectedColor && !selectedSize) {
+      setErrorMessage("Please select a color and size");
       return;
     }
 
     if (!selectedColor) {
-      toast.error("Please select a color");
+      setErrorMessage("Please select a color");
       return;
     }
 
     if (!selectedSize) {
-      toast.error("Please select a size");
+      setErrorMessage("Please select a size");
       return;
     }
 
@@ -212,6 +228,8 @@ const AddNewItemOnOrder: React.FC<IProps> = ({ onAddItem, className }) => {
                     }
                   />
                 </div>
+
+                {errorMessage && <AddToCartErrorMessage errorMessage={errorMessage} />}
                 <Button onClick={handleAddItem} className="mt-[20px]">
                   Add Item
                 </Button>

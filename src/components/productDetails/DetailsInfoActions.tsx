@@ -3,11 +3,12 @@ import { useAppDispatch } from "@/hooks/redux";
 import { addToCart } from "@/redux/features/cart/cartSlice";
 // import { addToWishlist } from "@/redux/features/wishlist/wishlistSlice";
 import { IColor, IProduct, ISize } from "@/types/product";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { toast } from "sonner";
 import ProcutCheckout from "../ui/Card/ProductCard/ProcutCheckout";
 import RestockRequestModal from "./RestockRequestModal";
+import AddToCartErrorMessage from "../Shared/AddToCartErrorMessage";
 
 interface IProps {
   product: IProduct;
@@ -15,8 +16,9 @@ interface IProps {
 }
 
 const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
-  const [activeColor, setActiveColor] = useState<IColor | undefined>(product?.colors?.[0]);
-  const [activeSize, setActiveSize] = useState<ISize | undefined>(activeColor?.sizes?.[0]);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [activeColor, setActiveColor] = useState<IColor | undefined>();
+  const [activeSize, setActiveSize] = useState<ISize | undefined>();
   const [activeQuantity, setActiveQuantity] = useState(1);
 
   // Reset quantity when size changes
@@ -60,9 +62,28 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
     return colorVariant?.images?.[0] || product?.images?.[0] || "";
   };
 
+  useEffect(() => {
+    if (activeColor && !activeSize) {
+      setErrorMessage("Please select a size.");
+    }
+    if (activeColor && activeSize) {
+      setErrorMessage("");
+    }
+  }, [activeColor, activeSize]);
+
   const handleAddToCart = () => {
-    if (!activeColor || !activeSize) {
-      toast.error("Please select a color and size.");
+    if (!activeColor && !activeSize) {
+      setErrorMessage("Please select a color and size.");
+      return;
+    }
+
+    if (!activeColor) {
+      setErrorMessage("Please select a color.");
+      return;
+    }
+
+    if (!activeSize) {
+      setErrorMessage("Please select a size.");
       return;
     }
 
@@ -87,7 +108,6 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
   const handleColorChange = (color: IColor) => {
     setActiveColor(color);
     onColorChange(color);
-    setActiveSize(color.sizes?.[0]);
   };
 
   return (
@@ -132,8 +152,10 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
           </button>
         ))}
       </div>
+
+      {errorMessage && <AddToCartErrorMessage className="mt-[10px]" errorMessage={errorMessage} />}
       {/* // quantity update  */}
-      <div className="mt-[15px] flex h-[30px] w-[80px] items-center border border-quaternary px-[7px]">
+      <div className="mt-[15px] mb-[15px] flex h-[30px] w-[80px] items-center border border-quaternary px-[7px]">
         <button
           disabled={activeQuantity <= 1}
           onClick={() => handleQuantityChange("dec")}
@@ -165,15 +187,18 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
 
       {product?.quickOverview ? (
         <div
-          className="mt-[10px] mb-[15px] text-primary"
+          className="quick-overview mt-[10px] mb-[15px] text-primary"
           dangerouslySetInnerHTML={{ __html: product?.quickOverview || "" }}
         />
       ) : (
         ""
       )}
+      <p className="text-primary">
+        <strong>Fabric Composition:</strong> {product?.fabric}
+      </p>
 
       {/* // add to cart button  */}
-      {activeSize && !activeSize.stock ? (
+      {activeColor && activeSize && !activeSize.stock ? (
         <RestockRequestModal
           color={activeColor?.color ?? ""}
           size={activeSize.size}
@@ -182,7 +207,7 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
       ) : (
         <div className="mt-[10px] flex flex-col items-center gap-[10px] sm:max-w-[330px] sm:flex-row">
           <button
-            disabled={!activeColor || !activeSize || !activeSize.stock}
+            disabled={activeColor?.sizes?.find((s) => s?.size === activeSize?.size)?.stock === 0}
             onClick={handleAddToCart}
             className="h-[40px] w-full cursor-pointer bg-primary text-white transition-all duration-300 hover:bg-info disabled:cursor-not-allowed disabled:opacity-[50]"
           >

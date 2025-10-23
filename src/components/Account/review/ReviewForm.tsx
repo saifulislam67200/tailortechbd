@@ -14,13 +14,11 @@ const MAX_REVIEW_LENGTH = 500;
 
 const validationSchema = Yup.object({
   rating: Yup.number().min(1, "Please provide a rating").required("Required"),
-  reviewText: Yup.string()
-    .min(10, "Too short!")
-    .max(MAX_REVIEW_LENGTH, `Max ${MAX_REVIEW_LENGTH} characters`)
-    .required("Required"),
+  reviewText: Yup.string().optional(),
   images: Yup.array()
     .of(Yup.string().url("Invalid image URL"))
-    .max(3, `You can upload up to ${3} images`),
+    .max(3, `You can upload up to ${3} images`)
+    .optional(),
 });
 
 const initialValues = {
@@ -121,11 +119,6 @@ const ReviewForm = ({ productToReview, setIsReviewOpen }: ReviewFormProps) => {
               maxLength={MAX_REVIEW_LENGTH}
             />
             <div className="flex items-center justify-between">
-              <ErrorMessage
-                name="reviewText"
-                component="div"
-                className="mt-1 text-xs text-red-500"
-              />
               <span
                 className={`text-xs ${values.reviewText.length > MAX_REVIEW_LENGTH ? "text-red-500" : "text-gray-400"}`}
               >
@@ -147,12 +140,7 @@ const ReviewForm = ({ productToReview, setIsReviewOpen }: ReviewFormProps) => {
           <button
             type="submit"
             className="mt-[20px] flex h-[35px] w-full cursor-pointer items-center justify-center rounded-[5px] bg-primary text-[16px] text-background disabled:opacity-60 sm:w-[150px]"
-            disabled={
-              isSubmitting ||
-              values.rating === 0 ||
-              values.images.length === 0 ||
-              !values.reviewText
-            }
+            disabled={isSubmitting || values.rating === 0}
           >
             {isSubmitting ? "Submitting..." : "Submit"}
           </button>

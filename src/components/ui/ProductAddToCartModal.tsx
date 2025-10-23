@@ -7,12 +7,11 @@ import { cloneElement, isValidElement, ReactElement, ReactNode, useEffect, useSt
 import { FaSpinner } from "react-icons/fa";
 import { LuX } from "react-icons/lu";
 import { useDispatch } from "react-redux";
-import { toast } from "sonner";
 import Button from "./Button";
 import DialogProvider from "./DialogProvider";
 import HorizontalLine from "./HorizontalLine";
 import RestockRequestModal from "../productDetails/RestockRequestModal";
-// import SelectionBox from "./SelectionBox";
+import AddToCartErrorMessage from "../Shared/AddToCartErrorMessage";
 
 interface Props {
   children?: ReactNode;
@@ -21,6 +20,7 @@ interface Props {
 }
 
 const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOut }: Props) => {
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const slug = clickedProduct?.slug || "";
@@ -38,13 +38,6 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
   const [selectedSize, setSelectedSize] = useState<ISize | undefined>();
 
-  useEffect(() => {
-    if (product?.colors?.length) {
-      setSelectedColor(product.colors[0]);
-      setSelectedSize(product.colors[0]?.sizes?.[0]);
-    }
-  }, [product]);
-
   const getColorVariantImage = (colorName: string): string => {
     if (!product?.colors || !Array.isArray(product.colors)) {
       return product?.images?.[0] || "";
@@ -61,12 +54,31 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
     setIsOpen(true);
   };
 
-  const handleAddToCart = () => {
-    if (!selectedColor || !selectedSize) {
-      return toast.error("Please select a color and size.", {
-        id: "productSelectionToastId",
-      });
+  useEffect(() => {
+    if (selectedColor && !selectedSize) {
+      setErrorMessage("Please select a size.");
     }
+    if (selectedColor && selectedSize) {
+      setErrorMessage("");
+    }
+  }, [selectedSize, selectedColor]);
+
+  const handleAddToCart = () => {
+    if (!selectedColor && !selectedSize) {
+      setErrorMessage("Please select a color and size.");
+      return;
+    }
+
+    if (!selectedColor) {
+      setErrorMessage("Please select a color.");
+      return;
+    }
+
+    if (!selectedSize) {
+      setErrorMessage("Please select a size.");
+      return;
+    }
+
     const payload = {
       discount: product?.discount,
       id: `${product._id}-${selectedColor!.color.trim()}-${selectedSize!.size.trim()}`,
@@ -212,9 +224,11 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
                       </button>
                     ))}
                   </div>
+
+                  {errorMessage && <AddToCartErrorMessage errorMessage={errorMessage} />}
                 </div>
 
-                {selectedColor && !selectedSize?.stock ? (
+                {selectedColor && selectedSize && !selectedSize?.stock ? (
                   <RestockRequestModal
                     color={selectedColor?.color ?? ""}
                     size={selectedSize?.size as string}

@@ -66,7 +66,11 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
 
       {/* Content section */}
       <div className="flex h-full flex-col justify-between p-[8px]">
-        <Link href={`/product/${product?.slug}`} className="line-clamp-1 hover:text-secondary">
+        <Link
+          title={product.name}
+          href={`/product/${product?.slug}`}
+          className="line-clamp-1 hover:text-secondary"
+        >
           <span className="text-[14px] font-bold">{product.name}</span>
         </Link>
         <span className="text-[12px] font-light text-info"> {product?.sku}</span>

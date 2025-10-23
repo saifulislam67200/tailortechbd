@@ -1,43 +1,35 @@
 "use client";
+
+import { useEffect, useMemo, useRef, useState } from "react";
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
-import SelectionBox from "@/components/ui/SelectionBox";
+import CategorySelector from "./CategorySelector";
 import {
   useGetProductStockQuery,
-  useLazyGetProductStockQuery,
+  useLazyGetDamagedProductQuery,
 } from "@/redux/features/product/product.api";
-import { IProductStock } from "@/types/product";
-import { formatCurrency } from "@/utils/currency";
-import dateUtils from "@/utils/date";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { PiPrinterFill, PiDownloadSimple } from "react-icons/pi";
-import { Calendar, DateObject } from "react-multi-date-picker";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
-import CategorySelector from "./CategorySelector";
-import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
+import { jsPDF } from "jspdf";
+import SelectionBox from "@/components/ui/SelectionBox";
+import { PiDownloadSimple, PiPrinterFill } from "react-icons/pi";
+import { IProductStock } from "@/types/product";
 
-const stockTableHeaders = [
-  { label: "SL" },
-  { label: "Product Code" },
-  { label: "Category" },
-  { label: "Sub Category" },
-  { label: "Product Name" },
-  { label: "Size" },
-  { label: "Color" },
-  { label: "Current Stock" },
-  { label: "Unit Price" },
-  { label: "Total Price" },
-  { label: "Stock Status" },
+const headers = [
+  "SL",
+  "Product Code",
+  "Category",
+  "Product Name",
+  "Size",
+  "Color",
+  "Price",
+  "Damaged Qty",
+  "Cause of Damaged",
 ];
 
-type DownloadStockReportProps = {
-  reportFilters?: Partial<Record<string, string | number>>;
-};
-
-const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) => {
+const DownloadDamagedProductReport = () => {
   const [openModal, setOpenModal] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [resetKey, setResetKey] = useState(0);
@@ -54,78 +46,69 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
     limit: 999,
   });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const products: IProductStock[] = stockData?.data || [];
+  const products = stockData?.data || [];
 
+  // filters
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
 
-  const [values, setValues] = useState([
-    new DateObject().subtract(1, "days"),
-    new DateObject().add(6, "days"),
-  ]);
-
-  const [trigger, { data, isFetching, isError }] = useLazyGetProductStockQuery({ ...stockQuery });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const stocks: IProductStock[] = data?.data || [];
+  const [trigger, { data, isFetching, isError }] = useLazyGetDamagedProductQuery();
+  const damagedProducts = data?.data || [];
 
   const handleFetch = async () => {
     const res = await trigger({
       limit: 100000,
-      startDate: values[0].format(),
-      endDate: values[1].format(),
-      ...reportFilters,
-      ...(selectedCategoryId ? { categoryId: selectedCategoryId } : {}),
+      ...(selectedCategoryId ? { category: selectedCategoryId } : {}),
       ...(selectedSize ? { size: selectedSize } : {}),
       ...(selectedColor ? { color: selectedColor } : {}),
-      // fields
       fields:
-        reportFilters?.fields ||
-        "sku,category,subCategory,productName,size,color,price,createdAt,stock,status",
+        "sku,category,subCategory,productName,size,color,price,quantity,causeOfDamage,createdAt,slug",
     });
 
     if (!res.data?.data?.length) {
       setShowReport(false);
-      toast.error("No Data Found in this date range and filters");
+      toast.error("No Data Found in this filters");
     } else {
       setShowReport(true);
     }
   };
+
   const unique = (arr: Array<string | undefined | null>) =>
     Array.from(new Set(arr.filter(Boolean))) as string[];
 
   const sizeOptions = useMemo(() => {
-    const allSizes = unique(products.map((p) => p.size));
+    const allSizes = unique(products.map((p: IProductStock) => p.size));
     return [{ label: "ALL", value: "" }, ...allSizes.map((s) => ({ label: s, value: s }))];
   }, [products]);
 
   const colorOptions = useMemo(() => {
-    const allColors = unique(products.map((p) => p.color));
+    const allColors = unique(products.map((p: IProductStock) => p.color));
     return [{ label: "ALL", value: "" }, ...allColors.map((c) => ({ label: c, value: c }))];
   }, [products]);
 
-  const displayedStocks = useMemo(() => {
-    return stocks.filter((p) => {
+  const displayedDamagedProducts = useMemo(() => {
+    return damagedProducts.filter((p) => {
       const okSize = !selectedSize || p.size === selectedSize;
       const okColor =
         !selectedColor || (p.color || "").toLowerCase() === selectedColor.toLowerCase();
       return okSize && okColor;
     });
-  }, [stocks, selectedSize, selectedColor]);
+  }, [damagedProducts, selectedSize, selectedColor]);
 
   const { totalUnits, totalAmount } = useMemo(() => {
-    const units = displayedStocks.reduce((sum, c) => sum + (Number(c.stock) || 0), 0);
-    const amount = displayedStocks.reduce(
-      (sum, c) => sum + Number(c.price || 0) * Number(c.stock || 0),
+    const units = displayedDamagedProducts.reduce((sum, c) => sum + (Number(c.quantity) || 0), 0);
+    const amount = displayedDamagedProducts.reduce(
+      (sum, c) => sum + Number(c.price || 0) * Number(c.quantity || 0),
       0
     );
     return { totalUnits: units, totalAmount: amount };
-  }, [displayedStocks]);
+  }, [displayedDamagedProducts]);
 
   const printRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({
     contentRef: printRef,
-    documentTitle: "Product_Stock_Report",
+    documentTitle: "Damaged_Product_Report",
   });
 
   useEffect(() => {
@@ -142,7 +125,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
     setSelectedSize("");
     setSelectedColor("");
     setResetKey((k) => k + 1);
-    setValues([new DateObject().subtract(1, "days"), new DateObject().add(6, "days")]);
+    setStockQuery({ ...stockQuery, size: "", color: "", page: 1, categoryId: "" });
   };
 
   const handleDownloadPdf = async () => {
@@ -232,9 +215,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
         pageIndex += 1;
       }
 
-      const start = values[0].format("YYYYMMDD");
-      const end = values[1].format("YYYYMMDD");
-      pdf.save(`Product_Stock_Report_${start}-${end}.pdf`);
+      pdf.save(`Damaged_Product_Report_${stockQuery.startDate}-${stockQuery.endDate}.pdf`);
     } catch (e) {
       toast.error("Failed to generate PDF");
       console.error(e);
@@ -244,15 +225,19 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
   return (
     <div>
       <Button onClick={() => setOpenModal(true)} className="bg-primary text-white">
-        Stock Report
+        Damaged Product Report
       </Button>
 
-      <DialogProvider state={openModal} setState={setOpenModal} className="w-full max-w-[1000px]">
+      <DialogProvider
+        state={openModal}
+        setState={setOpenModal}
+        className="w-full max-w-[1000px] overflow-visible"
+      >
         <div className="w-full rounded-[10px] bg-white">
-          <h4 className="p-3 text-[20px] font-[700] text-primary">Product Stock Report</h4>
+          <h4 className="p-3 text-[20px] font-[700] text-primary">Damaged Product Report</h4>
           <HorizontalLine className="my-[10px]" />
 
-          {/* DATE RANGE + FILTERS */}
+          {/* FILTERS */}
           {!showReport && (
             <div className="flex flex-col gap-4 p-3">
               {/* Filters row */}
@@ -296,18 +281,6 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                 </div>
               </div>
 
-              {/* Date range */}
-              <div className="flex flex-col gap-2">
-                <span className="text-[15px] font-[600]">Date Range</span>
-                <Calendar
-                  range
-                  numberOfMonths={2}
-                  className="mx-auto"
-                  value={values}
-                  onChange={setValues}
-                />
-              </div>
-
               {/* Actions */}
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <Button onClick={handleFetch} className="bg-primary text-white">
@@ -326,7 +299,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
           {/* REPORT VIEW */}
           {showReport && (
             <div className="mt-2">
-              {/* Controls */}
+              {/* Controls (hidden in print) */}
               <div className="mb-3 flex flex-wrap items-center gap-2 p-3 print:hidden">
                 <Button onClick={handlePrint} className="bg-primary text-white">
                   Print <PiPrinterFill />
@@ -334,9 +307,9 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                 <Button onClick={handleDownloadPdf} className="bg-primary text-white">
                   Download <PiDownloadSimple />
                 </Button>
-                <Button onClick={() => setShowReport(false)}>Change Date / Filters</Button>
+                <Button onClick={() => setShowReport(false)}>Change Filters</Button>
 
-                {/* Active filter pills (read-only) */}
+                {/* Active filter pills */}
                 <div className="ml-auto flex flex-wrap items-center gap-2 text-xs">
                   {selectedCategoryId && (
                     <span className="rounded bg-primary/10 px-2 py-1 text-primary">
@@ -362,28 +335,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img className="mx-auto mb-3 w-[150px]" src="/images/logos/logo.png" alt="logo" />
                 <div className="mb-4 text-center">
-                  <h2 className="text-[22px] font-bold text-primary">Product Stock Report</h2>
-                  <p className="text-sm text-gray-600">
-                    Product stock report of <b>{values[0].format("MMM DD, YYYY")}</b> to{" "}
-                    <b>{values[1].format("MMM DD, YYYY")}</b>
-                  </p>
-                </div>
-
-                {/* Info Bar */}
-                <div className="mb-4 rounded-md border border-primary/20 bg-primary/10 p-3 text-sm text-primary">
-                  Showing product stocks from <b>{values[0].format("MMM DD, YYYY")}</b> to{" "}
-                  <b>{values[1].format("MMM DD, YYYY")}</b>
-                  {(selectedCategoryId || selectedSize || selectedColor) && (
-                    <>
-                      {" "}
-                      • Filters:&nbsp;
-                      {selectedCategoryId ? "Category" : ""}
-                      {selectedCategoryId && (selectedSize || selectedColor) ? ", " : ""}
-                      {selectedSize || ""}
-                      {selectedSize && selectedColor ? ", " : ""}
-                      {selectedColor || ""}
-                    </>
-                  )}
+                  <h2 className="text-[22px] font-bold text-primary">Damaged Product Report</h2>
                 </div>
 
                 {/* TABLE */}
@@ -391,94 +343,63 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                   <table className="w-full min-w-[900px] text-sm">
                     <thead className="bg-primary/10 text-primary">
                       <tr>
-                        {stockTableHeaders.map((h) => (
-                          <th key={h.label} className="px-3 py-2 text-left">
-                            {h.label}
+                        {headers.map((h) => (
+                          <th key={h} className="px-3 py-2 text-left">
+                            {h}
                           </th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {displayedStocks.map((p, index) => (
-                        <tr key={p._id} className="odd:bg-white even:bg-gray-50">
-                          <td className="px-3 py-2">{index + 1}</td>
-                          <td className="px-3 py-2">{p.sku || "N/A"}</td>
+                      {displayedDamagedProducts.map((r, i) => (
+                        <tr key={r?._id ?? i} className="odd:bg-white even:bg-gray-50">
+                          <td className="px-3 py-2">{i + 1}</td>
+                          <td className="px-3 py-2">{r?.productCode ?? "N/A"}</td>
                           <td className="px-3 py-2">
-                            {typeof p.category === "object" &&
-                            p.category !== null &&
-                            "label" in p.category
-                              ? (p.category as { label: string }).label
-                              : typeof p.category === "string"
-                                ? p.category
+                            {typeof r?.category === "object" && r?.category?.label
+                              ? r?.category?.label
+                              : typeof r?.category === "string"
+                                ? r?.category
                                 : "N/A"}
                           </td>
-                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
+
                           <td className="px-3 py-2">
-                            <span title={p.productName} className="line-clamp-1">
-                              {p.productName || "-"}
+                            <span title={r?.productName} className="line-clamp-1">
+                              {r?.productName ?? "-"}
                             </span>
                           </td>
-                          <td className="px-3 py-2">{p.size || "N/A"}</td>
-                          <td className="px-3 py-2">{p.color || "N/A"}</td>
-                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
-                          <td className="px-3 py-2 text-right">
-                            {formatCurrency(Number(p.price || 0))}
-                          </td>
-                          <td className="px-3 py-2 text-right">
-                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
-                          </td>
-                          <td className="px-3 py-2 capitalize">
-                            {p.status ? p.status.replace(/-/g, " ") : "N/A"}
-                          </td>
+                          <td className="px-3 py-2">{r?.size ?? "N/A"}</td>
+                          <td className="px-3 py-2">{r?.color ?? "N/A"}</td>
+                          <td className="px-3 py-2 text-right">৳{Number(r?.price || 0)}</td>
+                          <td className="px-3 py-2">{r?.quantity ?? 0}</td>
+                          <td className="px-3 py-2">{r?.causeOfDamage ?? "N/A"}</td>
                         </tr>
                       ))}
                     </tbody>
                     <tfoot>
                       <tr className="bg-primary/10 font-semibold text-primary">
-                        <td className="px-3 py-2" colSpan={7}>
+                        <td className="px-3 py-2" colSpan={6}>
                           Totals
                         </td>
+                        <td className="px-3 py-2 text-right">৳{totalAmount}</td>
                         <td className="px-3 py-2">{totalUnits}</td>
-                        <td className="px-3 py-2 text-right"></td>
-                        <td className="px-3 py-2 text-right">{formatCurrency(totalAmount)}</td>
-                        <td className="px-3 py-2"></td>
+                        <td></td>
+                        <td></td>
                       </tr>
                     </tfoot>
                   </table>
                 </div>
 
                 <div className="mt-1 flex justify-between text-[11px] text-gray-500">
-                  <span>Printed on: {dateUtils.formatDate(new Date().toISOString())}</span>
+                  <span>Printed on: {new Date().toLocaleString()}</span>
                 </div>
               </div>
             </div>
           )}
         </div>
       </DialogProvider>
-
-      <style jsx global>{`
-        @media print {
-          .print\\:hidden {
-            display: none !important;
-          }
-          .print\\:break-inside-avoid {
-            break-inside: avoid;
-            page-break-inside: avoid;
-          }
-          body {
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-          }
-          table thead {
-            display: table-header-group;
-          }
-          table tfoot {
-            display: table-row-group;
-          }
-        }
-      `}</style>
     </div>
   );
 };
 
-export default DownloadStockReport;
+export default DownloadDamagedProductReport;

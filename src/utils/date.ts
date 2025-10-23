@@ -28,9 +28,28 @@ const formatDate = (dateString?: string | Date | undefined) => {
   return date.toLocaleDateString("en-US", { month: "short", year: "numeric", day: "numeric" });
 };
 
+const formatDateTime = (
+  dateInput?: string | Date | undefined,
+  options: Partial<Intl.DateTimeFormatOptions> = {}
+): string => {
+  if (!dateInput) return "";
+  const date = new Date(dateInput);
+
+  return date.toLocaleString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    ...options,
+  });
+};
+
 const dateUtils = {
   formatSecondsToMMSS,
   formateCreateOrUpdateDate,
   formatDate,
+  formatDateTime,
 };
 export default dateUtils;

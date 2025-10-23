@@ -14,7 +14,7 @@ const CookiePolicy = () => {
 
           <div className="space-y-[16px] p-[16px] text-[12px] md:text-[16px]">
             <p>
-              This Cookie Policy explains how TailorTech Limited (&quot;Company&quot;,
+              This Cookie Policy explains how Tailortech Limited (&quot;Company&quot;,
               &quot;we&quot;, &quot;us&quot;, and &quot;our&quot;) uses cookies and similar
               technologies to recognize you when you visit our websites at{" "}
               <Link href="/" className="text-blue-600 hover:underline">
@@ -41,7 +41,7 @@ const CookiePolicy = () => {
             </p>
 
             <p>
-              Cookies set by the website owner (in this case, TailorTech Limited) are called
+              Cookies set by the website owner (in this case, Tailortech Limited) are called
               &quot;first-party cookies&quot;. Cookies set by parties other than the website owner
               are called &quot;third-party cookies&quot;. Third-party cookies enable third-party
               features or functionality to be provided on or through the website (e.g. like
@@ -140,7 +140,7 @@ const CookiePolicy = () => {
 
           <div className="space-y-[16px] p-[16px] text-[12px] md:text-[16px]">
             <p>
-              এই কুকি নীতি ব্যাখ্যা করে যে TailorTech Limited (&quot;কোম্পানি&quot;,
+              এই কুকি নীতি ব্যাখ্যা করে যে Tailortech Limited (&quot;কোম্পানি&quot;,
               &quot;আমরা&quot;, &quot;আমাদের&quot;) কীভাবে কুকি এবং অনুরূপ প্রযুক্তি ব্যবহার করে
               আপনাকে চিনতে পারে যখন আপনি আমাদের ওয়েবসাইট{" "}
               <Link href="/" className="text-blue-600 hover:underline">
@@ -166,7 +166,7 @@ const CookiePolicy = () => {
 
             <p>
               ওয়েবসাইট মালিক দ্বারা সেট করা কুকিগুলিকে &quot;ফার্স্ট-পার্টি কুকি&quot; বলা হয় (এই
-              ক্ষেত্রে, TailorTech Limited)। ওয়েবসাইট মালিক ছাড়া অন্য পক্ষ দ্বারা সেট করা
+              ক্ষেত্রে, Tailortech Limited)। ওয়েবসাইট মালিক ছাড়া অন্য পক্ষ দ্বারা সেট করা
               কুকিগুলিকে &quot;থার্ড-পার্টি কুকি&quot; বলা হয়। থার্ড-পার্টি কুকি ওয়েবসাইটে বা এর
               মাধ্যমে তৃতীয় পক্ষের বৈশিষ্ট্য বা কার্যকারিতা প্রদান করতে সক্ষম করে (যেমন বিজ্ঞাপন,
               ইন্টারেক্টিভ কন্টেন্ট এবং বিশ্লেষণ)। এই তৃতীয় পক্ষের কুকি সেট করার পক্ষগুলি আপনার

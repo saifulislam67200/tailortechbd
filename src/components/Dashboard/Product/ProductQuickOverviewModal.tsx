@@ -1,7 +1,9 @@
 "use client";
+
 import ProductDetailsSlider from "@/components/productDetails/ProductDetailSlider";
 import ProductSizeChart from "@/components/productDetails/ProductSizeChart";
 import RestockRequestModal from "@/components/productDetails/RestockRequestModal";
+import AddToCartErrorMessage from "@/components/Shared/AddToCartErrorMessage";
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
@@ -10,11 +12,10 @@ import { addToCart } from "@/redux/features/cart/cartSlice";
 import { useGetProductByProductSlugQuery } from "@/redux/features/product/product.api";
 import { useGetAllReviewByProductIdQuery } from "@/redux/features/review/review.api";
 import { IColor, IProduct, ISize } from "@/types/product";
-import { cloneElement, isValidElement, ReactElement, ReactNode, useState } from "react";
+import { cloneElement, isValidElement, ReactElement, ReactNode, useEffect, useState } from "react";
 import { FaEye, FaSpinner } from "react-icons/fa";
 import { IoIosStar } from "react-icons/io";
 import { LuX } from "react-icons/lu";
-import { toast } from "sonner";
 
 interface Props {
   children?: ReactNode;
@@ -23,6 +24,7 @@ interface Props {
 }
 
 const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllStockOut }: Props) => {
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
   const slug = clickedProduct?.slug || "";
@@ -40,12 +42,8 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
     skip: !slug || !isOpen,
   });
 
-  const [activeColor = product?.colors?.[0], setActiveColor] = useState<IColor | undefined>(
-    product?.colors?.[0]
-  );
-  const [activeSize = activeColor?.sizes?.[0], setActiveSize] = useState<ISize | undefined>(
-    activeColor?.sizes?.[0]
-  );
+  const [activeColor, setActiveColor] = useState<IColor | undefined>();
+  const [activeSize, setActiveSize] = useState<ISize | undefined>();
   const [activeQuantity, setActiveQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
 
@@ -68,7 +66,6 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
   const handleColorChange = (color: IColor) => {
     setActiveColor(color);
     setSelectedColor(color);
-    setActiveSize(color.sizes?.[0]);
   };
 
   // Reset quantity when size changes
@@ -78,12 +75,31 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
     setActiveQuantity(quantity);
   };
 
-  const handleAddToCart = () => {
-    if (!activeColor || !activeSize) {
-      return toast.error("Please select a color and size.", {
-        id: "productSelectionToastId",
-      });
+  useEffect(() => {
+    if (activeColor && !activeSize) {
+      setErrorMessage("Please select a size.");
     }
+    if (activeColor && activeSize) {
+      setErrorMessage("");
+    }
+  }, [activeColor, activeSize]);
+
+  const handleAddToCart = () => {
+    if (!activeColor && !activeSize) {
+      setErrorMessage("Please select a color and size.");
+      return;
+    }
+
+    if (!activeColor) {
+      setErrorMessage("Please select a color.");
+      return;
+    }
+
+    if (!activeSize) {
+      setErrorMessage("Please select a size.");
+      return;
+    }
+
     const payload = {
       discount: product?.discount,
       id: `${product._id}-${activeColor!.color.trim()}-${activeSize!.size.trim()}`,
@@ -258,6 +274,10 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
                   </div>
                 </div>
 
+                {errorMessage && (
+                  <AddToCartErrorMessage className="mt-[10px]" errorMessage={errorMessage} />
+                )}
+
                 {activeSize && !activeSize.stock ? (
                   <p className="mt-[10px] mb-[5px] text-[15px] font-[600] text-danger">
                     Sorry this size is currently out of stock
@@ -266,7 +286,7 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
                   ""
                 )}
 
-                {activeSize && !activeSize.stock ? (
+                {activeColor && activeSize && !activeSize.stock ? (
                   <RestockRequestModal
                     color={activeColor?.color ?? ""}
                     size={activeSize.size}
