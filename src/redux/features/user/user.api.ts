@@ -41,7 +41,7 @@ const userApi = api.injectEndpoints({
     }),
     forgotPassword: builder.mutation<
       { data: null },
-      { email?: string; phoneNumber?: string; mode?: "email" | "phoneNumber" }
+      {emailOrPhone:string;  mode?: "email" | "phoneNumber" }
     >({
       query: (data) => ({
         url: "/user/forgot-password",

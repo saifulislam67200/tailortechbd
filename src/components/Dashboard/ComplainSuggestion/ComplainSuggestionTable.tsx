@@ -1,7 +1,6 @@
 "use client";
 
 import DeleteComplainAndSuggestionById from "@/components/Account/ComplainAndSuggestion/DeleteComplainAndSuggestoinById";
-import Button from "@/components/ui/Button";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Pagination from "@/components/ui/Pagination";
 import TableDataNotFound from "@/components/ui/TableDataNotFound";
@@ -11,7 +10,6 @@ import { useGetAllComplaintSuggestionQuery } from "@/redux/features/order/order.
 import dateUtils from "@/utils/date";
 import { useRef, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { IoPrintSharp } from "react-icons/io5";
 import { RxMagnifyingGlass } from "react-icons/rx";
 import TakeActionOnComplainSuggestion from "./TakeActionOnComplainSuggestion";
 export const tableHead = [
@@ -79,10 +77,10 @@ export default function ComplainSuggestionTable() {
           />
           <RxMagnifyingGlass />
         </div>
-        <Button type="button">
+        {/* <Button type="button">
           <IoPrintSharp className="mr-2" />
           Print
-        </Button>
+        </Button> */}
       </div>
 
       {/* Printable area */}

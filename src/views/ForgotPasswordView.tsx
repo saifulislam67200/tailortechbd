@@ -35,9 +35,10 @@ const ForgotPasswordView = () => {
     }
 
     try {
+      const phoneNumber = `${country?.dial_code}${values.phoneNumber}`;
+      const emailOrPhone = mode === "email" ? values.email : phoneNumber;
       const res = await forgotPassword({
-        email: values.email,
-        phoneNumber: values.phoneNumber,
+        emailOrPhone:emailOrPhone,
         mode,
       });
       const error = res.error as IQueruMutationErrorResponse;
