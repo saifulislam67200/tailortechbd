@@ -41,7 +41,7 @@ const userApi = api.injectEndpoints({
     }),
     forgotPassword: builder.mutation<
       { data: null },
-      {emailOrPhone:string;  mode?: "email" | "phoneNumber" }
+      { emailOrPhone: string; mode?: "email" | "phoneNumber" }
     >({
       query: (data) => ({
         url: "/user/forgot-password",
@@ -56,6 +56,18 @@ const userApi = api.injectEndpoints({
     >({
       query: (data) => ({
         url: "/user/reset-password",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["user"],
+    }),
+
+    resetPhonePassword: builder.mutation<
+      { data: { phone: string, password: string } },
+      { phone: string, password: string }
+    >({
+      query: (data) => ({
+        url: "/user/reset-phone-password",
         method: "POST",
         body: data,
       }),
@@ -119,4 +131,5 @@ export const {
   useLogoutUserMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useResetPhonePasswordMutation
 } = userApi;
