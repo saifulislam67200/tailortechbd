@@ -9,15 +9,19 @@ import { twMerge } from "tailwind-merge";
 type InputProps = InputHTMLAttributes<HTMLInputElement>;
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ type = "text", className, ...props }, ref) => {
+  ({ type = "text", className, value, onChange, ...props }, ref) => {
     const [showPass, setShowPass] = useState(false);
     const isPassword = type === "password";
     const inputType = isPassword && showPass ? "text" : type;
+
+    const inputValue = value !== undefined ? value : onChange ? "" : undefined;
 
     const inputElement = (
       <input
         ref={ref}
         type={inputType}
+        {...(inputValue !== undefined && { value: inputValue })}
+        onChange={onChange}
         className={twMerge(
           "w-full appearance-none border-[1px] border-border-main bg-white bg-clip-padding px-[12px] py-[6px] text-base text-[12px] font-normal text-strong outline-none",
           className

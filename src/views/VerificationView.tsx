@@ -12,7 +12,7 @@ import { IQueruMutationErrorResponse } from "@/types";
 import dateUtils from "@/utils/date";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsFillPhoneFill } from "react-icons/bs";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
@@ -26,9 +26,13 @@ const VerificationView = () => {
   const router = useRouter();
 
   const dispatch = useDispatch();
+  const hasSentOtp = useRef(false);
 
   // send OTP on mount
   useEffect(() => {
+    if (hasSentOtp.current) return;
+    
+    hasSentOtp.current = true;
     const sendOtp = async () => {
       const response = await sendVerificationOTP(undefined);
       const serverCooldownEnd = response?.data?.data?.cooldownEnd;
@@ -40,7 +44,7 @@ const VerificationView = () => {
       }
     };
     sendOtp();
-  }, []);
+  }, [sendVerificationOTP]);
 
   // countdown timer effect
   useEffect(() => {

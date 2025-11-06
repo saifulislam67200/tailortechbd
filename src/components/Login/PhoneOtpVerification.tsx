@@ -117,7 +117,9 @@ const PhoneOtpVerification = ({
         return;
       }
 
-      toast.success("Password reset successfully!");
+      toast.success("Password reset successfully!", {
+        description: "Please login with your new password",
+      });
       router.push("/login");
     } catch {
       toast.error("An unexpected error occurred");

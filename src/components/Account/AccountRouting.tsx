@@ -2,6 +2,7 @@
 import { useAppSelector } from "@/hooks/redux";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Fragment } from "react";
 export const routes = [
   {
     name: "Orders",
@@ -31,17 +32,16 @@ const AccountRouting = () => {
     <div className="w-full border-[1px] border-border-muted bg-white p-[4px]">
       <div className="flex w-full flex-col border-[1px] border-border-main">
         {routes.map((route) => (
-          <>
+          <Fragment key={route.path}>
             {route.role === "*" || route.role == user?.role ? (
               <Link
                 href={route.path}
-                key={route.path}
                 className={`center w-full border-b-[1px] border-border-main px-[20px] py-[5px] font-[700] ${route.path === path ? "bg-primary-foreground text-white" : ""}`}
               >
                 {route.name}
               </Link>
             ) : null}
-          </>
+          </Fragment>
         ))}
       </div>
     </div>
