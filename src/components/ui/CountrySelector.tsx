@@ -22,12 +22,11 @@ const CountrySelector = ({ onCountrySelect }: { onCountrySelect: (country: ICoun
 
   useEffect(() => {
     onCountrySelect(defaultCountry);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSelect = (item: ISelectOption) => {
-    const selectedCountry = countries.data?.find(
-      (c) => c.dial_code === item.value && c.name === item.label
-    );
+    const selectedCountry = countries.data?.find((c) => c.dial_code === item.value);
     if (selectedCountry) {
       onCountrySelect(selectedCountry);
     }

@@ -40,7 +40,7 @@ const VerificationView = () => {
       }
     };
     sendOtp();
-  }, [sendVerificationOTP]);
+  }, []);
 
   // countdown timer effect
   useEffect(() => {
@@ -129,7 +129,7 @@ const VerificationView = () => {
               `Resend in ${dateUtils.formatSecondsToMMSS(remainingTime)}`
             ) : (
               <button
-                onClick={handleResend}
+                onClick={() => handleResend()}
                 disabled={remainingTime > 0}
                 className="cursor-pointer font-[700]"
               >
