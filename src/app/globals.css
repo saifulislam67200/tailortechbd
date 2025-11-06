@@ -141,6 +141,11 @@ input[type="number"] {
   display: none; /* Chrome, Safari, Opera */
 }
 
+/* === REACT DATEPICKER === */
+.react-datepicker__day--selected {
+  background-color: var(--primary) !important;
+}
+
 /* === WEEK DAYS === */
 .rmdp-week-day {
   color: var(--primary-foreground) !important;

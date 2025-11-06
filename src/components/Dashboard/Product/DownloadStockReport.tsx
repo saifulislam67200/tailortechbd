@@ -8,27 +8,30 @@ import {
   useLazyGetProductStockQuery,
 } from "@/redux/features/product/product.api";
 import { IProductStock } from "@/types/product";
-import { formatCurrency } from "@/utils/currency";
 import dateUtils from "@/utils/date";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { PiPrinterFill, PiDownloadSimple } from "react-icons/pi";
-import { Calendar, DateObject } from "react-multi-date-picker";
 import { useReactToPrint } from "react-to-print";
 import { toast } from "sonner";
 import CategorySelector from "./CategorySelector";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
+import DateRange from "../DateRange";
 
 const stockTableHeaders = [
   { label: "SL" },
-  { label: "Product Code" },
+  { label: "Code" },
   { label: "Category" },
   { label: "Sub Category" },
-  { label: "Product Name" },
+  { label: "Name" },
   { label: "Size" },
   { label: "Color" },
+  { label: "Opening Stock" },
+  { label: "Sales Qty" },
+  { label: "Damaged Qty" },
   { label: "Current Stock" },
   { label: "Unit Price" },
+  { label: "Offer Price" },
   { label: "Total Price" },
   { label: "Stock Status" },
 ];
@@ -60,9 +63,9 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
 
-  const [values, setValues] = useState([
-    new DateObject().subtract(1, "days"),
-    new DateObject().add(6, "days"),
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
+    new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+    new Date(),
   ]);
 
   const [trigger, { data, isFetching, isError }] = useLazyGetProductStockQuery({ ...stockQuery });
@@ -70,18 +73,22 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
   const stocks: IProductStock[] = data?.data || [];
 
   const handleFetch = async () => {
+    if (!dateRange[0] || !dateRange[1]) {
+      toast.error("Please select both start and end dates");
+      return;
+    }
+
     const res = await trigger({
       limit: 100000,
-      startDate: values[0].format(),
-      endDate: values[1].format(),
+      startDate: dateRange[0].toISOString(),
+      endDate: dateRange[1].toISOString(),
       ...reportFilters,
       ...(selectedCategoryId ? { categoryId: selectedCategoryId } : {}),
       ...(selectedSize ? { size: selectedSize } : {}),
       ...(selectedColor ? { color: selectedColor } : {}),
-      // fields
       fields:
         reportFilters?.fields ||
-        "sku,category,subCategory,productName,size,color,price,createdAt,stock,status",
+        "sku,category,subCategory,productName,size,color,price,createdAt,stock,status,openingStock,salesQty,damagedQty,currentStock,offerPrice,totalPrice,discount",
     });
 
     if (!res.data?.data?.length) {
@@ -91,6 +98,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
       setShowReport(true);
     }
   };
+
   const unique = (arr: Array<string | undefined | null>) =>
     Array.from(new Set(arr.filter(Boolean))) as string[];
 
@@ -113,14 +121,31 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
     });
   }, [stocks, selectedSize, selectedColor]);
 
-  const { totalUnits, totalAmount } = useMemo(() => {
-    const units = displayedStocks.reduce((sum, c) => sum + (Number(c.stock) || 0), 0);
-    const amount = displayedStocks.reduce(
-      (sum, c) => sum + Number(c.price || 0) * Number(c.stock || 0),
-      0
-    );
-    return { totalUnits: units, totalAmount: amount };
-  }, [displayedStocks]);
+  const { totalAmount, totalOpeningStock, totalSalesQty, totalDamagedQty, totalCurrentStock } =
+    useMemo(() => {
+      const amount = displayedStocks.reduce((sum, c) => {
+        const currentStock = Number(c.currentStock ?? c.stock) || 0;
+        const price = Number(c.offerPrice) || Number(c.price) || 0;
+        return sum + currentStock * price;
+      }, 0);
+      const openingStock = displayedStocks.reduce(
+        (sum, c) => sum + (Number(c.openingStock ?? c.stock) || 0),
+        0
+      );
+      const salesQty = displayedStocks.reduce((sum, c) => sum + (Number(c.salesQty) || 0), 0);
+      const damagedQty = displayedStocks.reduce((sum, c) => sum + (Number(c.damagedQty) || 0), 0);
+      const currentStock = displayedStocks.reduce(
+        (sum, c) => sum + (Number(c.currentStock ?? c.stock) || 0),
+        0
+      );
+      return {
+        totalAmount: amount,
+        totalOpeningStock: openingStock,
+        totalSalesQty: salesQty,
+        totalDamagedQty: damagedQty,
+        totalCurrentStock: currentStock,
+      };
+    }, [displayedStocks]);
 
   const printRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({
@@ -142,98 +167,84 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
     setSelectedSize("");
     setSelectedColor("");
     setResetKey((k) => k + 1);
-    setValues([new DateObject().subtract(1, "days"), new DateObject().add(6, "days")]);
+    setDateRange([
+      new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+      new Date(),
+    ]);
   };
 
   const handleDownloadPdf = async () => {
     try {
       const el = printRef.current;
       if (!el) return;
-
-      // Render the entire report area to a canvas
+  
+      // Render to canvas (for full width capture)
       const canvas = await html2canvas(el, {
-        scale: 2, // crisp text
+        scale: 2,
         useCORS: true,
         allowTaint: true,
         backgroundColor: "#ffffff",
         windowWidth: document.documentElement.scrollWidth,
       });
-
-      // PDF settings
-      const orientation: "p" | "l" = "p"; // change to "l" for landscape if you prefer
+  
+      // 👉 Change orientation to landscape (horizontal)
+      const orientation: "p" | "l" = "l"; // <-- "l" means landscape
       const pdf = new jsPDF(orientation, "mm", "a4");
-
+  
       const pageWidthMM = pdf.internal.pageSize.getWidth();
       const pageHeightMM = pdf.internal.pageSize.getHeight();
-      const marginMM = 8; // left/right/top/bottom
-
-      // Drawable area inside margins
+      const marginMM = 8;
       const contentWidthMM = pageWidthMM - marginMM * 2;
       const contentHeightMM = pageHeightMM - marginMM * 2;
-
-      // Canvas sizes (px)
+  
       const canvasWidthPX = canvas.width;
       const canvasHeightPX = canvas.height;
-
-      // How many canvas pixels fit into 1mm at the chosen scale?
-      // We will scale the image so its width fits contentWidthMM
       const pxPerMM = canvasWidthPX / contentWidthMM;
-
-      // Height of one PDF page in canvas pixels (inside margins)
       const pageHeightPX = contentHeightMM * pxPerMM;
-
-      // A helper canvas we’ll reuse to crop page slices
+  
       const pageCanvas = document.createElement("canvas");
       const pageCtx = pageCanvas.getContext("2d")!;
       pageCanvas.width = canvasWidthPX;
       pageCanvas.height = Math.min(pageHeightPX, canvasHeightPX);
-
+  
       let rendered = 0;
       let pageIndex = 0;
-
+  
       while (rendered < canvasHeightPX) {
-        // Height for this slice (last slice may be shorter)
         const sliceHeightPX = Math.min(pageHeightPX, canvasHeightPX - rendered);
-
-        // Resize helper canvas if last slice is shorter
-        if (pageCanvas.height !== sliceHeightPX) {
-          pageCanvas.height = sliceHeightPX;
-        }
-
-        // Clear and draw slice from the big canvas
+        if (pageCanvas.height !== sliceHeightPX) pageCanvas.height = sliceHeightPX;
+  
         pageCtx.clearRect(0, 0, pageCanvas.width, pageCanvas.height);
         pageCtx.drawImage(
           canvas,
-          /* sx, sy, sw, sh */ 0,
+          0,
           rendered,
           canvasWidthPX,
           sliceHeightPX,
-          /* dx, dy, dw, dh */ 0,
+          0,
           0,
           canvasWidthPX,
           sliceHeightPX
         );
-
+  
         const imgData = pageCanvas.toDataURL("image/png");
-
         if (pageIndex > 0) pdf.addPage();
-
-        // Add the slice as an image that fits the content box
+  
         pdf.addImage(
           imgData,
           "PNG",
           marginMM,
           marginMM,
           contentWidthMM,
-          sliceHeightPX / pxPerMM // convert px back to mm for height
+          sliceHeightPX / pxPerMM
         );
-
+  
         rendered += sliceHeightPX;
         pageIndex += 1;
       }
-
-      const start = values[0].format("YYYYMMDD");
-      const end = values[1].format("YYYYMMDD");
+  
+      const start = dateRange[0]?.toISOString().split("T")[0].replace(/-/g, "") || "unknown";
+      const end = dateRange[1]?.toISOString().split("T")[0].replace(/-/g, "") || "unknown";
       pdf.save(`Product_Stock_Report_${start}-${end}.pdf`);
     } catch (e) {
       toast.error("Failed to generate PDF");
@@ -247,7 +258,11 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
         Stock Report
       </Button>
 
-      <DialogProvider state={openModal} setState={setOpenModal} className="w-full max-w-[1000px]">
+      <DialogProvider
+        state={openModal}
+        setState={setOpenModal}
+        className={`w-full max-w-[1000px] ${!showReport && "overflow-visible"}`}
+      >
         <div className="w-full rounded-[10px] bg-white">
           <h4 className="p-3 text-[20px] font-[700] text-primary">Product Stock Report</h4>
           <HorizontalLine className="my-[10px]" />
@@ -299,13 +314,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
               {/* Date range */}
               <div className="flex flex-col gap-2">
                 <span className="text-[15px] font-[600]">Date Range</span>
-                <Calendar
-                  range
-                  numberOfMonths={2}
-                  className="mx-auto"
-                  value={values}
-                  onChange={setValues}
-                />
+                <DateRange value={dateRange} onChange={setDateRange} />
               </div>
 
               {/* Actions */}
@@ -336,7 +345,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                 </Button>
                 <Button onClick={() => setShowReport(false)}>Change Date / Filters</Button>
 
-                {/* Active filter pills (read-only) */}
+                {/* Active filter pills */}
                 <div className="ml-auto flex flex-wrap items-center gap-2 text-xs">
                   {selectedCategoryId && (
                     <span className="rounded bg-primary/10 px-2 py-1 text-primary">
@@ -364,15 +373,43 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                 <div className="mb-4 text-center">
                   <h2 className="text-[22px] font-bold text-primary">Product Stock Report</h2>
                   <p className="text-sm text-gray-600">
-                    Product stock report of <b>{values[0].format("MMM DD, YYYY")}</b> to{" "}
-                    <b>{values[1].format("MMM DD, YYYY")}</b>
+                    Product stock report of{" "}
+                    <b>
+                      {dateRange[0]?.toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "2-digit",
+                        year: "numeric",
+                      })}
+                    </b>{" "}
+                    to{" "}
+                    <b>
+                      {dateRange[1]?.toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "2-digit",
+                        year: "numeric",
+                      })}
+                    </b>
                   </p>
                 </div>
 
                 {/* Info Bar */}
                 <div className="mb-4 rounded-md border border-primary/20 bg-primary/10 p-3 text-sm text-primary">
-                  Showing product stocks from <b>{values[0].format("MMM DD, YYYY")}</b> to{" "}
-                  <b>{values[1].format("MMM DD, YYYY")}</b>
+                  Showing product stocks from{" "}
+                  <b>
+                    {dateRange[0]?.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "2-digit",
+                      year: "numeric",
+                    })}
+                  </b>{" "}
+                  to{" "}
+                  <b>
+                    {dateRange[1]?.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "2-digit",
+                      year: "numeric",
+                    })}
+                  </b>
                   {(selectedCategoryId || selectedSize || selectedColor) && (
                     <>
                       {" "}
@@ -387,61 +424,116 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                 </div>
 
                 {/* TABLE */}
-                <div className="overflow-x-auto rounded-md border border-gray-200">
-                  <table className="w-full min-w-[900px] text-sm">
-                    <thead className="bg-primary/10 text-primary">
+                <div className="overflow-x-auto rounded-md border border-gray-200 stock-report-container">
+                  <table className="w-full print:min-w-[1100px] min-w-[1300px] text-sm stock-report-table">
+                    {/* lock column widths for thead/tbody/tfoot */}
+                    <colgroup>
+                      <col style={{ width: "40px" }} />
+                      <col style={{ width: "90px" }} />
+                      <col style={{ width: "120px" }} />
+                      <col style={{ width: "120px" }} className="print:hidden" />
+                      <col style={{ width: "160px" }} />
+                      <col style={{ width: "70px" }} />
+                      <col style={{ width: "90px" }} />
+                      <col style={{ width: "110px" }} />
+                      <col style={{ width: "90px" }} />
+                      <col style={{ width: "110px" }} />
+                      <col style={{ width: "110px" }} />
+                      <col style={{ width: "110px" }} />
+                      <col style={{ width: "110px" }} />
+                      <col style={{ width: "130px" }} />
+                      <col style={{ width: "120px" }} />
+                    </colgroup>
+
+                    <thead className="bg-primary/10 text-primary stock-report-thead">
                       <tr>
                         {stockTableHeaders.map((h) => (
-                          <th key={h.label} className="px-3 py-2 text-left">
+                          <th
+                            key={h.label}
+                            className={`px-1 py-2 text-left print:max-w-[40px] stock-report-th ${
+                              h.label === "Sub Category" ? "print:hidden" : ""
+                            } ${h.label === "Offer Price" ? "print:max-w-[25px]" : ""} ${
+                              h.label === "Total Price" ? "print:max-w-[25px]" : ""
+                            } ${h.label === "Size" ? "print:max-w-[7px]" : ""} ${
+                              h.label === "Color" ? "print:max-w-[10px]" : ""
+                            }`}
+                          >
                             {h.label}
                           </th>
                         ))}
                       </tr>
                     </thead>
-                    <tbody>
+
+                    <tbody className="stock-report-tbody">
                       {displayedStocks.map((p, index) => (
                         <tr key={p._id} className="odd:bg-white even:bg-gray-50">
-                          <td className="px-3 py-2">{index + 1}</td>
-                          <td className="px-3 py-2">{p.sku || "N/A"}</td>
-                          <td className="px-3 py-2">
+                          <td className="px-1 py-2">{index + 1}</td>
+                          <td className="px-1 py-2 print:max-w-[50px]">{p.sku || "N/A"}</td>
+                          <td className="px-1 py-2 line-clamp-1 max-w-[60px]">
                             {typeof p.category === "object" &&
                             p.category !== null &&
                             "label" in p.category
                               ? (p.category as { label: string }).label
                               : typeof p.category === "string"
-                                ? p.category
-                                : "N/A"}
+                              ? p.category
+                              : "N/A"}
                           </td>
-                          <td className="px-3 py-2">{p.subCategory || "N/A"}</td>
-                          <td className="px-3 py-2">
-                            <span title={p.productName} className="line-clamp-1">
+                          <td className="px-1 py-2 print:hidden">{p.subCategory || "N/A"}</td>
+                          <td className="px-1 py-2">
+                            <span title={p.productName} className="line-clamp-1 max-w-[70px]">
                               {p.productName || "-"}
                             </span>
                           </td>
-                          <td className="px-3 py-2">{p.size || "N/A"}</td>
-                          <td className="px-3 py-2">{p.color || "N/A"}</td>
-                          <td className="px-3 py-2">{p.stock ?? "0"}</td>
-                          <td className="px-3 py-2 text-right">
-                            {formatCurrency(Number(p.price || 0))}
+                          <td className="px-1 py-2 print:max-w-[7px]">{p.size || "N/A"}</td>
+                          <td className="px-1 py-2 print:max-w-[10px]">{p.color || "N/A"}</td>
+                          <td className="px-1 py-2">{p.openingStock ?? p.stock ?? "0"}</td>
+                          <td className="px-1 py-2">{p.salesQty ?? "0"}</td>
+                          <td className="px-1 py-2">{p.damagedQty ?? "0"}</td>
+                          <td className="px-1 py-2">{p.currentStock ?? p.stock ?? "0"}</td>
+                          <td className="px-1 py-2 text-left">৳ {p.price || 0}</td>
+                          <td className="px-1 py-2 text-left print:max-w-[25px]">
+                            {p.offerPrice ? `৳ ${p.offerPrice}` : "N/A"}
                           </td>
-                          <td className="px-3 py-2 text-right">
-                            {formatCurrency(Number(p.price || 0) * Number(p.stock || 0))}
+                          <td className="px-1 py-2 text-left print:max-w-[25px]">
+                            ৳ {p.totalPrice || 0}
                           </td>
-                          <td className="px-3 py-2 capitalize">
+                          <td className="px-1 py-2 capitalize">
                             {p.status ? p.status.replace(/-/g, " ") : "N/A"}
                           </td>
                         </tr>
                       ))}
                     </tbody>
-                    <tfoot>
-                      <tr className="bg-primary/10 font-semibold text-primary">
-                        <td className="px-3 py-2" colSpan={7}>
+
+                    {/* FOOTER inside the same table for perfect alignment */}
+                    <tfoot className="stock-report-tfoot">
+                      {/* Screen footer (Sub Category visible) */}
+                      <tr className="bg-primary/10 font-semibold text-primary print:hidden">
+                        <td className="px-1 py-2" colSpan={7}>
                           Totals
                         </td>
-                        <td className="px-3 py-2">{totalUnits}</td>
-                        <td className="px-3 py-2 text-right"></td>
-                        <td className="px-3 py-2 text-right">{formatCurrency(totalAmount)}</td>
-                        <td className="px-3 py-2"></td>
+                        <td className="px-1 py-2">{totalOpeningStock}</td>
+                        <td className="px-1 py-2">{totalSalesQty}</td>
+                        <td className="px-1 py-2">{totalDamagedQty}</td>
+                        <td className="px-1 py-2">{totalCurrentStock}</td>
+                        <td className="px-1 py-2"></td>
+                        <td className="px-1 py-2"></td>
+                        <td className="px-1 py-2 text-left">৳ {totalAmount.toFixed(2)}</td>
+                        <td className="px-1 py-2"></td>
+                      </tr>
+
+                      {/* Print footer (Sub Category hidden) */}
+                      <tr className="hidden print:table-row bg-primary/10 font-semibold text-primary">
+                        <td className="px-1 py-2" colSpan={6}>
+                          Totals
+                        </td>
+                        <td className="px-1 py-2">{totalOpeningStock}</td>
+                        <td className="px-1 py-2">{totalSalesQty}</td>
+                        <td className="px-1 py-2">{totalDamagedQty}</td>
+                        <td className="px-1 py-2">{totalCurrentStock}</td>
+                        <td className="px-1 py-2"></td>
+                        <td className="px-1 py-2"></td>
+                        <td className="px-1 py-2 text-left">৳ {totalAmount.toFixed(2)}</td>
+                        <td className="px-1 py-2"></td>
                       </tr>
                     </tfoot>
                   </table>
@@ -457,23 +549,50 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
       </DialogProvider>
 
       <style jsx global>{`
+        /* Remove header dividers - apply to all states */
+        .stock-report-table thead.stock-report-thead th.stock-report-th {
+          border-right: none !important;
+          border-left: none !important;
+          border-top: none !important;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+        }
+
+        /* Make tfoot band look clean and prevent misalignment */
+        .stock-report-tfoot td {
+          border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
         @media print {
           .print\\:hidden {
             display: none !important;
           }
-          .print\\:break-inside-avoid {
-            break-inside: avoid;
-            page-break-inside: avoid;
+          .print\\:table-row {
+            display: table-row !important;
           }
-          body {
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
+
+          /* Prevent clipping; respect colgroup widths */
+          .stock-report-container {
+            overflow: visible !important;
           }
-          table thead {
-            display: table-header-group;
+          .stock-report-table {
+            border-collapse: collapse;
+            table-layout: fixed;
+            width: 100% !important;
+            min-width: 0 !important;
           }
-          table tfoot {
-            display: table-row-group;
+
+          /* Keep totals together */
+          .stock-report-tfoot tr {
+            break-inside: avoid !important;
+            page-break-inside: avoid !important;
+          }
+
+          /* Aggressive: remove stray borders in thead on print */
+          .stock-report-table thead.stock-report-thead th.stock-report-th,
+          .stock-report-table thead th,
+          table.stock-report-table thead th {
+            border: none !important;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
           }
         }
       `}</style>

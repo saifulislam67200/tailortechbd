@@ -65,7 +65,8 @@ const ProductStockTable = () => {
     ...stockQuery,
     search: searchTerm,
     limit: 10,
-    ...dateRange,
+    startDate: dateRange.startDate ? dateRange.startDate.toISOString() : undefined,
+    endDate: dateRange.endDate ? dateRange.endDate.toISOString() : undefined,
   });
 
   const products: IProductStock[] = stockData?.data || [];
@@ -304,20 +305,20 @@ const ProductStockTable = () => {
 
                     {/* opening stock */}
                     <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">{product.stock || "0"}</span>
+                      <span className="text-[14px]">{product.openingStock ?? product.stock ?? "0"}</span>
                     </td>
 
                     {/* sales qty */}
                     <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">sales qty</span>
+                      <span className="text-[14px]">{product.salesQty ?? "0"}</span>
                     </td>
                     {/* damaged qty */}
                     <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">damaged qty</span>
+                      <span className="text-[14px]">{product.damagedQty ?? "0"}</span>
                     </td>
                     {/* current stock */}
                     <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]"></span>
+                      <span className="text-[14px]">{product.currentStock ?? product.stock ?? "0"}</span>
                     </td>
                     {/* unit price */}
                     <td className="border border-border-main px-6 py-3">
@@ -325,12 +326,14 @@ const ProductStockTable = () => {
                     </td>
                     {/* discount price */}
                     <td className="border border-border-main px-6 py-3">
-                      {/* <span className="text-[14px]">৳ {product.price - product.price * (product.discount / 100)}</span> */}
+                      <span className="text-[14px]">
+                        {product.offerPrice ? `৳ ${Math.round(product.offerPrice)}` : "N/A"}
+                      </span>
                     </td>
                     {/* total price */}
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px}">
-                        ৳ {Math.round((product.price || 0) * (product.stock || 0))}
+                    <td className="border border-border-main px-3 py-3">
+                      <span className="text-[14px]">
+                        ৳ {Math.round(product.totalPrice ?? (product.price || 0) * (product.stock || 0))}
                       </span>
                     </td>
                     <td className="border border-border-main px-6 py-3">
