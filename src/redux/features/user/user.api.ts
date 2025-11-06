@@ -63,8 +63,8 @@ const userApi = api.injectEndpoints({
     }),
 
     resetPhonePassword: builder.mutation<
-      { data: { phone: string, password: string } },
-      { phone: string, password: string }
+      { data: { phoneNumber: string; password: string } },
+      { phoneNumber: string; password: string }
     >({
       query: (data) => ({
         url: "/user/reset-phone-password",
@@ -131,5 +131,5 @@ export const {
   useLogoutUserMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
-  useResetPhonePasswordMutation
+  useResetPhonePasswordMutation,
 } = userApi;
