@@ -122,7 +122,7 @@ const DamagedProductTable = () => {
                   {stockTableHeaders.map((header) => (
                     <th
                       key={header.field || header.label}
-                      className="px-6 py-3 text-left text-sm font-semibold text-dashboard"
+                      className="px-3 py-3 text-left text-sm font-semibold text-dashboard"
                     >
                       {header.field ? (
                         <button
@@ -162,19 +162,19 @@ const DamagedProductTable = () => {
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   //@ts-ignore
                   productStocks.map((product, index) => (
-                    <tr key={product?._id + index} className="hover:bg-gray-50">
+                    <tr key={product?._id + index} className="hover:bg-gray-50 text-left">
                       {/* index */}
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-4">
                         <span className="text-[14px]">{index + 1}</span>
                       </td>
 
                       {/* product code */}
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-4">
                         <span className="text-[14px]">{product?.productCode || "N/A"}</span>
                       </td>
 
                       {/* category */}
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-4">
                         <span className="text-[14px]">
                           {typeof product?.category === "string"
                             ? product?.category
@@ -182,13 +182,13 @@ const DamagedProductTable = () => {
                         </span>
                       </td>
 
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-4">
                         <span className="text-[14px]">{product?.subCategory?.label || "N/A"}</span>
                       </td>
 
                       {/* product name */}
                       <td
-                        className="cursor-pointer px-6 py-4"
+                        className="cursor-pointer px-3 py-4"
                         onClick={() => viewProductDetails(product.slug)}
                       >
                         <span className="flex flex-col gap-[5px]">
@@ -199,27 +199,27 @@ const DamagedProductTable = () => {
                       </td>
 
                       {/* size */}
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-4">
                         <span className="text-[14px]">{product.size || "N/A"}</span>
                       </td>
 
                       {/* color */}
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-4">
                         <span className="text-[14px]">{product.color || "N/A"}</span>
                       </td>
 
                       {/* price */}
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-4">
                         <span className="text-[13px]">৳ {product.price}</span>
                       </td>
 
                       {/* status */}
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-4">
                         <span className="text-red-400">Damaged</span>
                       </td>
 
                       {/* damaged qty */}
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-4">
                         <span className="text-[14px]">{product.quantity || "N/A"}</span>
                       </td>
 

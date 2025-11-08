@@ -26,7 +26,7 @@ const ComplainAndSuggestionTable = ({
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[900px] border-collapse">
+        <table className="w-full min-w-[850px] border-collapse text-sm">
           <thead>
             <tr className="bg-solid-slab text-strong [&>th]:px-3 [&>th]:py-2 [&>th]:text-left">
               {/* <th>Timestamp</th>
@@ -61,11 +61,21 @@ const ComplainAndSuggestionTable = ({
                   <td className="px-3 py-2">{c.priority}</td>
                   <td className="px-3 py-2">{c.satisfaction}</td>
                   <td className="px-3 py-2">{c.status}</td>
-                  <td title={c.message} className="max-w-[360px] px-3 py-2">
-                    <span className="line-clamp-3 whitespace-pre-wrap">{c.message}</span>
+                  <td className="max-w-[300px] px-3 py-2">
+                    <span 
+                      title={c.message} 
+                      className="line-clamp-2 whitespace-pre-wrap block overflow-hidden text-ellipsis"
+                    >
+                      {c.message}
+                    </span>
                   </td>
-                  <td title={c.actionTaken} className="max-w-[360px] px-3 py-2">
-                    <span className="line-clamp-3 whitespace-pre-wrap">{c.actionTaken}</span>
+                  <td className="max-w-[300px] px-3 py-2">
+                    <span 
+                      title={c.actionTaken} 
+                      className="line-clamp-2 whitespace-pre-wrap block overflow-hidden text-ellipsis"
+                    >
+                      {c.actionTaken}
+                    </span>
                   </td>
                   <td className="px-3 py-2">
                     <span className="flex items-center gap-2">
