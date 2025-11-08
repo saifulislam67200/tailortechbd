@@ -178,14 +178,28 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
       const el = printRef.current;
       if (!el) return;
   
+      // Add PDF-specific class to hide sub category and apply print-like styles
+      el.classList.add("pdf-mode");
+      
+      // Wait a bit for styles to apply
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      
+      // Get table element to ensure full width capture
+      const tableEl = el.querySelector('.stock-report-table') as HTMLElement;
+      const tableWidth = tableEl ? Math.max(tableEl.scrollWidth, 1400) : document.documentElement.scrollWidth;
+      
       // Render to canvas (for full width capture)
       const canvas = await html2canvas(el, {
         scale: 2,
         useCORS: true,
         allowTaint: true,
         backgroundColor: "#ffffff",
-        windowWidth: document.documentElement.scrollWidth,
+        width: tableWidth,
+        windowWidth: tableWidth,
       });
+      
+      // Remove the class after capturing
+      el.classList.remove("pdf-mode");
   
       // 👉 Change orientation to landscape (horizontal)
       const orientation: "p" | "l" = "l"; // <-- "l" means landscape
@@ -193,7 +207,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
   
       const pageWidthMM = pdf.internal.pageSize.getWidth();
       const pageHeightMM = pdf.internal.pageSize.getHeight();
-      const marginMM = 8;
+      const marginMM = 4; // Reduced from 8 to 4 for less left/right margin
       const contentWidthMM = pageWidthMM - marginMM * 2;
       const contentHeightMM = pageHeightMM - marginMM * 2;
   
@@ -560,6 +574,99 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
         /* Make tfoot band look clean and prevent misalignment */
         .stock-report-tfoot td {
           border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        /* PDF mode styles - hide sub category and make table smaller like print */
+        /* Hide only Sub Category column (4th column) */
+        .pdf-mode .stock-report-table colgroup col:nth-child(4),
+        .pdf-mode .stock-report-table thead th:nth-child(4),
+        .pdf-mode .stock-report-table tbody td:nth-child(4) {
+          display: none !important;
+        }
+        /* Ensure all other columns are visible - especially after Current Stock */
+        /* Unit Price (12th), Offer Price (13th), Total Price (14th), Stock Status (15th) */
+        .pdf-mode .stock-report-table thead th:nth-child(12),
+        .pdf-mode .stock-report-table thead th:nth-child(13),
+        .pdf-mode .stock-report-table thead th:nth-child(14),
+        .pdf-mode .stock-report-table thead th:nth-child(15),
+        .pdf-mode .stock-report-table tbody td:nth-child(12),
+        .pdf-mode .stock-report-table tbody td:nth-child(13),
+        .pdf-mode .stock-report-table tbody td:nth-child(14),
+        .pdf-mode .stock-report-table tbody td:nth-child(15) {
+          display: table-cell !important;
+          visibility: visible !important;
+        }
+        /* Hide screen footer, show print footer in PDF mode */
+        .pdf-mode .stock-report-table tfoot tr:first-child {
+          display: none !important;
+        }
+        .pdf-mode .stock-report-table tfoot tr.hidden {
+          display: table-row !important;
+        }
+        .pdf-mode .stock-report-container {
+          overflow: visible !important;
+          width: 100% !important;
+        }
+        .pdf-mode .stock-report-table {
+          border-collapse: collapse;
+          table-layout: fixed;
+          width: 100% !important;
+          min-width: 1400px !important;
+          font-size: 10px !important;
+        }
+        /* Ensure all columns are visible in PDF mode */
+        .pdf-mode .stock-report-table th,
+        .pdf-mode .stock-report-table td {
+          display: table-cell !important;
+          visibility: visible !important;
+          font-size: 10px !important;
+          padding: 2px 4px !important;
+        }
+        .pdf-mode .stock-report-tfoot tr {
+          break-inside: avoid !important;
+          page-break-inside: avoid !important;
+        }
+        /* Reduce font size for headers and other text in PDF mode */
+        .pdf-mode h2 {
+          font-size: 18px !important;
+          text-align: center !important;
+        }
+        .pdf-mode p,
+        .pdf-mode span {
+          font-size: 11px !important;
+        }
+        .pdf-mode img {
+          width: 120px !important;
+          display: block !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
+        }
+        /* Center header section and info bar in PDF mode - but not table */
+        /* Center header div with h2 */
+        .pdf-mode > div > div.mb-4.text-center {
+          text-align: center !important;
+        }
+        /* Center info bar text */
+        .pdf-mode > div > div[class*="rounded-md"][class*="border"][class*="bg-primary"] {
+          text-align: center !important;
+        }
+        .pdf-mode > div > div[class*="rounded-md"][class*="border"][class*="bg-primary"] span,
+        .pdf-mode > div > div[class*="rounded-md"][class*="border"][class*="bg-primary"] b {
+          text-align: center !important;
+        }
+        /* Center all paragraphs in PDF mode (but not in table) */
+        .pdf-mode > div > div > p {
+          text-align: center !important;
+        }
+        /* Don't center table content - override any center styles */
+        .pdf-mode .stock-report-container,
+        .pdf-mode .stock-report-table,
+        .pdf-mode .stock-report-table th,
+        .pdf-mode .stock-report-table td,
+        .pdf-mode .stock-report-table tbody,
+        .pdf-mode .stock-report-table thead,
+        .pdf-mode .stock-report-table tfoot {
+          text-align: left !important;
         }
 
         @media print {
