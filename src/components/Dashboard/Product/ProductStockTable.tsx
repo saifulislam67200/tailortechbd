@@ -232,7 +232,7 @@ const ProductStockTable = () => {
         </div>
         {/* table */}
         <div className="overflow-x-auto" ref={tableRef}>
-          <table className="w-full border border-border-main">
+          <table className="w-full border border-border-main product-stock-table">
             <thead>
               <tr className="bg-dashboard/10">
                 {stockTableHeaders.map((header) => (
@@ -240,7 +240,7 @@ const ProductStockTable = () => {
                     rowSpan={header.rowSpan}
                     key={header.field || header.label}
                     className={twMerge(
-                      "border border-border-main px-6 py-3 text-left text-sm font-semibold text-dashboard"
+                      "border border-border-main px-6 py-3 text-left text-sm font-semibold text-dashboard print:px-2 print:py-1 print:text-[10px]"
                     )}
                   >
                     {header.field ? (
@@ -264,16 +264,16 @@ const ProductStockTable = () => {
               ) : displayedProducts.length ? (
                 displayedProducts.map((product: IProductStock, index: number) => (
                   <tr key={product?._id + index} className="">
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">{index + 1}</span>
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
+                      <span className="text-[14px] print:text-[10px]">{index + 1}</span>
                     </td>
 
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">{product?.sku || "N/A"}</span>
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
+                      <span className="text-[14px] print:text-[10px]">{product?.sku || "N/A"}</span>
                     </td>
 
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
+                      <span className="text-[14px] print:text-[10px]">
                         {typeof product?.category === "object" &&
                         product?.category !== null &&
                         "label" in product.category
@@ -284,61 +284,61 @@ const ProductStockTable = () => {
                       </span>
                     </td>
 
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">{product?.subCategory || "N/A"}</span>
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
+                      <span className="text-[14px] print:text-[10px]">{product?.subCategory || "N/A"}</span>
                     </td>
 
                     {/* product name */}
-                    <td className="border border-border-main px-6 py-3">
-                      <span title={product.productName} className="line-clamp-1 text-[14px]">
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
+                      <span title={product.productName} className="line-clamp-1 max-w-[50px] text-[14px] print:text-[10px]">
                         {product.productName}{" "}
                       </span>
                     </td>
 
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">{product.size || "N/A"}</span>
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
+                      <span className="text-[14px] print:text-[10px]">{product.size || "N/A"}</span>
                     </td>
 
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">{product.color || "N/A"}</span>
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
+                      <span className="text-[14px] print:text-[10px]">{product.color || "N/A"}</span>
                     </td>
 
                     {/* opening stock */}
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">{product.openingStock ?? product.stock ?? "0"}</span>
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
+                      <span className="text-[14px] print:text-[10px]">{product.openingStock ?? product.stock ?? "0"}</span>
                     </td>
 
                     {/* sales qty */}
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">{product.salesQty ?? "0"}</span>
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
+                      <span className="text-[14px] print:text-[10px]">{product.salesQty ?? "0"}</span>
                     </td>
                     {/* damaged qty */}
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">{product.damagedQty ?? "0"}</span>
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
+                      <span className="text-[14px] print:text-[10px]">{product.damagedQty ?? "0"}</span>
                     </td>
                     {/* current stock */}
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">{product.currentStock ?? product.stock ?? "0"}</span>
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
+                      <span className="text-[14px] print:text-[10px]">{product.currentStock ?? product.stock ?? "0"}</span>
                     </td>
                     {/* unit price */}
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">৳ {product.price}</span>
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
+                      <span className="text-[14px] print:text-[10px]">৳ {product.price}</span>
                     </td>
                     {/* discount price */}
-                    <td className="border border-border-main px-6 py-3">
-                      <span className="text-[14px]">
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1 text-left">
+                      <span className="text-[14px] print:text-[10px]">
                         {product.offerPrice ? `৳ ${Math.round(product.offerPrice)}` : "N/A"}
                       </span>
                     </td>
                     {/* total price */}
-                    <td className="border border-border-main px-3 py-3">
-                      <span className="text-[14px]">
+                    <td className="border border-border-main px-3 py-3 print:px-2 print:py-1">
+                      <span className="text-[14px] print:text-[10px]">
                         ৳ {Math.round(product.totalPrice ?? (product.price || 0) * (product.stock || 0))}
                       </span>
                     </td>
-                    <td className="border border-border-main px-6 py-3">
+                    <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
                       <span
-                        className={`text-[14px] capitalize ${
+                        className={`text-[14px] print:text-[10px] capitalize ${
                           product.status === "in-stock"
                             ? "text-green-500"
                             : product.status === "low-stock"
@@ -370,6 +370,21 @@ const ProductStockTable = () => {
         page={stockMetaData.page}
         onPageChange={(page) => setStockQuery({ ...stockQuery, page })}
       />
+      <style jsx global>{`
+        @media print {
+          .product-stock-table {
+            font-size: 10px !important;
+          }
+          .product-stock-table th,
+          .product-stock-table td {
+            padding: 2px 4px !important;
+            font-size: 10px !important;
+          }
+          .product-stock-table th {
+            font-weight: 600 !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

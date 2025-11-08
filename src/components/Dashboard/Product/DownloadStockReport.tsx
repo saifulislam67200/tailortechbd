@@ -464,7 +464,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                         {stockTableHeaders.map((h) => (
                           <th
                             key={h.label}
-                            className={`px-1 py-2 text-left print:max-w-[40px] stock-report-th ${
+                            className={`px-1 py-2 text-left print:max-w-[40px] print:px-1 print:py-1 print:text-[10px] stock-report-th ${
                               h.label === "Sub Category" ? "print:hidden" : ""
                             } ${h.label === "Offer Price" ? "print:max-w-[25px]" : ""} ${
                               h.label === "Total Price" ? "print:max-w-[25px]" : ""
@@ -481,9 +481,9 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                     <tbody className="stock-report-tbody">
                       {displayedStocks.map((p, index) => (
                         <tr key={p._id} className="odd:bg-white even:bg-gray-50">
-                          <td className="px-1 py-2">{index + 1}</td>
-                          <td className="px-1 py-2 print:max-w-[50px]">{p.sku || "N/A"}</td>
-                          <td className="px-1 py-2 line-clamp-1 max-w-[60px]">
+                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{index + 1}</td>
+                          <td className="px-1 py-2 print:max-w-[50px] print:px-1 print:py-1 print:text-[10px]">{p.sku || "N/A"}</td>
+                          <td className="px-1 py-2 line-clamp-1 max-w-[60px] print:px-1 print:py-1 print:text-[10px]">
                             {typeof p.category === "object" &&
                             p.category !== null &&
                             "label" in p.category
@@ -493,25 +493,25 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                               : "N/A"}
                           </td>
                           <td className="px-1 py-2 print:hidden">{p.subCategory || "N/A"}</td>
-                          <td className="px-1 py-2">
+                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
                             <span title={p.productName} className="line-clamp-1 max-w-[70px]">
                               {p.productName || "-"}
                             </span>
                           </td>
-                          <td className="px-1 py-2 print:max-w-[7px]">{p.size || "N/A"}</td>
-                          <td className="px-1 py-2 print:max-w-[10px]">{p.color || "N/A"}</td>
-                          <td className="px-1 py-2">{p.openingStock ?? p.stock ?? "0"}</td>
-                          <td className="px-1 py-2">{p.salesQty ?? "0"}</td>
-                          <td className="px-1 py-2">{p.damagedQty ?? "0"}</td>
-                          <td className="px-1 py-2">{p.currentStock ?? p.stock ?? "0"}</td>
-                          <td className="px-1 py-2 text-left">৳ {p.price || 0}</td>
-                          <td className="px-1 py-2 text-left print:max-w-[25px]">
+                          <td className="px-1 py-2 print:max-w-[7px] print:px-1 print:py-1 print:text-[10px]">{p.size || "N/A"}</td>
+                          <td className="px-1 py-2 print:max-w-[10px] print:px-1 print:py-1 print:text-[10px]">{p.color || "N/A"}</td>
+                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.openingStock ?? p.stock ?? "0"}</td>
+                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.salesQty ?? "0"}</td>
+                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.damagedQty ?? "0"}</td>
+                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.currentStock ?? p.stock ?? "0"}</td>
+                          <td className="px-1 py-2 text-left print:px-1 print:py-1 print:text-[10px]">৳ {p.price || 0}</td>
+                          <td className="px-1 py-2 text-left print:max-w-[25px] print:px-1 print:py-1 print:text-[10px]">
                             {p.offerPrice ? `৳ ${p.offerPrice}` : "N/A"}
                           </td>
-                          <td className="px-1 py-2 text-left print:max-w-[25px]">
+                          <td className="px-1 py-2 text-left print:max-w-[25px] print:px-1 print:py-1 print:text-[10px]">
                             ৳ {p.totalPrice || 0}
                           </td>
-                          <td className="px-1 py-2 capitalize">
+                          <td className="px-1 py-2 capitalize print:px-1 print:py-1 print:text-[10px]">
                             {p.status ? p.status.replace(/-/g, " ") : "N/A"}
                           </td>
                         </tr>
@@ -522,32 +522,32 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                     <tfoot className="stock-report-tfoot">
                       {/* Screen footer (Sub Category visible) */}
                       <tr className="bg-primary/10 font-semibold text-primary print:hidden">
-                        <td className="px-1 py-2" colSpan={7}>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]" colSpan={7}>
                           Totals
                         </td>
-                        <td className="px-1 py-2">{totalOpeningStock}</td>
-                        <td className="px-1 py-2">{totalSalesQty}</td>
-                        <td className="px-1 py-2">{totalDamagedQty}</td>
-                        <td className="px-1 py-2">{totalCurrentStock}</td>
-                        <td className="px-1 py-2"></td>
-                        <td className="px-1 py-2"></td>
-                        <td className="px-1 py-2 text-left">৳ {totalAmount.toFixed(2)}</td>
-                        <td className="px-1 py-2"></td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalOpeningStock}</td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalSalesQty}</td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalDamagedQty}</td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalCurrentStock}</td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"></td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"></td>
+                        <td className="px-1 py-2 text-left print:px-1 print:py-1 print:text-[10px]">৳ {totalAmount.toFixed(2)}</td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"></td>
                       </tr>
 
                       {/* Print footer (Sub Category hidden) */}
                       <tr className="hidden print:table-row bg-primary/10 font-semibold text-primary">
-                        <td className="px-1 py-2" colSpan={6}>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]" colSpan={6}>
                           Totals
                         </td>
-                        <td className="px-1 py-2">{totalOpeningStock}</td>
-                        <td className="px-1 py-2">{totalSalesQty}</td>
-                        <td className="px-1 py-2">{totalDamagedQty}</td>
-                        <td className="px-1 py-2">{totalCurrentStock}</td>
-                        <td className="px-1 py-2"></td>
-                        <td className="px-1 py-2"></td>
-                        <td className="px-1 py-2 text-left">৳ {totalAmount.toFixed(2)}</td>
-                        <td className="px-1 py-2"></td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalOpeningStock}</td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalSalesQty}</td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalDamagedQty}</td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalCurrentStock}</td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"></td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"></td>
+                        <td className="px-1 py-2 text-left print:px-1 print:py-1 print:text-[10px]">৳ {totalAmount.toFixed(2)}</td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"></td>
                       </tr>
                     </tfoot>
                   </table>
@@ -619,8 +619,8 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
         .pdf-mode .stock-report-table td {
           display: table-cell !important;
           visibility: visible !important;
-          font-size: 10px !important;
-          padding: 2px 4px !important;
+          font-size: 9px !important;
+          padding: 1px 3px !important;
         }
         .pdf-mode .stock-report-tfoot tr {
           break-inside: avoid !important;
@@ -700,6 +700,19 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
           table.stock-report-table thead th {
             border: none !important;
             border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+          }
+          
+          /* Reduce all text sizes for print */
+          .stock-report-table {
+            font-size: 10px !important;
+          }
+          .stock-report-table th,
+          .stock-report-table td {
+            font-size: 10px !important;
+            padding: 2px 4px !important;
+          }
+          .stock-report-table th {
+            font-weight: 600 !important;
           }
         }
       `}</style>

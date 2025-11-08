@@ -12,8 +12,8 @@ const ComplainAndSuggestionView = () => {
   >(undefined);
 
   return (
-    <div className="rounded-md border border-border-main bg-white p-[18px] md:p-[32px]">
-      <h2 className="mb-[15px] text-[20px] font-bold text-primary md:mb-[24px] md:text-[30px]">
+    <div className="rounded-md border border-border-main bg-white p-[18px] md:p-[24px]">
+      <h2 className="mb-[15px] text-[18px] font-bold text-primary md:mb-[16px] md:text-[24px]">
         Complain & Suggestion Box
       </h2>
 

@@ -11,6 +11,8 @@ export interface IDamageProduct {
   causeOfDamage: string;
   image: string;
   price: number;
+  offerPrice?: number | null;
+  totalPrice?: number;
   color: string;
   size: string;
   category?: string | ICategory;
