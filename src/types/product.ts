@@ -56,7 +56,6 @@ export interface IProductStock {
   openingStock: number;
   salesQty: number;
   damagedQty: number;
-  currentStock: number;
   offerPrice: number | null;
   totalPrice: number;
   discount: number;

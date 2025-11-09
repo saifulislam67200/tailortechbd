@@ -51,7 +51,7 @@ const ResetPasswordView = ({ slug }: { slug: string }) => {
   };
 
   return (
-    <div className="main_container min-h-[60dvh] py-[20px]">
+    <div className="main_container min-h-[60dvh] py-[20px] overflow-y-auto">
       <FormCard headerButtons={[{ title: "Reset Password" }]} className="mt-[20px]">
         <Formik
           initialValues={{ password: "", confirmPassword: "" }}

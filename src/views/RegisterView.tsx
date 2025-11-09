@@ -23,7 +23,7 @@ const RegisterView = () => {
   }, [isLoading, user, router]);
   
   return (
-    <div className="main_container flex h-[60vh] w-full flex-col gap-[20px] py-[20px]">
+    <div className="main_container flex h-[80dvh] w-full flex-col gap-[20px] py-[20px] overflow-y-auto">
       <Breadcrumb />
       <RegisterForm />
     </div>

@@ -84,9 +84,9 @@ const DeleteProductById = ({
                 className="mb-2 block text-sm font-medium text-gray-700"
               >
                 Type{" "}
-                <span className="rounded bg-danger/10 px-1 py-0.5 font-mono text-xs text-danger">
+                <div className="rounded bg-danger/10 px-1 py-0.5 font-mono text-xs text-danger inline-block">
                   DELETE
-                </span>{" "}
+                </div>{" "}
                 to confirm:
               </label>
               <input
