@@ -94,7 +94,7 @@ const ForgotPasswordView = () => {
   };
 
   return (
-    <div className="main_container flex min-h-[60dvh] w-full flex-col gap-[20px] py-[20px]">
+    <div className="main_container flex min-h-[80dvh] w-full flex-col gap-[20px] py-[20px] overflow-y-auto">
       <Breadcrumb />
       {!isSent ? (
         <FormCard

@@ -35,6 +35,7 @@ const initialValues: Omit<
   discount: 0,
   tag: "",
   category: "",
+  fabric: "",
   video: "",
   images: [],
   videoThumbnail: "",
@@ -93,11 +94,13 @@ export default function ProductForm({
 }) {
   const initValue = defaultValue
     ? {
+        ...initialValues,
         ...defaultValue,
         category:
           typeof defaultValue.category == "string"
             ? defaultValue.category
             : defaultValue.category?._id,
+        fabric: defaultValue.fabric || "",
       }
     : undefined;
 
@@ -165,8 +168,8 @@ export default function ProductForm({
                 <div className="flex w-full flex-col gap-[5px]">
                   <label className={labelClass}>Fabric</label>
                   <Field as={Input} name="fabric" placeholder="Fabric" />
-                  {touched.fabric && errors.fabric && (
-                    <span className="text-danger">{errors.fabric}</span>
+                  {(touched.fabric || submitCount > 0) && errors.fabric && (
+                    <span className="text-sm text-danger">{errors.fabric}</span>
                   )}
                 </div>
               </div>

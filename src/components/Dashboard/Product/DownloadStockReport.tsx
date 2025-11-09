@@ -124,18 +124,18 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
   const { totalAmount, totalOpeningStock, totalSalesQty, totalDamagedQty, totalCurrentStock } =
     useMemo(() => {
       const amount = displayedStocks.reduce((sum, c) => {
-        const currentStock = Number(c.currentStock ?? c.stock) || 0;
+        const currentStock = Number(c.stock) || 0;
         const price = Number(c.offerPrice) || Number(c.price) || 0;
         return sum + currentStock * price;
       }, 0);
       const openingStock = displayedStocks.reduce(
-        (sum, c) => sum + (Number(c.openingStock ?? c.stock) || 0),
+        (sum, c) => sum + (Number(c.openingStock) || 0),
         0
       );
       const salesQty = displayedStocks.reduce((sum, c) => sum + (Number(c.salesQty) || 0), 0);
       const damagedQty = displayedStocks.reduce((sum, c) => sum + (Number(c.damagedQty) || 0), 0);
       const currentStock = displayedStocks.reduce(
-        (sum, c) => sum + (Number(c.currentStock ?? c.stock) || 0),
+        (sum, c) => sum + (Number(c.stock) || 0),
         0
       );
       return {
@@ -503,7 +503,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                           <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.openingStock ?? p.stock ?? "0"}</td>
                           <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.salesQty ?? "0"}</td>
                           <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.damagedQty ?? "0"}</td>
-                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.currentStock ?? p.stock ?? "0"}</td>
+                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.stock ?? "0"}</td>
                           <td className="px-1 py-2 text-left print:px-1 print:py-1 print:text-[10px]">৳ {p.price || 0}</td>
                           <td className="px-1 py-2 text-left print:max-w-[25px] print:px-1 print:py-1 print:text-[10px]">
                             {p.offerPrice ? `৳ ${p.offerPrice}` : "N/A"}
