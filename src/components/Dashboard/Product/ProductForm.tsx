@@ -31,6 +31,7 @@ const initialValues: Omit<
   </ul>
   `,
   chart: [],
+  buyingPrice: 0,
   price: 0,
   discount: 0,
   tag: "",
@@ -53,6 +54,7 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required("Product name is required"),
   description: Yup.string().required("Description is required"),
   quickOverview: Yup.string().required("Quick Overview is required"),
+  buyingPrice: Yup.number().required("Buying Price is required").min(0, "Buying Price must be >= 0"),
   price: Yup.number().required("Price is required").min(0, "Price must be >= 0"),
   discount: Yup.number().min(0).max(100),
   tag: Yup.string(),
@@ -94,14 +96,14 @@ export default function ProductForm({
 }) {
   const initValue = defaultValue
     ? {
-        ...initialValues,
-        ...defaultValue,
-        category:
-          typeof defaultValue.category == "string"
-            ? defaultValue.category
-            : defaultValue.category?._id,
-        fabric: defaultValue.fabric || "",
-      }
+      ...initialValues,
+      ...defaultValue,
+      category:
+        typeof defaultValue.category == "string"
+          ? defaultValue.category
+          : defaultValue.category?._id,
+      fabric: defaultValue.fabric || "",
+    }
     : undefined;
 
   return (
@@ -126,8 +128,16 @@ export default function ProductForm({
 
               <div className="flex w-full flex-col items-start justify-start gap-[16px] sm:flex-row">
                 <div className="flex w-full flex-col gap-[5px]">
-                  <label className={labelClass}>Price</label>
-                  <Field as={Input} name="price" type="number" placeholder="Price" />
+                  <label className={labelClass}>Buying Price</label>
+                  <Field as={Input} name="buyingPrice" type="number" placeholder="Buying Price" />
+                  {touched.buyingPrice && errors.buyingPrice && (
+                    <span className="text-danger">{errors.buyingPrice}</span>
+                  )}
+                </div>
+
+                <div className="flex w-full flex-col gap-[5px]">
+                  <label className={labelClass}>Selling Price</label>
+                  <Field as={Input} name="price" type="number" placeholder="Selling Price" />
                   {touched.price && errors.price && (
                     <span className="text-danger">{errors.price}</span>
                   )}

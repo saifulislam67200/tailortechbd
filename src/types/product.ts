@@ -19,6 +19,7 @@ export interface IProduct {
   slug: string;
   description: string;
   quickOverview?: string;
+  buyingPrice?: number;
   price: number;
   brand: string;
   colors: IColor[];
