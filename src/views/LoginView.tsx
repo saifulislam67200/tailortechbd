@@ -8,7 +8,7 @@ import { useState } from "react";
 const LoginView = () => {
   const [loginMode, setLoginMode] = useState<"phoneNumber" | "email">("phoneNumber");
   return (
-    <div className="main_container flex h-[80dvh] flex-col gap-[16px] py-[20px] overflow-y-auto">
+    <div className="main_container flex h-[80dvh] flex-col gap-[16px] overflow-y-auto py-[20px]">
       <Breadcrumb />
       <FormCard
         headerButtons={[

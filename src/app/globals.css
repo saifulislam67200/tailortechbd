@@ -141,6 +141,12 @@ input[type="number"] {
   display: none; /* Chrome, Safari, Opera */
 }
 
+.quick-overview {
+  ol {
+    @apply list-inside list-disc;
+  }
+}
+
 /* === REACT DATEPICKER === */
 .react-datepicker__day--selected {
   background-color: var(--primary) !important;

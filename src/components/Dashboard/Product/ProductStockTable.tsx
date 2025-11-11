@@ -69,10 +69,7 @@ const ProductStockTable = () => {
     endDate: dateRange.endDate ? dateRange.endDate.toISOString() : undefined,
   });
 
-  const products: IProductStock[] = useMemo(
-    () => stockData?.data || [],
-    [stockData?.data]
-  );
+  const products: IProductStock[] = useMemo(() => stockData?.data || [], [stockData?.data]);
   const stockMetaData = stockData?.meta || { totalDoc: 0, page: 1, limit: 10 };
 
   const handleSort = (field: string) => {
@@ -320,16 +317,12 @@ const ProductStockTable = () => {
 
                     {/* sales qty */}
                     <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
-                      <span className="text-[14px] print:text-[10px]">
-                        {product.salesQty}
-                      </span>
+                      <span className="text-[14px] print:text-[10px]">{product.salesQty}</span>
                     </td>
 
                     {/* damaged qty */}
                     <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">
-                      <span className="text-[14px] print:text-[10px]">
-                        {product.damagedQty}
-                      </span>
+                      <span className="text-[14px] print:text-[10px]">{product.damagedQty}</span>
                     </td>
 
                     {/* current stock */}
@@ -352,10 +345,7 @@ const ProductStockTable = () => {
                     {/* total price */}
                     <td className="border border-border-main px-3 py-3 print:px-2 print:py-1">
                       <span className="text-[14px] print:text-[10px]">
-                        ৳{" "}
-                        {Math.round(
-                          product.totalPrice
-                        )}
+                        ৳ {Math.round(product.totalPrice)}
                       </span>
                     </td>
                     <td className="border border-border-main px-6 py-3 print:px-2 print:py-1">

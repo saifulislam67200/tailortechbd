@@ -54,7 +54,9 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required("Product name is required"),
   description: Yup.string().required("Description is required"),
   quickOverview: Yup.string().required("Quick Overview is required"),
-  buyingPrice: Yup.number().required("Buying Price is required").min(0, "Buying Price must be >= 0"),
+  buyingPrice: Yup.number()
+    .required("Buying Price is required")
+    .min(0, "Buying Price must be >= 0"),
   price: Yup.number().required("Price is required").min(0, "Price must be >= 0"),
   discount: Yup.number().min(0).max(100),
   tag: Yup.string(),
@@ -96,14 +98,14 @@ export default function ProductForm({
 }) {
   const initValue = defaultValue
     ? {
-      ...initialValues,
-      ...defaultValue,
-      category:
-        typeof defaultValue.category == "string"
-          ? defaultValue.category
-          : defaultValue.category?._id,
-      fabric: defaultValue.fabric || "",
-    }
+        ...initialValues,
+        ...defaultValue,
+        category:
+          typeof defaultValue.category == "string"
+            ? defaultValue.category
+            : defaultValue.category?._id,
+        fabric: defaultValue.fabric || "",
+      }
     : undefined;
 
   return (

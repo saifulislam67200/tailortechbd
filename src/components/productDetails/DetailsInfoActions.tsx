@@ -185,13 +185,11 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
         ""
       )}
 
-      {product?.quickOverview ? (
+      {product?.quickOverview && (
         <div
           className="quick-overview mt-[10px] mb-[15px] text-primary"
-          dangerouslySetInnerHTML={{ __html: product?.quickOverview || "" }}
+          dangerouslySetInnerHTML={{ __html: product?.quickOverview }}
         />
-      ) : (
-        ""
       )}
       <p className="text-primary">
         <strong>Fabric Composition:</strong> {product?.fabric}

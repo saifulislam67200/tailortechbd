@@ -134,10 +134,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
       );
       const salesQty = displayedStocks.reduce((sum, c) => sum + (Number(c.salesQty) || 0), 0);
       const damagedQty = displayedStocks.reduce((sum, c) => sum + (Number(c.damagedQty) || 0), 0);
-      const currentStock = displayedStocks.reduce(
-        (sum, c) => sum + (Number(c.stock) || 0),
-        0
-      );
+      const currentStock = displayedStocks.reduce((sum, c) => sum + (Number(c.stock) || 0), 0);
       return {
         totalAmount: amount,
         totalOpeningStock: openingStock,
@@ -167,27 +164,26 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
     setSelectedSize("");
     setSelectedColor("");
     setResetKey((k) => k + 1);
-    setDateRange([
-      new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-      new Date(),
-    ]);
+    setDateRange([new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), new Date()]);
   };
 
   const handleDownloadPdf = async () => {
     try {
       const el = printRef.current;
       if (!el) return;
-  
+
       // Add PDF-specific class to hide sub category and apply print-like styles
       el.classList.add("pdf-mode");
-      
+
       // Wait a bit for styles to apply
       await new Promise((resolve) => setTimeout(resolve, 100));
-      
+
       // Get table element to ensure full width capture
-      const tableEl = el.querySelector('.stock-report-table') as HTMLElement;
-      const tableWidth = tableEl ? Math.max(tableEl.scrollWidth, 1400) : document.documentElement.scrollWidth;
-      
+      const tableEl = el.querySelector(".stock-report-table") as HTMLElement;
+      const tableWidth = tableEl
+        ? Math.max(tableEl.scrollWidth, 1400)
+        : document.documentElement.scrollWidth;
+
       // Render to canvas (for full width capture)
       const canvas = await html2canvas(el, {
         scale: 2,
@@ -197,37 +193,37 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
         width: tableWidth,
         windowWidth: tableWidth,
       });
-      
+
       // Remove the class after capturing
       el.classList.remove("pdf-mode");
-  
+
       // 👉 Change orientation to landscape (horizontal)
       const orientation: "p" | "l" = "l"; // <-- "l" means landscape
       const pdf = new jsPDF(orientation, "mm", "a4");
-  
+
       const pageWidthMM = pdf.internal.pageSize.getWidth();
       const pageHeightMM = pdf.internal.pageSize.getHeight();
       const marginMM = 4; // Reduced from 8 to 4 for less left/right margin
       const contentWidthMM = pageWidthMM - marginMM * 2;
       const contentHeightMM = pageHeightMM - marginMM * 2;
-  
+
       const canvasWidthPX = canvas.width;
       const canvasHeightPX = canvas.height;
       const pxPerMM = canvasWidthPX / contentWidthMM;
       const pageHeightPX = contentHeightMM * pxPerMM;
-  
+
       const pageCanvas = document.createElement("canvas");
       const pageCtx = pageCanvas.getContext("2d")!;
       pageCanvas.width = canvasWidthPX;
       pageCanvas.height = Math.min(pageHeightPX, canvasHeightPX);
-  
+
       let rendered = 0;
       let pageIndex = 0;
-  
+
       while (rendered < canvasHeightPX) {
         const sliceHeightPX = Math.min(pageHeightPX, canvasHeightPX - rendered);
         if (pageCanvas.height !== sliceHeightPX) pageCanvas.height = sliceHeightPX;
-  
+
         pageCtx.clearRect(0, 0, pageCanvas.width, pageCanvas.height);
         pageCtx.drawImage(
           canvas,
@@ -240,23 +236,16 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
           canvasWidthPX,
           sliceHeightPX
         );
-  
+
         const imgData = pageCanvas.toDataURL("image/png");
         if (pageIndex > 0) pdf.addPage();
-  
-        pdf.addImage(
-          imgData,
-          "PNG",
-          marginMM,
-          marginMM,
-          contentWidthMM,
-          sliceHeightPX / pxPerMM
-        );
-  
+
+        pdf.addImage(imgData, "PNG", marginMM, marginMM, contentWidthMM, sliceHeightPX / pxPerMM);
+
         rendered += sliceHeightPX;
         pageIndex += 1;
       }
-  
+
       const start = dateRange[0]?.toISOString().split("T")[0].replace(/-/g, "") || "unknown";
       const end = dateRange[1]?.toISOString().split("T")[0].replace(/-/g, "") || "unknown";
       pdf.save(`Product_Stock_Report_${start}-${end}.pdf`);
@@ -438,8 +427,8 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                 </div>
 
                 {/* TABLE */}
-                <div className="overflow-x-auto rounded-md border border-gray-200 stock-report-container">
-                  <table className="w-full print:min-w-[1100px] min-w-[1300px] text-sm stock-report-table">
+                <div className="stock-report-container overflow-x-auto rounded-md border border-gray-200">
+                  <table className="stock-report-table w-full min-w-[1300px] text-sm print:min-w-[1100px]">
                     {/* lock column widths for thead/tbody/tfoot */}
                     <colgroup>
                       <col style={{ width: "40px" }} />
@@ -459,14 +448,14 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                       <col style={{ width: "120px" }} />
                     </colgroup>
 
-                    <thead className="bg-primary/10 text-primary stock-report-thead">
+                    <thead className="stock-report-thead bg-primary/10 text-primary">
                       <tr>
                         {stockTableHeaders.map((h) => (
                           <th
                             key={h.label}
-                            className={`px-1 py-2 text-left print:max-w-[40px] print:px-1 print:py-1 print:text-[10px] stock-report-th ${
+                            className={`stock-report-th px-1 py-2 text-left print:max-w-[40px] print:px-1 print:py-1 print:text-[10px] ${
                               h.label === "Sub Category" ? "print:hidden" : ""
-                            } ${h.label === "Offer Price" ? "print:max-w-[25px]" : ""} ${
+                            } ${h.label === "Category" ? "text-center" : ""} ${h.label === "Offer Price" ? "print:max-w-[25px]" : ""} ${
                               h.label === "Total Price" ? "print:max-w-[25px]" : ""
                             } ${h.label === "Size" ? "print:max-w-[7px]" : ""} ${
                               h.label === "Color" ? "print:max-w-[10px]" : ""
@@ -481,30 +470,50 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                     <tbody className="stock-report-tbody">
                       {displayedStocks.map((p, index) => (
                         <tr key={p._id} className="odd:bg-white even:bg-gray-50">
-                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{index + 1}</td>
-                          <td className="px-1 py-2 print:max-w-[50px] print:px-1 print:py-1 print:text-[10px]">{p.sku || "N/A"}</td>
-                          <td className="px-1 py-2 line-clamp-1 max-w-[60px] print:px-1 print:py-1 print:text-[10px]">
+                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                            {index + 1}
+                          </td>
+                          <td className="px-1 py-2 print:max-w-[50px] print:px-1 print:py-1 print:text-[10px]">
+                            {p.sku || "N/A"}
+                          </td>
+                          <td className="line-clamp-1 max-w-[60px] px-1 py-2 text-center print:px-1 print:py-1 print:text-[10px]">
                             {typeof p.category === "object" &&
                             p.category !== null &&
                             "label" in p.category
                               ? (p.category as { label: string }).label
                               : typeof p.category === "string"
-                              ? p.category
-                              : "N/A"}
+                                ? p.category
+                                : "N/A"}
                           </td>
-                          <td className="px-1 py-2 print:hidden">{p.subCategory || "N/A"}</td>
+                          <td className="truncate px-1 py-2 print:hidden">
+                            {p.subCategory || "N/A"}
+                          </td>
                           <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
                             <span title={p.productName} className="line-clamp-1 max-w-[70px]">
                               {p.productName || "-"}
                             </span>
                           </td>
-                          <td className="px-1 py-2 print:max-w-[7px] print:px-1 print:py-1 print:text-[10px]">{p.size || "N/A"}</td>
-                          <td className="px-1 py-2 print:max-w-[10px] print:px-1 print:py-1 print:text-[10px]">{p.color || "N/A"}</td>
-                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.openingStock ?? p.stock ?? "0"}</td>
-                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.salesQty ?? "0"}</td>
-                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.damagedQty ?? "0"}</td>
-                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{p.stock ?? "0"}</td>
-                          <td className="px-1 py-2 text-left print:px-1 print:py-1 print:text-[10px]">৳ {p.price || 0}</td>
+                          <td className="px-1 py-2 print:max-w-[7px] print:px-1 print:py-1 print:text-[10px]">
+                            {p.size || "N/A"}
+                          </td>
+                          <td className="px-1 py-2 print:max-w-[10px] print:px-1 print:py-1 print:text-[10px]">
+                            {p.color || "N/A"}
+                          </td>
+                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                            {p.openingStock ?? p.stock ?? "0"}
+                          </td>
+                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                            {p.salesQty ?? "0"}
+                          </td>
+                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                            {p.damagedQty ?? "0"}
+                          </td>
+                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                            {p.stock ?? "0"}
+                          </td>
+                          <td className="px-1 py-2 text-left print:px-1 print:py-1 print:text-[10px]">
+                            ৳ {p.price || 0}
+                          </td>
                           <td className="px-1 py-2 text-left print:max-w-[25px] print:px-1 print:py-1 print:text-[10px]">
                             {p.offerPrice ? `৳ ${p.offerPrice}` : "N/A"}
                           </td>
@@ -522,31 +531,57 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                     <tfoot className="stock-report-tfoot">
                       {/* Screen footer (Sub Category visible) */}
                       <tr className="bg-primary/10 font-semibold text-primary print:hidden">
-                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]" colSpan={7}>
+                        <td
+                          className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"
+                          colSpan={7}
+                        >
                           Totals
                         </td>
-                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalOpeningStock}</td>
-                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalSalesQty}</td>
-                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalDamagedQty}</td>
-                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalCurrentStock}</td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          {totalOpeningStock}
+                        </td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          {totalSalesQty}
+                        </td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          {totalDamagedQty}
+                        </td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          {totalCurrentStock}
+                        </td>
                         <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"></td>
                         <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"></td>
-                        <td className="px-1 py-2 text-left print:px-1 print:py-1 print:text-[10px]">৳ {totalAmount.toFixed(2)}</td>
+                        <td className="px-1 py-2 text-left print:px-1 print:py-1 print:text-[10px]">
+                          ৳ {totalAmount.toFixed(2)}
+                        </td>
                         <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"></td>
                       </tr>
 
                       {/* Print footer (Sub Category hidden) */}
-                      <tr className="hidden print:table-row bg-primary/10 font-semibold text-primary">
-                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]" colSpan={6}>
+                      <tr className="hidden bg-primary/10 font-semibold text-primary print:table-row">
+                        <td
+                          className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"
+                          colSpan={6}
+                        >
                           Totals
                         </td>
-                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalOpeningStock}</td>
-                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalSalesQty}</td>
-                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalDamagedQty}</td>
-                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">{totalCurrentStock}</td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          {totalOpeningStock}
+                        </td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          {totalSalesQty}
+                        </td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          {totalDamagedQty}
+                        </td>
+                        <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          {totalCurrentStock}
+                        </td>
                         <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"></td>
                         <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"></td>
-                        <td className="px-1 py-2 text-left print:px-1 print:py-1 print:text-[10px]">৳ {totalAmount.toFixed(2)}</td>
+                        <td className="px-1 py-2 text-left print:px-1 print:py-1 print:text-[10px]">
+                          ৳ {totalAmount.toFixed(2)}
+                        </td>
                         <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"></td>
                       </tr>
                     </tfoot>
@@ -701,7 +736,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
             border: none !important;
             border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
           }
-          
+
           /* Reduce all text sizes for print */
           .stock-report-table {
             font-size: 10px !important;
