@@ -5,6 +5,7 @@ import Heading from "../ui/Heading";
 const About = () => {
   return (
     <div className="main_container flex min-h-[100dvh] w-full flex-col gap-[20px] py-[20px]">
+      {/* breadcrumb */}
       <Breadcrumb />
       <div className="bg-white p-[16px]">
         <Heading>About Us</Heading>
