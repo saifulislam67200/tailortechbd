@@ -119,7 +119,8 @@ const BarcodeGeneratorProductSelect = ({ product }: BarcodeGeneratorProductSelec
                     type="number"
                     placeholder="Number of barcodes"
                     className="w-full"
-                    defaultValue={numberOfBarcodes}
+                    // defaultValue={numberOfBarcodes}
+                    value={numberOfBarcodes}
                     onChange={(e) => {
                       const value = e.target.value;
                       setNumberOfBarcodes(value === "" ? undefined : Number(value));
