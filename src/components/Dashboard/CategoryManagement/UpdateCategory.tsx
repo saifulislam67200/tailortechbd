@@ -29,7 +29,7 @@ const UpdateCategory: React.FC<IProps> = ({ children, onSuccess, defaultValue, c
       .url("Invalid URL")
       .when("display", {
         is: true,
-        then: (schema) => schema.required("Thumbnail URL is required when visibility is enabled"),
+        then: (schema) => schema.required("Thumbnail is required when visibility is enabled"),
         otherwise: (schema) => schema.notRequired(),
       }),
     display: Yup.boolean(),
@@ -38,7 +38,7 @@ const UpdateCategory: React.FC<IProps> = ({ children, onSuccess, defaultValue, c
       .url("Invalid URL")
       .when("display", {
         is: true,
-        then: (schema) => schema.required("Banner URL is required when visibility is enabled"),
+        then: (schema) => schema.required("Banner is required when visibility is enabled"),
         otherwise: (schema) => schema.notRequired(),
       }),
     bannerDisplay: Yup.boolean(),
@@ -129,7 +129,7 @@ const UpdateCategory: React.FC<IProps> = ({ children, onSuccess, defaultValue, c
                     }}
                   >
                     <label htmlFor="thumbnail" className="block text-sm font-[700] text-primary">
-                      Thumbnail URL <span className="text-muted">(optional)</span>
+                      Thumbnail <span className="text-muted">(optional)</span>
                     </label>
                   </ImageUploader>
                   <ErrorMessage name="thumbnail" component="p" className="text-sm text-danger" />
@@ -180,7 +180,7 @@ const UpdateCategory: React.FC<IProps> = ({ children, onSuccess, defaultValue, c
                     }}
                   >
                     <label htmlFor="banner" className="block text-sm font-[700] text-primary">
-                      Banner URL <span className="text-muted">(optional)</span>
+                      Banner <span className="text-muted">(optional)</span>
                     </label>
                   </ImageUploader>
                   <ErrorMessage name="banner" component="p" className="text-sm text-danger" />

@@ -20,14 +20,14 @@ const CreateCategoryForm = () => {
       .url("Invalid URL")
       .when("display", {
         is: true,
-        then: (schema) => schema.required("Thumbnail URL is required when visibility is enabled"),
+        then: (schema) => schema.required("Thumbnail is required when visibility is enabled"),
         otherwise: (schema) => schema.notRequired(),
       }),
     banner: Yup.string()
       .url("Invalid URL")
       .when("display", {
         is: true,
-        then: (schema) => schema.required("Banner URL is required when visibility is enabled"),
+        then: (schema) => schema.required("Banner is required when visibility is enabled"),
         otherwise: (schema) => schema.notRequired(),
       }),
     display: Yup.boolean(),
@@ -89,7 +89,7 @@ const CreateCategoryForm = () => {
                   }}
                 >
                   <label htmlFor="thumbnail" className="block text-sm font-[700] text-primary">
-                    Thumbnail URL <span className="text-muted">(optional)</span>
+                    Thumbnail <span className="text-muted">(optional)</span>
                   </label>
                 </ImageUploader>
                 <ErrorMessage name="thumbnail" component="p" className="text-sm text-danger" />
@@ -139,7 +139,7 @@ const CreateCategoryForm = () => {
                   }}
                 >
                   <label htmlFor="banner" className="block text-sm font-[700] text-primary">
-                    Banner URL <span className="text-muted">(optional)</span>
+                    Banner <span className="text-muted">(optional)</span>
                   </label>
                 </ImageUploader>
                 <ErrorMessage name="banner" component="p" className="text-sm text-danger" />
