@@ -132,6 +132,7 @@ input[type="number"] {
   transform: scaleX(1);
 }
 
+
 .scrollbar-hide {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
@@ -141,11 +142,18 @@ input[type="number"] {
   display: none; /* Chrome, Safari, Opera */
 }
 
-.quick-overview {
-  ol {
-    @apply list-inside list-disc;
-  }
+
+.quick-overview{
+ol, ul {
+    @apply list-disc list-inside marker:!indent-20;
+    li {
+        @apply mb-1;
+      }
+    }
 }
+
+
+
 
 /* === REACT DATEPICKER === */
 .react-datepicker__day--selected {
