@@ -28,6 +28,37 @@ import "react-phone-number-input/style.css";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 
+// Helper function to normalize phone number to E.164 format
+const normalizePhoneNumber = (phoneNumber: string | undefined): string => {
+  if (!phoneNumber) return "";
+  
+  // Remove all non-digit characters except +
+  const cleaned = phoneNumber.replace(/[^\d+]/g, "");
+  
+  // If already in E.164 format (starts with +), return as is
+  if (cleaned.startsWith("+")) {
+    return cleaned;
+  }
+  
+  // If starts with 880 (country code without +), add +
+  if (cleaned.startsWith("880")) {
+    return `+${cleaned}`;
+  }
+  
+  // If starts with 0 (local format), replace 0 with +880
+  if (cleaned.startsWith("0")) {
+    return `+880${cleaned.substring(1)}`;
+  }
+  
+  // If it's just digits, assume it's a local number and add +880
+  if (/^\d+$/.test(cleaned)) {
+    return `+880${cleaned}`;
+  }
+  
+  // Return empty string if format is unrecognized
+  return "";
+};
+
 const validationSchema = Yup.object({
   name: Yup.string().required("Full name is required"),
   phoneNumber: Yup.string().required("Phone number is required"),
@@ -80,7 +111,7 @@ const CheckoutView = () => {
     district: "",
     division: "",
     name: user?.fullName || "",
-    phoneNumber: user?.phoneNumber || "",
+    phoneNumber: normalizePhoneNumber(user?.phoneNumber),
     upazila: "",
     billing_name: "",
     billing_address: "",
@@ -150,6 +181,7 @@ const CheckoutView = () => {
     if (items?.length === 0) {
       router.push("/cart");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

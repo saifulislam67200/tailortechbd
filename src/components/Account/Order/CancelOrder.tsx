@@ -7,17 +7,18 @@ import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import { useChangeOrderStatusMutation } from "@/redux/features/order/order.api";
+import { IOrderStatus } from "@/types/order";
 import { toast } from "sonner";
 
 interface IProps {
-  order: { _id: string; orderId: string };
+  order: { _id: string; orderId: string; status: IOrderStatus[] };
   onSuccess?: () => void;
 }
 
 const reasons = ["Change of mind", "Too expensive", "I want to try another product", "Other"];
 
 const schema = Yup.object({
-  note: Yup.string().required("Please select a rason for cancellation"),
+  note: Yup.string().required("Please select a reason for cancellation"),
 });
 
 const CancelOrder: React.FC<IProps> = ({ order, onSuccess }) => {
@@ -46,7 +47,7 @@ const CancelOrder: React.FC<IProps> = ({ order, onSuccess }) => {
     <div className="flex items-center justify-end">
       <Button
         onClick={() => setIsOpen(true)}
-        className="rounded-[5px] bg-danger px-4 py-2 transition-opacity hover:opacity-90"
+        className={`rounded-[5px] bg-danger px-4 py-2 transition-opacity hover:opacity-90 ${order.status.some((status) => status.status !== "pending") ? "hidden" : ""}`}
       >
         Cancel Order
       </Button>

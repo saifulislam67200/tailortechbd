@@ -35,6 +35,7 @@ import AddNewItemOnOrder from "../AllOrders/AddNewItemOnOrder";
 import InvoiceModal from "../AllOrders/InvoiceModal/InvoiceModal";
 import ChangeOrderStatusModal from "./ChangeOrderStatusModal";
 import EditOrderShippingInfo from "./EditOrderShippingInfo";
+import Image from "next/image";
 const statuses = [
   {
     id: "pending",
@@ -42,6 +43,13 @@ const statuses = [
     icon: MdPending,
     color: "text-success",
     bgColor: "bg-success/10",
+  },
+  {
+    id: "cancelled",
+    label: "Cancelled",
+    icon: MdCancel,
+    color: "text-danger",
+    bgColor: "bg-danger/10",
   },
   {
     id: "confirmed",
@@ -70,13 +78,6 @@ const statuses = [
     icon: MdCheckCircle,
     color: "text-success",
     bgColor: "bg-success/10",
-  },
-  {
-    id: "cancelled",
-    label: "Cancelled",
-    icon: MdCancel,
-    color: "text-danger",
-    bgColor: "bg-danger/10",
   },
   {
     id: "exchange",
@@ -255,7 +256,63 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
   const shippingCharge = orderItemView?.deliveryFee;
   const couponDiscount = orderItemView?.couponDiscount;
 
+  // Check if a status should be disabled based on order's status history
+  const isStatusDisabled = (statusId: string): boolean => {
+    if (!orderItemView?.status || orderItemView.status.length === 0) return false;
+    
+    // If "cancelled" status has been passed, disable ALL statuses
+    const hasCancelledBeenPassed = orderItemView.status.some(
+      (statusEntry) => statusEntry.status === "cancelled"
+    );
+    if (hasCancelledBeenPassed) {
+      return true; // Disable all statuses if cancelled has been passed
+    }
+    
+    // Check if "exchange" has been passed in the order's history
+    const exchangeIndex = orderItemView.status.findIndex(
+      (statusEntry) => statusEntry.status === "exchange"
+    );
+    const hasExchangeBeenPassed = exchangeIndex !== -1;
+    
+    // Exchange flow: delivered → exchange → on-delivery → delivered
+    // If exchange has been passed, allow on-delivery and delivered even if they were passed before
+    // BUT disable them if they have been passed AFTER exchange
+    if (hasExchangeBeenPassed && (statusId === "on-delivery" || statusId === "delivered")) {
+      // Check if this status has been passed AFTER exchange
+      const statusPassedAfterExchange = orderItemView.status.some(
+        (statusEntry, index) =>
+          statusEntry.status === statusId && index > exchangeIndex
+      );
+      
+      // If passed after exchange, disable it
+      if (statusPassedAfterExchange) return true;
+      
+      // Otherwise allow it (even if passed before exchange)
+      return false;
+    }
+    
+    // Check if this status has already been passed in the order's history
+    const hasStatusBeenPassed = orderItemView.status.some(
+      (statusEntry) => statusEntry.status === statusId
+    );
+    
+    // Disable if the status has already been passed (except for exchange flow handled above)
+    if (hasStatusBeenPassed) return true;
+    
+    // Special rule: If "delivered" status has been passed, disable "cancelled"
+    if (statusId === "cancelled") {
+      const hasDeliveredBeenPassed = orderItemView.status.some(
+        (statusEntry) => statusEntry.status === "delivered"
+      );
+      return hasDeliveredBeenPassed;
+    }
+    
+    return false;
+  };
+
   const handleChangeOrderStatusOption = (newStatus: string) => {
+    if (isStatusDisabled(newStatus)) return;
+    
     const status = statuses.find((s) => s.id === newStatus);
     if (status) {
       setSelectedStatus(status.id as IOrderStatus["status"]);
@@ -330,17 +387,25 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
               onChange={(e) => handleChangeOrderStatusOption(e.target.value)}
               className="appearanc w-[150px] rounded-[4px] border-[1px] border-border-main bg-white px-[0.75rem] py-[0.375rem] pr-[2.25rem] text-base leading-[1.5] font-normal transition duration-150 ease-in-out outline-none"
             >
-              {statuses.map((status) => (
-                <option key={status.id} value={status.id}>
-                  {status.label}
-                </option>
-              ))}
               <option value="" hidden>
                 Change Status
               </option>
+              {statuses.map((status) => {
+                const disabled = isStatusDisabled(status.id);
+                return (
+                  <option
+                    key={status.id}
+                    value={status.id}
+                    disabled={disabled}
+                    style={disabled ? { color: "#999", cursor: "not-allowed" } : {}}
+                  >
+                    {status.label}
+                  </option>
+                );
+              })}
             </select>
 
-            <Button className="w-fit" onClick={handleStatusChange}>
+            <Button className="w-fit" isLoading={isUpdating} disabled={isUpdating} onClick={handleStatusChange}>
               Update
             </Button>
           </div>
@@ -401,9 +466,11 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
             <div className="flex flex-col gap-[10px]">
               <div className="flex items-center gap-[8px]">
                 <span className="h-[50px] w-[50px] overflow-hidden rounded-full border-[1px] border-border-main">
-                  <img
+                  <Image
                     src={customer.avatar || profileFallBack}
-                    alt=""
+                    width={50}
+                    height={50}
+                    alt={customer.fullName || "Customer Avatar"}
                     className="h-full w-full object-cover"
                   />
                 </span>

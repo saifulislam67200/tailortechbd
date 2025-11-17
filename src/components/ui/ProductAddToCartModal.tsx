@@ -54,6 +54,14 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
     setIsOpen(true);
   };
 
+  const handleColorChange = (color: IColor) => {
+    setSelectedColor(color);
+    // Reset selectedSize if it's not available in the selected color
+    if (selectedSize && !color.sizes?.some((s) => s.size === selectedSize.size)) {
+      setSelectedSize(undefined);
+    }
+  };
+
   useEffect(() => {
     if (selectedColor && !selectedSize) {
       setErrorMessage("Please select a size.");
@@ -174,7 +182,7 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
                   <div className="flex flex-wrap items-center justify-start gap-[8px]">
                     {product?.colors?.map((color, i) => (
                       <button
-                        onClick={() => setSelectedColor(color)}
+                        onClick={() => handleColorChange(color)}
                         key={color?.color + i}
                         className={`cursor-pointer border-[1px] border-border-muted px-[8px] py-[4px] text-[12px] ${selectedColor?.color === color.color ? "bg-primary-foreground text-white" : ""}`}
                       >
@@ -185,44 +193,42 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
                 </div>
                 <div className="flex w-full flex-col gap-[5px]">
                   <span className="font-[700]">Select Size:</span>
-                  {/* <SelectionBox
-                    showSearch={false}
-                    data={
-                      selectedColor?.sizes?.map((size) => {
-                        return {
-                          label: size.size,
-                          value: size.size,
-                        };
-                      }) || []
-                    }
-                    defaultValue={
-                      selectedSize
-                        ? { label: selectedSize?.size, value: selectedSize?.size }
-                        : undefined
-                    }
-                    onSelect={(item) =>
-                      setSelectedSize({
-                        size: item.value,
-                        stock: selectedColor?.sizes.find((s) => s.size === item.value)?.stock || 0,
-                      })
-                    }
-                  /> */}
                   <div className="flex flex-wrap items-center justify-start gap-[8px]">
-                    {selectedColor?.sizes?.map((size) => (
-                      <button
-                        key={size._id}
-                        type="button"
-                        aria-label={`Select size ${size.size}`}
-                        className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
-                          selectedSize?.size === size.size
-                            ? "bg-primary text-white shadow-none"
-                            : "bg-white text-black shadow"
-                        } border border-gray-200 hover:bg-primary hover:text-white`}
-                        onClick={() => setSelectedSize(size)}
-                      >
-                        {size.size}
-                      </button>
-                    ))}
+                    {selectedColor
+                      ? // If color is selected, show only sizes from that color
+                        selectedColor.sizes?.map((size) => (
+                          <button
+                            key={size._id}
+                            type="button"
+                            aria-label={`Select size ${size.size}`}
+                            className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+                              selectedSize?.size === size.size
+                                ? "bg-primary text-white shadow-none"
+                                : "bg-white text-black shadow"
+                            } border border-gray-200 hover:bg-primary hover:text-white`}
+                            onClick={() => setSelectedSize(size)}
+                          >
+                            {size.size}
+                          </button>
+                        ))
+                      : // If no color is selected, show all sizes from all colors
+                        product.colors?.map((color) =>
+                          color.sizes?.map((size) => (
+                            <button
+                              key={size._id}
+                              type="button"
+                              aria-label={`Select size ${size.size}`}
+                              className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+                                selectedSize?.size === size.size
+                                  ? "bg-primary text-white shadow-none"
+                                  : "bg-white text-black shadow"
+                              } border border-gray-200 hover:bg-primary hover:text-white`}
+                              onClick={() => setSelectedSize(size)}
+                            >
+                              {size.size}
+                            </button>
+                          ))
+                        )}
                   </div>
 
                   {errorMessage && <AddToCartErrorMessage errorMessage={errorMessage} />}

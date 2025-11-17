@@ -144,7 +144,7 @@ const AllOrderTable = () => {
               <tbody className="divide-y divide-gray-200 bg-white">
                 {isLoading ? (
                   <TableSkeleton columns={tableHead.length} />
-                ) : (
+                ) : orders.length > 0 ? (
                   orders?.map((order, index) => (
                     <tr key={order._id} className="hover:bg-gray-50">
                       <td className="px-[24px] py-[16px]">{index + 1}</td>
@@ -235,16 +235,14 @@ const AllOrderTable = () => {
                       </td>
                     </tr>
                   ))
+                ) : (
+                  <div className="py-12 text-center">
+                    <div className="text-lg text-gray-500">No orders found</div>
+                    <p className="mt-2 text-gray-400">Try changing your search criteria</p>
+                  </div>
                 )}
               </tbody>
             </table>
-
-            {orders?.length === 0 && (
-              <div className="py-12 text-center">
-                <div className="text-lg text-gray-500">No orders found</div>
-                <p className="mt-2 text-gray-400">Try changing your search criteria</p>
-              </div>
-            )}
           </div>
         </div>
         <Pagination

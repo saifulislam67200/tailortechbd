@@ -66,6 +66,11 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
   const handleColorChange = (color: IColor) => {
     setActiveColor(color);
     setSelectedColor(color);
+    // Reset activeSize if it's not available in the selected color
+    if (activeSize && !color.sizes?.some((s) => s.size === activeSize.size)) {
+      setActiveSize(undefined);
+      setActiveQuantity(1);
+    }
   };
 
   // Reset quantity when size changes
@@ -253,24 +258,45 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
                       );
                     })}
                   </div>
+
                   {/* // sizes  */}
                   <h1 className="mt-[10px] text-[16px]">Sizes:</h1>
                   <div className="mt-[5px] flex items-center gap-[10px]">
-                    {activeColor?.sizes?.map((size) => (
-                      <button
-                        key={size._id}
-                        type="button"
-                        aria-label={`Select size ${size.size}`}
-                        className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
-                          activeSize?.size === size.size
-                            ? "bg-primary text-white shadow-none"
-                            : "bg-white text-black shadow"
-                        } border border-gray-200 hover:bg-primary hover:text-white`}
-                        onClick={() => handleSizeChange(size)}
-                      >
-                        {size.size}
-                      </button>
-                    ))}
+                    {activeColor
+                      ? // If color is selected, show only sizes from that color
+                        activeColor.sizes?.map((size) => (
+                          <button
+                            key={size._id}
+                            type="button"
+                            aria-label={`Select size ${size.size}`}
+                            className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+                              activeSize?.size === size.size
+                                ? "bg-primary text-white shadow-none"
+                                : "bg-white text-black shadow"
+                            } border border-gray-200 hover:bg-primary hover:text-white`}
+                            onClick={() => handleSizeChange(size)}
+                          >
+                            {size.size}
+                          </button>
+                        ))
+                      : // If no color is selected, show all sizes from all colors
+                        product.colors?.map((color) =>
+                          color.sizes?.map((size) => (
+                            <button
+                              key={size._id}
+                              type="button"
+                              aria-label={`Select size ${size.size}`}
+                              className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+                                activeSize?.size === size.size
+                                  ? "bg-primary text-white shadow-none"
+                                  : "bg-white text-black shadow"
+                              } border border-gray-200 hover:bg-primary hover:text-white`}
+                              onClick={() => handleSizeChange(size)}
+                            >
+                              {size.size}
+                            </button>
+                          ))
+                        )}
                   </div>
                 </div>
 
@@ -308,9 +334,12 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
                   dangerouslySetInnerHTML={{ __html: product?.description || "" }}
                 ></div> */}
                 <div
-                  className="text-primary"
+                  className="quick-overview text-primary"
                   dangerouslySetInnerHTML={{ __html: product?.quickOverview || "" }}
                 />
+                <p className="text-primary">
+                  <strong>Fabric Composition:</strong> {product?.fabric}
+                </p>
               </div>
             </div>
             <div className="-mt-[20px]">
