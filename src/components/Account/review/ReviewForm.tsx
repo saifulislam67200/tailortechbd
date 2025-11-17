@@ -57,12 +57,12 @@ const ReviewForm = ({ productToReview, setIsReviewOpen }: ReviewFormProps) => {
     if (error) {
       if (error?.data?.message) {
         if (error?.data?.message === "Validation error") {
-          toast("Something went wrong");
+          toast.error("Something went wrong");
         } else {
-          toast(error.data?.message);
+          toast.error(error.data?.message);
         }
       } else {
-        toast("Something went wrong");
+        toast.error("Something went wrong");
       }
       return;
     }

@@ -162,7 +162,7 @@ const DamagedProductTable = () => {
                   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                   //@ts-ignore
                   productStocks.map((product, index) => (
-                    <tr key={product?._id + index} className="hover:bg-gray-50 text-left">
+                    <tr key={product?._id + index} className="text-left hover:bg-gray-50">
                       {/* index */}
                       <td className="px-3 py-4">
                         <span className="text-[14px]">{index + 1}</span>

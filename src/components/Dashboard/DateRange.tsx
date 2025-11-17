@@ -12,9 +12,9 @@ const DateRange = ({ value, onChange }: DateRangeProps) => {
   const [startDate, endDate] = value;
 
   return (
-    <div className="flex items-end gap-2 w-full">
+    <div className="flex w-full items-end gap-2">
       {/* Start date */}
-      <div className="flex flex-col w-full">
+      <div className="flex w-full flex-col">
         <label className="mb-1 text-xs font-medium text-gray-600">Start date</label>
         <DatePicker
           selected={startDate}
@@ -24,7 +24,7 @@ const DateRange = ({ value, onChange }: DateRangeProps) => {
           }}
           maxDate={endDate ?? new Date()}
           dateFormat="dd-MM-yyyy"
-          className="rounded-sm border border-gray-300 bg-white px-2 py-1.5 text-sm focus:border-primary w-full focus:outline-none"
+          className="w-full rounded-sm border border-gray-300 bg-white px-2 py-1.5 text-sm focus:border-primary focus:outline-none"
           placeholderText="Start date"
           showPopperArrow={false}
         />
@@ -33,7 +33,7 @@ const DateRange = ({ value, onChange }: DateRangeProps) => {
       <span className="mb-2 text-gray-500">—</span>
 
       {/* End date */}
-      <div className="flex flex-col w-full">
+      <div className="flex w-full flex-col">
         <label className="mb-1 text-xs font-medium text-gray-600">End date</label>
         <DatePicker
           selected={endDate}
@@ -42,7 +42,7 @@ const DateRange = ({ value, onChange }: DateRangeProps) => {
           maxDate={new Date()}
           dateFormat="dd-MM-yyyy"
           popperPlacement="bottom-end"
-          className="right-2 rounded-sm border border-gray-300 bg-white px-2 py-1.5 text-sm focus:border-primary w-full focus:outline-none"
+          className="right-2 w-full rounded-sm border border-gray-300 bg-white px-2 py-1.5 text-sm focus:border-primary focus:outline-none"
           placeholderText="End date"
           showPopperArrow={false}
         />

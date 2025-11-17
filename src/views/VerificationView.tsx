@@ -31,7 +31,7 @@ const VerificationView = () => {
   // send OTP on mount
   useEffect(() => {
     if (hasSentOtp.current) return;
-    
+
     hasSentOtp.current = true;
     const sendOtp = async () => {
       const response = await sendVerificationOTP(undefined);

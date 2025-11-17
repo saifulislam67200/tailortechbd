@@ -16,7 +16,7 @@ import CancelOrder from "./CancelOrder";
 import { BsArrowRight } from "react-icons/bs";
 
 const OrderCard = ({ order }: { order: IOrder }) => {
-  const [initOrder, setInitOrder] = useState(order); //
+  const [initOrder, setInitOrder] = useState(order);
   const [orderView, setOrderView] = useState(order);
 
   const [updateOrder, { isLoading: isUpdating }] = useUpdateOrderMutation();
@@ -32,6 +32,10 @@ const OrderCard = ({ order }: { order: IOrder }) => {
     item: { product_id: "" },
     orderId: "",
   });
+
+  const latestStatus = orderView.status[orderView.status.length - 1]?.status;
+  const isPending = latestStatus === "pending";
+  const isDelivered = latestStatus === "delivered";
 
   const toggleOrderExpansion = (orderId: string) => {
     setIsExpanded(isExpanded === orderId ? null : orderId);
@@ -61,6 +65,13 @@ const OrderCard = ({ order }: { order: IOrder }) => {
       ...orderView,
       orderItems: updatedOrderItems,
     });
+  };
+
+  const handleToggleEditMode = () => {
+    if (isEditMode) {
+      setOrderView(initOrder);
+    }
+    setIsEditMode(!isEditMode);
   };
 
   const handleUpdate = async () => {
@@ -160,7 +171,7 @@ const OrderCard = ({ order }: { order: IOrder }) => {
       </div>
 
       {/* Order Items Preview */}
-      {!isExpanded ? (
+      {!isExpanded && (
         <div className="px-[8px] pb-[16px] sm:px-[24px]">
           <div className="flex w-full flex-col gap-[12px] sm:flex-row sm:flex-wrap sm:items-center">
             {order.orderItems.slice(0, 3).map((item, index) => (
@@ -188,8 +199,6 @@ const OrderCard = ({ order }: { order: IOrder }) => {
             )}
           </div>
         </div>
-      ) : (
-        ""
       )}
 
       {/* Expanded Order Details */}
@@ -225,15 +234,13 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                               <h5 className="text-[14px] sm:text-[16px] sm:font-medium">
                                 {item.product.name}
                               </h5>
-                              {isEditMode ? (
+                              {isEditMode && (
                                 <button
                                   onClick={() => handleRemoveOrderItem(index)}
                                   className="flex cursor-pointer items-center gap-[5px] rounded-[4px] bg-danger/10 px-[10px] py-[2px] text-danger"
                                 >
                                   Delete <MdDelete />
                                 </button>
-                              ) : (
-                                ""
                               )}
                             </div>
                             <p className="mb-[4px] text-[14px] text-info">
@@ -265,21 +272,20 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                               </span>
                             </div>
                           </div>
-                          {/* // review button */}
-                          {orderView.status.some((status) => status.status == "delivered") &&
-                            !isEditMode && (
-                              <button
-                                onClick={() => handleReviewClick(item)}
-                                className="absolute top-2 right-2 z-10 flex cursor-pointer items-center justify-center rounded-[3px] border border-quaternary bg-white px-2 text-[10px] text-info transition-colors duration-200 hover:border-primary hover:text-primary sm:h-[30px] sm:w-[70px] sm:rounded-[5px] sm:text-[14px]"
-                                aria-label="Give Review"
-                              >
-                                Review
-                              </button>
-                            )}
+                          {/* Review button */}
+                          {isDelivered && !isEditMode && (
+                            <button
+                              onClick={() => handleReviewClick(item)}
+                              className="absolute top-2 right-2 z-10 flex cursor-pointer items-center justify-center rounded-[3px] border border-quaternary bg-white px-2 text-[10px] text-info transition-colors duration-200 hover:border-primary hover:text-primary sm:h-[30px] sm:w-[70px] sm:rounded-[5px] sm:text-[14px]"
+                              aria-label="Give Review"
+                            >
+                              Review
+                            </button>
+                          )}
                         </div>
                       ))}
                     </div>
-                    {isEditMode ? (
+                    {isEditMode && (
                       <AddNewItemOnOrder
                         className="mt-[10px]"
                         onAddItem={(item) =>
@@ -289,24 +295,17 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                           })
                         }
                       />
-                    ) : (
-                      ""
                     )}
-                    {orderView.status.some((status) => status.status == "pending") ? (
+                    {isPending && (
                       <div className="mt-[10px] flex flex-wrap items-center gap-[10px]">
                         <button
                           className={`cursor-pointer rounded-[4px] px-[10px] py-[5px] text-white ${isEditMode ? "bg-danger" : "bg-primary"}`}
-                          onClick={() => {
-                            setIsEditMode(!isEditMode);
-                            if (isEditMode) {
-                              setOrderView(initOrder);
-                            }
-                          }}
+                          onClick={handleToggleEditMode}
                         >
                           {isEditMode ? "Cancel Editing" : "Edit Order"}
                         </button>
 
-                        {isEditMode ? (
+                        {isEditMode && (
                           <button
                             onClick={handleUpdate}
                             disabled={isUpdating}
@@ -314,12 +313,8 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                           >
                             {isUpdating ? "Updating..." : "Save Changes"}
                           </button>
-                        ) : (
-                          ""
                         )}
                       </div>
-                    ) : (
-                      ""
                     )}
                   </>
                 )}
@@ -415,7 +410,7 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                   </div>
                 )}
 
-                {!isEditMode && orderView.status.some((status) => status.status == "pending") ? (
+                {!isEditMode && isPending && (
                   <CancelOrder
                     onSuccess={() => {
                       const newOrder = {
@@ -433,8 +428,6 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                     }}
                     order={orderView}
                   />
-                ) : (
-                  ""
                 )}
               </div>
             </div>

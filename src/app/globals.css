@@ -132,7 +132,6 @@ input[type="number"] {
   transform: scaleX(1);
 }
 
-
 .scrollbar-hide {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
@@ -142,18 +141,21 @@ input[type="number"] {
   display: none; /* Chrome, Safari, Opera */
 }
 
-
-.quick-overview{
-ol, ul {
-    @apply list-disc list-inside marker:!indent-20;
+.quick-overview {
+  ol,
+  ul {
+    @apply list-inside list-disc;
+    padding-left: 0;
     li {
-        @apply mb-1;
+      @apply mb-0.5;
+      padding-left: 0;
+      &::marker {
+        content: "• ";
+        margin-right: 0.125rem;
       }
     }
+  }
 }
-
-
-
 
 /* === REACT DATEPICKER === */
 .react-datepicker__day--selected {

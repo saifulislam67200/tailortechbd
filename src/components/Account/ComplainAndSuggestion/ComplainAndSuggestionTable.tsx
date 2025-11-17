@@ -62,17 +62,17 @@ const ComplainAndSuggestionTable = ({
                   <td className="px-3 py-2">{c.satisfaction}</td>
                   <td className="px-3 py-2">{c.status}</td>
                   <td className="max-w-[300px] px-3 py-2">
-                    <span 
-                      title={c.message} 
-                      className="line-clamp-2 whitespace-pre-wrap block overflow-hidden text-ellipsis"
+                    <span
+                      title={c.message}
+                      className="line-clamp-2 block overflow-hidden text-ellipsis whitespace-pre-wrap"
                     >
                       {c.message}
                     </span>
                   </td>
                   <td className="max-w-[300px] px-3 py-2">
-                    <span 
-                      title={c.actionTaken} 
-                      className="line-clamp-2 whitespace-pre-wrap block overflow-hidden text-ellipsis"
+                    <span
+                      title={c.actionTaken}
+                      className="line-clamp-2 block overflow-hidden text-ellipsis whitespace-pre-wrap"
                     >
                       {c.actionTaken}
                     </span>
