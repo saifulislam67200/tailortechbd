@@ -371,32 +371,34 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
               {/* Printable Area */}
               <div ref={printRef} className="p-3">
                 {/* Header */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img className="mx-auto mb-3 w-[150px]" src="/images/logos/logo.png" alt="logo" />
-                <div className="mb-4 text-center">
-                  <h2 className="text-[22px] font-bold text-primary">Product Stock Report</h2>
-                  <p className="text-sm text-gray-600">
-                    Product stock report of{" "}
-                    <b>
-                      {dateRange[0]?.toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "2-digit",
-                        year: "numeric",
-                      })}
-                    </b>{" "}
-                    to{" "}
-                    <b>
-                      {dateRange[1]?.toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "2-digit",
-                        year: "numeric",
-                      })}
-                    </b>
-                  </p>
+                <div className="pdf-header mx-auto print:min-w-full">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="mx-auto mb-3 w-[150px]" src="/images/logos/logo.png" alt="logo" />
+                  <div className="mb-4 text-center">
+                    <h2 className="text-[22px] font-bold text-primary">Product Stock Report</h2>
+                    <p className="text-sm text-gray-600">
+                      Product stock report of{" "}
+                      <b>
+                        {dateRange[0]?.toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "2-digit",
+                          year: "numeric",
+                        })}
+                      </b>{" "}
+                      to{" "}
+                      <b>
+                        {dateRange[1]?.toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "2-digit",
+                          year: "numeric",
+                        })}
+                      </b>
+                    </p>
+                  </div>
                 </div>
 
                 {/* Info Bar */}
-                <div className="mb-4 rounded-md border border-primary/20 bg-primary/10 p-3 text-sm text-primary">
+                <div className="pdf-info-bar mb-4 rounded-md border border-primary/20 bg-primary/10 p-3 text-sm text-primary print:min-w-full">
                   Showing product stocks from{" "}
                   <b>
                     {dateRange[0]?.toLocaleDateString("en-US", {
@@ -428,7 +430,10 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
 
                 {/* TABLE */}
                 <div className="stock-report-container overflow-x-auto rounded-md border border-gray-200">
-                  <table className="stock-report-table w-full min-w-[1300px] text-sm print:min-w-[1100px]">
+                  <table
+                    className="stock-report-table w-full min-w-[150%] text-sm print:min-w-[1100px]"
+                    style={{ borderCollapse: "collapse" }}
+                  >
                     {/* lock column widths for thead/tbody/tfoot */}
                     <colgroup>
                       <col style={{ width: "40px" }} />
@@ -460,6 +465,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                             } ${h.label === "Size" ? "print:max-w-[7px]" : ""} ${
                               h.label === "Color" ? "print:max-w-[10px]" : ""
                             }`}
+                            style={{ border: "none" }}
                           >
                             {h.label}
                           </th>
@@ -470,13 +476,22 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                     <tbody className="stock-report-tbody">
                       {displayedStocks.map((p, index) => (
                         <tr key={p._id} className="odd:bg-white even:bg-gray-50">
-                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             {index + 1}
                           </td>
-                          <td className="px-1 py-2 print:max-w-[50px] print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 print:max-w-[50px] print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             {p.sku || "N/A"}
                           </td>
-                          <td className="line-clamp-1 max-w-[60px] px-1 py-2 text-center print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="line-clamp-1 max-w-[60px] px-1 py-2 text-center print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             {typeof p.category === "object" &&
                             p.category !== null &&
                             "label" in p.category
@@ -485,42 +500,78 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                                 ? p.category
                                 : "N/A"}
                           </td>
-                          <td className="truncate px-1 py-2 print:hidden">
+                          <td
+                            className="truncate px-1 py-2 print:hidden"
+                            style={{ border: "none" }}
+                          >
                             {p.subCategory || "N/A"}
                           </td>
-                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             <span title={p.productName} className="line-clamp-1 max-w-[70px]">
                               {p.productName || "-"}
                             </span>
                           </td>
-                          <td className="px-1 py-2 print:max-w-[7px] print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 print:max-w-[7px] print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             {p.size || "N/A"}
                           </td>
-                          <td className="px-1 py-2 print:max-w-[10px] print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 print:max-w-[10px] print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             {p.color || "N/A"}
                           </td>
-                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             {p.openingStock ?? p.stock ?? "0"}
                           </td>
-                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             {p.salesQty ?? "0"}
                           </td>
-                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             {p.damagedQty ?? "0"}
                           </td>
-                          <td className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             {p.stock ?? "0"}
                           </td>
-                          <td className="px-1 py-2 text-left print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 text-left print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             ৳ {p.price || 0}
                           </td>
-                          <td className="px-1 py-2 text-left print:max-w-[25px] print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 text-left print:max-w-[25px] print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             {p.offerPrice ? `৳ ${p.offerPrice}` : "N/A"}
                           </td>
-                          <td className="px-1 py-2 text-left print:max-w-[25px] print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 text-left print:max-w-[25px] print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             ৳ {p.totalPrice || 0}
                           </td>
-                          <td className="px-1 py-2 capitalize print:px-1 print:py-1 print:text-[10px]">
+                          <td
+                            className="px-1 py-2 capitalize print:px-1 print:py-1 print:text-[10px]"
+                            style={{ border: "none" }}
+                          >
                             {p.status ? p.status.replace(/-/g, " ") : "N/A"}
                           </td>
                         </tr>
@@ -640,7 +691,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
         }
         .pdf-mode .stock-report-container {
           overflow: visible !important;
-          width: 100% !important;
+          width: 150% !important;
         }
         .pdf-mode .stock-report-table {
           border-collapse: collapse;
@@ -648,6 +699,14 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
           width: 100% !important;
           min-width: 1400px !important;
           font-size: 10px !important;
+        }
+
+        .pdf-mode .pdf-header {
+          min-width: 150% !important;
+        }
+
+        .pdf-mode .pdf-info-bar {
+          min-width: 200% !important;
         }
         /* Ensure all columns are visible in PDF mode */
         .pdf-mode .stock-report-table th,
