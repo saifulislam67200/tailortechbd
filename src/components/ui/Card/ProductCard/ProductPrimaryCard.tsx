@@ -80,10 +80,10 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
             Color: {product.colors?.map((color) => color.color).join(", ")}
           </p>
           <p className="line-clamp-1 text-[12px] font-semibold text-black">
-            Size: 
-            {product.colors?.map((color) => (
-              color.sizes?.map((size) => size.size?.toUpperCase())
-            )).join(", ")}
+            Size:
+            {product.colors
+              ?.map((color) => color.sizes?.map((size) => size.size?.toUpperCase()))
+              .join(", ")}
           </p>
         </div>
         <div className="flex flex-col gap-[20px] pt-2 text-start">

@@ -259,7 +259,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
   // Check if a status should be disabled based on order's status history
   const isStatusDisabled = (statusId: string): boolean => {
     if (!orderItemView?.status || orderItemView.status.length === 0) return false;
-    
+
     // If "cancelled" status has been passed, disable ALL statuses
     const hasCancelledBeenPassed = orderItemView.status.some(
       (statusEntry) => statusEntry.status === "cancelled"
@@ -267,38 +267,37 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
     if (hasCancelledBeenPassed) {
       return true; // Disable all statuses if cancelled has been passed
     }
-    
+
     // Check if "exchange" has been passed in the order's history
     const exchangeIndex = orderItemView.status.findIndex(
       (statusEntry) => statusEntry.status === "exchange"
     );
     const hasExchangeBeenPassed = exchangeIndex !== -1;
-    
+
     // Exchange flow: delivered → exchange → on-delivery → delivered
     // If exchange has been passed, allow on-delivery and delivered even if they were passed before
     // BUT disable them if they have been passed AFTER exchange
     if (hasExchangeBeenPassed && (statusId === "on-delivery" || statusId === "delivered")) {
       // Check if this status has been passed AFTER exchange
       const statusPassedAfterExchange = orderItemView.status.some(
-        (statusEntry, index) =>
-          statusEntry.status === statusId && index > exchangeIndex
+        (statusEntry, index) => statusEntry.status === statusId && index > exchangeIndex
       );
-      
+
       // If passed after exchange, disable it
       if (statusPassedAfterExchange) return true;
-      
+
       // Otherwise allow it (even if passed before exchange)
       return false;
     }
-    
+
     // Check if this status has already been passed in the order's history
     const hasStatusBeenPassed = orderItemView.status.some(
       (statusEntry) => statusEntry.status === statusId
     );
-    
+
     // Disable if the status has already been passed (except for exchange flow handled above)
     if (hasStatusBeenPassed) return true;
-    
+
     // Special rule: If "delivered" status has been passed, disable "cancelled"
     if (statusId === "cancelled") {
       const hasDeliveredBeenPassed = orderItemView.status.some(
@@ -306,13 +305,13 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
       );
       return hasDeliveredBeenPassed;
     }
-    
+
     return false;
   };
 
   const handleChangeOrderStatusOption = (newStatus: string) => {
     if (isStatusDisabled(newStatus)) return;
-    
+
     const status = statuses.find((s) => s.id === newStatus);
     if (status) {
       setSelectedStatus(status.id as IOrderStatus["status"]);
@@ -405,7 +404,12 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
               })}
             </select>
 
-            <Button className="w-fit" isLoading={isUpdating} disabled={isUpdating} onClick={handleStatusChange}>
+            <Button
+              className="w-fit"
+              isLoading={isUpdating}
+              disabled={isUpdating}
+              onClick={handleStatusChange}
+            >
               Update
             </Button>
           </div>
