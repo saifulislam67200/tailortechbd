@@ -127,7 +127,7 @@ const CreateCategory: React.FC<IProps> = ({ children, parent, onSuccess }) => {
                     }}
                   >
                     <label htmlFor="thumbnail" className="block text-sm font-[700] text-primary">
-                      Thumbnail  <span className="text-muted">(optional)</span>
+                      Thumbnail <span className="text-muted">(optional)</span>
                     </label>
                   </ImageUploader>
                   <ErrorMessage name="thumbnail" component="p" className="text-sm text-danger" />

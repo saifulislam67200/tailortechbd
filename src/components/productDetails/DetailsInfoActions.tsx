@@ -71,6 +71,10 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
     }
   }, [activeColor, activeSize]);
 
+  const handleCheckoutError = (error: string) => {
+    setErrorMessage(error);
+  };
+
   const handleAddToCart = () => {
     if (!activeColor && !activeSize) {
       setErrorMessage("Please select a color and size.");
@@ -237,11 +241,14 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
             Add to cart
           </button>
           <ProcutCheckout
-            // disabled={activeSize && !activeSize.stock}
             product={product}
             quantity={activeQuantity}
             onQuantityChange={setActiveQuantity}
             btnStyle="h-[42px]  mt-[0px]"
+            activeColor={activeColor}
+            activeSize={activeSize}
+            skipModal={true}
+            onError={handleCheckoutError}
           />
         </div>
       )}

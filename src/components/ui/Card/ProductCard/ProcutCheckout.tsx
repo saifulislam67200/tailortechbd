@@ -20,6 +20,10 @@ interface Props {
   onQuantityChange?: (q: number) => void;
   btnStyle?: string;
   children?: React.ReactNode;
+  activeColor?: IColor;
+  activeSize?: ISize;
+  skipModal?: boolean;
+  onError?: (error: string) => void;
 }
 
 const ProductCheckoutModal = ({
@@ -28,6 +32,10 @@ const ProductCheckoutModal = ({
   onQuantityChange,
   btnStyle,
   children,
+  activeColor: propActiveColor,
+  activeSize: propActiveSize,
+  skipModal = false,
+  onError,
 }: Props) => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const dispatch = useAppDispatch();
@@ -37,9 +45,9 @@ const ProductCheckoutModal = ({
   const [isOpen, setIsOpen] = useState(false);
 
   /** Active color/size selection (default to first color/size if available) */
-  const [activeColor, setActiveColor] = useState<IColor | undefined>();
-  const [activeSize, setActiveSize] = useState<ISize | undefined>();
-  const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
+  const [activeColor, setActiveColor] = useState<IColor | undefined>(propActiveColor);
+  const [activeSize, setActiveSize] = useState<ISize | undefined>(propActiveSize);
+  const [selectedColor, setSelectedColor] = useState<IColor | undefined>(propActiveColor);
 
   /** ---------------- Quantity: controlled + uncontrolled ----------------
    * Rules:
@@ -139,18 +147,22 @@ const ProductCheckoutModal = ({
   }, [activeColor, activeSize]);
 
   /** Checkout action */
-  const handleCheckoutClick = () => {
-    if (!activeColor && !activeSize) {
+  const handleCheckoutClick = (useProps = false) => {
+    // Use props directly when skipModal is true, otherwise use state
+    const colorToUse = useProps ? propActiveColor : activeColor;
+    const sizeToUse = useProps ? propActiveSize : activeSize;
+
+    if (!colorToUse && !sizeToUse) {
       setErrorMessage("Please select a color and size.");
       return;
     }
 
-    if (!activeColor) {
+    if (!colorToUse) {
       setErrorMessage("Please select a color.");
       return;
     }
 
-    if (!activeSize) {
+    if (!sizeToUse) {
       setErrorMessage("Please select a size.");
       return;
     }
@@ -158,15 +170,15 @@ const ProductCheckoutModal = ({
     dispatch(
       addItemsOnCheckout([
         {
-          color: activeColor.color || "",
+          color: colorToUse.color || "",
           product_id: product?._id || "",
           quantity: qty, // use the resolved quantity
           discount: product.discount,
-          size: activeSize.size || "",
+          size: sizeToUse.size || "",
           product: {
             name: product?.name || "",
             price: product?.price || 0,
-            image: getColorVariantImage(activeColor),
+            image: getColorVariantImage(colorToUse),
           },
         },
       ])
@@ -176,16 +188,57 @@ const ProductCheckoutModal = ({
     router.push("/checkout");
   };
 
-  /** Open modal */
-  const handleOpenModal = () => setIsOpen(true);
+  /** Open modal or direct checkout */
+  const handleBuyNowClick = () => {
+    if (skipModal) {
+      // Direct checkout without modal - validate first
+      if (!propActiveColor || !propActiveSize) {
+        let errorMsg = "";
+        if (!propActiveColor && !propActiveSize) {
+          errorMsg = "Please select a color and size.";
+        } else if (!propActiveColor) {
+          errorMsg = "Please select a color.";
+        } else {
+          errorMsg = "Please select a size.";
+        }
+        // Call onError callback if provided, otherwise show toast
+        if (onError) {
+          onError(errorMsg);
+        } else {
+          toast.error(errorMsg);
+        }
+        return;
+      }
+      // Clear error if validation passes
+      if (onError) {
+        onError("");
+      }
+      // Direct checkout without modal - use props directly
+      handleCheckoutClick(true);
+    } else {
+      // Open modal
+      setIsOpen(true);
+    }
+  };
+
+  // Update local state when props change
+  useEffect(() => {
+    if (propActiveColor) {
+      setActiveColor(propActiveColor);
+      setSelectedColor(propActiveColor);
+    }
+    if (propActiveSize) {
+      setActiveSize(propActiveSize);
+    }
+  }, [propActiveColor, propActiveSize]);
 
   return (
     <>
       {children ? (
-        <button onClick={handleOpenModal}>{children}</button>
+        <button onClick={handleBuyNowClick}>{children}</button>
       ) : (
         <button
-          onClick={handleOpenModal}
+          onClick={handleBuyNowClick}
           className={`checkoutBtn center mt-1 w-full cursor-pointer gap-[3px] border border-[#c5c5c5] py-[8px] text-sm font-bold ${btnStyle}`}
         >
           Buy Now <IoBagCheckOutline />
@@ -353,7 +406,7 @@ const ProductCheckoutModal = ({
                 />
               ) : (
                 <button
-                  onClick={handleCheckoutClick}
+                  onClick={() => handleCheckoutClick(false)}
                   disabled={
                     activeColor?.sizes?.find((s) => s?.size === activeSize?.size)?.stock === 0
                   }
