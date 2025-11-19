@@ -3,7 +3,7 @@ import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { useChangePasswordMutation } from "@/redux/features/user/user.api";
 import { IQueruMutationErrorResponse } from "@/types";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from "formik";
 import { toast } from "sonner";
 import * as Yup from "yup";
 const initialValues = {
@@ -24,7 +24,7 @@ const validationSchema = Yup.object({
 
 const ChangePassword = () => {
   const [changePassword, { isLoading }] = useChangePasswordMutation();
-  const handleSubmit = async (values: typeof initialValues) => {
+  const handleSubmit = async (values: typeof initialValues, { resetForm }: FormikHelpers<typeof initialValues>) => {
     const res = await changePassword(values);
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
@@ -36,6 +36,7 @@ const ChangePassword = () => {
       return;
     }
     toast.success("Password updated successfully");
+    resetForm();
   };
 
   return (
