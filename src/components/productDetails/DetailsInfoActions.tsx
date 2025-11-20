@@ -112,8 +112,8 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
   const handleColorChange = (color: IColor) => {
     setActiveColor(color);
     onColorChange(color);
-    // Reset activeSize if it's not available in the selected color
-    if (activeSize && !color.sizes?.some((s) => s.size === activeSize.size)) {
+    // Reset activeSize if it's not available in the selected color or if it's out of stock
+    if (activeSize && !color.sizes?.some((s) => s.size === activeSize.size && s.stock > 0)) {
       setActiveSize(undefined);
       setActiveQuantity(1);
     }
@@ -146,25 +146,10 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
       <h1 className="mt-[15px] text-[16px]">Sizes:</h1>
       <div className="mt-[5px] flex items-center gap-[10px]">
         {activeColor
-          ? // If color is selected, show only sizes from that color
-            activeColor.sizes?.map((size) => (
-              <button
-                key={size._id}
-                type="button"
-                aria-label={`Select size ${size.size}`}
-                className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
-                  activeSize?.size === size.size
-                    ? "bg-primary text-white shadow-none"
-                    : "bg-white text-black shadow"
-                } border border-gray-200 hover:bg-primary hover:text-white`}
-                onClick={() => handleSizeChange(size)}
-              >
-                {size.size}
-              </button>
-            ))
-          : // If no color is selected, show all sizes from all colors
-            product.colors?.map((color) =>
-              color.sizes?.map((size) => (
+          ? // If color is selected, show only sizes from that color with stock > 0
+            activeColor.sizes
+              ?.filter((size) => size.stock > 0)
+              ?.map((size) => (
                 <button
                   key={size._id}
                   type="button"
@@ -179,6 +164,25 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
                   {size.size}
                 </button>
               ))
+          : // If no color is selected, show all sizes from all colors with stock > 0
+            product.colors?.map((color) =>
+              color.sizes
+                ?.filter((size) => size.stock > 0)
+                ?.map((size) => (
+                  <button
+                    key={size._id}
+                    type="button"
+                    aria-label={`Select size ${size.size}`}
+                    className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+                      activeSize?.size === size.size
+                        ? "bg-primary text-white shadow-none"
+                        : "bg-white text-black shadow"
+                    } border border-gray-200 hover:bg-primary hover:text-white`}
+                    onClick={() => handleSizeChange(size)}
+                  >
+                    {size.size}
+                  </button>
+                ))
             )}
       </div>
 

@@ -24,7 +24,10 @@ const validationSchema = Yup.object({
 
 const ChangePassword = () => {
   const [changePassword, { isLoading }] = useChangePasswordMutation();
-  const handleSubmit = async (values: typeof initialValues, { resetForm }: FormikHelpers<typeof initialValues>) => {
+  const handleSubmit = async (
+    values: typeof initialValues,
+    { resetForm }: FormikHelpers<typeof initialValues>
+  ) => {
     const res = await changePassword(values);
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {

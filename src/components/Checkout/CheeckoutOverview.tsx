@@ -121,15 +121,15 @@ const CheeckoutOverview = ({
                   {item.discount ? (
                     <span className="flex items-center justify-start gap-[10px]">
                       <span className="lin text-[12.8px] font-[600] text-primary">
-                        ৳ {getDiscountedPrice(item.product.price, item.discount).toFixed(2)}
+                        ৳ {getDiscountedPrice(item.product.price, item.discount).toFixed(0)}
                       </span>
                       <span className="lin text-[12.8px] font-[600] text-muted line-through">
-                        ৳ {item.product.price.toFixed(2)}
+                        ৳ {item.product.price.toFixed(0)}
                       </span>
                     </span>
                   ) : (
                     <span className="lin text-[12.8px] font-[600] text-primary">
-                      ৳ {item.product.price.toFixed(2)}
+                      ৳ {item.product.price.toFixed(0)}
                     </span>
                   )}
                   <span className="lin text-[12.8px] font-[600] text-muted">
@@ -141,7 +141,7 @@ const CheeckoutOverview = ({
               <span className="shrink-0 text-[16px] font-[700]">
                 {(
                   getDiscountedPrice(item.product.price, item.discount || 0) * item.quantity
-                ).toFixed(2)}{" "}
+                ).toFixed(0)}{" "}
                 TK.
               </span>
             </div>

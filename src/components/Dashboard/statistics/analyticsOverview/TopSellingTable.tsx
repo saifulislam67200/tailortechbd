@@ -72,13 +72,19 @@ const TopSellingTable = () => {
                 className="border-t border-t-quaternary hover:bg-quaternary/20"
               >
                 <td className="px-4 py-3">
-                  <Image
-                    width={200}
-                    height={200}
-                    src={product?.image}
-                    alt={product?.name}
-                    className="h-12 w-12 rounded object-cover"
-                  />
+                  {product?.image ? (
+                    <Image
+                      width={200}
+                      height={200}
+                      src={product.image}
+                      alt={product?.name}
+                      className="h-12 w-12 rounded object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-12 w-12 items-center justify-center rounded bg-gray-200">
+                      <span className="text-xs text-gray-400">No Image</span>
+                    </div>
+                  )}
                 </td>
                 <td className="cursor-pointer px-4 py-3 font-medium text-primary hover:underline">
                   {product?.name}

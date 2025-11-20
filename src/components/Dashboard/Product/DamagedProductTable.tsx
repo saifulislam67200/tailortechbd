@@ -224,8 +224,10 @@ const DamagedProductTable = () => {
                       </td>
 
                       {/* cause of damaged */}
-                      <td className="px-6 py-4">
-                        <span className="text-[14px]">{product.causeOfDamage || "N/A"}</span>
+                      <td className="px-6 py-4" title={product.causeOfDamage || "N/A"}>
+                        <span className="line-clamp-1 max-w-[200px] text-[14px]">
+                          {product.causeOfDamage || "N/A"}
+                        </span>
                       </td>
                     </tr>
                   ))

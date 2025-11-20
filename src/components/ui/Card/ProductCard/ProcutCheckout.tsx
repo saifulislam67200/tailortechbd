@@ -323,24 +323,9 @@ const ProductCheckoutModal = ({
                 <div className="mt-[5px] flex items-center gap-[10px]">
                   {activeColor
                     ? // If color is selected, show only sizes from that color
-                      activeColor.sizes?.map((size) => (
-                        <button
-                          key={size._id}
-                          type="button"
-                          aria-label={`Select size ${size.size}`}
-                          className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
-                            activeSize?.size === size.size
-                              ? "bg-primary text-white shadow-none"
-                              : "bg-white text-black shadow"
-                          } border border-gray-200 hover:bg-primary hover:text-white`}
-                          onClick={() => handleSizeChange(size)}
-                        >
-                          {size.size}
-                        </button>
-                      ))
-                    : // If no color is selected, show all sizes from all colors
-                      product.colors?.map((color) =>
-                        color.sizes?.map((size) => (
+                      activeColor.sizes
+                        ?.filter((size) => size.stock > 0)
+                        ?.map((size) => (
                           <button
                             key={size._id}
                             type="button"
@@ -355,6 +340,25 @@ const ProductCheckoutModal = ({
                             {size.size}
                           </button>
                         ))
+                    : // If no color is selected, show all sizes from all colors
+                      product.colors?.map((color) =>
+                        color.sizes
+                          ?.filter((size) => size.stock > 0)
+                          ?.map((size) => (
+                            <button
+                              key={size._id}
+                              type="button"
+                              aria-label={`Select size ${size.size}`}
+                              className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+                                activeSize?.size === size.size
+                                  ? "bg-primary text-white shadow-none"
+                                  : "bg-white text-black shadow"
+                              } border border-gray-200 hover:bg-primary hover:text-white`}
+                              onClick={() => handleSizeChange(size)}
+                            >
+                              {size.size}
+                            </button>
+                          ))
                       )}
                 </div>
 
