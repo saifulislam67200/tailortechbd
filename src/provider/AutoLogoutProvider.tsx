@@ -1,7 +1,6 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import useAutoLogout from "@/hooks/useAutoLogout";
-import { clearCart } from "@/redux/features/cart/cartSlice";
 import { useLogoutUserMutation } from "@/redux/features/user/user.api";
 import React, { ReactNode, useEffect } from "react";
 import { logout as logoutAction } from "@/redux/features/user/user.slice";

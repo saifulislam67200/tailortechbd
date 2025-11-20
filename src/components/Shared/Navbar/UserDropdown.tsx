@@ -1,7 +1,6 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { clearCart } from "@/redux/features/cart/cartSlice";
 import { useLogoutUserMutation } from "@/redux/features/user/user.api";
 import { logout as logoutAction } from "@/redux/features/user/user.slice";
 import { profileFallBack } from "@/utils";

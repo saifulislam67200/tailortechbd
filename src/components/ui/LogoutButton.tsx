@@ -4,7 +4,7 @@ import { useLogoutUserMutation } from "@/redux/features/user/user.api";
 import Button from "./Button";
 import { useAppDispatch } from "@/hooks/redux";
 import { logout as logoutAction } from "@/redux/features/user/user.slice";
-import { clearCart } from "@/redux/features/cart/cartSlice";
+
 
 const LogoutButton = ({ className }: { className?: string }) => {
   const [logoutUser] = useLogoutUserMutation();

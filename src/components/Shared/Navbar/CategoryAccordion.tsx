@@ -1,7 +1,6 @@
 "use client";
 import PlusIcon from "@/components/icons/PlusIcon";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { clearCart } from "@/redux/features/cart/cartSlice";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/category.api";
 import { useLogoutUserMutation } from "@/redux/features/user/user.api";
 import { logout as logoutAction } from "@/redux/features/user/user.slice";
