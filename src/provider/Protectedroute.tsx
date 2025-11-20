@@ -30,7 +30,6 @@ const Protectedroute: React.FC<IProps> = ({ role, children, checkVerification = 
 
       if (user.role !== role && role !== "*") {
         Cookies.remove("redirect");
-        console.log("protected")
         router.replace("/");
         return;
       }
