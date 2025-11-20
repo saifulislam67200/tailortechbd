@@ -28,6 +28,10 @@ const EmailLogin = () => {
       ...values,
       mode: "email",
     });
+
+    const redirect = Cookies.get("redirect") || "/";
+    Cookies.remove("redirect");
+
     const error = res.error as IQueruMutationErrorResponse;
 
     if (error) {
@@ -49,8 +53,7 @@ const EmailLogin = () => {
     if (token) {
       dispatch(setToken(token));
     }
-    const redirect = Cookies.get("redirect") || "/";
-    Cookies.remove("redirect");
+    
     setFormMessage(null);
 
     router.replace(redirect);
