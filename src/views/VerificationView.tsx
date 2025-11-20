@@ -106,10 +106,8 @@ const VerificationView = () => {
     toast.success("OTP verified successfully");
     dispatch(updateUser({ isVerified: true }));
     const redirect = Cookies.get("redirect") || "/";
-    Cookies.remove("redirect");
-    console.log("verification")
     router.replace(redirect);
-
+    Cookies.remove("redirect");
     setErrorMessage("");
   };
 

@@ -29,7 +29,7 @@ const EmailLogin = () => {
       mode: "email",
     });
 
-    const redirect = Cookies.get("redirect") || "/";
+
 
     const error = res.error as IQueruMutationErrorResponse;
 
@@ -54,9 +54,9 @@ const EmailLogin = () => {
     }
 
     setFormMessage(null);
+    const redirect = Cookies.get("redirect") || "/";
     router.replace(redirect);
     Cookies.remove("redirect");
-        console.log("email login")
   };
   return (
     <Formik onSubmit={onSubmit} validationSchema={validationSchema} initialValues={initialValues}>

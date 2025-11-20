@@ -43,7 +43,6 @@ const PhoneNumberLogin = () => {
       phoneNumber: phone,
       mode: "phoneNumber",
     });
-    const redirect = Cookies.get("redirect") || "/";
 
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
@@ -67,9 +66,9 @@ const PhoneNumberLogin = () => {
     }
 
     setFormMessage(null);
+   const redirect = Cookies.get("redirect") || "/";
     router.replace(redirect);
     Cookies.remove("redirect");
-    console.log("phoen login")
   };
   return (
     <Formik onSubmit={onSubmit} validationSchema={validationSchema} initialValues={initialValues}>
