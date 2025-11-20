@@ -30,7 +30,6 @@ const EmailLogin = () => {
     });
 
     const redirect = Cookies.get("redirect") || "/";
-    Cookies.remove("redirect");
 
     const error = res.error as IQueruMutationErrorResponse;
 
@@ -53,10 +52,10 @@ const EmailLogin = () => {
     if (token) {
       dispatch(setToken(token));
     }
-    
-    setFormMessage(null);
 
+    setFormMessage(null);
     router.replace(redirect);
+    Cookies.remove("redirect");
   };
   return (
     <Formik onSubmit={onSubmit} validationSchema={validationSchema} initialValues={initialValues}>

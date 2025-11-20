@@ -14,7 +14,7 @@ export const AutoLogoutProvider = ({ children }: { children: ReactNode }) => {
 
   const handleLogout = async () => {
     dispatch(logoutAction(undefined));
-    dispatch(clearCart());
+    // dispatch(clearCart());
     await logoutUser(undefined);
   };
 

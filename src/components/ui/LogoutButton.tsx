@@ -11,7 +11,7 @@ const LogoutButton = ({ className }: { className?: string }) => {
   const dispatch = useAppDispatch();
   const handleLogout = async () => {
     dispatch(logoutAction(undefined));
-    dispatch(clearCart());
+    // dispatch(clearCart());
     await logoutUser(undefined);
   };
   return (

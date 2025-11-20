@@ -35,7 +35,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
 
   const handleLogout = async () => {
     dispatch(logoutAction(undefined));
-    dispatch(clearCart());
+    // dispatch(clearCart());
     setIsOpen(false);
     await logoutUser(undefined);
     toast.success("Logout successfully");

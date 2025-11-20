@@ -96,7 +96,7 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
 
   const handleLogout = async () => {
     dispatch(logoutAction(undefined));
-    dispatch(clearCart());
+    // dispatch(clearCart());
       startTransition(() => {
     router.push("/");
     setIsOpen(false);
