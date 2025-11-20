@@ -56,6 +56,7 @@ const EmailLogin = () => {
     setFormMessage(null);
     router.replace(redirect);
     Cookies.remove("redirect");
+        console.log("email login")
   };
   return (
     <Formik onSubmit={onSubmit} validationSchema={validationSchema} initialValues={initialValues}>

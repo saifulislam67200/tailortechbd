@@ -107,6 +107,7 @@ const VerificationView = () => {
     dispatch(updateUser({ isVerified: true }));
     const redirect = Cookies.get("redirect") || "/";
     Cookies.remove("redirect");
+    console.log("verification")
     router.replace(redirect);
 
     setErrorMessage("");
