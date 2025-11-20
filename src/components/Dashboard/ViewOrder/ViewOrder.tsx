@@ -13,7 +13,7 @@ import { IUser } from "@/types/user";
 import { profileFallBack } from "@/utils";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { BsArrowLeft } from "react-icons/bs";
+import { BsArrowLeft, BsArrowCounterclockwise } from "react-icons/bs";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { HiOutlinePencil } from "react-icons/hi";
 import { ImSpinner11 } from "react-icons/im";
@@ -256,11 +256,14 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
   const shippingCharge = orderItemView?.deliveryFee;
   const couponDiscount = orderItemView?.couponDiscount;
 
-  // Check if a status should be disabled based on order's status history
+  // Define status order/sequence (main flow)
+  const mainStatusOrder = ["pending", "confirmed", "processing", "on-delivery", "delivered"];
+
+  // Check if a status should be disabled based on currently selected status
   const isStatusDisabled = (statusId: string): boolean => {
     if (!orderItemView?.status || orderItemView.status.length === 0) return false;
 
-    // If "cancelled" status has been passed, disable ALL statuses
+    // If "cancelled" status has been passed in history, disable ALL statuses
     const hasCancelledBeenPassed = orderItemView.status.some(
       (statusEntry) => statusEntry.status === "cancelled"
     );
@@ -268,26 +271,202 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
       return true; // Disable all statuses if cancelled has been passed
     }
 
-    // Check if "exchange" has been passed in the order's history
-    const exchangeIndex = orderItemView.status.findIndex(
-      (statusEntry) => statusEntry.status === "exchange"
-    );
-    const hasExchangeBeenPassed = exchangeIndex !== -1;
+    // Get the last status from history
+    const lastStatusInHistory = orderItemView.status[orderItemView.status.length - 1]?.status;
 
-    // Exchange flow: delivered → exchange → on-delivery → delivered
-    // If exchange has been passed, allow on-delivery and delivered even if they were passed before
-    // BUT disable them if they have been passed AFTER exchange
-    if (hasExchangeBeenPassed && (statusId === "on-delivery" || statusId === "delivered")) {
-      // Check if this status has been passed AFTER exchange
-      const statusPassedAfterExchange = orderItemView.status.some(
-        (statusEntry, index) => statusEntry.status === statusId && index > exchangeIndex
+    // Get the currently selected status (what user is trying to select in dropdown)
+    const currentSelectedStatus = selectedStatus;
+
+    // Check if "returned" has been passed or is being selected
+    const hasReturnedBeenPassed = orderItemView.status.some(
+      (statusEntry) => statusEntry.status === "returned"
+    );
+    const isReturnedSelected = currentSelectedStatus === "returned";
+    const isLastStatusReturned = lastStatusInHistory === "returned";
+
+    // If "returned" is selected, is the last status, or has been passed, disable all previous statuses
+    if (hasReturnedBeenPassed || isReturnedSelected || isLastStatusReturned) {
+      // Disable all previous statuses: cancelled, pending, confirmed, processing, on-delivery, delivered, exchange
+      if (
+        statusId === "cancelled" ||
+        statusId === "pending" ||
+        statusId === "confirmed" ||
+        statusId === "processing" ||
+        statusId === "on-delivery" ||
+        statusId === "delivered" ||
+        statusId === "exchange"
+      ) {
+        return true; // Disable all previous statuses when returned
+      }
+    }
+
+    // Disable the status only if it's already the last status in history (already updated)
+    // Don't disable just because it's selected - only disable after update is performed
+    if (lastStatusInHistory && statusId === lastStatusInHistory) {
+      return true;
+    }
+
+    // If no status is selected yet, check based on history
+    if (!currentSelectedStatus) {
+      // If "returned" has been passed or is the last status, disable all previous statuses
+      if (hasReturnedBeenPassed || isLastStatusReturned) {
+        if (
+          statusId === "cancelled" ||
+          statusId === "pending" ||
+          statusId === "confirmed" ||
+          statusId === "processing" ||
+          statusId === "on-delivery" ||
+          statusId === "delivered" ||
+          statusId === "exchange"
+        ) {
+          return true; // Disable all previous statuses when returned has been passed
+        }
+      }
+
+      // Check if this status has already been passed
+      const hasStatusBeenPassed = orderItemView.status.some(
+        (statusEntry) => statusEntry.status === statusId
       );
 
-      // If passed after exchange, disable it
-      if (statusPassedAfterExchange) return true;
+      // Allow re-selection in exchange flow
+      if (hasStatusBeenPassed) {
+        const exchangeIndex = orderItemView.status.findIndex(
+          (statusEntry) => statusEntry.status === "exchange"
+        );
+        if (exchangeIndex !== -1 && (statusId === "on-delivery" || statusId === "delivered")) {
+          // Check if this status was passed after exchange
+          const statusPassedAfterExchange = orderItemView.status.some(
+            (statusEntry, index) => statusEntry.status === statusId && index > exchangeIndex
+          );
+          return statusPassedAfterExchange; // Disable only if passed after exchange
+        }
+        return true; // Disable if already passed
+      }
 
-      // Otherwise allow it (even if passed before exchange)
+      // Special rule: If "delivered" has been passed, disable "cancelled"
+      if (statusId === "cancelled") {
+        const hasDeliveredBeenPassed = orderItemView.status.some(
+          (statusEntry) => statusEntry.status === "delivered"
+        );
+        return hasDeliveredBeenPassed;
+      }
+
       return false;
+    }
+
+    // Check if selection is sequential (next in order) or direct (jumping)
+    const lastStatusIndex = mainStatusOrder.indexOf(lastStatusInHistory || "");
+    const selectedStatusIndex = mainStatusOrder.indexOf(currentSelectedStatus);
+    const isSequentialSelection =
+      selectedStatusIndex !== -1 &&
+      lastStatusIndex !== -1 &&
+      selectedStatusIndex === lastStatusIndex + 1;
+
+    // Special case: If "exchange" is selected, enable "on-delivery" and "delivered"
+    if (currentSelectedStatus === "exchange") {
+      // Explicitly disable cancelled when exchange is selected
+      if (statusId === "cancelled") {
+        return true; // Disable cancelled
+      }
+      if (statusId === "on-delivery" || statusId === "delivered") {
+        return false; // Keep them active
+      }
+      // Disable other statuses that come before delivered in main flow
+      const statusIndex = mainStatusOrder.indexOf(statusId);
+      if (statusIndex !== -1 && statusIndex < mainStatusOrder.indexOf("delivered")) {
+        return true; // Disable previous statuses
+      }
+      return false;
+    }
+
+    // Special case: If "on-delivery" is selected
+    if (currentSelectedStatus === "on-delivery") {
+      // Always keep cancelled active when on-delivery is selected
+      if (statusId === "cancelled") {
+        return false; // Keep cancelled active
+      }
+      // Disable previous statuses in sequence (except cancelled)
+      const onDeliveryIndex = mainStatusOrder.indexOf("on-delivery");
+      const statusIndex = mainStatusOrder.indexOf(statusId);
+      if (statusIndex !== -1 && statusIndex < onDeliveryIndex) {
+        return true; // Disable previous statuses except cancelled
+      }
+      return false;
+    }
+
+    // Special case: If "returned" is selected
+    if (currentSelectedStatus === "returned") {
+      // Disable all previous statuses when returned is selected
+      // This includes: cancelled, pending, confirmed, processing, on-delivery, delivered, exchange
+      if (
+        statusId === "cancelled" ||
+        statusId === "pending" ||
+        statusId === "confirmed" ||
+        statusId === "processing" ||
+        statusId === "on-delivery" ||
+        statusId === "delivered" ||
+        statusId === "exchange"
+      ) {
+        return true; // Disable all previous statuses
+      }
+      return false;
+    }
+
+    // Special case: If "delivered" is selected
+    if (currentSelectedStatus === "delivered") {
+      // Always disable cancelled when delivered is selected
+      if (statusId === "cancelled") {
+        return true;
+      }
+      // Disable exchange if delivered is selected after exchange → on-delivery flow
+      if (statusId === "exchange") {
+        const exchangeIndex = orderItemView.status.findIndex(
+          (statusEntry) => statusEntry.status === "exchange"
+        );
+        const onDeliveryIndex = orderItemView.status.findIndex(
+          (statusEntry) => statusEntry.status === "on-delivery"
+        );
+        // If exchange exists and on-delivery was after exchange, disable exchange
+        if (exchangeIndex !== -1 && onDeliveryIndex !== -1 && onDeliveryIndex > exchangeIndex) {
+          return true; // Disable exchange when delivered is selected after the flow
+        }
+      }
+      // If directly selecting delivered (jumping), disable on-delivery
+      if (!isSequentialSelection && statusId === "on-delivery") {
+        return true; // Disable on-delivery when directly selecting delivered
+      }
+      // Disable previous statuses in sequence
+      const deliveredIndex = mainStatusOrder.indexOf("delivered");
+      const statusIndex = mainStatusOrder.indexOf(statusId);
+      if (statusIndex !== -1 && statusIndex < deliveredIndex) {
+        return true; // Disable previous statuses
+      }
+      return false;
+    }
+
+    // Don't disable statuses based on current selection - allow user to change selection freely
+    // Only disable based on what's already in history (already updated)
+
+    // Special case: Disable exchange after exchange → on-delivery → delivered flow
+    if (statusId === "exchange") {
+      const exchangeIndex = orderItemView.status.findIndex(
+        (statusEntry) => statusEntry.status === "exchange"
+      );
+      const onDeliveryIndex = orderItemView.status.findIndex(
+        (statusEntry) => statusEntry.status === "on-delivery"
+      );
+
+      // If exchange exists and on-delivery was after exchange
+      if (exchangeIndex !== -1 && onDeliveryIndex !== -1 && onDeliveryIndex > exchangeIndex) {
+        // Check if "delivered" was after on-delivery in the exchange flow
+        const deliveredAfterOnDelivery = orderItemView.status.some(
+          (statusEntry, index) => statusEntry.status === "delivered" && index > onDeliveryIndex
+        );
+        // If "delivered" is currently being selected or was after on-delivery, disable exchange
+        if ((currentSelectedStatus as string) === "delivered" || deliveredAfterOnDelivery) {
+          return true; // Disable exchange after completing the flow
+        }
+      }
     }
 
     // Check if this status has already been passed in the order's history
@@ -295,15 +474,38 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
       (statusEntry) => statusEntry.status === statusId
     );
 
-    // Disable if the status has already been passed (except for exchange flow handled above)
-    if (hasStatusBeenPassed) return true;
-
-    // Special rule: If "delivered" status has been passed, disable "cancelled"
-    if (statusId === "cancelled") {
-      const hasDeliveredBeenPassed = orderItemView.status.some(
-        (statusEntry) => statusEntry.status === "delivered"
+    // If status has been passed, check for exchange flow exception
+    if (hasStatusBeenPassed) {
+      const exchangeIndex = orderItemView.status.findIndex(
+        (statusEntry) => statusEntry.status === "exchange"
       );
-      return hasDeliveredBeenPassed;
+      if (exchangeIndex !== -1 && (statusId === "on-delivery" || statusId === "delivered")) {
+        // Check if this status was passed after exchange
+        const statusPassedAfterExchange = orderItemView.status.some(
+          (statusEntry, index) => statusEntry.status === statusId && index > exchangeIndex
+        );
+        // If passed after exchange, disable it
+        if (statusPassedAfterExchange) return true;
+        // Otherwise allow it (was passed before exchange)
+        return false;
+      }
+      return true;
+    }
+
+    // Final check: If "returned" has been passed, is selected, or is the last status, disable all previous statuses
+    // This ensures the check is applied even if other logic might have allowed these statuses
+    if (hasReturnedBeenPassed || isReturnedSelected || isLastStatusReturned) {
+      if (
+        statusId === "cancelled" ||
+        statusId === "pending" ||
+        statusId === "confirmed" ||
+        statusId === "processing" ||
+        statusId === "on-delivery" ||
+        statusId === "delivered" ||
+        statusId === "exchange"
+      ) {
+        return true; // Disable all previous statuses when returned
+      }
     }
 
     return false;
@@ -381,28 +583,42 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
 
           <div className="flex flex-col gap-[10px]">
             <span>Change Status:</span>
-            <select
-              value={selectedStatus ? selectedStatus : ""}
-              onChange={(e) => handleChangeOrderStatusOption(e.target.value)}
-              className="appearanc w-[150px] rounded-[4px] border-[1px] border-border-main bg-white px-[0.75rem] py-[0.375rem] pr-[2.25rem] text-base leading-[1.5] font-normal transition duration-150 ease-in-out outline-none"
-            >
-              <option value="" hidden>
-                Change Status
-              </option>
-              {statuses.map((status) => {
-                const disabled = isStatusDisabled(status.id);
-                return (
-                  <option
-                    key={status.id}
-                    value={status.id}
-                    disabled={disabled}
-                    style={disabled ? { color: "#999", cursor: "not-allowed" } : {}}
-                  >
-                    {status.label}
-                  </option>
-                );
-              })}
-            </select>
+            <div className="flex items-center gap-[8px]">
+              <select
+                value={selectedStatus ? selectedStatus : ""}
+                onChange={(e) => handleChangeOrderStatusOption(e.target.value)}
+                className="appearanc w-[150px] rounded-[4px] border-[1px] border-border-main bg-white px-[0.75rem] py-[0.375rem] pr-[2.25rem] text-base leading-[1.5] font-normal transition duration-150 ease-in-out outline-none"
+              >
+                <option value="" hidden>
+                  Change Status
+                </option>
+                {statuses.map((status) => {
+                  const disabled = isStatusDisabled(status.id);
+                  return (
+                    <option
+                      key={status.id}
+                      value={status.id}
+                      disabled={disabled}
+                      style={disabled ? { color: "#999", cursor: "not-allowed" } : {}}
+                    >
+                      {status.label}
+                    </option>
+                  );
+                })}
+              </select>
+              <button
+                onClick={() => {
+                  if (currentStatus?.status) {
+                    setSelectedStatus(currentStatus.status);
+                  }
+                }}
+                disabled={selectedStatus === currentStatus?.status}
+                className="flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-[4px] border-[1px] border-border-main bg-white text-black transition duration-150 ease-in-out hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-white"
+                title="Reset to last status"
+              >
+                <BsArrowCounterclockwise size={16} />
+              </button>
+            </div>
 
             <Button
               className="w-fit"

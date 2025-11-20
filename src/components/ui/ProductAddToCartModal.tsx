@@ -56,8 +56,8 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
 
   const handleColorChange = (color: IColor) => {
     setSelectedColor(color);
-    // Reset selectedSize if it's not available in the selected color
-    if (selectedSize && !color.sizes?.some((s) => s.size === selectedSize.size)) {
+    // Reset selectedSize if it's not available in the selected color or if it's out of stock
+    if (selectedSize && !color.sizes?.some((s) => s.size === selectedSize.size && s.stock > 0)) {
       setSelectedSize(undefined);
     }
   };
@@ -195,25 +195,10 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
                   <span className="font-[700]">Select Size:</span>
                   <div className="flex flex-wrap items-center justify-start gap-[8px]">
                     {selectedColor
-                      ? // If color is selected, show only sizes from that color
-                        selectedColor.sizes?.map((size) => (
-                          <button
-                            key={size._id}
-                            type="button"
-                            aria-label={`Select size ${size.size}`}
-                            className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
-                              selectedSize?.size === size.size
-                                ? "bg-primary text-white shadow-none"
-                                : "bg-white text-black shadow"
-                            } border border-gray-200 hover:bg-primary hover:text-white`}
-                            onClick={() => setSelectedSize(size)}
-                          >
-                            {size.size}
-                          </button>
-                        ))
-                      : // If no color is selected, show all sizes from all colors
-                        product.colors?.map((color) =>
-                          color.sizes?.map((size) => (
+                      ? // If color is selected, show only sizes from that color with stock > 0
+                        selectedColor.sizes
+                          ?.filter((size) => size.stock > 0)
+                          ?.map((size) => (
                             <button
                               key={size._id}
                               type="button"
@@ -228,6 +213,25 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
                               {size.size}
                             </button>
                           ))
+                      : // If no color is selected, show all sizes from all colors with stock > 0
+                        product.colors?.map((color) =>
+                          color.sizes
+                            ?.filter((size) => size.stock > 0)
+                            ?.map((size) => (
+                              <button
+                                key={size._id}
+                                type="button"
+                                aria-label={`Select size ${size.size}`}
+                                className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+                                  selectedSize?.size === size.size
+                                    ? "bg-primary text-white shadow-none"
+                                    : "bg-white text-black shadow"
+                                } border border-gray-200 hover:bg-primary hover:text-white`}
+                                onClick={() => setSelectedSize(size)}
+                              >
+                                {size.size}
+                              </button>
+                            ))
                         )}
                   </div>
 

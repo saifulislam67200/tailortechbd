@@ -25,7 +25,9 @@ const CheckoutSuccess: React.FC<IProps> = ({ orderData }) => {
       }
       hasMounted.current = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <div className="min-h-screen bg-[#f4f4f4] px-4 py-10">
       <div className="mx-auto max-w-3xl bg-white p-6 shadow-md">
@@ -50,7 +52,7 @@ const CheckoutSuccess: React.FC<IProps> = ({ orderData }) => {
                   <h3 className="font-semibold">{item.product.name}</h3>
                   <div className="text-sm">
                     <p>
-                      <span className="mr-2 text-success">৳ {item.product.price}</span>
+                      <span className="mr-2 text-success">৳ {item.product.price.toFixed(0)}</span>
                     </p>
                     <p>
                       Color: {item.color} - Size: {item.size} - Quantity: {item.quantity}
@@ -58,7 +60,7 @@ const CheckoutSuccess: React.FC<IProps> = ({ orderData }) => {
                   </div>
                 </div>
               </div>
-              <div className="font-semibold whitespace-nowrap">৳ {totalPrice.toFixed(2)}</div>
+              <div className="font-semibold whitespace-nowrap">৳ {totalPrice.toFixed(0)}</div>
             </div>
           );
         })}
@@ -66,7 +68,7 @@ const CheckoutSuccess: React.FC<IProps> = ({ orderData }) => {
         <div className="mt-4 space-y-1 border-t pt-4 text-sm text-gray-700">
           <div className="flex justify-between">
             <span>Sub Total</span>
-            <span>৳ {orderData?.totalProductAmount?.toFixed(2)}</span>
+            <span>৳ {orderData?.totalProductAmount?.toFixed(0)}</span>
           </div>
 
           <div className="flex justify-between">
@@ -77,14 +79,14 @@ const CheckoutSuccess: React.FC<IProps> = ({ orderData }) => {
           {orderData.couponDiscount ? (
             <div className="mt-2 flex justify-between border-t border-primary pt-2 font-semibold text-success">
               <span>Coupon Discount</span>
-              <span>- ৳ {orderData.couponDiscount.toFixed(2)}</span>
+              <span>- ৳ {orderData.couponDiscount.toFixed(0)}</span>
             </div>
           ) : (
             ""
           )}
           <div className="mt-2 flex justify-between border-t pt-2 font-semibold text-black">
             <span>Grand Total</span>
-            <span>৳ {grandTotal.toFixed(2)}</span>
+            <span>৳ {grandTotal.toFixed(0)}</span>
           </div>
         </div>
         <Button className="mx-auto mt-4" onClick={() => router.replace("/")}>

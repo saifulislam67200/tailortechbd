@@ -21,7 +21,10 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
   const [isOpen, setIsOpen] = useState(false);
   const isInsideDhaka = orderItem?.shippingAddress?.division?.toLowerCase() === "dhaka";
   const deliveryFee = isInsideDhaka ? 80 : 120;
-  const subtotal = Math.floor(orderItem?.totalProductAmount || 0);
+  const subtotal = Math.floor(
+    orderItem?.orderItems.reduce((total, item) => total + item.product.price * item.quantity, 0) ||
+      0
+  );
   const discount = Math.floor(orderItem?.couponDiscount || 0);
   const total = subtotal - discount + deliveryFee;
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
@@ -111,7 +114,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
             return () => clearTimeout(timer);
           }}
         >
-          🖨️ Download
+          📥 Download
         </button>
         <button
           className="cursor-pointer rounded border-[1px] border-border-main px-[10px] py-[4px] text-[16px] text-primary duration-[0.3s] hover:bg-primary hover:text-white"
@@ -225,9 +228,6 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
           <div className="mt-2 text-right text-[12px]">
             <p>
               <strong>Subtotal = {subtotal}</strong>
-            </p>
-            <p>
-              <strong>General Discount = 0</strong>
             </p>
             <p>
               <strong>Coupon Discount = {discount}</strong>

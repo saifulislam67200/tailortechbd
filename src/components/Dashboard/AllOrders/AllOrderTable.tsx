@@ -236,10 +236,12 @@ const AllOrderTable = () => {
                     </tr>
                   ))
                 ) : (
-                  <div className="py-12 text-center">
-                    <div className="text-lg text-gray-500">No orders found</div>
-                    <p className="mt-2 text-gray-400">Try changing your search criteria</p>
-                  </div>
+                  <tr>
+                    <td colSpan={tableHead.length} className="px-[24px] py-12 text-center">
+                      <div className="text-lg text-gray-500">No orders found</div>
+                      <p className="mt-2 text-gray-400">Try changing your search criteria</p>
+                    </td>
+                  </tr>
                 )}
               </tbody>
             </table>
