@@ -7,7 +7,8 @@ import { useLogoutUserMutation } from "@/redux/features/user/user.api";
 import { logout as logoutAction } from "@/redux/features/user/user.slice";
 import { TCategoryWithSubcategories } from "@/types/category";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { startTransition, useEffect, useState } from "react";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { IoHome } from "react-icons/io5";
 import { toast } from "sonner";
@@ -88,6 +89,7 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
   const { data } = useGetAllCategoriesQuery({ mode: "tree" });
   const categories = data?.data;
   const { user } = useAppSelector((state) => state.user);
+  const router = useRouter();
 
   const [logoutUser] = useLogoutUserMutation();
   const dispatch = useAppDispatch();
@@ -95,10 +97,20 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
   const handleLogout = async () => {
     dispatch(logoutAction(undefined));
     dispatch(clearCart());
+      startTransition(() => {
+    router.push("/");
     setIsOpen(false);
+  });
     await logoutUser(undefined);
     toast.success("Logout successfully");
   };
+
+  useEffect(() => {
+    if (!user || !user.phoneNumber) {
+      router.push("/");
+    }
+  }, [user]);
+
 
   return (
     <>
@@ -125,7 +137,7 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
       <div className="mb-14 border-t border-quaternary/30">
         {user && user.phoneNumber ? (
           <button
-            onClick={() => handleLogout()}
+            onClick={handleLogout}
             className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[14px] text-[14px] text-white"
           >
             <FiLogOut className="h-[16px] w-[16px]" />

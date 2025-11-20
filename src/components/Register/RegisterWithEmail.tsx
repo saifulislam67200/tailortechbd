@@ -63,7 +63,7 @@ const RegisterWithEmail = () => {
       dispatch(setToken(token));
     }
 
-    router.replace("/register/verification");
+    router.push("/register/verification");
   };
 
   const validationSchema = Yup.object({

@@ -27,6 +27,7 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
+import Cookies from "js-cookie";
 
 // Helper function to normalize phone number to E.164 format
 const normalizePhoneNumber = (phoneNumber: string | undefined): string => {
@@ -130,6 +131,7 @@ const CheckoutView = () => {
       });
       return;
     }
+
     const payload: Omit<
       IOrder,
       | "status"
@@ -163,6 +165,11 @@ const CheckoutView = () => {
       coupon: successfulCouponResponse?.appliedCoupon || "",
     };
 
+    if (!user) {
+      Cookies.set("redirect", "/checkout");
+      router.push("/login");
+    }
+
     const res = await creaeOrder(payload);
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
@@ -195,6 +202,7 @@ const CheckoutView = () => {
             initialValues={initialValues}
           >
             {({ setFieldValue, touched, errors, setFieldTouched, values, isValid }) => {
+              console.log("values", values);
               return (
                 <Form className="flex w-full flex-col items-start justify-start gap-[16px] md:flex-row">
                   <div className="w-full bg-white pt-[8px] pb-[22px]">
