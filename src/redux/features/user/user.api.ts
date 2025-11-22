@@ -3,7 +3,6 @@ import { IUser } from "@/types/user";
 
 const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    // Create blog post
     registerCustomer: builder.mutation<
       { data: { result: IUser; accessToken: string } },
       {
@@ -99,6 +98,55 @@ const userApi = api.injectEndpoints({
       }),
       invalidatesTags: ["user"],
     }),
+    sendLoginOtp: builder.mutation<
+      { data: { cooldownEnd: number; remainingSeconds: number } },
+      { phoneNumber: string }
+    >({
+      query: (payload) => ({
+        url: "/user/send-login-otp",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["user"],
+    }),
+    loginWithOtp: builder.mutation<
+      { data: { result: IUser; accessToken: string } },
+      { phoneNumber: string; otp: number }
+    >({
+      query: (payload) => ({
+        url: "/user/login-with-otp",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["user"],
+    }),
+    sendSignupOtp: builder.mutation<
+      { data: { cooldownEnd: number; remainingSeconds: number } },
+      { phoneNumber: string; fullName: string }
+    >({
+      query: (payload) => ({
+        url: "/user/send-signup-otp",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["user"],
+    }),
+    signupWithOtp: builder.mutation<
+      { data: { result: IUser; accessToken: string } },
+      {
+        phoneNumber: string;
+        otp: number;
+        fullName: string;
+        geo_profile?: { country: string; phone_code: string };
+      }
+    >({
+      query: (payload) => ({
+        url: "/user/signup-with-otp",
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: ["user"],
+    }),
     getAuthor: builder.query<{ data: IUser }, undefined>({
       query: () => {
         return {
@@ -132,4 +180,8 @@ export const {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useResetPhonePasswordMutation,
+  useSendLoginOtpMutation,
+  useLoginWithOtpMutation,
+  useSendSignupOtpMutation,
+  useSignupWithOtpMutation,
 } = userApi;

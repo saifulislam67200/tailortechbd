@@ -39,6 +39,7 @@ export interface IShippingAddress {
   upazila: string;
   address: string;
   phoneNumber: string;
+  email: string;
 }
 export interface IBillingAddress {
   name: string;

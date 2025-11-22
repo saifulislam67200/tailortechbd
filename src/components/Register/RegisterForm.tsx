@@ -1,20 +1,21 @@
-"use client";
-
-import { useState } from "react";
+import Link from "next/link";
 import FormCard from "../ui/FormCard";
-import RegisterWithEmail from "./RegisterWithEmail";
 import RegisterWithMobile from "./RegisterWithMobile";
 
 const RegisterForm = () => {
-  const [mode, setMode] = useState<"email" | "phoneNumber">("phoneNumber");
   return (
-    <FormCard
-      headerButtons={[
-        { title: "Register with Mobile", onClick: () => setMode("phoneNumber") },
-        { title: "Register with Email", onClick: () => setMode("email") },
-      ]}
-    >
-      {mode == "phoneNumber" ? <RegisterWithMobile /> : <RegisterWithEmail />}
+    <FormCard headerButtons={[{ title: "Register with Mobile" }]}>
+      <RegisterWithMobile />
+
+      <div className="flex flex-col justify-end gap-[10px] sm:flex-row sm:items-center">
+        <span className={"text-[14px] text-primary-foreground"}>
+          Already have an account?
+          <Link href={"/login"} className="font-[600] hover:underline">
+            {" "}
+            Login Here
+          </Link>
+        </span>
+      </div>
     </FormCard>
   );
 };

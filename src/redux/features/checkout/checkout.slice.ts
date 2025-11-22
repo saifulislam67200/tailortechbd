@@ -63,12 +63,16 @@ const checkoutSlice = createSlice({
       state.shippingAddress = null;
       state.billingAddress = null;
     },
+    removeItemsFromCheckout: (state) => {
+      state.items = [];
+    },
   },
 });
 
 export const {
   addItemToCheckout,
   removeAllItemsFromCheckout,
+  removeItemsFromCheckout,
   addItemsOnCheckout,
   setCheckoutAddresses,
 } = checkoutSlice.actions;

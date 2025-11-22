@@ -182,7 +182,11 @@ const EditProfile = () => {
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                   </Field>
-                  <ErrorMessage name="gender" component="div" className="text-[12px] text-red-500" />
+                  <ErrorMessage
+                    name="gender"
+                    component="div"
+                    className="text-[12px] text-red-500"
+                  />
                 </div>
               </div>
 
@@ -196,7 +200,7 @@ const EditProfile = () => {
                 Update Information
               </Button>
             </Form>
-          )
+          );
         }}
       </Formik>
     </div>
