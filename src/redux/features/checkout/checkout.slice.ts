@@ -1,8 +1,22 @@
-import { IOrderItem } from "@/types/order";
+import { IOrderItem, IShippingAddress } from "@/types/order";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState: { items: (IOrderItem & { discount?: number })[] } = {
+type IBillingAddress = {
+  name: string;
+  address: string;
+  phoneNumber: string;
+};
+
+type CheckoutState = {
+  items: (IOrderItem & { discount?: number })[];
+  shippingAddress: IShippingAddress | null;
+  billingAddress: IBillingAddress | null;
+};
+
+const initialState: CheckoutState = {
   items: [],
+  shippingAddress: null,
+  billingAddress: null,
 };
 
 const checkoutSlice = createSlice({
@@ -32,12 +46,31 @@ const checkoutSlice = createSlice({
     addItemsOnCheckout: (state, action: PayloadAction<IOrderItem[]>) => {
       state.items = action.payload;
     },
+
+    setCheckoutAddresses: (
+      state,
+      action: PayloadAction<{
+        shipping: IShippingAddress;
+        billing: IBillingAddress | null;
+      }>
+    ) => {
+      state.shippingAddress = action.payload.shipping;
+      state.billingAddress = action.payload.billing;
+    },
+
     removeAllItemsFromCheckout: (state) => {
       state.items = [];
+      state.shippingAddress = null;
+      state.billingAddress = null;
     },
   },
 });
 
-export const { addItemToCheckout, removeAllItemsFromCheckout, addItemsOnCheckout } =
-  checkoutSlice.actions;
+export const {
+  addItemToCheckout,
+  removeAllItemsFromCheckout,
+  addItemsOnCheckout,
+  setCheckoutAddresses,
+} = checkoutSlice.actions;
+
 export default checkoutSlice.reducer;

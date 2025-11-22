@@ -1,7 +1,6 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { clearCart } from "@/redux/features/cart/cartSlice";
 import { useLogoutUserMutation } from "@/redux/features/user/user.api";
 import { logout as logoutAction } from "@/redux/features/user/user.slice";
 import { profileFallBack } from "@/utils";
@@ -35,7 +34,7 @@ export default function UserDropdown({ displayName = false }: { displayName?: bo
 
   const handleLogout = async () => {
     dispatch(logoutAction(undefined));
-    dispatch(clearCart());
+    // dispatch(clearCart());
     setIsOpen(false);
     await logoutUser(undefined);
     toast.success("Logout successfully");

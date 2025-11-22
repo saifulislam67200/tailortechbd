@@ -5,11 +5,16 @@ type TAuthState = {
   user: IUser | null;
   isLoading: boolean;
   token: string | null;
+  role: {
+    _id: string;
+    name: string;
+  } | null;
 };
 const initialState: TAuthState = {
   user: null,
   isLoading: true,
   token: null,
+  role: null
 };
 const userSlice = createSlice({
   name: "user",
@@ -23,6 +28,7 @@ const userSlice = createSlice({
       state.user = null;
       state.isLoading = false;
       state.token = null;
+      state.role = null;
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action?.payload || false;

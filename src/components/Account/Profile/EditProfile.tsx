@@ -121,80 +121,83 @@ const EditProfile = () => {
         onSubmit={handleSubmit}
         enableReinitialize
       >
-        {({ dirty }) => (
-          <Form>
-            <div className="grid grid-cols-1 gap-[8px] sm:grid-cols-2">
-              {/* Full Name */}
-              <div className="flex w-full flex-col gap-[6px]">
-                <label className="text-[12px] text-strong">Full Name</label>
-                <Field name="fullName" as={Input} placeholder="Enter your full name" />
-                <ErrorMessage
-                  name="fullName"
-                  component="div"
-                  className="text-[12px] text-red-500"
-                />
-              </div>
-
-              {/* Phone Number */}
-              <div className="flex w-full flex-col gap-[6px]">
-                <label className="text-[12px] text-strong">Phone No.</label>
-                <div className="flex items-center justify-start gap-0">
-                  <span className="border-y-[1px] border-l-[1px] border-border-main bg-solid-slab px-[12px] py-[6px] text-[12px] text-strong">
-                    {dialCode}
-                  </span>
-                  <Field
-                    disabled={!!user?.phoneNumber}
-                    type="string"
-                    name="phoneNumber"
-                    as={Input}
-                    className={user?.phoneNumber ? "bg-solid-slab" : ""}
-                    placeholder="Enter Your Mobile Number"
+        {({ dirty }) => {
+          const isDirty = dirty || !!file;
+          return (
+            <Form>
+              <div className="grid grid-cols-1 gap-[8px] sm:grid-cols-2">
+                {/* Full Name */}
+                <div className="flex w-full flex-col gap-[6px]">
+                  <label className="text-[12px] text-strong">Full Name</label>
+                  <Field name="fullName" as={Input} placeholder="Enter your full name" />
+                  <ErrorMessage
+                    name="fullName"
+                    component="div"
+                    className="text-[12px] text-red-500"
                   />
+                </div>
+
+                {/* Phone Number */}
+                <div className="flex w-full flex-col gap-[6px]">
+                  <label className="text-[12px] text-strong">Phone No.</label>
+                  <div className="flex items-center justify-start gap-0">
+                    <span className="border-y-[1px] border-l-[1px] border-border-main bg-solid-slab px-[12px] py-[6px] text-[12px] text-strong">
+                      {dialCode}
+                    </span>
+                    <Field
+                      disabled={!!user?.phoneNumber}
+                      type="string"
+                      name="phoneNumber"
+                      as={Input}
+                      className={user?.phoneNumber ? "bg-solid-slab" : ""}
+                      placeholder="Enter Your Mobile Number"
+                    />
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="flex w-full flex-col gap-[6px]">
+                  <label className="text-[12px] text-strong">Email</label>
+                  <Field
+                    disabled={!!user?.email}
+                    name="email"
+                    as={Input}
+                    placeholder="Enter your email"
+                    className={user?.email ? "bg-solid-slab" : ""}
+                  />
+                  <ErrorMessage name="email" component="div" className="text-[12px] text-red-500" />
+                </div>
+
+                {/* Gender */}
+                <div className="flex w-full flex-col gap-[6px]">
+                  <label className="text-[12px] text-strong">Gender</label>
+                  <Field
+                    as="select"
+                    name="gender"
+                    className="w-full appearance-none border-[1px] border-border-main bg-white bg-clip-padding px-[12px] py-[6px] text-[12px] font-normal text-strong outline-none"
+                  >
+                    <option value="" hidden>
+                      Select Gender
+                    </option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </Field>
+                  <ErrorMessage name="gender" component="div" className="text-[12px] text-red-500" />
                 </div>
               </div>
 
-              {/* Email */}
-              <div className="flex w-full flex-col gap-[6px]">
-                <label className="text-[12px] text-strong">Email</label>
-                <Field
-                  disabled={!!user?.email}
-                  name="email"
-                  as={Input}
-                  placeholder="Enter your email"
-                  className={user?.email ? "bg-solid-slab" : ""}
-                />
-                <ErrorMessage name="email" component="div" className="text-[12px] text-red-500" />
-              </div>
-
-              {/* Gender */}
-              <div className="flex w-full flex-col gap-[6px]">
-                <label className="text-[12px] text-strong">Gender</label>
-                <Field
-                  as="select"
-                  name="gender"
-                  className="w-full appearance-none border-[1px] border-border-main bg-white bg-clip-padding px-[12px] py-[6px] text-[12px] font-normal text-strong outline-none"
-                >
-                  <option value="" hidden>
-                    Select Gender
-                  </option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </Field>
-                <ErrorMessage name="gender" component="div" className="text-[12px] text-red-500" />
-              </div>
-            </div>
-
-            {/* <FormMessage formMessage={formMessage} /> */}
-            <Button
-              isLoading={isLoading || isUploading}
-              type="submit"
-              disabled={!dirty}
-              className="mt-[16px] bg-primary-foreground"
-            >
-              Update Information
-            </Button>
-          </Form>
-        )}
+              {/* <FormMessage formMessage={formMessage} /> */}
+              <Button
+                isLoading={isLoading || isUploading}
+                type="submit"
+                disabled={!isDirty}
+                className="mt-[16px] bg-primary-foreground"
+              >
+                Update Information
+              </Button>
+            </Form>
+          )
+        }}
       </Formik>
     </div>
   );

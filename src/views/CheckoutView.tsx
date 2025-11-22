@@ -12,7 +12,7 @@ import SelectionBox from "@/components/ui/SelectionBox";
 import TextArea from "@/components/ui/TextArea";
 import { useAppSelector } from "@/hooks/redux";
 import { clearCart } from "@/redux/features/cart/cartSlice";
-import { removeAllItemsFromCheckout } from "@/redux/features/checkout/checkout.slice";
+import { removeAllItemsFromCheckout, setCheckoutAddresses } from "@/redux/features/checkout/checkout.slice";
 import {
   useGetDistrictsQuery,
   useGetDivisionsQuery,
@@ -29,6 +29,7 @@ import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
+import Cookies from "js-cookie";
 
 // Helper function to normalize phone number to E.164 format
 const normalizePhoneNumber = (phoneNumber: string | undefined): string => {
@@ -75,7 +76,9 @@ const CheckoutView = () => {
     useState<IAppliedCouponResponse | null>(null);
 
   const [creaeOrder, { isLoading, data }] = useCreateOrderMutation();
-  const { items } = useAppSelector((state) => state.checkout);
+  const { items, shippingAddress, billingAddress } = useAppSelector(
+    (state) => state.checkout
+  );
   const { user } = useAppSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -105,16 +108,17 @@ const CheckoutView = () => {
     billing_name: string;
     email: string;
   } = {
-    address: "",
-    email: "",
-    district: "",
-    division: "",
-    name: user?.fullName || "",
-    phoneNumber: normalizePhoneNumber(user?.phoneNumber),
-    upazila: "",
-    billing_name: "",
-    billing_address: "",
-    billing_phoneNumber: "",
+    address: shippingAddress?.address || "",
+    email: user?.email || "",
+    district: shippingAddress?.district || "",
+    division: shippingAddress?.division || "",
+    name: shippingAddress?.name || user?.fullName || "",
+    phoneNumber:
+      shippingAddress?.phoneNumber || normalizePhoneNumber(user?.phoneNumber),
+    upazila: shippingAddress?.upazila || "",
+    billing_name: billingAddress?.name || "",
+    billing_address: billingAddress?.address || "",
+    billing_phoneNumber: billingAddress?.phoneNumber || "",
   };
 
   const handleSubmit = async (values: typeof initialValues) => {
@@ -129,6 +133,30 @@ const CheckoutView = () => {
       });
       return;
     }
+    const shippingAddress: IShippingAddress = {
+      address: values.address,
+      district: values.district,
+      division: values.division,
+      name: values.name,
+      phoneNumber: values.phoneNumber,
+      upazila: values.upazila,
+    };
+
+    const billing =
+      !isSameBillingAddress &&
+        values.billing_address &&
+        values.billing_phoneNumber &&
+        values.billing_name
+        ? {
+          address: values.billing_address,
+          phoneNumber: values.billing_phoneNumber,
+          name: values.billing_name,
+        }
+        : null;
+
+
+    dispatch(setCheckoutAddresses({ shipping: shippingAddress, billing }));
+
     const payload: Omit<
       IOrder,
       | "status"
@@ -143,10 +171,10 @@ const CheckoutView = () => {
       ...values,
       billingAddress: !isSameBillingAddress
         ? {
-            address: values.billing_address,
-            phoneNumber: values.billing_phoneNumber,
-            name: values.billing_name,
-          }
+          address: values.billing_address,
+          phoneNumber: values.billing_phoneNumber,
+          name: values.billing_name,
+        }
         : undefined,
 
       shippingAddress: {
@@ -161,6 +189,11 @@ const CheckoutView = () => {
       orderItems: myOrderItems,
       coupon: successfulCouponResponse?.appliedCoupon || "",
     };
+
+    if (!user) {
+      Cookies.set("redirect", "/checkout");
+      router.push("/login");
+    }
 
     const res = await creaeOrder(payload);
     const error = res.error as IQueruMutationErrorResponse;
@@ -183,6 +216,30 @@ const CheckoutView = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (!shippingAddress || !divisions) return;
+
+    const div = divisions.find(d => d.name === shippingAddress.division);
+    if (div) {
+      setLocationId(prev => ({
+        ...prev,
+        division_id: div.id,
+      }));
+    }
+  }, [shippingAddress, divisions]);
+
+  useEffect(() => {
+    if (!shippingAddress || !districts) return;
+
+    const dis = districts.find(d => d.name === shippingAddress.district);
+    if (dis) {
+      setLocationId(prev => ({
+        ...prev,
+        district_id: dis.id,
+      }));
+    }
+  }, [shippingAddress, districts]);
+
   return (
     <>
       {!data?.data ? (
@@ -192,6 +249,7 @@ const CheckoutView = () => {
             onSubmit={handleSubmit}
             validationSchema={validationSchema}
             initialValues={initialValues}
+            enableReinitialize
           >
             {({ setFieldValue, touched, errors, setFieldTouched, values, isValid }) => {
               return (
@@ -210,6 +268,7 @@ const CheckoutView = () => {
                         </Label>
                         <div className="flex flex-col gap-[5px]">
                           <SelectionBox
+                            displayValue={values.division}
                             data={divisions?.map((d) => ({ label: d.name, value: d.id })) || []}
                             onSelect={(e) => {
                               setFieldValue("division", e.label);
