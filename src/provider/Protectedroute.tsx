@@ -24,7 +24,7 @@ const Protectedroute: React.FC<IProps> = ({ role, children, checkVerification = 
 
       if (!user) {
         Cookies.set("redirect", path);
-        router.replace("/login");
+        router.replace("/customers/login");
         return;
       }
 

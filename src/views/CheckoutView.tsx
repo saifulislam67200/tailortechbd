@@ -1,4 +1,5 @@
 "use client";
+
 import CheckoutPaymentOptions from "@/components/Checkout/CheckoutPaymentOptions";
 import CheckoutSuccess from "@/components/Checkout/CheckoutSuccess";
 import CheeckoutOverview, { IAppliedCouponResponse } from "@/components/Checkout/CheeckoutOverview";
@@ -6,6 +7,7 @@ import Breadcrumb from "@/components/ui/BreadCrumbs";
 import Button from "@/components/ui/Button";
 import FormMessage, { IFormMessage } from "@/components/ui/FormMessage";
 import Input from "@/components/ui/Input";
+import Label from "@/components/ui/label";
 import SelectionBox from "@/components/ui/SelectionBox";
 import TextArea from "@/components/ui/TextArea";
 import { useAppSelector } from "@/hooks/redux";
@@ -32,45 +34,40 @@ import * as Yup from "yup";
 const normalizePhoneNumber = (phoneNumber: string | undefined): string => {
   if (!phoneNumber) return "";
 
-  // Remove all non-digit characters except +
   const cleaned = phoneNumber.replace(/[^\d+]/g, "");
 
-  // If already in E.164 format (starts with +), return as is
   if (cleaned.startsWith("+")) {
     return cleaned;
   }
 
-  // If starts with 880 (country code without +), add +
   if (cleaned.startsWith("880")) {
     return `+${cleaned}`;
   }
 
-  // If starts with 0 (local format), replace 0 with +880
   if (cleaned.startsWith("0")) {
     return `+880${cleaned.substring(1)}`;
   }
 
-  // If it's just digits, assume it's a local number and add +880
   if (/^\d+$/.test(cleaned)) {
     return `+880${cleaned}`;
   }
 
-  // Return empty string if format is unrecognized
   return "";
 };
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Full name is required"),
   phoneNumber: Yup.string().required("Phone number is required"),
+  email: Yup.string().email("Invalid email address").required("Email is required"),
   address: Yup.string().required("Please Enter a describe delvery address"),
   division: Yup.string().required("Division is required"),
   district: Yup.string().required("District is required"),
   upazila: Yup.string().required("Upazila is required"),
-  // billing address (optional)
   billing_name: Yup.string().optional(),
   billing_address: Yup.string().optional(),
   billing_phoneNumber: Yup.string().optional(),
 });
+
 const CheckoutView = () => {
   const router = useRouter();
   // this state is lift up from Checkout Overview component
@@ -106,8 +103,10 @@ const CheckoutView = () => {
     billing_address: string;
     billing_phoneNumber: string;
     billing_name: string;
+    email: string;
   } = {
     address: "",
+    email: "",
     district: "",
     division: "",
     name: user?.fullName || "",
@@ -206,9 +205,9 @@ const CheckoutView = () => {
 
                     <div className="flex flex-col gap-[16px] px-[16px] pt-[8px]">
                       <div className="flex flex-col gap-[8px]">
-                        <label className="text-[14px] font-[700] text-strong" htmlFor="name">
-                          Division *
-                        </label>
+                        <Label required htmlFor="name">
+                          Division
+                        </Label>
                         <div className="flex flex-col gap-[5px]">
                           <SelectionBox
                             data={divisions?.map((d) => ({ label: d.name, value: d.id })) || []}
@@ -227,9 +226,9 @@ const CheckoutView = () => {
                       </div>
                       {locationId.division_id ? (
                         <div className="flex flex-col gap-[8px]">
-                          <label className="text-[14px] font-[700] text-strong" htmlFor="name">
-                            District *
-                          </label>
+                          <Label required htmlFor="name">
+                            District
+                          </Label>
                           <div className="flex flex-col gap-[5px]">
                             <SelectionBox
                               displayValue={values.district}
@@ -251,9 +250,9 @@ const CheckoutView = () => {
                       )}
                       {locationId.district_id ? (
                         <div className="flex flex-col gap-[8px]">
-                          <label className="text-[14px] font-[700] text-strong" htmlFor="name">
-                            Upazila/City *
-                          </label>
+                          <Label required htmlFor="name">
+                            Upazila/City
+                          </Label>
                           <div className="flex flex-col gap-[5px]">
                             <SelectionBox
                               displayValue={values.upazila}
@@ -272,9 +271,9 @@ const CheckoutView = () => {
                         ""
                       )}
                       <div className="flex flex-col gap-[8px]">
-                        <label className="text-[14px] font-[700] text-strong" htmlFor="name">
-                          Name *
-                        </label>
+                        <Label required htmlFor="name">
+                          Name
+                        </Label>
                         <div className="flex flex-col gap-[5px]">
                           <Field placeholder="Full name" as={Input} name="name" id="name" />
                           {touched.name && errors.name && (
@@ -282,14 +281,12 @@ const CheckoutView = () => {
                           )}
                         </div>
                       </div>
+                      {/* Phone Number */}
                       <div className="flex flex-col gap-[8px]">
                         <div className="flex flex-col gap-[8px]">
-                          <label
-                            className="text-[14px] font-[700] text-strong"
-                            htmlFor="phoneNumber"
-                          >
+                          <Label required htmlFor="phoneNumber">
                             Phone Number
-                          </label>
+                          </Label>
                           <span className="text-[12px] text-muted">
                             The person who will receive the order
                           </span>
@@ -312,10 +309,25 @@ const CheckoutView = () => {
                           </div>
                         </div>
                       </div>
+
+                      {/* Email */}
                       <div className="flex flex-col gap-[8px]">
-                        <label className="text-[14px] font-[700] text-strong" htmlFor="address">
-                          Address *
-                        </label>
+                        <Label required htmlFor="email">
+                          Email
+                        </Label>
+                        <div className="flex flex-col gap-[5px]">
+                          <Field placeholder="Email" as={Input} name="email" id="email" />
+                          {touched.email && errors.email && (
+                            <span className="text-[12px] text-danger">{errors.email}</span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Address */}
+                      <div className="flex flex-col gap-[8px]">
+                        <Label required htmlFor="address">
+                          Address
+                        </Label>
                         <div className="flex flex-col gap-[5px]">
                           <Field
                             placeholder="Road #, House #, Area Name etc."
@@ -344,12 +356,7 @@ const CheckoutView = () => {
                       {!isSameBillingAddress ? (
                         <>
                           <div className="flex flex-col gap-[8px]">
-                            <label
-                              className="text-[14px] font-[700] text-strong"
-                              htmlFor="billing_name"
-                            >
-                              Billing Name
-                            </label>
+                            <Label htmlFor="billing_name">Billing Name</Label>
                             <div className="flex flex-col gap-[5px]">
                               <Field
                                 placeholder="Full name"
@@ -365,12 +372,7 @@ const CheckoutView = () => {
                             </div>
                           </div>
                           <div className="flex flex-col gap-[8px]">
-                            <label
-                              className="text-[14px] font-[700] text-strong"
-                              htmlFor="billing_phoneNumber"
-                            >
-                              Billing Contact Number
-                            </label>
+                            <Label htmlFor="billing_phoneNumber">Billing Contact Number</Label>
                             <div className="flex flex-col gap-[5px]">
                               <PhoneInput
                                 defaultCountry="BD"
@@ -393,12 +395,9 @@ const CheckoutView = () => {
                           </div>
 
                           <div className="flex flex-col gap-[8px]">
-                            <label
-                              className="text-[14px] font-[700] text-strong"
-                              htmlFor="billing_address"
-                            >
-                              Billing Address *
-                            </label>
+                            <Label required htmlFor="billing_address">
+                              Billing Address
+                            </Label>
                             <div className="flex flex-col gap-[5px]">
                               <Field
                                 placeholder="Road #, House #, Area Name etc."
