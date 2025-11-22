@@ -24,7 +24,7 @@ const Protectedroute: React.FC<IProps> = ({ role, children, checkVerification = 
 
       if (!user) {
         Cookies.set("redirect", path);
-        router.replace("/login");
+        router.replace("/");
         return;
       }
 
@@ -33,13 +33,7 @@ const Protectedroute: React.FC<IProps> = ({ role, children, checkVerification = 
         router.replace("/");
         return;
       }
-
-      /*       if (!user.isVerified && checkVerification) {
-        Cookies.set("redirect", path);
-        router.replace("/register/verification");
-        return;
-      } */
-
+      
       setIsAllowed(true);
     }, 500);
 

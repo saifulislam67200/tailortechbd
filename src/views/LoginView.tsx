@@ -3,7 +3,7 @@
 import PhoneNumberLogin from "@/components/Login/PhoneNumberLogin";
 import Breadcrumb from "@/components/ui/BreadCrumbs";
 import FormCard from "@/components/ui/FormCard";
-import Link from "next/link";
+// import Link from "next/link";
 
 const LoginView = () => {
   return (
@@ -17,7 +17,7 @@ const LoginView = () => {
         ]}
       >
         <PhoneNumberLogin />
-        <div className="flex flex-col justify-end gap-[10px] sm:flex-row sm:items-center">
+        {/* <div className="flex flex-col justify-end gap-[10px] sm:flex-row sm:items-center">
           <span className={"text-[14px] text-primary-foreground"}>
             New Customer?
             <Link href={"/register"} className="font-[600] hover:underline">
@@ -25,7 +25,7 @@ const LoginView = () => {
               Sign Up Here
             </Link>
           </span>
-        </div>
+        </div> */}
       </FormCard>
     </div>
   );

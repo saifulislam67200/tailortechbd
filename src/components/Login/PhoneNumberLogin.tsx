@@ -14,6 +14,7 @@ import Button from "../ui/Button";
 import CountrySelector from "../ui/CountrySelector";
 import FormMessage, { IFormMessage } from "../ui/FormMessage";
 import Input from "../ui/Input";
+import Label from "../ui/label";
 
 const initialValues = { phoneNumber: "", otp: "" };
 const phoneValidationSchema = yup.object({
@@ -189,6 +190,7 @@ const PhoneNumberLogin = () => {
         <Form className="flex w-full flex-col gap-[16px]">
           <CountrySelector onCountrySelect={setCountry} />
           <div className="flex flex-col gap-[5px]">
+            <Label required>Phone Number</Label>
             <div className="flex items-center justify-start gap-0">
               <span className="border-y-[1px] border-l-[1px] border-border-main bg-solid-slab px-[12px] py-[6px] text-[12px] text-strong">
                 {country?.dial_code || "+880"}
@@ -241,7 +243,7 @@ const PhoneNumberLogin = () => {
 
           <FormMessage formMessage={formMessage} />
           <Button isLoading={otpSent ? isLoggingIn : isSendingOtp} type="submit" className="w-full">
-            {otpSent ? "Login" : "Send OTP"}
+            {otpSent ? "Verify Login" : "Send"}
           </Button>
         </Form>
       )}
