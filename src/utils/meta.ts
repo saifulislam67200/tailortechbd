@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     title: "Tailortech - Your Style Is Your Story",
     description:
       "Welcome to Tailortech – Where Tradition Meets Innovation.\nAt Tailortech, we believe fashion is more than just clothing — it's a statement of identity. Our brand blends modern design with timeless comfort, offering high-quality apparel for individuals who value style, authenticity, and confidence. We also blend the timeless art of tailoring with cutting-edge fashion technology to bring you modern, perfectly fitted, and stylish apparel. Every piece is crafted with precision, comfort, and confidence in mind.\Tailortech is more than a brand — it’s a movement towards smarter fashion.\nJoin us and wear the future.",
-    url: "https://www.bd-shop.com",
+    url: "https://www.tailortechbd.com",
     siteName: "Tailortech",
     images: [
       {
