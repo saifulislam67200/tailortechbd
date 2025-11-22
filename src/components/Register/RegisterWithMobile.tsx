@@ -103,7 +103,7 @@ const RegisterWithMobile = () => {
     setPhoneNumber(phone);
     setFullName(values.fullName);
 
-    const res = await sendSignupOtp({ phoneNumber: phone });
+    const res = await sendSignupOtp({ phoneNumber: phone, fullName: values.fullName });
     const error = res.error as IQueruMutationErrorResponse;
 
     if (error) {
@@ -127,9 +127,9 @@ const RegisterWithMobile = () => {
   };
 
   const handleResendOtp = async () => {
-    if (!phoneNumber) return;
+    if (!phoneNumber || !fullName) return;
 
-    const res = await sendSignupOtp({ phoneNumber });
+    const res = await sendSignupOtp({ phoneNumber, fullName });
     const error = res.error as IQueruMutationErrorResponse;
 
     if (error) {

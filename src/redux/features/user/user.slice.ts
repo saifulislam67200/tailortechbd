@@ -14,7 +14,7 @@ const initialState: TAuthState = {
   user: null,
   isLoading: true,
   token: null,
-  role: null
+  role: null,
 };
 const userSlice = createSlice({
   name: "user",

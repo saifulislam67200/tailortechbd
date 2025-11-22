@@ -10,9 +10,12 @@ import Input from "@/components/ui/Input";
 import Label from "@/components/ui/label";
 import SelectionBox from "@/components/ui/SelectionBox";
 import TextArea from "@/components/ui/TextArea";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { clearCart } from "@/redux/features/cart/cartSlice";
-import { removeAllItemsFromCheckout, setCheckoutAddresses } from "@/redux/features/checkout/checkout.slice";
+import {
+  removeItemsFromCheckout,
+  setCheckoutAddresses,
+} from "@/redux/features/checkout/checkout.slice";
 import {
   useGetDistrictsQuery,
   useGetDivisionsQuery,
@@ -21,15 +24,13 @@ import {
 import { useCreateOrderMutation } from "@/redux/features/order/order.api";
 import { IQueruMutationErrorResponse } from "@/types";
 import { IOrder, IShippingAddress } from "@/types/order";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikHelpers } from "formik";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaSpinner } from "react-icons/fa";
-import PhoneInput from "react-phone-number-input";
+import PhoneInput, { isPossiblePhoneNumber, isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import { useDispatch } from "react-redux";
 import * as Yup from "yup";
-import Cookies from "js-cookie";
 
 // Helper function to normalize phone number to E.164 format
 const normalizePhoneNumber = (phoneNumber: string | undefined): string => {
@@ -58,7 +59,12 @@ const normalizePhoneNumber = (phoneNumber: string | undefined): string => {
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Full name is required"),
-  phoneNumber: Yup.string().required("Phone number is required"),
+  phoneNumber: Yup.string()
+    .required("Phone number is required")
+    .test("is-valid-phone", "Invalid phone number", (value) => {
+      if (!value) return false;
+      return isPossiblePhoneNumber(value) && isValidPhoneNumber(value);
+    }),
   email: Yup.string().email("Invalid email address").required("Email is required"),
   address: Yup.string().required("Please Enter a describe delvery address"),
   division: Yup.string().required("Division is required"),
@@ -66,7 +72,12 @@ const validationSchema = Yup.object({
   upazila: Yup.string().required("Upazila is required"),
   billing_name: Yup.string().optional(),
   billing_address: Yup.string().optional(),
-  billing_phoneNumber: Yup.string().optional(),
+  billing_phoneNumber: Yup.string()
+    .optional()
+    .test("is-valid-phone", "Invalid phone number", (value) => {
+      if (!value) return true; // Optional field, so empty is valid
+      return isPossiblePhoneNumber(value) && isValidPhoneNumber(value);
+    }),
 });
 
 const CheckoutView = () => {
@@ -75,12 +86,10 @@ const CheckoutView = () => {
   const [successfulCouponResponse, setSuccessfulCouponResponse] =
     useState<IAppliedCouponResponse | null>(null);
 
-  const [creaeOrder, { isLoading, data }] = useCreateOrderMutation();
-  const { items, shippingAddress, billingAddress } = useAppSelector(
-    (state) => state.checkout
-  );
+  const [createOrder, { isLoading, data }] = useCreateOrderMutation();
+  const { items, shippingAddress, billingAddress } = useAppSelector((state) => state.checkout);
   const { user } = useAppSelector((state) => state.user);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const [formMessage, setFormMessage] = useState<IFormMessage | null>(null);
   const [isSameBillingAddress, setIsSameBillingAddress] = useState(true);
@@ -108,21 +117,44 @@ const CheckoutView = () => {
     billing_name: string;
     email: string;
   } = {
+    name: user?.fullName || shippingAddress?.name || "",
+    email: user?.email || shippingAddress?.email || "",
+    phoneNumber: user?.phoneNumber
+      ? normalizePhoneNumber(user.phoneNumber)
+      : shippingAddress?.phoneNumber || "",
     address: shippingAddress?.address || "",
-    email: user?.email || "",
     district: shippingAddress?.district || "",
     division: shippingAddress?.division || "",
-    name: shippingAddress?.name || user?.fullName || "",
-    phoneNumber:
-      shippingAddress?.phoneNumber || normalizePhoneNumber(user?.phoneNumber),
     upazila: shippingAddress?.upazila || "",
     billing_name: billingAddress?.name || "",
     billing_address: billingAddress?.address || "",
     billing_phoneNumber: billingAddress?.phoneNumber || "",
   };
 
-  const handleSubmit = async (values: typeof initialValues) => {
+  const handleSubmit = async (
+    values: typeof initialValues,
+    formikHelpers?: FormikHelpers<typeof initialValues>
+  ) => {
     setFormMessage(null);
+
+    // Validate shipping phone number
+    if (
+      !values.phoneNumber ||
+      !isPossiblePhoneNumber(values.phoneNumber) ||
+      !isValidPhoneNumber(values.phoneNumber)
+    ) {
+      if (formikHelpers) {
+        formikHelpers.setFieldError("phoneNumber", "* Invalid phone number");
+      } else {
+        setFormMessage({
+          message: "Please enter a valid phone number",
+          type: "error",
+        });
+      }
+      return;
+    }
+
+    // Validate billing phone number if different billing address is used
     if (
       !isSameBillingAddress &&
       (!values.billing_address || !values.billing_phoneNumber || !values.billing_name)
@@ -133,29 +165,44 @@ const CheckoutView = () => {
       });
       return;
     }
+
+    if (
+      !isSameBillingAddress &&
+      values.billing_phoneNumber &&
+      (!isPossiblePhoneNumber(values.billing_phoneNumber) ||
+        !isValidPhoneNumber(values.billing_phoneNumber))
+    ) {
+      if (formikHelpers) {
+        formikHelpers.setFieldError("billing_phoneNumber", "* Invalid phone number");
+      } else {
+        setFormMessage({
+          message: "Please enter a valid billing phone number",
+          type: "error",
+        });
+      }
+      return;
+    }
     const shippingAddress: IShippingAddress = {
       address: values.address,
       district: values.district,
       division: values.division,
       name: values.name,
       phoneNumber: values.phoneNumber,
+      email: values.email,
       upazila: values.upazila,
     };
 
     const billing =
       !isSameBillingAddress &&
-        values.billing_address &&
-        values.billing_phoneNumber &&
-        values.billing_name
+      values.billing_address &&
+      values.billing_phoneNumber &&
+      values.billing_name
         ? {
-          address: values.billing_address,
-          phoneNumber: values.billing_phoneNumber,
-          name: values.billing_name,
-        }
+            address: values.billing_address,
+            phoneNumber: values.billing_phoneNumber,
+            name: values.billing_name,
+          }
         : null;
-
-
-    dispatch(setCheckoutAddresses({ shipping: shippingAddress, billing }));
 
     const payload: Omit<
       IOrder,
@@ -171,10 +218,10 @@ const CheckoutView = () => {
       ...values,
       billingAddress: !isSameBillingAddress
         ? {
-          address: values.billing_address,
-          phoneNumber: values.billing_phoneNumber,
-          name: values.billing_name,
-        }
+            address: values.billing_address,
+            phoneNumber: values.billing_phoneNumber,
+            name: values.billing_name,
+          }
         : undefined,
 
       shippingAddress: {
@@ -183,6 +230,7 @@ const CheckoutView = () => {
         division: values.division,
         name: values.name,
         phoneNumber: values.phoneNumber,
+        email: values.email,
         upazila: values.upazila,
       },
 
@@ -190,12 +238,7 @@ const CheckoutView = () => {
       coupon: successfulCouponResponse?.appliedCoupon || "",
     };
 
-    if (!user) {
-      Cookies.set("redirect", "/checkout");
-      router.push("/login");
-    }
-
-    const res = await creaeOrder(payload);
+    const res = await createOrder(payload);
     const error = res.error as IQueruMutationErrorResponse;
     if (error) {
       if (error.data?.message) {
@@ -205,8 +248,13 @@ const CheckoutView = () => {
       }
       return;
     }
+
+    // Set checkout addresses in redux after successful order creation
+    // This ensures the information is saved, especially when a new user is created
+    dispatch(setCheckoutAddresses({ shipping: shippingAddress, billing }));
+
     dispatch(clearCart());
-    dispatch(removeAllItemsFromCheckout());
+    dispatch(removeItemsFromCheckout());
   };
 
   useEffect(() => {
@@ -219,9 +267,9 @@ const CheckoutView = () => {
   useEffect(() => {
     if (!shippingAddress || !divisions) return;
 
-    const div = divisions.find(d => d.name === shippingAddress.division);
+    const div = divisions.find((d) => d.name === shippingAddress.division);
     if (div) {
-      setLocationId(prev => ({
+      setLocationId((prev) => ({
         ...prev,
         division_id: div.id,
       }));
@@ -231,9 +279,9 @@ const CheckoutView = () => {
   useEffect(() => {
     if (!shippingAddress || !districts) return;
 
-    const dis = districts.find(d => d.name === shippingAddress.district);
+    const dis = districts.find((d) => d.name === shippingAddress.district);
     if (dis) {
-      setLocationId(prev => ({
+      setLocationId((prev) => ({
         ...prev,
         district_id: dis.id,
       }));
@@ -246,12 +294,22 @@ const CheckoutView = () => {
         <div className="main_container flex min-h-[100dvh] w-full flex-col gap-[20px] py-[20px]">
           <Breadcrumb />
           <Formik
-            onSubmit={handleSubmit}
+            onSubmit={(values, formikHelpers) => handleSubmit(values, formikHelpers)}
             validationSchema={validationSchema}
             initialValues={initialValues}
             enableReinitialize
+            validateOnChange={true}
+            validateOnBlur={true}
           >
-            {({ setFieldValue, touched, errors, setFieldTouched, values, isValid }) => {
+            {({
+              setFieldValue,
+              touched,
+              errors,
+              setFieldTouched,
+              values,
+              isValid,
+              validateField,
+            }) => {
               return (
                 <Form className="flex w-full flex-col items-start justify-start gap-[16px] md:flex-row">
                   <div className="w-full bg-white pt-[8px] pb-[22px]">
@@ -357,8 +415,16 @@ const CheckoutView = () => {
                               countryCallingCodeEditable={false}
                               placeholder="Enter your phone number"
                               onChange={(value) => {
-                                setFieldValue("phoneNumber", value);
+                                setFieldValue("phoneNumber", value || "", false);
                                 setFieldTouched("phoneNumber", true);
+                                // Validate immediately
+                                setTimeout(() => {
+                                  validateField("phoneNumber");
+                                }, 0);
+                              }}
+                              onBlur={() => {
+                                setFieldTouched("phoneNumber", true);
+                                validateField("phoneNumber");
                               }}
                               className={`rounded-[5px] border-[1px] border-border-muted bg-white px-3 py-[12px] text-sm`}
                             />
@@ -440,8 +506,16 @@ const CheckoutView = () => {
                                 countryCallingCodeEditable={false}
                                 placeholder="Enter billing phone number"
                                 onChange={(value) => {
-                                  setFieldValue("billing_phoneNumber", value);
+                                  setFieldValue("billing_phoneNumber", value || "", false);
                                   setFieldTouched("billing_phoneNumber", true);
+                                  // Validate immediately
+                                  setTimeout(() => {
+                                    validateField("billing_phoneNumber");
+                                  }, 0);
+                                }}
+                                onBlur={() => {
+                                  setFieldTouched("billing_phoneNumber", true);
+                                  validateField("billing_phoneNumber");
                                 }}
                                 className={`rounded-[5px] border-[1px] border-border-muted bg-white px-3 py-[12px] text-sm`}
                               />

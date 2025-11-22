@@ -1,6 +1,6 @@
 "use client";
 import Button from "@/components/ui/Button";
-import { removeAllItemsFromCheckout } from "@/redux/features/checkout/checkout.slice";
+import { removeItemsFromCheckout } from "@/redux/features/checkout/checkout.slice";
 import { IOrder } from "@/types/order";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -21,7 +21,7 @@ const CheckoutSuccess: React.FC<IProps> = ({ orderData }) => {
   useEffect(() => {
     return () => {
       if (hasMounted.current) {
-        dispatch(removeAllItemsFromCheckout());
+        dispatch(removeItemsFromCheckout());
       }
       hasMounted.current = true;
     };

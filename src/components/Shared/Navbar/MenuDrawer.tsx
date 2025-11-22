@@ -11,14 +11,15 @@ interface MenuDrawerProps {
 export default function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
   const drawerRef = useRef<HTMLDivElement>(null);
   if (!isOpen) {
-    return ""
+    return "";
   }
   return (
     <>
       {/* Overlay  */}
       <div
-        className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${isOpen ? "opacity-50" : "pointer-events-none opacity-0"
-          }`}
+        className={`fixed inset-0 z-40 bg-black transition-opacity duration-300 ${
+          isOpen ? "opacity-50" : "pointer-events-none opacity-0"
+        }`}
         onClick={() => setIsOpen(false)}
         aria-hidden={!isOpen}
       />
@@ -26,8 +27,9 @@ export default function MenuDrawer({ isOpen, setIsOpen }: MenuDrawerProps) {
       {/* Drawer */}
       <div
         ref={drawerRef}
-        className={`fixed top-0 left-0 z-[9999999999] h-full w-full transform bg-primary-foreground shadow-lg transition-transform duration-300 ease-in-out sm:max-w-[334px] ${isOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed top-0 left-0 z-[9999999999] h-full w-full transform bg-primary-foreground shadow-lg transition-transform duration-300 ease-in-out sm:max-w-[334px] ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mt-[16px] flex items-center justify-between border-b px-[16px]">

@@ -20,7 +20,7 @@ const LoginView = () => {
         <div className="flex flex-col justify-end gap-[10px] sm:flex-row sm:items-center">
           <span className={"text-[14px] text-primary-foreground"}>
             New Customer?
-            <Link href={"/customers/register"} className="font-[600] hover:underline">
+            <Link href={"/register"} className="font-[600] hover:underline">
               {" "}
               Sign Up Here
             </Link>

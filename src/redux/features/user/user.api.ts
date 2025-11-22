@@ -122,7 +122,7 @@ const userApi = api.injectEndpoints({
     }),
     sendSignupOtp: builder.mutation<
       { data: { cooldownEnd: number; remainingSeconds: number } },
-      { phoneNumber: string }
+      { phoneNumber: string; fullName: string }
     >({
       query: (payload) => ({
         url: "/user/send-signup-otp",

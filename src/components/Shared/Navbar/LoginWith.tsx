@@ -8,7 +8,7 @@ const LoginWith = () => {
   return (
     <div>
       <Link
-        href="/customers/login"
+        href="/login"
         className="mt-2 cursor-pointer text-primary"
         onMouseOver={() => setIsMouseOver(true)}
         onMouseLeave={() => setIsMouseOver(false)}
