@@ -164,7 +164,7 @@ const PhoneNumberLogin = () => {
     }
 
     setFormMessage(null);
-    const redirect = Cookies.get("redirect") || "/";
+    const redirect = Cookies.get("redirect") || "/account/orders";
     Cookies.remove("redirect");
     router.replace(redirect);
   };
