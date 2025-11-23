@@ -7,6 +7,7 @@ import ProductAddToCartModal from "../../ProductAddToCartModal";
 import PrimaryProductCardImages from "./PrimaryProductCardImages";
 import ProcutCheckout from "./ProcutCheckout";
 import ProductHoverIcons from "./ProductHoverIcons";
+
 const ProductPrimaryCard = ({ product, className }: { product: IProduct; className?: string }) => {
   const isAllStockOutFunctional = (colors: IColor[]): boolean => {
     try {

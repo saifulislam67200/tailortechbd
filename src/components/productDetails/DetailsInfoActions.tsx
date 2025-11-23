@@ -21,6 +21,40 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
   const [activeSize, setActiveSize] = useState<ISize | undefined>();
   const [activeQuantity, setActiveQuantity] = useState(1);
 
+  // Check if all stock is out
+  const isAllStockOutFunctional = (colors: IColor[]): boolean => {
+    try {
+      if (!Array.isArray(colors) || colors.length === 0) {
+        return true;
+      }
+
+      return !colors.some((color) => {
+        if (!color || !Array.isArray(color.sizes)) {
+          return false;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-ignore
+        return color.sizes.some((size) => {
+          if (!size || typeof size.stock === "undefined") {
+            return false;
+          }
+
+          const stock = parseInt(size.stock.toString(), 10);
+
+          return !isNaN(stock) && stock > 0;
+        });
+      });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error checking stock status:", errorMessage);
+
+      return true;
+    }
+  };
+
+  const isAllStockOut = isAllStockOutFunctional(product?.colors || []);
+
   // Reset quantity when size changes
   const handleSizeChange = (size: ISize) => {
     setActiveSize(size);
@@ -112,10 +146,18 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
   const handleColorChange = (color: IColor) => {
     setActiveColor(color);
     onColorChange(color);
-    // Reset activeSize if it's not available in the selected color or if it's out of stock
-    if (activeSize && !color.sizes?.some((s) => s.size === activeSize.size && s.stock > 0)) {
-      setActiveSize(undefined);
-      setActiveQuantity(1);
+    // Reset activeSize if it's not available in the selected color
+    // If all stock is out, just check if size exists; otherwise check stock > 0
+    if (activeSize) {
+      const sizeExists = color.sizes?.some((s) => s.size === activeSize.size);
+      const hasStock = isAllStockOut
+        ? true
+        : color.sizes?.some((s) => s.size === activeSize.size && s.stock > 0);
+
+      if (!sizeExists || !hasStock) {
+        setActiveSize(undefined);
+        setActiveQuantity(1);
+      }
     }
   };
 
@@ -146,29 +188,31 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
       <h1 className="mt-[15px] text-[16px]">Sizes:</h1>
       <div className="mt-[5px] flex items-center gap-[10px]">
         {activeColor
-          ? // If color is selected, show only sizes from that color with stock > 0
-            activeColor.sizes
-              ?.filter((size) => size.stock > 0)
-              ?.map((size) => (
-                <button
-                  key={size._id}
-                  type="button"
-                  aria-label={`Select size ${size.size}`}
-                  className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
-                    activeSize?.size === size.size
-                      ? "bg-primary text-white shadow-none"
-                      : "bg-white text-black shadow"
-                  } border border-gray-200 hover:bg-primary hover:text-white`}
-                  onClick={() => handleSizeChange(size)}
-                >
-                  {size.size}
-                </button>
-              ))
-          : // If no color is selected, show all sizes from all colors with stock > 0
+          ? // If color is selected, show sizes from that color
+            // If all stock is out, show all sizes; otherwise filter by stock > 0
+            (isAllStockOut
+              ? activeColor.sizes
+              : activeColor.sizes?.filter((size) => size.stock > 0)
+            )?.map((size) => (
+              <button
+                key={size._id}
+                type="button"
+                aria-label={`Select size ${size.size}`}
+                className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+                  activeSize?.size === size.size
+                    ? "bg-primary text-white shadow-none"
+                    : "bg-white text-black shadow"
+                } border border-gray-200 hover:bg-primary hover:text-white`}
+                onClick={() => handleSizeChange(size)}
+              >
+                {size.size}
+              </button>
+            ))
+          : // If no color is selected, show sizes from all colors
+            // If all stock is out, show all sizes; otherwise filter by stock > 0
             product.colors?.map((color) =>
-              color.sizes
-                ?.filter((size) => size.stock > 0)
-                ?.map((size) => (
+              (isAllStockOut ? color.sizes : color.sizes?.filter((size) => size.stock > 0))?.map(
+                (size) => (
                   <button
                     key={size._id}
                     type="button"
@@ -182,7 +226,8 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
                   >
                     {size.size}
                   </button>
-                ))
+                )
+              )
             )}
       </div>
 
@@ -229,33 +274,47 @@ const DetailsInfoActions: React.FC<IProps> = ({ product, onColorChange }) => {
       </p>
 
       {/* // add to cart button  */}
-      {activeColor && activeSize && !activeSize.stock ? (
-        <RestockRequestModal
-          color={activeColor?.color ?? ""}
-          size={activeSize.size}
-          productId={product?._id}
-        />
-      ) : (
-        <div className="mt-[10px] flex flex-col items-center gap-[10px] sm:max-w-[330px] sm:flex-row">
-          <button
-            disabled={activeColor?.sizes?.find((s) => s?.size === activeSize?.size)?.stock === 0}
-            onClick={handleAddToCart}
-            className="h-[40px] w-full cursor-pointer bg-primary text-white transition-all duration-300 hover:bg-info disabled:cursor-not-allowed disabled:opacity-[50]"
-          >
-            Add to cart
-          </button>
+      <div className="mt-[10px] flex flex-col items-center gap-[10px] sm:max-w-[330px] sm:flex-row">
+        <button
+          disabled={
+            isAllStockOut ||
+            !activeColor ||
+            !activeSize ||
+            activeColor?.sizes?.find((s) => s?.size === activeSize?.size)?.stock === 0
+          }
+          onClick={handleAddToCart}
+          className="h-[40px] w-full cursor-pointer bg-primary text-white transition-all duration-300 hover:bg-info disabled:cursor-not-allowed disabled:opacity-[50]"
+        >
+          Add to cart
+        </button>
+        {isAllStockOut || (activeColor && activeSize && !activeSize.stock) ? (
+          activeColor && activeSize ? (
+            <RestockRequestModal
+              color={activeColor?.color ?? ""}
+              size={activeSize.size}
+              productId={product?._id}
+            />
+          ) : (
+            <button
+              disabled
+              className="checkoutBtn center mt-1 h-[42px] w-full cursor-not-allowed gap-[3px] border border-[#c5c5c5] py-[8px] text-sm font-bold opacity-50"
+            >
+              Request Restock
+            </button>
+          )
+        ) : (
           <ProcutCheckout
             product={product}
             quantity={activeQuantity}
             onQuantityChange={setActiveQuantity}
-            btnStyle="h-[42px]  mt-[0px]"
+            btnStyle="h-[42px] mt-[0px]"
             activeColor={activeColor}
             activeSize={activeSize}
             skipModal={true}
             onError={handleCheckoutError}
           />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
