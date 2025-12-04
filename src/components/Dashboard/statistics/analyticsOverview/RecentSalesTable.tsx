@@ -1,18 +1,13 @@
 "use client";
-import React, { useState } from "react";
-import AnalyticsOverviewFilter from "./AnalyticsOverviewFilter";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Pagination from "@/components/ui/Pagination";
 import { useGetRecentSalesQuery } from "@/redux/features/statistics/statistics.api";
 import { IOrderStatus } from "@/types/order";
 import RecentSalesTableSkeleton from "@/components/ui/Skeleton/RecentSalesTableSkeleton";
-
-const options = [
-  { value: "overall", label: "Overall" },
-  { value: "today", label: "Today" },
-  { value: "this-month", label: "This Month" },
-  { value: "this-year", label: "This Year" },
-];
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { IoCalendarNumberOutline } from "react-icons/io5";
 
 const getStatusBadgeColor = (status: string) => {
   switch (status) {
@@ -81,14 +76,20 @@ export interface ISale {
 }
 
 const RecentSalesTable = () => {
-  const [selectedFilter, setSelectedFilter] = useState(options[2]);
+  const selectedFilter = { value: "custom", label: "Select Range" };
+  const [dateRange, setDateRange] = useState<{ startDate: Date | undefined; endDate: Date | undefined }>({ startDate: undefined, endDate: undefined });
   const [page, setPage] = useState<number>(1);
   const limit = 5;
-  const { data: getRecentSales, isLoading } = useGetRecentSalesQuery({
-    period: selectedFilter.value,
-    page,
-    limit,
-  });
+  const queryParams: Record<string, string | number> = { page, limit };
+  if (dateRange.startDate) queryParams.startDate = dateRange.startDate.toISOString().split('T')[0];
+  if (dateRange.endDate) queryParams.endDate = dateRange.endDate.toISOString().split('T')[0];
+  const { data: getRecentSales, isLoading, refetch } = useGetRecentSalesQuery(queryParams);
+
+  useEffect(() => {
+    if (!dateRange.startDate && !dateRange.endDate) {
+      refetch();
+    }
+  }, [dateRange.startDate, dateRange.endDate, refetch]);
 
   const recentSales = getRecentSales?.data || [];
 
@@ -105,11 +106,31 @@ const RecentSalesTable = () => {
           <h3 className="text-[14px] font-bold text-primary sm:text-[16px]">Recent Sales</h3> |{" "}
           <p className="text-[14px] font-semibold text-info capitalize">{selectedFilter.label}</p>
         </div>
-        <AnalyticsOverviewFilter
-          options={options}
-          selected={selectedFilter}
-          onChange={setSelectedFilter}
-        />
+        <div className="flex items-center justify-start gap-2">
+          <DatePicker
+            selected={dateRange.startDate}
+            dateFormat={"dd MMM yyyy"}
+            placeholderText="Start Date"
+            icon={<IoCalendarNumberOutline />}
+            className="max-w-[150px] cursor-pointer border border-quaternary px-[12px] py-[6px] text-sm focus:outline-none"
+            onChange={(date) => setDateRange({ ...dateRange, startDate: date || undefined })}
+          />
+          -
+          <DatePicker
+            selected={dateRange.endDate}
+            dateFormat={"dd MMM yyyy"}
+            placeholderText="End Date"
+            icon={<IoCalendarNumberOutline />}
+            className="max-w-[150px] cursor-pointer border border-quaternary px-[12px] py-[6px] text-sm focus:outline-none"
+            onChange={(date) => setDateRange({ ...dateRange, endDate: date || undefined })}
+          />
+          <button
+            onClick={() => setDateRange({ startDate: undefined, endDate: undefined })}
+            className="ml-2 px-3 py-1 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300"
+          >
+            Clear
+          </button>
+        </div>
       </div>
       <div className="w-full overflow-x-auto">
         <table className="min-w-full text-sm">

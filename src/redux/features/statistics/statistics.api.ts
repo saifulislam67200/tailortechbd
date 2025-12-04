@@ -4,10 +4,13 @@ import { generateQueryParams } from "@/utils";
 const statisticsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getSalesSummary: builder.query({
-      query: ({ searchQuery }) => ({
-        url: `/statistics/sales-summery?period=${searchQuery}`,
-        method: "GET",
-      }),
+      query: (params) => {
+        const queryString = generateQueryParams(params);
+        return {
+          url: `/statistics/sales-summery?${queryString}`,
+          method: "GET",
+        };
+      },
       providesTags: ["statistics"],
     }),
     getThisYearEarnings: builder.query({

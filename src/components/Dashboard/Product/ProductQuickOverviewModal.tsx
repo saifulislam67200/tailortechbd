@@ -16,6 +16,7 @@ import { cloneElement, isValidElement, ReactElement, ReactNode, useEffect, useSt
 import { FaEye, FaSpinner } from "react-icons/fa";
 import { IoIosStar } from "react-icons/io";
 import { LuX } from "react-icons/lu";
+import ProcutCheckout from "@/components/ui/Card/ProductCard/ProcutCheckout";
 
 interface Props {
   children?: ReactNode;
@@ -46,6 +47,50 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
   const [activeSize, setActiveSize] = useState<ISize | undefined>();
   const [activeQuantity, setActiveQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState<IColor | undefined>();
+
+  // Check if all stock is out
+  const isAllStockOutFunctional = (colors: IColor[]): boolean => {
+    try {
+      if (!Array.isArray(colors) || colors.length === 0) {
+        return true;
+      }
+
+      return !colors.some((color) => {
+        if (!color || !Array.isArray(color.sizes)) {
+          return false;
+        }
+
+        return color.sizes.some((size) => {
+          if (!size || typeof size.stock === "undefined") {
+            return false;
+          }
+
+          const stock = parseInt(size.stock.toString(), 10);
+
+          return !isNaN(stock) && stock > 0;
+        });
+      });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error checking stock status:", errorMessage);
+
+      return true;
+    }
+  };
+
+  const isAllStockOutCalculated = isAllStockOutFunctional(product?.colors || []);
+
+  // Filter colors to only show those with available sizes
+  const availableColors = product?.colors?.filter((color) =>
+    isAllStockOutCalculated ? true : color.sizes?.some((size) => size.stock > 0)
+  ) || [];
+
+  useEffect(() => {
+    if (availableColors.length > 0 && !activeColor) {
+      setActiveColor(availableColors[0]);
+      setSelectedColor(availableColors[0]);
+    }
+  }, [availableColors, activeColor]);
 
   const getColorVariantImage = (colorName: string): string => {
     if (!product?.colors || !Array.isArray(product.colors)) {
@@ -240,7 +285,7 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
                   {/* colors  */}
                   <h1 className="text-[16px]">Colors:</h1>
                   <div className="mt-[5px] flex items-center gap-[10px]">
-                    {product?.colors?.map((color) => {
+                    {availableColors?.map((color) => {
                       return (
                         <button
                           key={color._id}
@@ -263,8 +308,11 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
                   <h1 className="mt-[10px] text-[16px]">Sizes:</h1>
                   <div className="mt-[5px] flex items-center gap-[10px]">
                     {activeColor
-                      ? // If color is selected, show only sizes from that color
-                        activeColor.sizes?.map((size) => (
+                      ? // If color is selected, show sizes from that color with stock >0 unless all stock out
+                        (isAllStockOutCalculated
+                          ? activeColor.sizes
+                          : activeColor.sizes?.filter((size) => size.stock > 0)
+                        )?.map((size) => (
                           <button
                             key={size._id}
                             type="button"
@@ -279,23 +327,25 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
                             {size.size}
                           </button>
                         ))
-                      : // If no color is selected, show all sizes from all colors
-                        product.colors?.map((color) =>
-                          color.sizes?.map((size) => (
-                            <button
-                              key={size._id}
-                              type="button"
-                              aria-label={`Select size ${size.size}`}
-                              className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
-                                activeSize?.size === size.size
-                                  ? "bg-primary text-white shadow-none"
-                                  : "bg-white text-black shadow"
-                              } border border-gray-200 hover:bg-primary hover:text-white`}
-                              onClick={() => handleSizeChange(size)}
-                            >
-                              {size.size}
-                            </button>
-                          ))
+                      : // If no color is selected, show all sizes from available colors
+                        availableColors?.map((color) =>
+                          (isAllStockOutCalculated ? color.sizes : color.sizes?.filter((size) => size.stock > 0))?.map(
+                            (size) => (
+                              <button
+                                key={size._id}
+                                type="button"
+                                aria-label={`Select size ${size.size}`}
+                                className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+                                  activeSize?.size === size.size
+                                    ? "bg-primary text-white shadow-none"
+                                    : "bg-white text-black shadow"
+                                } border border-gray-200 hover:bg-primary hover:text-white`}
+                                onClick={() => handleSizeChange(size)}
+                              >
+                                {size.size}
+                              </button>
+                            )
+                          )
                         )}
                   </div>
                 </div>
@@ -319,15 +369,27 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
                     productId={product?._id}
                   />
                 ) : (
-                  <Button
-                    disabled={
-                      selectedColor?.sizes?.find((s) => s?.size === activeSize?.size)?.stock === 0
-                    }
-                    onClick={handleAddToCart}
-                    className="mt-[10px] h-[27px] w-[100px] p-0 text-[14px]"
-                  >
-                    Add To Cart
-                  </Button>
+                  <div className="mt-[10px] flex items-center gap-[10px]">
+                    <Button
+                      disabled={
+                        selectedColor?.sizes?.find((s) => s?.size === activeSize?.size)?.stock === 0
+                      }
+                      onClick={handleAddToCart}
+                      className="flex-1 h-[27px] p-0 text-[14px]"
+                    >
+                      Add To Cart
+                    </Button>
+                    <ProcutCheckout
+                      product={product}
+                      quantity={activeQuantity}
+                      onQuantityChange={setActiveQuantity}
+                      btnStyle="flex-1 h-[27px] p-0 text-[14px] rounded -mt-2"
+                      activeColor={activeColor}
+                      activeSize={activeSize}
+                      skipModal={true}
+                      // onError={handleCheckoutError}
+                    />
+                  </div>
                 )}
                 {/* <div
                   className="mt-[20px] line-clamp-[10] line"

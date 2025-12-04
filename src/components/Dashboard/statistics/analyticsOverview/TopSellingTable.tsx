@@ -1,17 +1,12 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
-import AnalyticsOverviewFilter from "./AnalyticsOverviewFilter";
+import { useState, useEffect } from "react";
 import { useGetTopSellingProductsQuery } from "@/redux/features/statistics/statistics.api";
 import Pagination from "@/components/ui/Pagination";
 import TopSellingTableSkeleton from "@/components/ui/Skeleton/TopSellingTableSekleton";
-
-const options = [
-  { value: "overall", label: "Overall" },
-  { value: "today", label: "Today" },
-  { value: "this-month", label: "This Month" },
-  { value: "this-year", label: "This Year" },
-];
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { IoCalendarNumberOutline } from "react-icons/io5";
 
 interface IProduct {
   _id: number;
@@ -24,14 +19,20 @@ interface IProduct {
 }
 
 const TopSellingTable = () => {
-  const [selectedFilter, setSelectedFilter] = useState(options[2]);
+  const selectedFilter = { value: "custom", label: "Select Range" };
+  const [dateRange, setDateRange] = useState<{ startDate: Date | undefined; endDate: Date | undefined }>({ startDate: undefined, endDate: undefined });
   const [page, setPage] = useState<number>(1);
   const limit = 5;
-  const { data: getTopSellingProducts, isLoading } = useGetTopSellingProductsQuery({
-    period: selectedFilter.value,
-    page,
-    limit,
-  });
+  const queryParams: Record<string, string | number> = { page, limit };
+  if (dateRange.startDate) queryParams.startDate = dateRange.startDate.toISOString().split('T')[0];
+  if (dateRange.endDate) queryParams.endDate = dateRange.endDate.toISOString().split('T')[0];
+  const { data: getTopSellingProducts, isLoading, refetch } = useGetTopSellingProductsQuery(queryParams);
+
+  useEffect(() => {
+    if (!dateRange.startDate && !dateRange.endDate) {
+      refetch();
+    }
+  }, [dateRange.startDate, dateRange.endDate, refetch]);
 
   const topSellingProducts = getTopSellingProducts?.data || [];
   const metaData = getTopSellingProducts?.meta || { totalDoc: 0, page: 1 };
@@ -48,11 +49,31 @@ const TopSellingTable = () => {
           <p className="text-[14px] font-semibold text-info capitalize">{selectedFilter.label}</p>
         </div>
 
-        <AnalyticsOverviewFilter
-          options={options}
-          selected={selectedFilter}
-          onChange={setSelectedFilter}
-        />
+        <div className="flex items-center justify-start gap-2">
+          <DatePicker
+            selected={dateRange.startDate}
+            dateFormat={"dd MMM yyyy"}
+            placeholderText="Start Date"
+            icon={<IoCalendarNumberOutline />}
+            className="max-w-[150px] cursor-pointer border border-quaternary px-[12px] py-[6px] text-sm focus:outline-none"
+            onChange={(date) => setDateRange({ ...dateRange, startDate: date || undefined })}
+          />
+          -
+          <DatePicker
+            selected={dateRange.endDate}
+            dateFormat={"dd MMM yyyy"}
+            placeholderText="End Date"
+            icon={<IoCalendarNumberOutline />}
+            className="max-w-[150px] cursor-pointer border border-quaternary px-[12px] py-[6px] text-sm focus:outline-none"
+            onChange={(date) => setDateRange({ ...dateRange, endDate: date || undefined })}
+          />
+          <button
+            onClick={() => setDateRange({ startDate: undefined, endDate: undefined })}
+            className="ml-2 px-3 py-1 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300"
+          >
+            Clear
+          </button>
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm">

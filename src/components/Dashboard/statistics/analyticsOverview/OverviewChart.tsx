@@ -5,7 +5,7 @@ import {
   useGetSalesSummaryQuery,
   useGetSmsStatisticsQuery,
 } from "@/redux/features/statistics/statistics.api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -16,54 +16,35 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import AnalyticsOverviewFilter from "./AnalyticsOverviewFilter";
 import CustomersCard from "./CustomersCard";
 import EarningCard from "./EarningCard";
 import SalesCard from "./SalesCard";
 import SmsOverviewCard from "./SmsOverviewCard";
-
-type TimeDataType = {
-  time: string;
-  Sales: number;
-  Earnings: number;
-  Customers: number;
-  increase: number;
-};
-
-type TimePeriodDataType = {
-  [key in "today" | "this_month" | "this_year" | "overall"]: TimeDataType[];
-};
-
-const options = [
-  { value: "overall", label: "Overall" },
-  { value: "today", label: "Today" },
-  { value: "this-month", label: "This Month" },
-  { value: "this-year", label: "This Year" },
-];
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { IoCalendarNumberOutline } from "react-icons/io5";
 
 const OverviewChart = () => {
-  const [selectedFilter, setSelectedFilter] = useState(options[2]);
+  const selectedFilter = { value: "custom", label: "Custom Range" };
+  const [dateRange, setDateRange] = useState<{ startDate: Date | undefined; endDate: Date | undefined }>({ startDate: undefined, endDate: undefined });
   const { user } = useAppSelector((state) => state.user);
 
   // Fetch sales summary data from API
-  const { data: salesSummaryData, isLoading } = useGetSalesSummaryQuery({
-    searchQuery: selectedFilter.value,
-  });
+  const queryParams: Record<string, string> = {};
+  if (dateRange.startDate) queryParams.startDate = dateRange.startDate.toISOString().split('T')[0]; // YYYY-MM-DD
+  if (dateRange.endDate) queryParams.endDate = dateRange.endDate.toISOString().split('T')[0];
+  const { data: salesSummaryData, isLoading, refetch } = useGetSalesSummaryQuery(queryParams);
 
   const { data: smsOverview } = useGetSmsStatisticsQuery(undefined);
 
-  // Map filter value to API key
-  const filterKeyMap: Record<string, keyof TimePeriodDataType> = {
-    overall: "overall",
-    today: "today",
-    "this-month": "this_month",
-    "this-year": "this_year",
-  };
+  useEffect(() => {
+    if (!dateRange.startDate && !dateRange.endDate) {
+      refetch();
+    }
+  }, [dateRange.startDate, dateRange.endDate, refetch]);
 
-  // Get current data from API if available, otherwise fallback to empty array
-  const currentData = salesSummaryData?.data?.[filterKeyMap[selectedFilter.value]] ?? [];
+  const currentData = Array.isArray(salesSummaryData?.data) ? salesSummaryData.data : [];
 
-  // Calculate totals for the current period
   interface DataItem {
     time: string;
     Sales: number;
@@ -100,11 +81,31 @@ const OverviewChart = () => {
     <div className="w-full">
       <div className="mb-4 flex w-full items-center justify-between bg-white p-[16px]">
         <h1>Hi, {user?.fullName}</h1>
-        <AnalyticsOverviewFilter
-          options={options}
-          selected={selectedFilter}
-          onChange={setSelectedFilter}
-        />
+        <div className="flex items-center justify-start gap-2">
+          <DatePicker
+            selected={dateRange.startDate}
+            dateFormat={"dd MMM yyyy"}
+            placeholderText="Start Date"
+            icon={<IoCalendarNumberOutline />}
+            className="max-w-[150px] cursor-pointer border border-quaternary px-[12px] py-[6px] text-sm focus:outline-none"
+            onChange={(date) => setDateRange({ ...dateRange, startDate: date || undefined })}
+          />
+          -
+          <DatePicker
+            selected={dateRange.endDate}
+            dateFormat={"dd MMM yyyy"}
+            placeholderText="End Date"
+            icon={<IoCalendarNumberOutline />}
+            className="max-w-[150px] cursor-pointer border border-quaternary px-[12px] py-[6px] text-sm focus:outline-none"
+            onChange={(date) => setDateRange({ ...dateRange, endDate: date || undefined })}
+          />
+          <button
+            onClick={() => setDateRange({ startDate: undefined, endDate: undefined })}
+            className="ml-2 px-3 py-1 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300"
+          >
+            Clear
+          </button>
+        </div>
       </div>
 
       <div className="mb-[16px] grid grid-cols-1 gap-[16px] sm:grid-cols-2 2xl:grid-cols-4">

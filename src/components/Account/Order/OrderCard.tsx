@@ -67,6 +67,7 @@ const OrderCard = ({ order }: { order: IOrder }) => {
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleToggleEditMode = () => {
     if (isEditMode) {
       setOrderView(initOrder);
@@ -298,12 +299,12 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                     )}
                     {isPending && (
                       <div className="mt-[10px] flex flex-wrap items-center gap-[10px]">
-                        <button
+                        {/* <button
                           className={`cursor-pointer rounded-[4px] px-[10px] py-[5px] text-white ${isEditMode ? "bg-danger" : "bg-primary"}`}
                           onClick={handleToggleEditMode}
                         >
                           {isEditMode ? "Cancel Editing" : "Edit Order"}
-                        </button>
+                        </button> */}
 
                         {isEditMode && (
                           <button

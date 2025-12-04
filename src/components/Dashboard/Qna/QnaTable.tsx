@@ -100,7 +100,7 @@ export default function QnaTable() {
                               {item.product.name}
                             </span>
                             <span className="block truncate text-[12px] text-info">
-                              ID: {item.productId}
+                              ID: {item.product.productCode}
                             </span>
                           </span>
                         </span>
