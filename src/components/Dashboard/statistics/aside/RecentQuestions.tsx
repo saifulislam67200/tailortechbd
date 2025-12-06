@@ -1,24 +1,9 @@
 "use client";
 import RecentQuestionsSkeleton from "@/components/ui/Skeleton/RecentQuestionsSkeleton";
 import { useGetRecentUnansweredQuestionQuery } from "@/redux/features/statistics/statistics.api";
+import { IQuestionsAndAns } from "@/types/QuestionAndAns";
 import Image from "next/image";
 import AnswerModal from "../../Qna/AnswerModal";
-
-interface IProduct {
-  _id: string;
-  name: string;
-  image: string;
-}
-
-interface IQuestion {
-  _id: string;
-  name: string;
-  user: string | null;
-  question: string;
-  productId: string;
-  product: IProduct;
-  createdAt: string;
-}
 
 const RecentQuestions = () => {
   const { data, isLoading } = useGetRecentUnansweredQuestionQuery(undefined);
@@ -41,7 +26,7 @@ const RecentQuestions = () => {
             </h5>
           </div>
         ) : (
-          recentUnAnsweredQuestions?.map((question: IQuestion) => (
+          recentUnAnsweredQuestions?.map((question: IQuestionsAndAns) => (
             <li key={question?._id} className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3">
                 <Image

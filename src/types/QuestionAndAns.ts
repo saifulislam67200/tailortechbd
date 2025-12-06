@@ -7,6 +7,7 @@ export interface IQuestionsAndAns {
   product: {
     name: string;
     image: string;
+    productCode: string;
   };
   productId: string;
 }
