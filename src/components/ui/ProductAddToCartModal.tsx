@@ -71,6 +71,15 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
     }
   }, [selectedSize, selectedColor]);
 
+  useEffect(() => {
+    if (product?.colors && product.colors.length > 0 && !selectedColor) {
+      const availableColors = product.colors.filter(color => color.sizes?.some(size => size.stock > 0));
+      if (availableColors.length > 0) {
+        setSelectedColor(availableColors[0]);
+      }
+    }
+  }, [product, selectedColor]);
+
   const handleAddToCart = () => {
     if (!selectedColor && !selectedSize) {
       setErrorMessage("Please select a color and size.");
@@ -180,7 +189,7 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
                 <div className="flex flex-col gap-[5px]">
                   <span className="font-[700]">Select color:</span>
                   <div className="flex flex-wrap items-center justify-start gap-[8px]">
-                    {product?.colors?.map((color, i) => (
+                    {product?.colors?.filter(color => color.sizes?.some(size => size.stock > 0))?.map((color, i) => (
                       <button
                         onClick={() => handleColorChange(color)}
                         key={color?.color + i}

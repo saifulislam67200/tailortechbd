@@ -77,6 +77,7 @@ type TAssignedUser = {
   role: string;
   email: string;
   phoneNumber?: string;
+  avatar?: string;
 };
 
 export interface ICoupon {

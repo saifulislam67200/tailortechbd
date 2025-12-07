@@ -2,6 +2,7 @@
 
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import Pagination from "@/components/ui/Pagination";
+import Tooltip from "@/components/ui/ToolTip";
 import useDebounce from "@/hooks/useDebounce";
 import { useGetAllQuestionAnswersQuery } from "@/redux/features/Q&A/questionAndAnswer.api";
 import dateUtils from "@/utils/date";
@@ -106,15 +107,19 @@ export default function QnaTable() {
                         </span>
                       </td>
                       <td className="px-[24px] py-[16px]">
-                        <span className="line-clamp-2 block h-[32px] w-[250px] text-[12px]">
-                          {item.question}
-                        </span>
+                        <Tooltip content={item.question}>
+                          <span className="line-clamp-2 block h-[32px] w-[250px] text-[12px]">
+                            {item.question}
+                          </span>
+                        </Tooltip>
                       </td>
                       <td className="px-[24px] py-[16px]">
                         {item.answer ? (
-                          <span className="line-clamp-2 block h-[32px] w-[250px] text-[12px]">
-                            {item.answer}
-                          </span>
+                          <Tooltip content={item.answer}>
+                            <span className="line-clamp-2 block h-[32px] w-[250px] text-[12px]">
+                              {item.answer}
+                            </span>
+                          </Tooltip>
                         ) : (
                           <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
                             Pending Answer
