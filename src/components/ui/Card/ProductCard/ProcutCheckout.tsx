@@ -232,6 +232,17 @@ const ProductCheckoutModal = ({
     }
   }, [propActiveColor, propActiveSize]);
 
+  // Set default color if none selected
+  useEffect(() => {
+    if (product?.colors && product.colors.length > 0 && !activeColor) {
+      const availableColors = product.colors.filter(color => color.sizes?.some(size => size.stock > 0));
+      if (availableColors.length > 0) {
+        setActiveColor(availableColors[0]);
+        setSelectedColor(availableColors[0]);
+      }
+    }
+  }, [product, activeColor]);
+
   return (
     <>
       {children ? (
@@ -301,7 +312,7 @@ const ProductCheckoutModal = ({
               <div>
                 <h1 className="text-[16px]">Colors:</h1>
                 <div className="mt-[5px] flex items-center gap-[10px]">
-                  {product?.colors?.map((color) => (
+                  {product?.colors?.filter(color => color.sizes?.some(size => size.stock > 0))?.map((color) => (
                     <button
                       key={color._id}
                       type="button"

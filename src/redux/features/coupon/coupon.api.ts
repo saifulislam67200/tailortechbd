@@ -47,6 +47,15 @@ const couponApi = api.injectEndpoints({
       }),
       invalidatesTags: ["coupon"],
     }),
+
+    updateCoupon: builder.mutation({
+      query: ({ id, payload }) => ({
+        url: `/coupon/update/${id}`,
+        method: "PUT",
+        body: payload,
+      }),
+      invalidatesTags: ["coupon"],
+    }),
   }),
 });
 
@@ -56,4 +65,5 @@ export const {
   useGetAllCouponsQuery,
   useToggleActiveInActiveMutation,
   useDeleteCouponMutation,
+  useUpdateCouponMutation,
 } = couponApi;

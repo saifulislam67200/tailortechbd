@@ -15,6 +15,7 @@ import dateUtils from "@/utils/date";
 import { ICoupon } from "./CreateCouponView";
 import DeleteCouponModal from "@/components/Dashboard/coupon/DeleteCouponModal";
 import CouponInfoModal from "@/components/Dashboard/coupon/CouponInfoModal";
+import EditCouponModal from "@/components/Dashboard/coupon/EditCouponModal";
 import DashboardPageHeadingTitle from "@/components/Dashboard/DashboardPageHeadingTitle";
 
 const tableHead = [
@@ -147,6 +148,7 @@ const AllCouponsView = () => {
                       </td>
                       <td className="flex items-center justify-start gap-[16px] px-6 py-4">
                         <CouponInfoModal coupon={coupon} />
+                        <EditCouponModal coupon={coupon} />
                         <DeleteCouponModal coupon={coupon} />
                       </td>
                     </tr>

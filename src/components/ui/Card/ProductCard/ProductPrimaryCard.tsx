@@ -82,9 +82,13 @@ const ProductPrimaryCard = ({ product, className }: { product: IProduct; classNa
           </p>
           <p className="line-clamp-1 text-[12px] font-semibold text-black">
             Size:
-            {product.colors
-              ?.map((color) => color.sizes?.map((size) => size.size?.toUpperCase()))
-              .join(", ")}
+            {Array.from(
+              new Set(
+                product.colors
+                  ?.flatMap((color) => color.sizes?.map((size) => size.size?.toUpperCase()) || [])
+                  .filter(Boolean)
+              )
+            ).join(", ")}
           </p>
         </div>
         <div className="flex flex-col gap-[20px] pt-2 text-start">

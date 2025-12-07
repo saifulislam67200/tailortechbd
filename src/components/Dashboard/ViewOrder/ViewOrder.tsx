@@ -813,12 +813,12 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
                 {orderItems?.map((item, i) => (
                   <tr key={item.product_id + i}>
                     <td className="min-w-[100px] border border-border-muted px-4 py-2">
-                      <Link
+                      {/* <Link
                         href={`/dashboard/products/${item.product_id}`}
                         className="hover:underline"
-                      >
+                      > */}
                         {item.product.name}
-                      </Link>
+                      {/* </Link> */}
                     </td>
                     <td className="border border-border-muted px-4 py-2">
                       {item.product.sku || "N/A"}
