@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useGetTopSellingProductsQuery } from "@/redux/features/statistics/statistics.api";
 import Pagination from "@/components/ui/Pagination";
 import TopSellingTableSkeleton from "@/components/ui/Skeleton/TopSellingTableSekleton";
+import dateUtils from "@/utils/date";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { IoCalendarNumberOutline } from "react-icons/io5";
@@ -23,9 +24,10 @@ const TopSellingTable = () => {
   const [dateRange, setDateRange] = useState<{ startDate: Date | undefined; endDate: Date | undefined }>({ startDate: undefined, endDate: undefined });
   const [page, setPage] = useState<number>(1);
   const limit = 5;
+  
   const queryParams: Record<string, string | number> = { page, limit };
-  if (dateRange.startDate) queryParams.startDate = dateRange.startDate.toISOString().split('T')[0];
-  if (dateRange.endDate) queryParams.endDate = dateRange.endDate.toISOString().split('T')[0];
+  if (dateRange.startDate) queryParams.startDate = dateUtils.formatDateLocal(dateRange.startDate);
+  if (dateRange.endDate) queryParams.endDate = dateUtils.formatDateLocal(dateRange.endDate);
   const { data: getTopSellingProducts, isLoading, refetch } = useGetTopSellingProductsQuery(queryParams);
 
   useEffect(() => {
