@@ -27,7 +27,7 @@ const About = () => {
           <section>
             <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Our Mission</h3>
             <p className="text-[12px] md:text-[15px]">
-              At TailorTech, our mission is to empower individuals to express their unique identity
+              At Tailortech, our mission is to empower individuals to express their unique identity
               through fashion that fits perfectly—both in size and personality. We strive to make
               high-quality, custom-fitted apparel accessible to everyone, blending traditional
               tailoring expertise with modern technology to create garments that make you look good
@@ -39,7 +39,7 @@ const About = () => {
             <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Our Vision</h3>
             <p className="text-[12px] md:text-[15px]">
               We envision a future where fashion is smarter, more sustainable, and truly personal.
-              TailorTech aims to lead the transformation of the apparel industry by pioneering
+              Tailortech aims to lead the transformation of the apparel industry by pioneering
               innovative approaches to design, production, and customer experience. We&apos;re
               working toward a world where every garment is created with purpose, precision, and
               respect for both the wearer and the environment.
@@ -78,7 +78,7 @@ const About = () => {
               What Sets Us Apart
             </h3>
             <p className="mb-[16px]">
-              TailorTech stands at the intersection of tradition and technology. While we respect
+              Tailortech stands at the intersection of tradition and technology. While we respect
               and practice the time-honored techniques of tailoring, we enhance them with modern
               innovations:
             </p>
@@ -112,7 +112,7 @@ const About = () => {
               Our Commitment to You
             </h3>
             <p className="text-[12px] md:text-[15px]">
-              When you choose TailorTech, you&apos;re not just buying clothing—you&apos;re investing
+              When you choose Tailortech, you&apos;re not just buying clothing—you&apos;re investing
               in a garment that&apos;s been thoughtfully designed and crafted to serve you well. We
               promise to maintain the highest standards of quality, to listen to your feedback, and
               to continuously improve our offerings. Your satisfaction is our priority, and we stand
@@ -123,14 +123,14 @@ const About = () => {
           <section>
             <h3 className="mb-[12px] text-[15px] font-semibold md:text-[21px]">Join Our Journey</h3>
             <p className="text-[12px] md:text-[15px]">
-              TailorTech is more than a brand—it&apos;s a movement towards smarter, more
+              Tailortech is more than a brand—it&apos;s a movement towards smarter, more
               personalized fashion. We invite you to be part of our story as we continue to innovate
               and grow. Whether you&apos;re a first-time customer or a longtime supporter, your
               participation helps shape the future of fashion.
             </p>
 
             <p className="mt-4 font-medium">
-              Thank you for choosing TailorTech. We look forward to helping you express your unique
+              Thank you for choosing Tailortech. We look forward to helping you express your unique
               style and tell your story through the clothes you wear.
             </p>
           </section>

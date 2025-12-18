@@ -93,7 +93,7 @@ const PrivacyPolicy = () => {
               contact us at:
               <br />
               <br />
-              TailorTech
+              Tailortech
               <br />
               Email: support@tailortechbd.com
               <br />
