@@ -49,7 +49,7 @@ const DashboardPathSearchBar = ({
     }
 
     return links;
-  }, []);
+  }, [navLinks]);
 
   const filteredLinks = useMemo(() => {
     return searchableLinks.filter((link) => link.label.toLowerCase().includes(query.toLowerCase()));

@@ -112,15 +112,16 @@ const EditCouponModal = ({ coupon }: Props) => {
     discount: coupon.discount || 0,
     discountType: coupon.discountType || "percentage",
     isActive: coupon.isActive ?? true,
-    assignedTo: coupon.assignedTo?.map(user => ({
-      id: user._id,
-      fullName: user.fullName,
-      email: user.email,
-      phoneNumber: user.phoneNumber || "",
-      avatar: user.avatar || "",
-    })) || [],
+    assignedTo:
+      coupon.assignedTo?.map((user) => ({
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        phoneNumber: user.phoneNumber || "",
+        avatar: user.avatar || "",
+      })) || [],
     minOrderValue: coupon.minOrderValue || 0,
-    expiresAt: coupon.expiresAt ? new Date(coupon.expiresAt).toISOString().split('T')[0] : "",
+    expiresAt: coupon.expiresAt ? new Date(coupon.expiresAt).toISOString().split("T")[0] : "",
     couponType: coupon.assignedTo && coupon.assignedTo.length > 0 ? "personal" : "public",
   };
 
@@ -172,10 +173,10 @@ const EditCouponModal = ({ coupon }: Props) => {
       <DialogProvider
         state={isOpen}
         setState={setIsOpen}
-        className="w-[95%] max-w-[800px] md:w-full max-h-[90vh] overflow-y-auto"
+        className="max-h-[90vh] w-[95%] max-w-[800px] overflow-y-auto md:w-full"
       >
         <div className="w-full bg-white p-[16px]">
-          <div className="flex items-center justify-between mb-4">
+          <div className="mb-4 flex items-center justify-between">
             <h5 className="text-[20px] font-[700] text-strong">Edit Coupon</h5>
             <button onClick={() => setIsOpen(false)} className="cursor-pointer">
               <LuX />
@@ -237,10 +238,16 @@ const EditCouponModal = ({ coupon }: Props) => {
                         type="number"
                         name="discount"
                         className={`w-full border px-3 py-2 focus:outline-none ${
-                          touched.discount && errors.discount ? "border-danger" : "border-quaternary"
+                          touched.discount && errors.discount
+                            ? "border-danger"
+                            : "border-quaternary"
                         }`}
                       />
-                      <ErrorMessage name="discount" component="div" className="text-sm text-danger" />
+                      <ErrorMessage
+                        name="discount"
+                        component="div"
+                        className="text-sm text-danger"
+                      />
                     </div>
 
                     <div>
@@ -326,7 +333,11 @@ const EditCouponModal = ({ coupon }: Props) => {
                       <option value="public">Public</option>
                       <option value="personal">Personal</option>
                     </Field>
-                    <ErrorMessage name="couponType" component="div" className="text-sm text-danger" />
+                    <ErrorMessage
+                      name="couponType"
+                      component="div"
+                      className="text-sm text-danger"
+                    />
                   </div>
 
                   {/* Assigned Users if Personal */}
@@ -337,42 +348,44 @@ const EditCouponModal = ({ coupon }: Props) => {
                           <label className="text-sm font-medium text-info">Assign to Users</label>
                           {values.assignedTo.length > 0 && (
                             <div className="mt-[8px] grid grid-cols-1 gap-[16px] sm:grid-cols-2">
-                              {(values.assignedTo as TAssignedUser[]).map((user: TAssignedUser, index) => (
-                                <div
-                                  key={user?.id}
-                                  className="flex items-center justify-between border border-quaternary bg-primary/10 px-3 py-1 text-primary"
-                                >
-                                  <div className="flex items-center gap-[10px]">
-                                    <span className="flex h-[40px] w-[40px] overflow-hidden">
-                                      <Image
-                                        src={user.avatar || profileFallBack}
-                                        alt="user"
-                                        width={40}
-                                        height={40}
-                                        className="h-full w-full rounded-full border border-quaternary object-cover"
-                                      />
-                                    </span>
-                                    <div>
-                                      <span className="text-[14px] font-semibold">
-                                        Name: {user.fullName ? user.fullName : "N/A"}
-                                      </span>
-                                      <span className="block text-[14px]">
-                                        Phone: {user.phoneNumber}
-                                      </span>
-                                      <span className="text-[14px]">
-                                        Email: {user.email ? user.email : "N/A"}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <button
-                                    className="cursor-pointer rounded-full bg-danger/20 p-1 text-white hover:bg-danger"
-                                    type="button"
-                                    onClick={() => remove(index)}
+                              {(values.assignedTo as TAssignedUser[]).map(
+                                (user: TAssignedUser, index) => (
+                                  <div
+                                    key={user?.id}
+                                    className="flex items-center justify-between border border-quaternary bg-primary/10 px-3 py-1 text-primary"
                                   >
-                                    <FiX />
-                                  </button>
-                                </div>
-                              ))}
+                                    <div className="flex items-center gap-[10px]">
+                                      <span className="flex h-[40px] w-[40px] overflow-hidden">
+                                        <Image
+                                          src={user.avatar || profileFallBack}
+                                          alt="user"
+                                          width={40}
+                                          height={40}
+                                          className="h-full w-full rounded-full border border-quaternary object-cover"
+                                        />
+                                      </span>
+                                      <div>
+                                        <span className="text-[14px] font-semibold">
+                                          Name: {user.fullName ? user.fullName : "N/A"}
+                                        </span>
+                                        <span className="block text-[14px]">
+                                          Phone: {user.phoneNumber}
+                                        </span>
+                                        <span className="text-[14px]">
+                                          Email: {user.email ? user.email : "N/A"}
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <button
+                                      className="cursor-pointer rounded-full bg-danger/20 p-1 text-white hover:bg-danger"
+                                      type="button"
+                                      onClick={() => remove(index)}
+                                    >
+                                      <FiX />
+                                    </button>
+                                  </div>
+                                )
+                              )}
                             </div>
                           )}
 
@@ -417,9 +430,9 @@ const EditCouponModal = ({ coupon }: Props) => {
                                 key={user?._id}
                                 className="flex cursor-pointer items-center justify-start gap-[10px] border-b border-quaternary/50 p-[16px] hover:bg-primary/10"
                                 onClick={() => {
-                                  const isAlreadyAdded = (values.assignedTo as TAssignedUser[]).some(
-                                    (u: TAssignedUser) => u.id === user._id
-                                  );
+                                  const isAlreadyAdded = (
+                                    values.assignedTo as TAssignedUser[]
+                                  ).some((u: TAssignedUser) => u.id === user._id);
                                   if (!isAlreadyAdded) {
                                     push({
                                       id: user._id,
@@ -491,7 +504,11 @@ const EditCouponModal = ({ coupon }: Props) => {
                       />
                     </div>
 
-                    <ErrorMessage name="expiresAt" component="div" className="text-sm text-danger" />
+                    <ErrorMessage
+                      name="expiresAt"
+                      component="div"
+                      className="text-sm text-danger"
+                    />
                   </div>
 
                   {/* Submit */}

@@ -7,11 +7,11 @@ import { cloneElement, isValidElement, ReactElement, ReactNode, useEffect, useSt
 import { FaSpinner } from "react-icons/fa";
 import { LuX } from "react-icons/lu";
 import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 import Button from "./Button";
 import DialogProvider from "./DialogProvider";
 import HorizontalLine from "./HorizontalLine";
 import RestockRequestModal from "../productDetails/RestockRequestModal";
-import AddToCartErrorMessage from "../Shared/AddToCartErrorMessage";
 
 interface Props {
   children?: ReactNode;
@@ -20,7 +20,6 @@ interface Props {
 }
 
 const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOut }: Props) => {
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
   const slug = clickedProduct?.slug || "";
@@ -57,42 +56,38 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
   const handleColorChange = (color: IColor) => {
     setSelectedColor(color);
     // Reset selectedSize if it's not available in the selected color or if it's out of stock
-    if (selectedSize && !color.sizes?.some((s) => s.size === selectedSize.size && s.stock > 0)) {
+    const isSizeAvailable =
+      selectedSize && color.sizes?.some((s) => s.size === selectedSize.size && s.stock > 0);
+    if (!isSizeAvailable) {
       setSelectedSize(undefined);
     }
   };
 
-  useEffect(() => {
-    if (selectedColor && !selectedSize) {
-      setErrorMessage("Please select a size.");
-    }
-    if (selectedColor && selectedSize) {
-      setErrorMessage("");
-    }
-  }, [selectedSize, selectedColor]);
+  const handleSizeChange = (size: ISize) => {
+    setSelectedSize(size);
+  };
 
+  // Reset selections when modal opens/closes
   useEffect(() => {
-    if (product?.colors && product.colors.length > 0 && !selectedColor) {
-      const availableColors = product.colors.filter(color => color.sizes?.some(size => size.stock > 0));
-      if (availableColors.length > 0) {
-        setSelectedColor(availableColors[0]);
-      }
+    if (!isOpen) {
+      setSelectedColor(undefined);
+      setSelectedSize(undefined);
     }
-  }, [product, selectedColor]);
+  }, [isOpen]);
 
   const handleAddToCart = () => {
     if (!selectedColor && !selectedSize) {
-      setErrorMessage("Please select a color and size.");
+      toast.error("Please select a color and size.");
       return;
     }
 
     if (!selectedColor) {
-      setErrorMessage("Please select a color.");
+      toast.error("Please select a color.");
       return;
     }
 
     if (!selectedSize) {
-      setErrorMessage("Please select a size.");
+      toast.error("Please select a size.");
       return;
     }
 
@@ -189,15 +184,17 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
                 <div className="flex flex-col gap-[5px]">
                   <span className="font-[700]">Select color:</span>
                   <div className="flex flex-wrap items-center justify-start gap-[8px]">
-                    {product?.colors?.filter(color => color.sizes?.some(size => size.stock > 0))?.map((color, i) => (
-                      <button
-                        onClick={() => handleColorChange(color)}
-                        key={color?.color + i}
-                        className={`cursor-pointer border-[1px] border-border-muted px-[8px] py-[4px] text-[12px] ${selectedColor?.color === color.color ? "bg-primary-foreground text-white" : ""}`}
-                      >
-                        {color?.color}
-                      </button>
-                    ))}
+                    {product?.colors
+                      ?.filter((color) => color.sizes?.some((size) => size.stock > 0))
+                      ?.map((color, i) => (
+                        <button
+                          onClick={() => handleColorChange(color)}
+                          key={color?.color + i}
+                          className={`cursor-pointer border-[1px] border-border-muted px-[8px] py-[4px] text-[12px] ${selectedColor?.color === color.color ? "bg-primary-foreground text-white" : ""}`}
+                        >
+                          {color?.color}
+                        </button>
+                      ))}
                   </div>
                 </div>
                 <div className="flex w-full flex-col gap-[5px]">
@@ -217,7 +214,7 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
                                   ? "bg-primary text-white shadow-none"
                                   : "bg-white text-black shadow"
                               } border border-gray-200 hover:bg-primary hover:text-white`}
-                              onClick={() => setSelectedSize(size)}
+                              onClick={() => handleSizeChange(size)}
                             >
                               {size.size}
                             </button>
@@ -236,15 +233,13 @@ const ProductAddToCartModal = ({ children, product: clickedProduct, isAllStockOu
                                     ? "bg-primary text-white shadow-none"
                                     : "bg-white text-black shadow"
                                 } border border-gray-200 hover:bg-primary hover:text-white`}
-                                onClick={() => setSelectedSize(size)}
+                                onClick={() => handleSizeChange(size)}
                               >
                                 {size.size}
                               </button>
                             ))
                         )}
                   </div>
-
-                  {errorMessage && <AddToCartErrorMessage errorMessage={errorMessage} />}
                 </div>
 
                 {selectedColor && selectedSize && !selectedSize?.stock ? (

@@ -26,14 +26,17 @@ import { IoCalendarNumberOutline } from "react-icons/io5";
 
 const OverviewChart = () => {
   const selectedFilter = { value: "custom", label: "Custom Range" };
-  const [dateRange, setDateRange] = useState<{ startDate: Date | undefined; endDate: Date | undefined }>({ startDate: undefined, endDate: undefined });
+  const [dateRange, setDateRange] = useState<{
+    startDate: Date | undefined;
+    endDate: Date | undefined;
+  }>({ startDate: undefined, endDate: undefined });
   const { user } = useAppSelector((state) => state.user);
 
   // Helper function to format date as YYYY-MM-DD in local timezone
   const formatDateLocal = (date: Date) => {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   };
 
@@ -53,7 +56,7 @@ const OverviewChart = () => {
 
   // Extract summary data from the new API structure
   const summaryData = salesSummaryData?.data?.summary || { Sales: 0, Earnings: 0, Customers: 0 };
-  
+
   // For chart display, create an array with the summary data
   // If you need time-series data for the chart, you'll need to format it accordingly
   const currentData = [summaryData];
@@ -108,7 +111,7 @@ const OverviewChart = () => {
           />
           <button
             onClick={() => setDateRange({ startDate: undefined, endDate: undefined })}
-            className="ml-2 px-3 py-1 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300"
+            className="ml-2 rounded bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-300"
           >
             Clear
           </button>

@@ -21,14 +21,21 @@ interface IProduct {
 
 const TopSellingTable = () => {
   const selectedFilter = { value: "custom", label: "Select Range" };
-  const [dateRange, setDateRange] = useState<{ startDate: Date | undefined; endDate: Date | undefined }>({ startDate: undefined, endDate: undefined });
+  const [dateRange, setDateRange] = useState<{
+    startDate: Date | undefined;
+    endDate: Date | undefined;
+  }>({ startDate: undefined, endDate: undefined });
   const [page, setPage] = useState<number>(1);
   const limit = 5;
-  
+
   const queryParams: Record<string, string | number> = { page, limit };
   if (dateRange.startDate) queryParams.startDate = dateUtils.formatDateLocal(dateRange.startDate);
   if (dateRange.endDate) queryParams.endDate = dateUtils.formatDateLocal(dateRange.endDate);
-  const { data: getTopSellingProducts, isLoading, refetch } = useGetTopSellingProductsQuery(queryParams);
+  const {
+    data: getTopSellingProducts,
+    isLoading,
+    refetch,
+  } = useGetTopSellingProductsQuery(queryParams);
 
   useEffect(() => {
     if (!dateRange.startDate && !dateRange.endDate) {
@@ -71,7 +78,7 @@ const TopSellingTable = () => {
           />
           <button
             onClick={() => setDateRange({ startDate: undefined, endDate: undefined })}
-            className="ml-2 px-3 py-1 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300"
+            className="ml-2 rounded bg-gray-200 px-3 py-1 text-sm text-gray-700 hover:bg-gray-300"
           >
             Clear
           </button>

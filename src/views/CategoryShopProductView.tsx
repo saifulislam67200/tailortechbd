@@ -19,7 +19,7 @@ const CategoryShopProductView: React.FC<IProps> = async ({ searchParams, params 
   const search = await searchParams;
   const resolvedParams = await params;
   const slug = resolvedParams.slug || "";
-  console.log(slug)
+  console.log(slug);
 
   const searchTerm = search.searchTerm || "";
   const page = search.page || "1";
