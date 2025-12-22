@@ -33,7 +33,7 @@ const Protectedroute: React.FC<IProps> = ({ role, children, checkVerification = 
         router.replace("/");
         return;
       }
-      
+
       setIsAllowed(true);
     }, 500);
 

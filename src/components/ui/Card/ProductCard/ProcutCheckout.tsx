@@ -1,7 +1,6 @@
 "use client";
 import ProductDetailsSlider from "@/components/productDetails/ProductDetailSlider";
 import RestockRequestModal from "@/components/productDetails/RestockRequestModal";
-import AddToCartErrorMessage from "@/components/Shared/AddToCartErrorMessage";
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
 import { useAppDispatch } from "@/hooks/redux";
@@ -23,7 +22,6 @@ interface Props {
   activeColor?: IColor;
   activeSize?: ISize;
   skipModal?: boolean;
-  onError?: (error: string) => void;
 }
 
 const ProductCheckoutModal = ({
@@ -35,9 +33,7 @@ const ProductCheckoutModal = ({
   activeColor: propActiveColor,
   activeSize: propActiveSize,
   skipModal = false,
-  onError,
 }: Props) => {
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -109,12 +105,16 @@ const ProductCheckoutModal = ({
     setActiveColor(color);
     setSelectedColor(color);
     // Reset activeSize if it's not available in the selected color
-    if (activeSize && !color.sizes?.some((s) => s.size === activeSize.size)) {
+    const isSizeAvailable =
+      activeSize && color.sizes?.some((s) => s.size === activeSize.size && s.stock > 0);
+    if (!isSizeAvailable) {
       setActiveSize(undefined);
       setQty(1);
     }
   };
-  const handleSizeChange = (size: ISize) => setActiveSize(size);
+  const handleSizeChange = (size: ISize) => {
+    setActiveSize(size);
+  };
 
   /** Quantity +/- handlers (stock-aware) */
   const handleQuantityChange = (type: "inc" | "dec") => {
@@ -137,15 +137,6 @@ const ProductCheckoutModal = ({
     }
   };
 
-  useEffect(() => {
-    if (activeColor && !activeSize) {
-      setErrorMessage("Please select a size.");
-    }
-    if (activeColor && activeSize) {
-      setErrorMessage("");
-    }
-  }, [activeColor, activeSize]);
-
   /** Checkout action */
   const handleCheckoutClick = (useProps = false) => {
     // Use props directly when skipModal is true, otherwise use state
@@ -153,17 +144,17 @@ const ProductCheckoutModal = ({
     const sizeToUse = useProps ? propActiveSize : activeSize;
 
     if (!colorToUse && !sizeToUse) {
-      setErrorMessage("Please select a color and size.");
+      toast.error("Please select a color and size.");
       return;
     }
 
     if (!colorToUse) {
-      setErrorMessage("Please select a color.");
+      toast.error("Please select a color.");
       return;
     }
 
     if (!sizeToUse) {
-      setErrorMessage("Please select a size.");
+      toast.error("Please select a size.");
       return;
     }
 
@@ -201,17 +192,9 @@ const ProductCheckoutModal = ({
         } else {
           errorMsg = "Please select a size.";
         }
-        // Call onError callback if provided, otherwise show toast
-        if (onError) {
-          onError(errorMsg);
-        } else {
-          toast.error(errorMsg);
-        }
+        // Show toast error
+        toast.error(errorMsg);
         return;
-      }
-      // Clear error if validation passes
-      if (onError) {
-        onError("");
       }
       // Direct checkout without modal - use props directly
       handleCheckoutClick(true);
@@ -232,16 +215,15 @@ const ProductCheckoutModal = ({
     }
   }, [propActiveColor, propActiveSize]);
 
-  // Set default color if none selected
+  // Reset selections when modal closes
   useEffect(() => {
-    if (product?.colors && product.colors.length > 0 && !activeColor) {
-      const availableColors = product.colors.filter(color => color.sizes?.some(size => size.stock > 0));
-      if (availableColors.length > 0) {
-        setActiveColor(availableColors[0]);
-        setSelectedColor(availableColors[0]);
-      }
+    if (!isOpen && !skipModal) {
+      // Reset to prop values if they exist, otherwise reset to undefined
+      setActiveColor(propActiveColor);
+      setActiveSize(propActiveSize);
+      setSelectedColor(propActiveColor);
     }
-  }, [product, activeColor]);
+  }, [isOpen, skipModal, propActiveColor, propActiveSize]);
 
   return (
     <>
@@ -312,21 +294,23 @@ const ProductCheckoutModal = ({
               <div>
                 <h1 className="text-[16px]">Colors:</h1>
                 <div className="mt-[5px] flex items-center gap-[10px]">
-                  {product?.colors?.filter(color => color.sizes?.some(size => size.stock > 0))?.map((color) => (
-                    <button
-                      key={color._id}
-                      type="button"
-                      aria-label={`Select color ${color.color}`}
-                      className={`flex h-[20px] w-fit cursor-pointer items-center rounded-full border-[1px] border-primary px-[8px] text-[12px] transition-all duration-200 ${
-                        activeColor?.color === color.color
-                          ? "bg-primary text-white"
-                          : "bg-white text-primary"
-                      }`}
-                      onClick={() => handleColorChange(color)}
-                    >
-                      {color.color}
-                    </button>
-                  ))}
+                  {product?.colors
+                    ?.filter((color) => color.sizes?.some((size) => size.stock > 0))
+                    ?.map((color) => (
+                      <button
+                        key={color._id}
+                        type="button"
+                        aria-label={`Select color ${color.color}`}
+                        className={`flex h-[20px] w-fit cursor-pointer items-center rounded-full border-[1px] border-primary px-[8px] text-[12px] transition-all duration-200 ${
+                          activeColor?.color === color.color
+                            ? "bg-primary text-white"
+                            : "bg-white text-primary"
+                        }`}
+                        onClick={() => handleColorChange(color)}
+                      >
+                        {color.color}
+                      </button>
+                    ))}
                 </div>
 
                 {/* Sizes */}
@@ -401,10 +385,6 @@ const ProductCheckoutModal = ({
                   </button>
                 </div>
               </div>
-
-              {errorMessage && (
-                <AddToCartErrorMessage className="mt-[10px]" errorMessage={errorMessage} />
-              )}
 
               {/* Stock & Checkout */}
               {activeSize && activeSize.stock === 0 && (

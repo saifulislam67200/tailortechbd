@@ -817,7 +817,7 @@ export default function ViewOrder({ orderId }: ViewOrderProps) {
                         href={`/dashboard/products/${item.product_id}`}
                         className="hover:underline"
                       > */}
-                        {item.product.name}
+                      {item.product.name}
                       {/* </Link> */}
                     </td>
                     <td className="border border-border-muted px-4 py-2">
