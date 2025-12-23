@@ -77,7 +77,7 @@ const EditProfile = () => {
   };
 
   return (
-    <div className="flex w-full flex-col gap-[16px] border-[1px] border-border-main p-[10px]">
+    <div className="flex w-full flex-col gap-[16px] border-0 border-border-main sm:border-[1px] p-[10px]">
       <h4 className="text-[16px] font-[700] text-strong">Account Information</h4>
 
       <div

@@ -132,8 +132,8 @@ const CheeckoutOverview = ({
                       ৳ {item.product.price.toFixed(0)}
                     </span>
                   )}
-                  <span className="lin text-[12.8px] font-[600] text-muted">
-                    Color: {item.color} - Size: {item.size} - Quantity: {item.quantity}
+                  <span className="lin text-[12.8px] font-[600] text-muted flex flex-col gap-[2px]">
+                    <span>Color: {item.color}</span> <span>Size: {item.size}</span> <span>Quantity: {item.quantity}</span>
                   </span>
                 </div>
               </div>

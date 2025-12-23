@@ -65,7 +65,7 @@ const validationSchema = Yup.object({
       if (!value) return false;
       return isPossiblePhoneNumber(value) && isValidPhoneNumber(value);
     }),
-  email: Yup.string().email("Invalid email address").required("Email is required"),
+  email: Yup.string().email("Invalid email address").optional(),
   address: Yup.string().required("Please Enter a describe delvery address"),
   division: Yup.string().required("Division is required"),
   district: Yup.string().required("District is required"),
@@ -188,7 +188,7 @@ const CheckoutView = () => {
       division: values.division,
       name: values.name,
       phoneNumber: values.phoneNumber,
-      email: values.email,
+      email: values.email?.trim() || undefined,
       upazila: values.upazila,
     };
 
@@ -230,7 +230,7 @@ const CheckoutView = () => {
         division: values.division,
         name: values.name,
         phoneNumber: values.phoneNumber,
-        email: values.email,
+        email: values.email?.trim() || undefined,
         upazila: values.upazila,
       },
 
@@ -437,14 +437,9 @@ const CheckoutView = () => {
 
                       {/* Email */}
                       <div className="flex flex-col gap-[8px]">
-                        <Label required htmlFor="email">
-                          Email
-                        </Label>
+                        <Label htmlFor="email">Email</Label>
                         <div className="flex flex-col gap-[5px]">
                           <Field placeholder="Email" as={Input} name="email" id="email" />
-                          {touched.email && errors.email && (
-                            <span className="text-[12px] text-danger">{errors.email}</span>
-                          )}
                         </div>
                       </div>
 

@@ -1,5 +1,7 @@
 "use client";
 import { IColor, IProduct } from "@/types/product";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { addToWishlist, removeFromWishlist } from "@/redux/features/wishlist/wishlistSlice";
 import PhotoSwipeLightbox from "photoswipe/lightbox";
 import "photoswipe/style.css";
 import { useEffect, useRef, useState } from "react";
@@ -13,6 +15,7 @@ import type { Swiper as SwiperType } from "swiper/types";
 
 import Image from "next/image";
 import Link from "next/link";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { RiPlayLargeFill } from "react-icons/ri";
 
 interface ZoomableImageProps {
@@ -20,24 +23,50 @@ interface ZoomableImageProps {
   zoomLevel?: number;
   width?: number;
   height?: number;
+  product: IProduct;
 }
 
-const ZoomableImage = ({ src, width = 1200, height = 1200 }: ZoomableImageProps) => {
+const ZoomableImage = ({ src, width = 1200, height = 1200, product }: ZoomableImageProps) => {
+  const dispatch = useAppDispatch();
+  const wishlistItems = useAppSelector((state) => state.wishlist.items);
+  const isInWishlist = wishlistItems.some((item) => item._id === product._id);
+
+  const handleToggleWishlist = () => {
+    if (isInWishlist) {
+      dispatch(removeFromWishlist(product._id));
+    } else {
+      dispatch(addToWishlist(product));
+    }
+  };
+
   return (
-    <Link
-      href={src}
-      data-pswp-width={width}
-      data-pswp-height={height}
-      className="group/zoomable relative w-full cursor-zoom-in p-[5px] lg:p-[0px]"
-    >
-      <Image
-        src={src}
-        width={831}
-        height={598}
-        alt="product image"
-        className="relative z-[1] max-h-[778px] w-full object-contain"
-      />
-    </Link>
+    <div className="group/zoomable relative w-full cursor-zoom-in p-[5px] lg:p-[0px]">
+      <Link
+        href={src}
+        data-pswp-width={width}
+        data-pswp-height={height}
+        className="block"
+      >
+        <Image
+          src={src}
+          width={831}
+          height={598}
+          alt="product image"
+          className="relative z-[1] max-h-[778px] w-full object-contain"
+        />
+      </Link>
+      <button
+        onClick={handleToggleWishlist}
+        className="absolute top-4 right-4 z-10 rounded-full bg-white p-2 shadow-md hover:bg-gray-100"
+        aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+      >
+        {isInWishlist ? (
+          <FaHeart size={20} className="text-red-500" />
+        ) : (
+          <FaRegHeart size={20} className="text-gray-600" />
+        )}
+      </button>
+    </div>
   );
 };
 
@@ -46,7 +75,7 @@ const ProductDetailsSlider = ({
   selectedColor,
   setSelectedColor,
 }: {
-  product: Pick<IProduct, "images" | "colors" | "video">;
+  product: IProduct;
   selectedColor: IColor | undefined;
   setSelectedColor: (color: IColor | undefined) => void;
 }) => {
@@ -116,7 +145,7 @@ const ProductDetailsSlider = ({
           {images.map((img, index) => (
             <SwiperSlide key={index}>
               <div className="group flex w-full cursor-zoom-in flex-col items-center justify-center gap-4 lg:flex-row">
-                <ZoomableImage src={img} />
+                <ZoomableImage src={img} product={product} />
               </div>
             </SwiperSlide>
           ))}

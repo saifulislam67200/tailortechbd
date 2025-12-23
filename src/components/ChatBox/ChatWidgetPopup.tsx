@@ -53,7 +53,7 @@ const ChatWidgetPopup = ({
 
   return (
     <div
-      className="fixed right-3 bottom-14 z-50 sm:right-5 sm:bottom-14 lg:right-6 lg:bottom-6"
+      className="fixed right-3 bottom-4 z-50 sm:right-5 sm:bottom-14 lg:right-6 lg:bottom-6"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0)" }}
     >
       {/* Chat Popup Widget */}

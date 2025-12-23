@@ -3,7 +3,6 @@
 import ProductDetailsSlider from "@/components/productDetails/ProductDetailSlider";
 import ProductSizeChart from "@/components/productDetails/ProductSizeChart";
 import RestockRequestModal from "@/components/productDetails/RestockRequestModal";
-import AddToCartErrorMessage from "@/components/Shared/AddToCartErrorMessage";
 import Button from "@/components/ui/Button";
 import DialogProvider from "@/components/ui/DialogProvider";
 import HorizontalLine from "@/components/ui/HorizontalLine";
@@ -16,6 +15,7 @@ import { cloneElement, isValidElement, ReactElement, ReactNode, useEffect, useSt
 import { FaEye, FaSpinner } from "react-icons/fa";
 import { IoIosStar } from "react-icons/io";
 import { LuX } from "react-icons/lu";
+import { toast } from "sonner";
 import ProcutCheckout from "@/components/ui/Card/ProductCard/ProcutCheckout";
 
 interface Props {
@@ -25,7 +25,6 @@ interface Props {
 }
 
 const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllStockOut }: Props) => {
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useAppDispatch();
   const slug = clickedProduct?.slug || "";
@@ -81,16 +80,10 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
   const isAllStockOutCalculated = isAllStockOutFunctional(product?.colors || []);
 
   // Filter colors to only show those with available sizes
-  const availableColors = product?.colors?.filter((color) =>
-    isAllStockOutCalculated ? true : color.sizes?.some((size) => size.stock > 0)
-  ) || [];
-
-  useEffect(() => {
-    if (availableColors.length > 0 && !activeColor) {
-      setActiveColor(availableColors[0]);
-      setSelectedColor(availableColors[0]);
-    }
-  }, [availableColors, activeColor]);
+  const availableColors =
+    product?.colors?.filter((color) =>
+      isAllStockOutCalculated ? true : color.sizes?.some((size) => size.stock > 0)
+    ) || [];
 
   const getColorVariantImage = (colorName: string): string => {
     if (!product?.colors || !Array.isArray(product.colors)) {
@@ -111,8 +104,10 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
   const handleColorChange = (color: IColor) => {
     setActiveColor(color);
     setSelectedColor(color);
-    // Reset activeSize if it's not available in the selected color
-    if (activeSize && !color.sizes?.some((s) => s.size === activeSize.size)) {
+    // Reset activeSize if it's not available in the selected color or if it's out of stock
+    const isSizeAvailable =
+      activeSize && color.sizes?.some((s) => s.size === activeSize.size && s.stock > 0);
+    if (!isSizeAvailable) {
       setActiveSize(undefined);
       setActiveQuantity(1);
     }
@@ -125,28 +120,29 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
     setActiveQuantity(quantity);
   };
 
+  // Reset selections when modal closes
   useEffect(() => {
-    if (activeColor && !activeSize) {
-      setErrorMessage("Please select a size.");
+    if (!isOpen) {
+      setActiveColor(undefined);
+      setActiveSize(undefined);
+      setSelectedColor(undefined);
+      setActiveQuantity(1);
     }
-    if (activeColor && activeSize) {
-      setErrorMessage("");
-    }
-  }, [activeColor, activeSize]);
+  }, [isOpen]);
 
   const handleAddToCart = () => {
     if (!activeColor && !activeSize) {
-      setErrorMessage("Please select a color and size.");
+      toast.error("Please select a color and size.");
       return;
     }
 
     if (!activeColor) {
-      setErrorMessage("Please select a color.");
+      toast.error("Please select a color.");
       return;
     }
 
     if (!activeSize) {
-      setErrorMessage("Please select a size.");
+      toast.error("Please select a size.");
       return;
     }
 
@@ -329,30 +325,27 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
                         ))
                       : // If no color is selected, show all sizes from available colors
                         availableColors?.map((color) =>
-                          (isAllStockOutCalculated ? color.sizes : color.sizes?.filter((size) => size.stock > 0))?.map(
-                            (size) => (
-                              <button
-                                key={size._id}
-                                type="button"
-                                aria-label={`Select size ${size.size}`}
-                                className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
-                                  activeSize?.size === size.size
-                                    ? "bg-primary text-white shadow-none"
-                                    : "bg-white text-black shadow"
-                                } border border-gray-200 hover:bg-primary hover:text-white`}
-                                onClick={() => handleSizeChange(size)}
-                              >
-                                {size.size}
-                              </button>
-                            )
-                          )
+                          (isAllStockOutCalculated
+                            ? color.sizes
+                            : color.sizes?.filter((size) => size.stock > 0)
+                          )?.map((size) => (
+                            <button
+                              key={size._id}
+                              type="button"
+                              aria-label={`Select size ${size.size}`}
+                              className={`h-[30px] w-fit cursor-pointer px-[8px] text-[12px] font-medium transition-all duration-200 ${
+                                activeSize?.size === size.size
+                                  ? "bg-primary text-white shadow-none"
+                                  : "bg-white text-black shadow"
+                              } border border-gray-200 hover:bg-primary hover:text-white`}
+                              onClick={() => handleSizeChange(size)}
+                            >
+                              {size.size}
+                            </button>
+                          ))
                         )}
                   </div>
                 </div>
-
-                {errorMessage && (
-                  <AddToCartErrorMessage className="mt-[10px]" errorMessage={errorMessage} />
-                )}
 
                 {activeSize && !activeSize.stock ? (
                   <p className="mt-[10px] mb-[5px] text-[15px] font-[600] text-danger">
@@ -375,7 +368,7 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
                         selectedColor?.sizes?.find((s) => s?.size === activeSize?.size)?.stock === 0
                       }
                       onClick={handleAddToCart}
-                      className="flex-1 h-[27px] p-0 text-[14px]"
+                      className="h-[27px] flex-1 p-0 text-[14px]"
                     >
                       Add To Cart
                     </Button>
@@ -387,7 +380,6 @@ const ProductQuickOverviewModal = ({ children, product: clickedProduct, isAllSto
                       activeColor={activeColor}
                       activeSize={activeSize}
                       skipModal={true}
-                      // onError={handleCheckoutError}
                     />
                   </div>
                 )}
