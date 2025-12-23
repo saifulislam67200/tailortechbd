@@ -9,9 +9,6 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -26,7 +23,10 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "noEmit": true,
+    "module": "esnext",
+    "esModuleInterop": true
   },
   "include": [
     "next-env.d.ts",
