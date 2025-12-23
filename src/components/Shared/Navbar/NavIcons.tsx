@@ -28,7 +28,7 @@ export default function NavIcons({ setIsSearchOpen, setIsCartOpen }: NavIconsPro
 
       <button
         onClick={() => setIsCartOpen(true)}
-        className="relative hidden cursor-pointer text-primary lg:flex"
+        className="relative cursor-pointer text-primary"
         aria-label="Cart"
         onMouseOver={() => setIsMouseOver((prev) => ({ ...prev, cartItems: true }))}
         onMouseLeave={() => setIsMouseOver((prev) => ({ ...prev, cartItems: false }))}
@@ -46,7 +46,7 @@ export default function NavIcons({ setIsSearchOpen, setIsCartOpen }: NavIconsPro
 
       <Link
         href="/wishlist"
-        className="relative hidden text-primary lg:flex"
+        className="relative text-primary"
         aria-label="wishlist"
         onMouseOver={() => setIsMouseOver((prev) => ({ ...prev, wishlistItems: true }))}
         onMouseLeave={() => setIsMouseOver((prev) => ({ ...prev, wishlistItems: false }))}

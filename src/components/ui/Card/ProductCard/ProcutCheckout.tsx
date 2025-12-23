@@ -270,7 +270,7 @@ const ProductCheckoutModal = ({
             </div>
 
             {/* Right: Details */}
-            <div className="flex w-full flex-col gap-[10px]">
+            <div className="flex w-full flex-col gap-[10px] mt-12 sm:mt-0">
               <h3 className="line-clamp-2 text-[20px] font-[700]">{product?.name}</h3>
 
               {/* Price block */}

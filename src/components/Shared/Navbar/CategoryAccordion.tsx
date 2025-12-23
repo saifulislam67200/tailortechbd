@@ -149,15 +149,7 @@ const CategoryAccordion = ({ setIsOpen }: CategoryAccordionProps) => {
               className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[14px] text-[14px] text-white"
             >
               <FiLogIn className="h-[16px] w-[16px]" />
-              <span>Customer Login</span>
-            </Link>
-            <Link
-              href="/login-admin"
-              onClick={() => setIsOpen(false)}
-              className="flex w-full cursor-pointer items-center space-x-[12px] px-[16px] py-[14px] text-[14px] text-white"
-            >
-              <FiLogIn className="h-[16px] w-[16px]" />
-              <span>Admin Login</span>
+              <span>Login</span>
             </Link>
           </>
         )}

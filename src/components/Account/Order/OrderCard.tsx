@@ -113,7 +113,7 @@ const OrderCard = ({ order }: { order: IOrder }) => {
   };
 
   return (
-    <div key={order._id} className="rounded-lg border border-border-main bg-white">
+    <div key={order._id} className="rounded-lg border-0 sm:border border-border-main bg-white">
       {/* Order Header */}
       <div className="p-[8px] sm:p-[16px]">
         <div className="flex flex-col gap-[16px] lg:flex-row lg:items-center lg:justify-between">
@@ -221,7 +221,7 @@ const OrderCard = ({ order }: { order: IOrder }) => {
                       {orderView.orderItems.map((item, index) => (
                         <div
                           key={index}
-                          className="relative flex flex-row items-center gap-[4px] rounded-lg border border-border-muted bg-white p-[8px] sm:gap-[12px] sm:p-[16px]"
+                          className="relative flex flex-row items-center gap-[4px] rounded-lg border  border-border-muted bg-white p-[8px] sm:gap-[12px] sm:p-[16px]"
                         >
                           <Image
                             src={item.product.image || "/avatar.png"}
