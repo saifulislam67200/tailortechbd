@@ -48,6 +48,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/eslint-plugin-tailwindcss": "^3",
     "@types/fslightbox-react": "^1.8.0",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
@@ -56,10 +57,11 @@
     "@types/react-image-magnify": "^2.7.4",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
+    "eslint-plugin-tailwindcss": "^3.18.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.0.0",
     "prettier": "3.5.3",
-    "prettier-plugin-tailwindcss": "^0.6.11",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

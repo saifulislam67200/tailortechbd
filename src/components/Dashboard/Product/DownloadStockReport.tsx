@@ -373,7 +373,7 @@ const DownloadStockReport = ({ reportFilters = {} }: DownloadStockReportProps) =
                 {/* Header */}
                 <div className="pdf-header mx-auto print:min-w-full">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className="mx-auto mb-3 w-[150px]" src="/images/logos/logo.png" alt="logo" />
+                  <img className="mx-auto mb-3 w-[150px]" src="/images/logos/logo.jpg" alt="logo" />
                   <div className="mb-4 text-center">
                     <h2 className="text-[22px] font-bold text-primary">Product Stock Report</h2>
                     <p className="text-sm text-gray-600">

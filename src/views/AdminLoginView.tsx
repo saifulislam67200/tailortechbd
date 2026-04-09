@@ -11,7 +11,7 @@ const AdminLoginView = () => {
   return (
     <div className="main_container flex h-screen flex-col gap-[16px] py-[20px]">
       <Breadcrumb />
-      <Image src="/images/logos/logo.png" alt="logo" width={100} height={100} className="mx-auto" />
+      <Image src="/images/logos/logo.jpg" alt="logo" width={100} height={100} className="mx-auto" />
       <h4 className="text-center text-[20px] font-[700] text-primary">Admin Login</h4>
       <FormCard
         headerButtons={[

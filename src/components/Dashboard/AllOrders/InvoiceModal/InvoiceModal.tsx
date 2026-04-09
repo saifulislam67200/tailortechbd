@@ -141,7 +141,7 @@ const InvoiceModal = ({ orderItem }: { orderItem: IOrder }) => {
           <div className="text-left">
             <div className="mb-2">
               <img
-                src="/images/logos/logo.png"
+                src="/images/logos/logo.jpg"
                 width={200}
                 height={40}
                 className="mx-auto h-[38px]"

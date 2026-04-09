@@ -16,7 +16,7 @@ interface ChatWidgetPopupProps {
 const ChatWidgetPopup = ({
   pageUsername,
   companyName = "Tailortech Support",
-  companyLogo = "/images/logos/logo-.webp",
+  companyLogo = "/images/logos/favicon.jpg",
   responseTime = "Typically replies within an hour",
   greetingMessage = "Hi there 👋\nHow can I help you?",
   showNotification = true,

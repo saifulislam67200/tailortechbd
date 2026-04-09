@@ -155,7 +155,7 @@ const ForgotPasswordView = () => {
           {mode === "email" ? (
             <div className="center mx-auto mt-[50px] flex h-full w-full max-w-[500px] flex-col gap-[10px] bg-transparent p-[16px]">
               <Image
-                src="/images/logos/logo.png"
+                src="/images/logos/logo.jpg"
                 width={100}
                 height={100}
                 alt="success"

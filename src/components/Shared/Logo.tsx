@@ -7,7 +7,7 @@ const Logo = ({ className }: { className?: string }) => {
     <div className="flex flex-1 justify-center md:flex-none md:justify-start">
       <Link href={"/"} className={twMerge("text-[28px] font-bold text-white", className)}>
         <Image
-          src="/images/logos/logo.svg"
+          src="/images/logos/logo.jpg"
           alt="logo"
           width={230}
           height={60}

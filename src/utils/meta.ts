@@ -12,15 +12,15 @@ export const metadata: Metadata = {
 
   icons: {
     icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
-      { url: "/images/logos/logo.png", type: "image/png" },
+      { url: "/images/logos/favicon.jpg" },
+      { url: "/images/logos/favicon.jpg", sizes: "16x16", type: "image/jpg" },
+      { url: "/images/logos/favicon.jpg", sizes: "32x32", type: "image/jpg" },
+      { url: "/images/logos/logo.jpg", type: "image/png" },
     ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    apple: [{ url: "/images/logos/favicon.jpg", sizes: "180x180" }],
     other: [
-      { rel: "icon", url: "/icon-192.png", sizes: "192x192", type: "image/png" },
-      { rel: "icon", url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+      { rel: "icon", url: "/images/logos/favicon.jpg", sizes: "192x192", type: "image/jpg" },
+      { rel: "icon", url: "/images/logos/favicon.jpg", sizes: "512x512", type: "image/jpg" },
     ],
   },
 
@@ -32,11 +32,11 @@ export const metadata: Metadata = {
     siteName: "Tailortech",
     images: [
       {
-        url: "/images/logos/logo-.webp",
+        url: "/images/logos/favicon.jpg",
         width: 1200,
         height: 630,
         alt: "Tailortech - Your Style Is Your Story",
-        type: "image/webp",
+        type: "image/jpg",
       },
     ],
     locale: "en_US",

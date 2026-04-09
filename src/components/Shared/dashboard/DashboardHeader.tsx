@@ -17,7 +17,7 @@ const DashboardHeader = () => {
         <nav className="flex w-full items-center justify-between gap-4">
           <Link href={"/"} className={twMerge("text-[28px] font-bold text-white")}>
             <Image
-              src="/images/logos/logo.svg"
+              src="/images/logos/logo.jpg"
               alt="logo"
               width={230}
               height={60}
